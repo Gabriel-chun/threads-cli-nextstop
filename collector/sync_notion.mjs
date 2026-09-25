@@ -10,6 +10,7 @@ const RUNS_DATA_SOURCE_ID =
 const JSON_ARCHIVE_DATA_SOURCE_ID =
   process.env.NOTION_JSON_ARCHIVE_DATA_SOURCE_ID || "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5";
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "collector/output";
+const QUERY_FILE = process.env.QUERY_FILE || "collector/queries.txt";
 const RUN_STAMP = process.env.RUN_STAMP;
 const GITHUB_RUN_URL = process.env.GITHUB_RUN_URL || "";
 
@@ -261,7 +262,7 @@ async function upsertCollectorRun({
     .map((x) => x.trim())
     .filter(Boolean);
 
-  const totalQueries = (await readFile("collector/queries.txt", "utf8"))
+  const totalQueries = (await readFile(QUERY_FILE, "utf8"))
     .split(/\r?\n/)
     .map((x) => x.trim())
     .filter((x) => x && !x.startsWith("#")).length;
@@ -329,7 +330,7 @@ async function upsertJsonArchive({
     .map((x) => x.trim())
     .filter(Boolean);
 
-  const totalQueries = (await readFile("collector/queries.txt", "utf8"))
+  const totalQueries = (await readFile(QUERY_FILE, "utf8"))
     .split(/\r?\n/)
     .map((x) => x.trim())
     .filter((x) => x && !x.startsWith("#")).length;
