@@ -61,6 +61,7 @@ type Reply struct {
 type SearchResult struct {
 	ID             string    `json:"id"`
 	Query          string    `json:"query"`
+	SourceQueries  []string  `json:"source_queries,omitempty"`
 	Text           string    `json:"text,omitempty"`
 	Username       string    `json:"username,omitempty"`
 	Permalink      string    `json:"permalink,omitempty"`
@@ -69,6 +70,7 @@ type SearchResult struct {
 	IsReply        bool      `json:"is_reply,omitempty"`
 	IsQuotePost    bool      `json:"is_quote_post,omitempty"`
 	RelevanceScore int       `json:"relevance_score"`
+	RelevanceTier  string    `json:"relevance_tier"`
 	MatchedTerms   []string  `json:"matched_terms,omitempty"`
 	SearchedAt     time.Time `json:"searched_at"`
 }
