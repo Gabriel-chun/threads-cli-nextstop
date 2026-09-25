@@ -36,8 +36,8 @@ func replyRow(r *threads.Reply) Row {
 
 func searchRow(r *threads.SearchResult) Row {
 	return Row{
-		Cols:  []string{"id", "username", "text", "media", "permalink"},
-		Vals:  []string{r.ID, r.Username, truncate(r.Text, 80), r.MediaType, r.Permalink},
+		Cols:  []string{"id", "username", "score", "matched_terms", "text", "media", "permalink"},
+		Vals:  []string{r.ID, r.Username, strconv.Itoa(r.RelevanceScore), strings.Join(r.MatchedTerms, ","), truncate(r.Text, 80), r.MediaType, r.Permalink},
 		Value: r,
 	}
 }
