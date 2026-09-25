@@ -1,6 +1,4 @@
 import json
-import re
-from datetime import datetime
 from typing import Any
 
 CATEGORY_RULES = {
@@ -27,8 +25,9 @@ CATEGORY_RULES = {
         "住宿", "飯店", "旅館", "酒店", "民宿", "hotel"
     ],
     "food": [
-        "美食", "餐廳", "咖啡", "麵包", "冰淇淋", "試吃", "試喝",
-        "吃什麼", "吃到", "飲料", "garden city"
+        "美食", "餐廳", "餐飲", "咖啡", "麵包", "冰淇淋", "冰品",
+        "試吃", "試喝", "吃什麼", "吃到", "飲料", "garden city",
+        "米其林", "grill", "bakery"
     ],
     "merch": [
         "周邊", "商品部", "官方商店", "手燈", "應援棒", "紀念品",
@@ -41,8 +40,10 @@ CATEGORY_RULES = {
 }
 
 QUESTION_TERMS = [
-    "請問", "有人知道", "想問", "怎麼", "如何", "哪一區", "哪裡",
-    "幾點", "多久", "會不會", "有沒有", "嗎", "？", "?"
+    "請問", "有人知道", "想問", "如何", "哪一區", "哪裡",
+    "幾點", "多久", "會不會", "有沒有", "嗎", "？", "?",
+    "怎麼去", "怎麼走", "怎麼搭", "怎麼安排", "怎麼買",
+    "怎麼選", "怎麼回", "怎麼辦"
 ]
 
 SALE_TERMS = [
@@ -51,8 +52,13 @@ SALE_TERMS = [
 ]
 
 ANNOUNCEMENT_TERMS = [
-    "官宣", "開放報名", "售票", "開賣", "演出日期", "演出地點",
-    "上線", "新開幕", "開幕"
+    "官宣", "開放報名", "報名中", "開團", "售票", "開賣",
+    "演出日期", "演出地點", "上線", "新開幕", "開幕"
+]
+
+MUSIC_CONTEXT_TERMS = [
+    "演唱會", "演出", "開唱", "巡迴", "world tour", "concert", "live",
+    "應援", "歌單", "歌手", "藝人", "舞台", "售票", "抽票", "搶票"
 ]
 
 RELEVANT_CATEGORIES = {
@@ -89,39 +95,71 @@ def _primary_category(categories: list[str]) -> str:
 
 
 def _content_type(text: str) -> str:
-    if any(_contains(text, term) for term in QUESTION_TERMS):
-        return "question"
+    # A resale post stays a resale post even when it also contains seat/ticket words.
     if any(_contains(text, term) for term in SALE_TERMS):
         return "sale"
+
+    # Announcements are checked before questions so promotional copy such as
+    # "怎麼可以只來一天...包車報名中" is not treated as a user question.
     if any(_contains(text, term) for term in ANNOUNCEMENT_TERMS):
         return "announcement"
+
+    if any(_contains(text, term) for term in QUESTION_TERMS):
+        return "question"
+
     return "discussion"
+
+
+def _has_music_context(text: str, row: dict[str, Any]) -> bool:
+    source_queries = row.get("source_queries") or []
+    if isinstance(source_queries, list):
+        query_text = " ".join(str(x) for x in source_queries)
+    else:
+        query_text = str(source_queries)
+
+    combined = f"{text} {query_text} {row.get('query') or ''}"
+    return any(_contains(combined, term) for term in MUSIC_CONTEXT_TERMS)
+
+
+def _is_nextstop_relevant(
+    categories: list[str],
+    text: str,
+    row: dict[str, Any],
+) -> bool:
+    relevant = bool(RELEVANT_CATEGORIES.intersection(categories))
+    if not relevant:
+        return False
+
+    # Pure sports chatter, sports ticket resale, and baseball-seat posts should
+    # not become Next Stop Live leads unless there is explicit music/live-event context.
+    if "sports" in categories and not _has_music_context(text, row):
+        return False
+
+    return True
 
 
 def _editorial_priority(
     categories: list[str],
     content_type: str,
     relevance_score: int,
+    nextstop_relevant: bool,
 ) -> str:
-    relevant = bool(RELEVANT_CATEGORIES.intersection(categories))
-    if not relevant:
+    if not nextstop_relevant:
         return "low"
 
-    # Questions are especially valuable for Next Stop Live because they expose
-    # unmet user needs directly.
+    # Resale is evidence of demand, but not a strong standalone editorial lead.
+    if content_type == "sale":
+        return "low"
+
+    # Direct user questions expose unmet needs and are the strongest content leads.
     if content_type == "question" and relevance_score >= 30:
         return "high"
 
-    # Strong transport / seat / merch / stay / exit signals are usually
-    # actionable editorial topics even when the post is not phrased as a question.
+    # These categories are strongly actionable even when phrased as announcements.
     if relevance_score >= 60 and any(
         c in categories for c in ["transport", "exit", "seat", "merch", "stay"]
     ):
         return "high"
-
-    # Pure resale posts are useful trend evidence but poor standalone content leads.
-    if content_type == "sale":
-        return "low"
 
     return "medium"
 
@@ -182,7 +220,7 @@ def main(
         categories, category_terms = _classify_categories(text)
         primary = _primary_category(categories)
         content_type = _content_type(text)
-        nextstop_relevant = bool(RELEVANT_CATEGORIES.intersection(categories))
+        nextstop_relevant = _is_nextstop_relevant(categories, text, row)
 
         if relevant_only and not nextstop_relevant:
             continue
@@ -194,7 +232,7 @@ def main(
         enriched["content_type"] = content_type
         enriched["nextstop_relevant"] = nextstop_relevant
         enriched["editorial_priority"] = _editorial_priority(
-            categories, content_type, score
+            categories, content_type, score, nextstop_relevant
         )
         out.append(enriched)
 
