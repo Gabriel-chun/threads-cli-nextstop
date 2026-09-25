@@ -171,6 +171,13 @@ def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")
 
+def write_json(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(rows, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
 def csv_value(value: Any) -> Any:
     if isinstance(value, (list, dict)):
         return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
@@ -223,8 +230,10 @@ def main() -> None:
 
     output_dir = Path(args.output_dir)
     snapshot_jsonl = output_dir / f"snapshot_{args.run_stamp}.jsonl"
+    snapshot_json = output_dir / f"snapshot_{args.run_stamp}.json"
     snapshot_csv = output_dir / f"snapshot_{args.run_stamp}.csv"
     write_jsonl(snapshot_jsonl, snapshot_rows)
+    write_json(snapshot_json, snapshot_rows)
     write_csv(snapshot_csv, snapshot_rows)
 
     state_dir = Path(args.state_dir)
@@ -250,6 +259,7 @@ def main() -> None:
     write_csv(state_dir / "master.csv", master)
 
     write_jsonl(output_dir / "master.jsonl", master)
+    write_json(output_dir / "master.json", master)
     write_csv(output_dir / "master.csv", master)
 
     summary = {
