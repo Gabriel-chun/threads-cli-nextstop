@@ -145,28 +145,29 @@ async function listAllPages(dataSourceId) {
   return pages;
 }
 
-async function uploadFile(path, contentType) {
-  const filename = basename(path);
+async function uploadFile(path, contentType, notionFilename = basename(path)) {
   const upload = await notion.fileUploads.create({
     mode: "single_part",
-    filename,
+    filename: notionFilename,
     content_type: contentType,
   });
 
-  const bytes = await readFile(path);
-  const blob = new Blob([bytes], { type: contentType });
+  // CSV/JSONL are UTF-8 text. Passing a string lets the official SDK build
+  // the multipart body itself and avoids runtime-specific Blob issues.
+  const data = await readFile(path, "utf8");
 
   await notion.fileUploads.send({
     file_upload_id: upload.id,
     file: {
-      filename,
-      data: blob,
+      filename: notionFilename,
+      data,
     },
+    part_number: "1",
   });
 
   return {
     id: upload.id,
-    name: filename,
+    name: notionFilename,
   };
 }
 
@@ -335,9 +336,10 @@ async function main() {
   );
 
   console.log("[notion] uploading snapshot CSV + JSONL");
+  const notionJsonFilename = basename(snapshotJsonl).replace(/\.jsonl$/i, ".txt");
   const [csvUpload, jsonlUpload] = await Promise.all([
     uploadFile(snapshotCsv, "text/csv"),
-    uploadFile(snapshotJsonl, "application/x-ndjson"),
+    uploadFile(snapshotJsonl, "text/plain", notionJsonFilename),
   ]);
 
   await upsertCollectorRun({
