@@ -13,29 +13,56 @@ func TestScoreSearchPostExactChineseQuery(t *testing.T) {
 	}
 }
 
-func TestScoreSearchPostAllowsPartialVenuePhrase(t *testing.T) {
+func TestScoreSearchPostRejectsPartialSingleTermVenuePhrase(t *testing.T) {
 	p := Post{ID: "1", Text: "大巨蛋散場後捷運人很多"}
 	score, matched := scoreSearchPost(p, "台北大巨蛋")
-	if score <= 0 {
-		t.Fatalf("expected partial venue match, got %d", score)
-	}
-	if len(matched) != 1 || matched[0] != "大巨蛋" {
-		t.Fatalf("expected 大巨蛋 partial match, got %#v", matched)
+	if score != 0 || len(matched) != 0 {
+		t.Fatalf("expected partial single-term match to be rejected, got score=%d matched=%#v", score, matched)
 	}
 }
 
-func TestScoreSearchPostRanksMultiTermMatchHigher(t *testing.T) {
-	both := Post{ID: "1", Text: "YOASOBI 明年將在台北大巨蛋演出"}
+func TestScoreSearchPostRequiresAllMultiTermParts(t *testing.T) {
+	both := Post{ID: "1", Text: "YOASOBI 明年將在大巨蛋演出"}
 	artistOnly := Post{ID: "2", Text: "YOASOBI 香港場日期公開"}
 
 	bothScore, _ := scoreSearchPost(both, "YOASOBI 大巨蛋")
-	artistScore, _ := scoreSearchPost(artistOnly, "YOASOBI 大巨蛋")
+	artistScore, artistMatched := scoreSearchPost(artistOnly, "YOASOBI 大巨蛋")
 
-	if bothScore <= artistScore {
-		t.Fatalf("expected combined match (%d) to outrank artist-only match (%d)", bothScore, artistScore)
+	if bothScore <= 0 {
+		t.Fatalf("expected anchored AND match to pass, got %d", bothScore)
 	}
-	if artistScore <= 0 {
-		t.Fatalf("expected partial candidate to remain visible with lower score")
+	if artistScore != 0 || len(artistMatched) != 0 {
+		t.Fatalf("expected missing second term to be rejected, got score=%d matched=%#v", artistScore, artistMatched)
+	}
+}
+
+func TestScoreSearchPostRequiresLatinPhraseAnchor(t *testing.T) {
+	good := Post{ID: "1", Text: "Extra ticket for Tokyo Dome concert this November"}
+	noise := Post{ID: "2", Text: "Amazing concert tonight in Singapore"}
+
+	goodScore, _ := scoreSearchPost(good, "Tokyo Dome concert")
+	noiseScore, noiseMatched := scoreSearchPost(noise, "Tokyo Dome concert")
+
+	if goodScore != 100 {
+		t.Fatalf("expected exact phrase match score 100, got %d", goodScore)
+	}
+	if noiseScore != 0 || len(noiseMatched) != 0 {
+		t.Fatalf("expected generic concert noise to be rejected, got score=%d matched=%#v", noiseScore, noiseMatched)
+	}
+}
+
+func TestScoreSearchPostRequiresCJKAnchorAndIntent(t *testing.T) {
+	good := Post{ID: "1", Text: "東京ドームからの帰りは水道橋駅が混んでいた"}
+	venueOnly := Post{ID: "2", Text: "東京ドームに行ってきた"}
+
+	goodScore, _ := scoreSearchPost(good, "東京ドーム 帰り")
+	venueScore, venueMatched := scoreSearchPost(venueOnly, "東京ドーム 帰り")
+
+	if goodScore <= 0 {
+		t.Fatalf("expected venue + intent to pass, got %d", goodScore)
+	}
+	if venueScore != 0 || len(venueMatched) != 0 {
+		t.Fatalf("expected missing intent to be rejected, got score=%d matched=%#v", venueScore, venueMatched)
 	}
 }
 
