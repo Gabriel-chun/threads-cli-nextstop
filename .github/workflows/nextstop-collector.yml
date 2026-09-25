@@ -95,6 +95,7 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_POSTS_DATA_SOURCE_ID: "1d268bf4-2656-46c2-9ed1-b2143e611d3c"
           NOTION_RUNS_DATA_SOURCE_ID: "0f121a0f-3cfa-477c-be91-2bc61410dff4"
+          NOTION_JSON_ARCHIVE_DATA_SOURCE_ID: "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5"
           OUTPUT_DIR: collector/output
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         run: node collector/sync_notion.mjs
