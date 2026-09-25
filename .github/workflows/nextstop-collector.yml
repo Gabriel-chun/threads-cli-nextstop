@@ -81,3 +81,20 @@ jobs:
           path: collector/output/
           retention-days: 30
           if-no-files-found: error
+
+      - name: Set up Node for Notion sync
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Notion SDK
+        run: npm install --no-save @notionhq/client@5.26.0
+
+      - name: Sync snapshot to Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_POSTS_DATA_SOURCE_ID: "1d268bf4-2656-46c2-9ed1-b2143e611d3c"
+          NOTION_RUNS_DATA_SOURCE_ID: "0f121a0f-3cfa-477c-be91-2bc61410dff4"
+          OUTPUT_DIR: collector/output
+          GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: node collector/sync_notion.mjs
