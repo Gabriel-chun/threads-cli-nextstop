@@ -1,6 +1,6 @@
 # Next Stop Live Collector V0.1
 
-This collector keeps the data layer separate from the intelligence layer.
+This collector keeps the data layer separate from the intelligence layer. Each scheduled run is a 12-hour collection window; the master database keeps accumulating unique posts across windows.
 
 ## Schedule
 
@@ -11,7 +11,7 @@ GitHub Actions runs at **00:30 and 12:30 Taiwan time** every day. You can also r
 ```
 queries.txt
   -> anonymous Threads search
-  -> keep posts from the last 30 days
+  -> keep posts from the last 12 hours
   -> relevance_score >= 30
   -> deduplicate by permalink / post id
   -> snapshot JSONL + CSV
