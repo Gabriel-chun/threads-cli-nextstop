@@ -22,10 +22,14 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - name: Build CLI binary
+      - name: Build CLI binaries
         run: |
-          mkdir -p linux/amd64
+          mkdir -p linux/amd64 linux/arm64
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o linux/amd64/th ./cmd/th
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o linux/arm64/th ./cmd/th
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -37,9 +41,10 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build and push multi-platform image
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/gabriel-chun/threads-cli-nextstop:latest
