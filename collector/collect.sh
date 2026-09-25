@@ -24,7 +24,6 @@ i=0
 while IFS= read -r query || [[ -n "$query" ]]; do
   query="$(printf '%s' "$query" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
   [[ -z "$query" ]] && continue
-  case "$query" in\n    \#*) continue ;;\n  esac
 
   i=$((i + 1))
   outfile="$RAW_DIR/query_$(printf '%02d' "$i").jsonl"
