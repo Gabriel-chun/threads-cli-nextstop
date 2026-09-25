@@ -107,6 +107,7 @@ Quick start:
 		newRepliesCmd(app),
 		newFeedCmd(app),
 		newSearchCmd(app),
+		newBatchSearchCmd(app),
 		newIDCmd(app),
 		newDBCmd(app),
 		newWhoamiCmd(app),
