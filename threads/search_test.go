@@ -53,3 +53,54 @@ func TestLongestQuerySubstringMatch(t *testing.T) {
 		t.Fatalf("expected 大巨蛋, got %q", got)
 	}
 }
+
+
+func TestRelevanceTier(t *testing.T) {
+	cases := []struct {
+		score int
+		want  string
+	}{
+		{100, "high"},
+		{60, "high"},
+		{59, "candidate"},
+		{30, "candidate"},
+		{29, "low"},
+		{1, "low"},
+		{0, "none"},
+	}
+	for _, tc := range cases {
+		if got := relevanceTier(tc.score); got != tc.want {
+			t.Fatalf("score %d: want %q, got %q", tc.score, tc.want, got)
+		}
+	}
+}
+
+func TestMergeSearchResultsDeduplicatesMetadata(t *testing.T) {
+	a := SearchResult{
+		ID:             "1",
+		Query:          "大巨蛋",
+		SourceQueries:  []string{"大巨蛋"},
+		MatchedTerms:   []string{"大巨蛋"},
+		RelevanceScore: 60,
+		RelevanceTier:  "high",
+	}
+	b := SearchResult{
+		ID:             "1",
+		Query:          "台北大巨蛋",
+		SourceQueries:  []string{"台北大巨蛋"},
+		MatchedTerms:   []string{"台北大巨蛋"},
+		RelevanceScore: 80,
+		RelevanceTier:  "high",
+	}
+
+	got := mergeSearchResults(a, b)
+	if got.Query != "台北大巨蛋" || got.RelevanceScore != 80 {
+		t.Fatalf("expected stronger query to win, got query=%q score=%d", got.Query, got.RelevanceScore)
+	}
+	if len(got.SourceQueries) != 2 {
+		t.Fatalf("expected 2 source queries, got %#v", got.SourceQueries)
+	}
+	if len(got.MatchedTerms) != 2 {
+		t.Fatalf("expected merged matched terms, got %#v", got.MatchedTerms)
+	}
+}
