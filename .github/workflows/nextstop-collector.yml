@@ -37,6 +37,20 @@ jobs:
           mkdir -p bin
           go build -o bin/th ./cmd/th
 
+      - name: Set up Node for Notion config
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Notion SDK
+        run: npm install --no-save @notionhq/client@5.26.0
+
+      - name: Load collector config from Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_CONTROL_DATA_SOURCE_ID: "198328f3-d0b7-4fad-8740-5c5177cc1101"
+        run: node collector/load_notion_config.mjs
+
       - name: Restore master database
         uses: actions/cache/restore@v4
         with:
@@ -51,6 +65,8 @@ jobs:
           mkdir -p collector/raw collector/output collector/state
 
       - name: Collect Threads snapshots
+        env:
+          QUERY_FILE: ${{ env.QUERY_FILE }}
         run: bash collector/collect.sh
 
       - name: Build snapshot and master files
@@ -59,14 +75,14 @@ jobs:
             --raw-dir collector/raw \
             --output-dir collector/output \
             --state-dir collector/state \
-            --min-score 30 \
-            --since-hours 12 \
+            --min-score "$COLLECTOR_MIN_SCORE" \
+            --since-hours "$COLLECTOR_WINDOW_HOURS" \
             --run-stamp "$RUN_STAMP"
 
       - name: Include collector diagnostics
         run: |
           cp collector/failed_queries.txt collector/output/failed_queries.txt
-          cp collector/queries.txt collector/output/queries.txt
+          cp "$QUERY_FILE" collector/output/queries.txt
 
       - name: Save master database
         uses: actions/cache/save@v4
@@ -81,14 +97,6 @@ jobs:
           path: collector/output/
           retention-days: 30
           if-no-files-found: error
-
-      - name: Set up Node for Notion sync
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install Notion SDK
-        run: npm install --no-save @notionhq/client@5.26.0
 
       - name: Sync snapshot to Notion
         env:
