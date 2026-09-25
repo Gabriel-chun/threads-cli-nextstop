@@ -59,16 +59,18 @@ type Reply struct {
 
 // SearchResult is one hit from a keyword search.
 type SearchResult struct {
-	ID          string    `json:"id"`
-	Query       string    `json:"query"`
-	Text        string    `json:"text,omitempty"`
-	Username    string    `json:"username,omitempty"`
-	Permalink   string    `json:"permalink,omitempty"`
-	Timestamp   time.Time `json:"timestamp,omitempty"`
-	MediaType   string    `json:"media_type,omitempty"`
-	IsReply     bool      `json:"is_reply,omitempty"`
-	IsQuotePost bool      `json:"is_quote_post,omitempty"`
-	SearchedAt  time.Time `json:"searched_at"`
+	ID             string    `json:"id"`
+	Query          string    `json:"query"`
+	Text           string    `json:"text,omitempty"`
+	Username       string    `json:"username,omitempty"`
+	Permalink      string    `json:"permalink,omitempty"`
+	Timestamp      time.Time `json:"timestamp,omitempty"`
+	MediaType      string    `json:"media_type,omitempty"`
+	IsReply        bool      `json:"is_reply,omitempty"`
+	IsQuotePost    bool      `json:"is_quote_post,omitempty"`
+	RelevanceScore int       `json:"relevance_score"`
+	MatchedTerms   []string  `json:"matched_terms,omitempty"`
+	SearchedAt     time.Time `json:"searched_at"`
 }
 
 // asReply converts a parsed post (a reply lives in the same thread_items shape
