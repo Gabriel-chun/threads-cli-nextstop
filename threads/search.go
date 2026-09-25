@@ -166,16 +166,21 @@ func relevanceTier(score int) string {
 	}
 }
 
-// scoreSearchPost returns a 0-100 relevance score plus the terms/substrings that
-// actually matched.
+// scoreSearchPost returns a 0-100 relevance score plus the exact terms
+// that satisfied the query.
 //
-// Rules:
-//   - exact query term match: +40
-//   - exact full query phrase: +20
-//   - all terms matched exactly: +20
-//   - for a long CJK-style term, a contiguous 3+ rune partial match is allowed
-//     with a lower score (e.g. "台北大巨蛋" can match "大巨蛋")
-//   - unrelated recommendation-feed posts receive 0 and are discarded
+// Precision rules:
+//   - a single-term query must match the full normalized query exactly
+//   - a multi-term query is AND, not OR: every term must be present
+//   - the anchor must also be present:
+//     * for Latin queries, the first two words form a phrase anchor
+//       (e.g. "Tokyo Dome concert" requires "tokyo dome" + "concert")
+//     * otherwise the first term is the anchor
+//   - exact full-query phrase receives the strongest score
+//   - partial CJK substring matches never qualify a result on their own
+//
+// This intentionally favors precision over recall so recommendation-feed noise
+// cannot pass merely because it contains a generic word such as "concert".
 func scoreSearchPost(p Post, query string) (int, []string) {
 	haystack := normalizeSearchText(p.Text + " " + p.Username)
 	q := normalizeSearchText(query)
@@ -188,52 +193,50 @@ func scoreSearchPost(p Post, query string) (int, []string) {
 		return 0, nil
 	}
 
-	score := 0
-	matched := make([]string, 0, len(terms))
-	allExact := true
+	// Single-term searches are themselves the anchor. Require the complete
+	// normalized term; do not fall back to a shorter CJK substring.
+	if len(terms) == 1 {
+		if !strings.Contains(haystack, q) {
+			return 0, nil
+		}
+		return 60, []string{q}
+	}
 
+	anchor := terms[0]
+	if len(terms) >= 2 && isASCIIQueryTerm(terms[0]) && isASCIIQueryTerm(terms[1]) {
+		anchor = terms[0] + " " + terms[1]
+	}
+	if !strings.Contains(haystack, anchor) {
+		return 0, nil
+	}
+
+	matched := []string{anchor}
 	for _, term := range terms {
-		if strings.Contains(haystack, term) {
-			score += 40
-			matched = appendUnique(matched, term)
-			continue
+		if !strings.Contains(haystack, term) {
+			return 0, nil
 		}
-
-		allExact = false
-		if partial := longestQuerySubstringMatch(term, haystack, 3); partial != "" {
-			partialLen := len([]rune(partial))
-			score += 15 + partialLen*5
-			matched = appendUnique(matched, partial)
-		}
+		matched = appendUnique(matched, term)
 	}
 
+	// Anchored AND match.
+	score := 80
+	// Exact phrase is the strongest possible match.
 	if strings.Contains(haystack, q) {
-		score += 20
-	}
-	if len(terms) > 1 && allExact {
-		score += 20
-	}
-	if score > 100 {
 		score = 100
 	}
 	return score, matched
 }
 
-func longestQuerySubstringMatch(term, haystack string, minRunes int) string {
-	r := []rune(term)
-	if len(r) < minRunes+1 {
-		return ""
+func isASCIIQueryTerm(s string) bool {
+	if s == "" {
+		return false
 	}
-
-	for size := len(r) - 1; size >= minRunes; size-- {
-		for start := 0; start+size <= len(r); start++ {
-			part := string(r[start : start+size])
-			if strings.Contains(haystack, part) {
-				return part
-			}
+	for _, r := range s {
+		if r > 127 {
+			return false
 		}
 	}
-	return ""
+	return true
 }
 
 func appendUnique(in []string, s string) []string {
