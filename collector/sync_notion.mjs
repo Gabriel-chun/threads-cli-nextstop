@@ -7,6 +7,8 @@ const POSTS_DATA_SOURCE_ID =
   process.env.NOTION_POSTS_DATA_SOURCE_ID || "1d268bf4-2656-46c2-9ed1-b2143e611d3c";
 const RUNS_DATA_SOURCE_ID =
   process.env.NOTION_RUNS_DATA_SOURCE_ID || "0f121a0f-3cfa-477c-be91-2bc61410dff4";
+const JSON_ARCHIVE_DATA_SOURCE_ID =
+  process.env.NOTION_JSON_ARCHIVE_DATA_SOURCE_ID || "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5";
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "collector/output";
 const RUN_STAMP = process.env.RUN_STAMP;
 const GITHUB_RUN_URL = process.env.GITHUB_RUN_URL || "";
@@ -314,10 +316,68 @@ async function upsertCollectorRun({
   }
 }
 
+
+async function upsertJsonArchive({
+  summary,
+  failedQueries,
+  snapshotJsonUpload,
+  masterJsonUpload,
+}) {
+  const runTitle = `JSON Archive ${RUN_STAMP}`;
+  const failed = failedQueries
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  const totalQueries = (await readFile("collector/queries.txt", "utf8"))
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter((x) => x && !x.startsWith("#")).length;
+
+  let status = "Success";
+  if (failed.length >= totalQueries && totalQueries > 0) status = "Failed";
+  else if (failed.length > 0) status = "Partial";
+
+  const properties = {
+    "Run": title(runTitle),
+    "Run At": date(summary.run_at || null),
+    "Status": select(status),
+    "Snapshot Count": number(summary.snapshot_unique_rows ?? 0),
+    "Master Count": number(summary.master_unique_rows ?? 0),
+    "Snapshot JSON": fileProperty(snapshotJsonUpload),
+    "Master JSON": fileProperty(masterJsonUpload),
+    "GitHub Run": url(GITHUB_RUN_URL),
+  };
+
+  const existing = await notion.dataSources.query({
+    data_source_id: JSON_ARCHIVE_DATA_SOURCE_ID,
+    filter: {
+      property: "Run",
+      title: { equals: runTitle },
+    },
+    page_size: 10,
+  });
+
+  const page = (existing.results || []).find((x) => x.object === "page");
+  if (page) {
+    await notion.pages.update({ page_id: page.id, properties });
+  } else {
+    await notion.pages.create({
+      parent: {
+        type: "data_source_id",
+        data_source_id: JSON_ARCHIVE_DATA_SOURCE_ID,
+      },
+      properties,
+    });
+  }
+}
+
 async function main() {
   const summaryPath = join(OUTPUT_DIR, "summary.json");
   const snapshotJsonl = await findOutput("snapshot_", ".jsonl");
+  const snapshotJson = await findOutput("snapshot_", ".json");
   const snapshotCsv = await findOutput("snapshot_", ".csv");
+  const masterJson = join(OUTPUT_DIR, "master.json");
   const failedPath = join(OUTPUT_DIR, "failed_queries.txt");
 
   const [summary, snapshotRows, failedQueries] = await Promise.all([
@@ -348,6 +408,19 @@ async function main() {
     csvUpload,
     jsonlUpload,
     syncResult,
+  });
+
+  console.log("[notion] uploading JSON archive files");
+  const [snapshotJsonUpload, masterJsonUpload] = await Promise.all([
+    uploadFile(snapshotJson, "application/json"),
+    uploadFile(masterJson, "application/json"),
+  ]);
+
+  await upsertJsonArchive({
+    summary,
+    failedQueries,
+    snapshotJsonUpload,
+    masterJsonUpload,
   });
 
   console.log("[notion] sync complete");
