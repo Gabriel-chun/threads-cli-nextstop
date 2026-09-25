@@ -4,21 +4,18 @@ import (
 	"context"
 	"iter"
 	"net/url"
+	"sort"
 	"strings"
 	"time"
 )
 
-// Search streams public keyword-search hits from the crawler-rendered Threads
-// search page.
+// Search streams candidates from the crawler-rendered Threads search page,
+// ranked by how strongly the visible post text/username matches the query.
 //
-// The anonymous search page can contain unrelated recommendation/feed posts in
-// the same SSR payload as real search results. To avoid labeling those posts as
-// matches, this fork keeps only posts whose visible text/username actually
-// matches the requested query.
-//
-// We intentionally do not fall back to the rotating logged-out GraphQL search
-// doc_id here. A stale doc_id is what originally broke the upstream CLI, and a
-// bad fallback is worse than returning an honest empty result set.
+// The anonymous Threads SSR payload mixes real search hits with unrelated feed
+// recommendations. Instead of requiring an exact AND match (which was too
+// strict), this fork assigns a relevance score and keeps any candidate with a
+// meaningful match. Downstream workflows can then choose their own threshold.
 func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[SearchResult, error] {
 	return func(yield func(SearchResult, error) bool) {
 		posts, err := c.searchSSR(ctx, query)
@@ -27,8 +24,9 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 			return
 		}
 
-		n := 0
+		results := make([]SearchResult, 0, len(posts))
 		seen := map[string]bool{}
+
 		for _, p := range posts {
 			key := p.ID
 			if key == "" {
@@ -41,23 +39,39 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 				seen[key] = true
 			}
 
-			r := SearchResult{
-				ID:          p.ID,
-				Query:       query,
-				Text:        p.Text,
-				Username:    p.Username,
-				Permalink:   p.Permalink,
-				Timestamp:   p.Timestamp,
-				MediaType:   p.MediaType,
-				IsReply:     p.IsReply,
-				IsQuotePost: p.IsQuotePost,
-				SearchedAt:  time.Now(),
+			score, matched := scoreSearchPost(p, query)
+			if score <= 0 {
+				continue
 			}
-			if !yield(r, nil) {
+
+			results = append(results, SearchResult{
+				ID:             p.ID,
+				Query:          query,
+				Text:           p.Text,
+				Username:       p.Username,
+				Permalink:      p.Permalink,
+				Timestamp:      p.Timestamp,
+				MediaType:      p.MediaType,
+				IsReply:        p.IsReply,
+				IsQuotePost:    p.IsQuotePost,
+				RelevanceScore: score,
+				MatchedTerms:   matched,
+				SearchedAt:     time.Now(),
+			})
+		}
+
+		sort.SliceStable(results, func(i, j int) bool {
+			if results[i].RelevanceScore == results[j].RelevanceScore {
+				return results[i].Timestamp.After(results[j].Timestamp)
+			}
+			return results[i].RelevanceScore > results[j].RelevanceScore
+		})
+
+		for i, r := range results {
+			if limit > 0 && i >= limit {
 				return
 			}
-			n++
-			if limit > 0 && n >= limit {
+			if !yield(r, nil) {
 				return
 			}
 		}
@@ -70,63 +84,92 @@ func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
 	if err != nil {
 		return nil, err
 	}
-	return filterSearchPosts(parsePostsSSR(html), query), nil
+	return parsePostsSSR(html), nil
 }
 
-// filterSearchPosts removes unrelated feed/recommendation posts that Threads
-// includes in the anonymous search-page SSR payload.
+// scoreSearchPost returns a 0-100 relevance score plus the terms/substrings that
+// actually matched.
 //
-// Matching rules:
-//   - case-insensitive
-//   - '#' and '@' are ignored for matching
-//   - multi-word queries require every term to appear somewhere in the visible
-//     post text or username
-//   - CJK queries such as "大巨蛋" remain a single exact substring term
-func filterSearchPosts(posts []Post, query string) []Post {
-	terms := searchTerms(query)
-	if len(terms) == 0 {
-		return nil
+// Rules:
+//   - exact query term match: +40
+//   - exact full query phrase: +20
+//   - all terms matched exactly: +20
+//   - for a long CJK-style term, a contiguous 3+ rune partial match is allowed
+//     with a lower score (e.g. "台北大巨蛋" can match "大巨蛋")
+//   - unrelated recommendation-feed posts receive 0 and are discarded
+func scoreSearchPost(p Post, query string) (int, []string) {
+	haystack := normalizeSearchText(p.Text + " " + p.Username)
+	q := normalizeSearchText(query)
+	if q == "" || haystack == "" {
+		return 0, nil
 	}
 
-	out := make([]Post, 0, len(posts))
-	seen := map[string]bool{}
+	terms := strings.Fields(q)
+	if len(terms) == 0 {
+		return 0, nil
+	}
 
-	for _, p := range posts {
-		haystack := normalizeSearchText(p.Text + " " + p.Username)
+	score := 0
+	matched := make([]string, 0, len(terms))
+	allExact := true
 
-		matches := true
-		for _, term := range terms {
-			if !strings.Contains(haystack, term) {
-				matches = false
-				break
+	for _, term := range terms {
+		if strings.Contains(haystack, term) {
+			score += 40
+			matched = appendUnique(matched, term)
+			continue
+		}
+
+		allExact = false
+		if partial := longestQuerySubstringMatch(term, haystack, 3); partial != "" {
+			// Lower confidence than an exact term. Longer partial matches score
+			// slightly higher, but never as much as an exact term.
+			partialLen := len([]rune(partial))
+			score += 15 + partialLen*5
+			matched = appendUnique(matched, partial)
+		}
+	}
+
+	if strings.Contains(haystack, q) {
+		score += 20
+	}
+	if len(terms) > 1 && allExact {
+		score += 20
+	}
+	if score > 100 {
+		score = 100
+	}
+	return score, matched
+}
+
+// longestQuerySubstringMatch finds the longest contiguous substring of term
+// present in haystack. It is intentionally query-sided: we only relax a long
+// search phrase into shorter pieces, rather than fuzzy-matching arbitrary post
+// text. This keeps recall higher without reopening the unrelated-feed problem.
+func longestQuerySubstringMatch(term, haystack string, minRunes int) string {
+	r := []rune(term)
+	if len(r) < minRunes+1 {
+		return ""
+	}
+
+	for size := len(r) - 1; size >= minRunes; size-- {
+		for start := 0; start+size <= len(r); start++ {
+			part := string(r[start : start+size])
+			if strings.Contains(haystack, part) {
+				return part
 			}
 		}
-		if !matches {
-			continue
-		}
-
-		key := p.ID
-		if key == "" {
-			key = p.Permalink
-		}
-		if key != "" && seen[key] {
-			continue
-		}
-		if key != "" {
-			seen[key] = true
-		}
-		out = append(out, p)
 	}
-
-	return out
+	return ""
 }
 
-func searchTerms(query string) []string {
-	q := normalizeSearchText(query)
-	if q == "" {
-		return nil
+func appendUnique(in []string, s string) []string {
+	for _, existing := range in {
+		if existing == s {
+			return in
+		}
 	}
-	return strings.Fields(q)
+	return append(in, s)
 }
 
 func normalizeSearchText(s string) string {
