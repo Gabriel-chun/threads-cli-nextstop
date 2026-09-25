@@ -9,10 +9,16 @@ const RUNS_DATA_SOURCE_ID =
   process.env.NOTION_RUNS_DATA_SOURCE_ID || "0f121a0f-3cfa-477c-be91-2bc61410dff4";
 const JSON_ARCHIVE_DATA_SOURCE_ID =
   process.env.NOTION_JSON_ARCHIVE_DATA_SOURCE_ID || "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5";
+const QUERY_RUN_HISTORY_DATA_SOURCE_ID =
+  process.env.NOTION_QUERY_RUN_HISTORY_DATA_SOURCE_ID || "bd2b6fc3-f4ca-4b54-9def-84f9708a6b96";
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "collector/output";
 const QUERY_FILE = process.env.QUERY_FILE || "collector/queries.txt";
 const RUN_STAMP = process.env.RUN_STAMP;
 const GITHUB_RUN_URL = process.env.GITHUB_RUN_URL || "";
+const COLLECTOR_TRACK = process.env.COLLECTOR_TRACK || "";
+const COLLECTOR_CONFIG_KEY = process.env.COLLECTOR_CONFIG_KEY || "";
+const COLLECTOR_WINDOW_HOURS = Number(process.env.COLLECTOR_WINDOW_HOURS || 12);
+const COLLECTOR_MIN_SCORE = Number(process.env.COLLECTOR_MIN_SCORE || 30);
 
 if (!NOTION_TOKEN) {
   throw new Error("NOTION_TOKEN is missing");
@@ -373,6 +379,75 @@ async function upsertJsonArchive({
   }
 }
 
+
+async function upsertQueryRunHistory({
+  summary,
+  failedQueries,
+  syncResult,
+}) {
+  const runTitle = `Query Run ${RUN_STAMP}`;
+  const queryLines = (await readFile(QUERY_FILE, "utf8"))
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter((x) => x && !x.startsWith("#"));
+  const failed = failedQueries
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  let status = "Success";
+  if (failed.length >= queryLines.length && queryLines.length > 0) status = "Failed";
+  else if (failed.length > 0) status = "Partial";
+
+  const snapshotCount = Number(summary.snapshot_unique_rows || 0);
+  const newUnique = Number(syncResult.created || 0);
+  const repeatedUpdated = Number(syncResult.updated || 0);
+  const noveltyRate = snapshotCount > 0
+    ? Number(((newUnique / snapshotCount) * 100).toFixed(1))
+    : 0;
+
+  const properties = {
+    "Run": title(runTitle),
+    "Run At": date(summary.run_at || null),
+    "Track": richText(COLLECTOR_TRACK),
+    "Config Key": richText(COLLECTOR_CONFIG_KEY),
+    "Queries": richText(clip(queryLines.join("\n"))),
+    "Query Count": number(queryLines.length),
+    "Window Hours": number(COLLECTOR_WINDOW_HOURS),
+    "Min Score": number(COLLECTOR_MIN_SCORE),
+    "Raw Rows": number(summary.raw_rows ?? 0),
+    "Snapshot Unique": number(snapshotCount),
+    "New Unique": number(newUnique),
+    "Repeated / Updated": number(repeatedUpdated),
+    "Master Count": number(summary.master_unique_rows ?? 0),
+    "Novelty Rate %": number(noveltyRate),
+    "Status": select(status),
+    "GitHub Run": url(GITHUB_RUN_URL),
+  };
+
+  const existing = await notion.dataSources.query({
+    data_source_id: QUERY_RUN_HISTORY_DATA_SOURCE_ID,
+    filter: {
+      property: "Run",
+      title: { equals: runTitle },
+    },
+    page_size: 10,
+  });
+
+  const page = (existing.results || []).find((x) => x.object === "page");
+  if (page) {
+    await notion.pages.update({ page_id: page.id, properties });
+  } else {
+    await notion.pages.create({
+      parent: {
+        type: "data_source_id",
+        data_source_id: QUERY_RUN_HISTORY_DATA_SOURCE_ID,
+      },
+      properties,
+    });
+  }
+}
+
 async function main() {
   const summaryPath = join(OUTPUT_DIR, "summary.json");
   const snapshotJsonl = await findOutput("snapshot_", ".jsonl");
@@ -422,6 +497,12 @@ async function main() {
     failedQueries,
     snapshotJsonUpload,
     masterJsonUpload,
+  });
+
+  await upsertQueryRunHistory({
+    summary,
+    failedQueries,
+    syncResult,
   });
 
   console.log("[notion] sync complete");
