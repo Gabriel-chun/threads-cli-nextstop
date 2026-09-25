@@ -190,12 +190,14 @@ def main() -> None:
     parser.add_argument("--output-dir", default="collector/output")
     parser.add_argument("--state-dir", default="collector/state")
     parser.add_argument("--min-score", type=int, default=30)
-    parser.add_argument("--since-days", type=int, default=30)
+    parser.add_argument("--since-hours", type=int, default=12)
+    parser.add_argument("--since-days", type=int, default=None, help="legacy override; converted to hours")
     parser.add_argument("--run-stamp", required=True)
     args = parser.parse_args()
 
     run_at = iso_now()
-    since = datetime.now(timezone.utc) - timedelta(days=args.since_days)
+    window_hours = args.since_days * 24 if args.since_days is not None else args.since_hours
+    since = datetime.now(timezone.utc) - timedelta(hours=window_hours)
     raw_rows = load_raw_dir(Path(args.raw_dir))
 
     snapshot_by_key: dict[str, dict[str, Any]] = {}
@@ -257,7 +259,7 @@ def main() -> None:
         "snapshot_unique_rows": len(snapshot_rows),
         "master_unique_rows": len(master),
         "min_score": args.min_score,
-        "since_days": args.since_days,
+        "since_hours": window_hours,
     }
     (output_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
