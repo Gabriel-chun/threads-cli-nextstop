@@ -11,11 +11,6 @@ import (
 
 // Search streams candidates from the crawler-rendered Threads search page,
 // ranked by how strongly the visible post text/username matches the query.
-//
-// The anonymous Threads SSR payload mixes real search hits with unrelated feed
-// recommendations. Instead of requiring an exact AND match (which was too
-// strict), this fork assigns a relevance score and keeps any candidate with a
-// meaningful match. Downstream workflows can then choose their own threshold.
 func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[SearchResult, error] {
 	return func(yield func(SearchResult, error) bool) {
 		posts, err := c.searchSSR(ctx, query)
@@ -47,6 +42,7 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 			results = append(results, SearchResult{
 				ID:             p.ID,
 				Query:          query,
+				SourceQueries:  []string{query},
 				Text:           p.Text,
 				Username:       p.Username,
 				Permalink:      p.Permalink,
@@ -55,17 +51,13 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 				IsReply:        p.IsReply,
 				IsQuotePost:    p.IsQuotePost,
 				RelevanceScore: score,
+				RelevanceTier:  relevanceTier(score),
 				MatchedTerms:   matched,
 				SearchedAt:     time.Now(),
 			})
 		}
 
-		sort.SliceStable(results, func(i, j int) bool {
-			if results[i].RelevanceScore == results[j].RelevanceScore {
-				return results[i].Timestamp.After(results[j].Timestamp)
-			}
-			return results[i].RelevanceScore > results[j].RelevanceScore
-		})
+		sortSearchResults(results)
 
 		for i, r := range results {
 			if limit > 0 && i >= limit {
@@ -78,6 +70,56 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 	}
 }
 
+// BatchSearch runs several queries, filters by score/date, deduplicates posts,
+// merges the queries/terms that found the same post, and returns one ranked list.
+func (c *Client) BatchSearch(ctx context.Context, queries []string, minScore int, since time.Time, limit int) ([]SearchResult, error) {
+	byKey := map[string]SearchResult{}
+
+	for _, query := range queries {
+		query = strings.TrimSpace(query)
+		if query == "" {
+			continue
+		}
+
+		for r, err := range c.Search(ctx, query, 0) {
+			if err != nil {
+				return nil, err
+			}
+			if r.RelevanceScore < minScore {
+				continue
+			}
+			if !since.IsZero() && (r.Timestamp.IsZero() || r.Timestamp.Before(since)) {
+				continue
+			}
+
+			key := r.Permalink
+			if key == "" {
+				key = r.ID
+			}
+			if key == "" {
+				continue
+			}
+
+			if existing, ok := byKey[key]; ok {
+				byKey[key] = mergeSearchResults(existing, r)
+			} else {
+				byKey[key] = r
+			}
+		}
+	}
+
+	results := make([]SearchResult, 0, len(byKey))
+	for _, r := range byKey {
+		results = append(results, r)
+	}
+	sortSearchResults(results)
+
+	if limit > 0 && len(results) > limit {
+		results = results[:limit]
+	}
+	return results, nil
+}
+
 func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
 	u := WebBase + "/search?q=" + url.QueryEscape(query)
 	html, err := c.getHTML(ctx, u)
@@ -85,6 +127,43 @@ func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
 		return nil, err
 	}
 	return parsePostsSSR(html), nil
+}
+
+func sortSearchResults(results []SearchResult) {
+	sort.SliceStable(results, func(i, j int) bool {
+		if results[i].RelevanceScore == results[j].RelevanceScore {
+			return results[i].Timestamp.After(results[j].Timestamp)
+		}
+		return results[i].RelevanceScore > results[j].RelevanceScore
+	})
+}
+
+func mergeSearchResults(a, b SearchResult) SearchResult {
+	a.SourceQueries = appendUniqueMany(a.SourceQueries, b.SourceQueries...)
+	a.MatchedTerms = appendUniqueMany(a.MatchedTerms, b.MatchedTerms...)
+
+	if b.RelevanceScore > a.RelevanceScore {
+		a.Query = b.Query
+		a.RelevanceScore = b.RelevanceScore
+		a.RelevanceTier = relevanceTier(b.RelevanceScore)
+	}
+	if b.SearchedAt.After(a.SearchedAt) {
+		a.SearchedAt = b.SearchedAt
+	}
+	return a
+}
+
+func relevanceTier(score int) string {
+	switch {
+	case score >= 60:
+		return "high"
+	case score >= 30:
+		return "candidate"
+	case score > 0:
+		return "low"
+	default:
+		return "none"
+	}
 }
 
 // scoreSearchPost returns a 0-100 relevance score plus the terms/substrings that
@@ -122,8 +201,6 @@ func scoreSearchPost(p Post, query string) (int, []string) {
 
 		allExact = false
 		if partial := longestQuerySubstringMatch(term, haystack, 3); partial != "" {
-			// Lower confidence than an exact term. Longer partial matches score
-			// slightly higher, but never as much as an exact term.
 			partialLen := len([]rune(partial))
 			score += 15 + partialLen*5
 			matched = appendUnique(matched, partial)
@@ -142,10 +219,6 @@ func scoreSearchPost(p Post, query string) (int, []string) {
 	return score, matched
 }
 
-// longestQuerySubstringMatch finds the longest contiguous substring of term
-// present in haystack. It is intentionally query-sided: we only relax a long
-// search phrase into shorter pieces, rather than fuzzy-matching arbitrary post
-// text. This keeps recall higher without reopening the unrelated-feed problem.
 func longestQuerySubstringMatch(term, haystack string, minRunes int) string {
 	r := []rune(term)
 	if len(r) < minRunes+1 {
@@ -170,6 +243,16 @@ func appendUnique(in []string, s string) []string {
 		}
 	}
 	return append(in, s)
+}
+
+func appendUniqueMany(in []string, values ...string) []string {
+	for _, v := range values {
+		if strings.TrimSpace(v) == "" {
+			continue
+		}
+		in = appendUnique(in, v)
+	}
+	return in
 }
 
 func normalizeSearchText(s string) string {
