@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 import csv
+import hashlib
 import json
+import re
+import unicodedata
+from difflib import SequenceMatcher
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -23,6 +27,10 @@ CSV_FIELDS = [
     "first_seen_at",
     "last_seen_at",
     "seen_count",
+    "content_cluster_id",
+    "signal_counted",
+    "duplicate_group_size",
+    "duplicate_reason",
 ]
 
 def parse_time(value: Any) -> datetime | None:
@@ -59,6 +67,120 @@ def unique(values: list[Any]) -> list[str]:
 
 def key_for(row: dict[str, Any]) -> str:
     return str(row.get("permalink") or row.get("id") or "").strip()
+
+def normalize_content(value: Any) -> str:
+    text = unicodedata.normalize("NFKC", str(value or "")).lower()
+    text = re.sub(r"https?://\S+", " ", text)
+    text = re.sub(r"[@#]", "", text)
+    text = re.sub(r"[^0-9a-z\u3400-\u9fff]+", "", text)
+    return text
+
+def cluster_id_for(username: str, canonical: str) -> str:
+    digest = hashlib.sha1(f"{username.lower()}|{canonical}".encode("utf-8")).hexdigest()[:16]
+    return f"dup_{digest}"
+
+def assign_content_clusters(rows: list[dict[str, Any]], window_hours: int = 12, threshold: float = 0.90) -> list[dict[str, Any]]:
+    ordered = sorted(
+        rows,
+        key=lambda r: (
+            str(r.get("username") or "").lower(),
+            parse_time(r.get("timestamp")) or parse_time(r.get("first_seen_at")) or datetime.max.replace(tzinfo=timezone.utc),
+            key_for(r),
+        ),
+    )
+    groups: list[dict[str, Any]] = []
+
+    for row in ordered:
+        username = str(row.get("username") or "").strip().lower()
+        norm = normalize_content(row.get("text"))
+        row_time = parse_time(row.get("timestamp")) or parse_time(row.get("first_seen_at"))
+        matched_group = None
+        matched_rule = ""
+
+        if username and norm:
+            for group in reversed(groups):
+                if group["username"] != username:
+                    continue
+                group_time = group["last_time"]
+                if row_time and group_time and abs((row_time - group_time).total_seconds()) > window_hours * 3600:
+                    continue
+                if norm == group["canonical"]:
+                    matched_group = group
+                    matched_rule = "same_author_exact"
+                    break
+                ratio = SequenceMatcher(None, norm, group["canonical"], autojunk=False).ratio()
+                if ratio >= threshold:
+                    matched_group = group
+                    matched_rule = "same_author_near_duplicate"
+                    break
+
+        if matched_group is None:
+            cid = cluster_id_for(username or "unknown", norm or key_for(row))
+            matched_group = {
+                "id": cid,
+                "username": username,
+                "canonical": norm or key_for(row),
+                "rows": [],
+                "last_time": row_time,
+                "rule": "",
+            }
+            groups.append(matched_group)
+        else:
+            if matched_rule == "same_author_near_duplicate":
+                matched_group["rule"] = "same_author_near_duplicate"
+            elif matched_rule == "same_author_exact" and matched_group["rule"] != "same_author_near_duplicate":
+                matched_group["rule"] = "same_author_exact"
+            if row_time and (matched_group["last_time"] is None or row_time > matched_group["last_time"]):
+                matched_group["last_time"] = row_time
+
+        matched_group["rows"].append(row)
+
+    for group in groups:
+        size = len(group["rows"])
+        reason = group["rule"] if size > 1 else ""
+        representative = min(
+            group["rows"],
+            key=lambda r: (
+                parse_time(r.get("timestamp")) or parse_time(r.get("first_seen_at")) or datetime.max.replace(tzinfo=timezone.utc),
+                key_for(r),
+            ),
+        )
+        rep_key = key_for(representative)
+        for row in group["rows"]:
+            row["content_cluster_id"] = group["id"]
+            row["duplicate_group_size"] = size
+            row["duplicate_reason"] = reason
+            row["signal_counted"] = key_for(row) == rep_key
+    return rows
+
+def duplicate_review_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_cluster: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        cid = str(row.get("content_cluster_id") or "")
+        if cid:
+            by_cluster.setdefault(cid, []).append(row)
+
+    out: list[dict[str, Any]] = []
+    for cid, members in by_cluster.items():
+        if len(members) <= 1:
+            continue
+        representative = next((r for r in members if r.get("signal_counted")), members[0])
+        links = unique([r.get("permalink") for r in members])
+        rule = "same_author_near_duplicate" if any(
+            r.get("duplicate_reason") == "same_author_near_duplicate" for r in members
+        ) else "same_author_exact"
+        out.append({
+            "cluster_id": cid,
+            "username": representative.get("username") or "",
+            "query": representative.get("query") or "",
+            "raw_posts": len(members),
+            "suppressed": max(0, len(members) - 1),
+            "rule": rule,
+            "sample_text": representative.get("text") or "",
+            "representative_url": representative.get("permalink") or "",
+            "duplicate_links": links,
+        })
+    return sorted(out, key=lambda r: (-int(r["raw_posts"]), r["cluster_id"]))
 
 def normalize_row(row: dict[str, Any], run_at: str) -> dict[str, Any]:
     item = dict(row)
@@ -236,7 +358,7 @@ def main() -> None:
         else:
             snapshot_by_key[key] = row
 
-    snapshot_rows = sort_rows(list(snapshot_by_key.values()))
+    snapshot_rows = sort_rows(assign_content_clusters(list(snapshot_by_key.values()), window_hours=window_hours))
 
     output_dir = Path(args.output_dir)
     snapshot_jsonl = output_dir / f"snapshot_{args.run_stamp}.jsonl"
@@ -264,13 +386,21 @@ def main() -> None:
         else:
             master_by_key[key] = row
 
-    master = sort_rows(list(master_by_key.values()))
+    master = sort_rows(assign_content_clusters(list(master_by_key.values()), window_hours=window_hours))
     write_jsonl(master_jsonl, master)
     write_csv(state_dir / "master.csv", master)
 
     write_jsonl(output_dir / "master.jsonl", master)
     write_json(output_dir / "master.json", master)
     write_csv(output_dir / "master.csv", master)
+
+    duplicate_rows = duplicate_review_rows(snapshot_rows)
+    write_jsonl(output_dir / "duplicate_review.jsonl", duplicate_rows)
+    write_json(output_dir / "duplicate_review.json", duplicate_rows)
+
+    unique_signals = sum(1 for row in snapshot_rows if row.get("signal_counted"))
+    suppressed_duplicates = max(0, len(snapshot_rows) - unique_signals)
+    duplicate_clusters = len(duplicate_rows)
 
     summary = {
         "run_at": run_at,
@@ -280,6 +410,9 @@ def main() -> None:
         "master_unique_rows": len(master),
         "min_score": args.min_score,
         "since_hours": window_hours,
+        "unique_signals": unique_signals,
+        "suppressed_duplicates": suppressed_duplicates,
+        "duplicate_clusters": duplicate_clusters,
     }
     (output_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
