@@ -105,6 +105,7 @@ jobs:
           NOTION_RUNS_DATA_SOURCE_ID: "0f121a0f-3cfa-477c-be91-2bc61410dff4"
           NOTION_JSON_ARCHIVE_DATA_SOURCE_ID: "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5"
           NOTION_QUERY_RUN_HISTORY_DATA_SOURCE_ID: "bd2b6fc3-f4ca-4b54-9def-84f9708a6b96"
+          NOTION_DUPLICATE_REVIEW_DATA_SOURCE_ID: "fc925420-287c-4e42-9c68-b8ad2fd385a4"
           COLLECTOR_TRACK: ${{ env.COLLECTOR_TRACK }}
           COLLECTOR_CONFIG_KEY: ${{ env.COLLECTOR_CONFIG_KEY }}
           COLLECTOR_WINDOW_HOURS: ${{ env.COLLECTOR_WINDOW_HOURS }}
@@ -151,6 +152,7 @@ jobs:
           cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
           cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
+          cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
