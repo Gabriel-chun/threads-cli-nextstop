@@ -425,11 +425,20 @@ async function upsertQueryRunHistory({
     return Number.isNaN(d.getTime()) ? null : d;
   };
 
-  const new3h = masterRows.filter((row) => {
+  const currentQueries = new Set(queryLines);
+  const belongsToCurrentTrack = (row) => {
+    const q = String(row.query || "").trim();
+    if (q && currentQueries.has(q)) return true;
+    const sources = Array.isArray(row.source_queries) ? row.source_queries : [];
+    return sources.some((value) => currentQueries.has(String(value || "").trim()));
+  };
+  const currentMasterRows = masterRows.filter(belongsToCurrentTrack);
+
+  const new3h = currentMasterRows.filter((row) => {
     const d = firstSeenDate(row);
     return d && d >= cutoff3h && d <= runAt;
   }).length;
-  const new12h = masterRows.filter((row) => {
+  const new12h = currentMasterRows.filter((row) => {
     const d = firstSeenDate(row);
     return d && d >= cutoff12h && d <= runAt;
   }).length;
