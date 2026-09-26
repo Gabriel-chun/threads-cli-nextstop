@@ -9,29 +9,88 @@ import (
 	"time"
 )
 
-// Search streams candidates from the crawler-rendered Threads search page,
-// ranked by how strongly the visible post text/username matches the query.
+// Search streams candidates from the crawler-rendered Threads search page.
+// It preserves the historical one-window behavior. Use SearchWithOptions when
+// retrieval depth or Google coverage fallback is desired.
 func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[SearchResult, error] {
+	return c.SearchWithOptions(ctx, query, limit, 1, false)
+}
+
+// SearchWithOptions combines three anonymous retrieval surfaces:
+//   1. Threads SSR search window
+//   2. logged-out Threads GraphQL pagination (up to depth pages total)
+//   3. optional Google site:threads.com coverage fallback
+//
+// All candidates are deduplicated before relevance scoring, and every surviving
+// row records which retrieval sources found it.
+func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, depth int, googleFallback bool) iter.Seq2[SearchResult, error] {
 	return func(yield func(SearchResult, error) bool) {
-		posts, err := c.searchSSR(ctx, query)
+		if depth < 1 {
+			depth = 1
+		}
+		if depth > 5 {
+			depth = 5
+		}
+
+		type sourcedPost struct {
+			post   Post
+			source string
+		}
+		var candidates []sourcedPost
+
+		posts, cursor, hasMore, err := c.searchSSRPage(ctx, query)
 		if err != nil {
 			yield(SearchResult{}, err)
 			return
 		}
-
-		results := make([]SearchResult, 0, len(posts))
-		seen := map[string]bool{}
-
 		for _, p := range posts {
+			candidates = append(candidates, sourcedPost{post: p, source: "threads_ssr"})
+		}
+
+		// Depth counts the SSR window as page 1. Resume from its cursor when
+		// available; otherwise ask GraphQL for its first anonymous page.
+		graphCursor := cursor
+		for page := 2; page <= depth; page++ {
+			if page > 2 && !hasMore {
+				break
+			}
+			gPosts, next, more, gErr := c.graphqlSearchPage(ctx, query, graphCursor)
+			if gErr != nil {
+				c.logf(1, "anonymous GraphQL search depth stopped at page %d: %v", page, gErr)
+				break
+			}
+			for _, p := range gPosts {
+				candidates = append(candidates, sourcedPost{post: p, source: "threads_graphql"})
+			}
+			if next == "" || next == graphCursor {
+				break
+			}
+			graphCursor, hasMore = next, more
+			if !more {
+				break
+			}
+		}
+
+		if googleFallback {
+			gPosts, gErr := c.googleThreadsSearch(ctx, query, 20)
+			if gErr != nil {
+				c.logf(1, "Google coverage fallback unavailable: %v", gErr)
+			} else {
+				for _, p := range gPosts {
+					candidates = append(candidates, sourcedPost{post: p, source: "google_site"})
+				}
+			}
+		}
+
+		byKey := map[string]SearchResult{}
+		for _, item := range candidates {
+			p := item.post
 			key := p.ID
 			if key == "" {
 				key = p.Permalink
 			}
-			if key != "" && seen[key] {
+			if key == "" {
 				continue
-			}
-			if key != "" {
-				seen[key] = true
 			}
 
 			score, matched := scoreSearchPost(p, query)
@@ -39,24 +98,34 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 				continue
 			}
 
-			results = append(results, SearchResult{
-				ID:             p.ID,
-				Query:          query,
-				SourceQueries:  []string{query},
-				Text:           p.Text,
-				Username:       p.Username,
-				Permalink:      p.Permalink,
-				Timestamp:      p.Timestamp,
-				MediaType:      p.MediaType,
-				IsReply:        p.IsReply,
-				IsQuotePost:    p.IsQuotePost,
-				RelevanceScore: score,
-				RelevanceTier:  relevanceTier(score),
-				MatchedTerms:   matched,
-				SearchedAt:     time.Now(),
-			})
+			r := SearchResult{
+				ID:               p.ID,
+				Query:            query,
+				SourceQueries:    []string{query},
+				Text:             p.Text,
+				Username:         p.Username,
+				Permalink:        p.Permalink,
+				Timestamp:        p.Timestamp,
+				MediaType:        p.MediaType,
+				IsReply:          p.IsReply,
+				IsQuotePost:      p.IsQuotePost,
+				RelevanceScore:   score,
+				RelevanceTier:    relevanceTier(score),
+				MatchedTerms:     matched,
+				RetrievalSources: []string{item.source},
+				SearchedAt:       time.Now(),
+			}
+			if existing, ok := byKey[key]; ok {
+				byKey[key] = mergeSearchResults(existing, r)
+			} else {
+				byKey[key] = r
+			}
 		}
 
+		results := make([]SearchResult, 0, len(byKey))
+		for _, r := range byKey {
+			results = append(results, r)
+		}
 		sortSearchResults(results)
 
 		for i, r := range results {
@@ -121,12 +190,18 @@ func (c *Client) BatchSearch(ctx context.Context, queries []string, minScore int
 }
 
 func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
+	posts, _, _, err := c.searchSSRPage(ctx, query)
+	return posts, err
+}
+
+func (c *Client) searchSSRPage(ctx context.Context, query string) ([]Post, string, bool, error) {
 	u := WebBase + "/search?q=" + url.QueryEscape(query)
 	html, err := c.getHTML(ctx, u)
 	if err != nil {
-		return nil, err
+		return nil, "", false, err
 	}
-	return parsePostsSSR(html), nil
+	cursor, more := pageInfoSSR(html)
+	return parsePostsSSR(html), cursor, more, nil
 }
 
 func sortSearchResults(results []SearchResult) {
@@ -141,6 +216,7 @@ func sortSearchResults(results []SearchResult) {
 func mergeSearchResults(a, b SearchResult) SearchResult {
 	a.SourceQueries = appendUniqueMany(a.SourceQueries, b.SourceQueries...)
 	a.MatchedTerms = appendUniqueMany(a.MatchedTerms, b.MatchedTerms...)
+	a.RetrievalSources = appendUniqueMany(a.RetrievalSources, b.RetrievalSources...)
 
 	if b.RelevanceScore > a.RelevanceScore {
 		a.Query = b.Query
