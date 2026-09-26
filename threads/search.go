@@ -72,7 +72,7 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 		}
 
 		if googleFallback {
-			gPosts, gErr := c.googleThreadsSearch(ctx, query, 20)
+			gPosts, gErr := c.googleThreadsSearch(ctx, query, 5)
 			if gErr != nil {
 				c.logf(1, "Google coverage fallback unavailable: %v", gErr)
 			} else {
