@@ -68,12 +68,26 @@ func (c *Client) graphqlPostReplies(ctx context.Context, postID string) ([]Post,
 
 // graphqlSearch runs the logged-out keyword search query.
 func (c *Client) graphqlSearch(ctx context.Context, query string) ([]Post, error) {
+	posts, _, _, err := c.graphqlSearchPage(ctx, query, "")
+	return posts, err
+}
+
+// graphqlSearchPage fetches one anonymous search page and returns its cursor.
+// Threads' persisted query may rotate or stop exposing pagination to logged-out
+// callers; callers should treat that as "no extra depth" rather than losing the
+// SSR results they already have.
+func (c *Client) graphqlSearchPage(ctx context.Context, query, cursor string) ([]Post, string, bool, error) {
 	vars := map[string]any{"query": query}
+	if cursor != "" {
+		vars["after"] = cursor
+	}
 	raw, err := c.graphqlPost(ctx, DocIDSearch, vars)
 	if err != nil {
-		return nil, err
+		return nil, "", false, err
 	}
-	return postsFromGraphQL(raw), nil
+	posts := postsFromGraphQL(raw)
+	next, more, _ := findPageInfo(raw, 0)
+	return posts, next, more, nil
 }
 
 // graphqlPost POSTs a persisted query and returns the decoded data tree.
