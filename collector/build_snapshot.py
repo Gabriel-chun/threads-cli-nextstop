@@ -18,6 +18,7 @@ CSV_FIELDS = [
     "relevance_tier",
     "matched_terms",
     "source_queries",
+    "retrieval_sources",
     "searched_at",
     "first_seen_at",
     "last_seen_at",
@@ -73,6 +74,11 @@ def normalize_row(row: dict[str, Any], run_at: str) -> dict[str, Any]:
         matched_terms = []
     item["matched_terms"] = unique(matched_terms)
 
+    retrieval_sources = item.get("retrieval_sources")
+    if not isinstance(retrieval_sources, list):
+        retrieval_sources = []
+    item["retrieval_sources"] = unique(retrieval_sources)
+
     item["relevance_score"] = int(item.get("relevance_score") or 0)
     item["first_seen_at"] = str(item.get("first_seen_at") or run_at)
     item["last_seen_at"] = run_at
@@ -89,6 +95,10 @@ def merge_rows(existing: dict[str, Any], incoming: dict[str, Any], *, increment_
     out["matched_terms"] = unique([
         *(existing.get("matched_terms") if isinstance(existing.get("matched_terms"), list) else []),
         *(incoming.get("matched_terms") if isinstance(incoming.get("matched_terms"), list) else []),
+    ])
+    out["retrieval_sources"] = unique([
+        *(existing.get("retrieval_sources") if isinstance(existing.get("retrieval_sources"), list) else []),
+        *(incoming.get("retrieval_sources") if isinstance(incoming.get("retrieval_sources"), list) else []),
     ])
 
     old_score = int(existing.get("relevance_score") or 0)
