@@ -11,6 +11,8 @@ const JSON_ARCHIVE_DATA_SOURCE_ID =
   process.env.NOTION_JSON_ARCHIVE_DATA_SOURCE_ID || "fb4c3b0b-8dbd-4604-826c-32d3bcb7b5c5";
 const QUERY_RUN_HISTORY_DATA_SOURCE_ID =
   process.env.NOTION_QUERY_RUN_HISTORY_DATA_SOURCE_ID || "bd2b6fc3-f4ca-4b54-9def-84f9708a6b96";
+const DUPLICATE_REVIEW_DATA_SOURCE_ID =
+  process.env.NOTION_DUPLICATE_REVIEW_DATA_SOURCE_ID || "fc925420-287c-4e42-9c68-b8ad2fd385a4";
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "collector/output";
 const QUERY_FILE = process.env.QUERY_FILE || "collector/queries.txt";
 const RUN_STAMP = process.env.RUN_STAMP;
@@ -109,6 +111,10 @@ function postProperties(row, seenCountOverride = null) {
     "Query": richText(row.query || ""),
     "Source Queries": richText(sourceQueries),
     "Retrieval Sources": richText(retrievalSources),
+    "Content Cluster ID": richText(row.content_cluster_id || ""),
+    "Signal Counted": { checkbox: Boolean(row.signal_counted) },
+    "Duplicate Group Size": number(row.duplicate_group_size ?? 1),
+    "Duplicate Reason": richText(row.duplicate_reason || ""),
     "Relevance Score": number(row.relevance_score ?? null),
     "Relevance Tier": select(row.relevance_tier || null),
     "First Seen": date(row.first_seen_at || row.searched_at || null),
@@ -386,6 +392,72 @@ async function upsertJsonArchive({
 }
 
 
+
+async function syncDuplicateReviewLog(duplicateRows, summary) {
+  if (!duplicateRows.length) return { created: 0, updated: 0 };
+
+  const existingPages = await listAllPages(DUPLICATE_REVIEW_DATA_SOURCE_ID);
+  const byCluster = new Map();
+  for (const page of existingPages) {
+    const clusterId = plainText(page.properties?.["Cluster ID"]);
+    if (clusterId) byCluster.set(clusterId, page);
+  }
+
+  let created = 0;
+  let updated = 0;
+
+  for (const row of duplicateRows) {
+    const clusterId = String(row.cluster_id || "");
+    if (!clusterId) continue;
+
+    const links = Array.isArray(row.duplicate_links)
+      ? row.duplicate_links.filter(Boolean)
+      : [];
+    const existing = byCluster.get(clusterId);
+
+    const properties = {
+      "Review": title(`@${row.username || "unknown"} — ${clip(row.sample_text || "duplicate cluster", 100)}`),
+      "Run At": date(summary.run_at || null),
+      "Track": richText(COLLECTOR_TRACK),
+      "Query": richText(row.query || ""),
+      "Username": richText(row.username || ""),
+      "Cluster ID": richText(clusterId),
+      "Raw Posts": number(row.raw_posts ?? links.length),
+      "Suppressed": number(row.suppressed ?? Math.max(0, links.length - 1)),
+      "Rule": select(row.rule || "same_author_exact"),
+      "Sample Text": richText(row.sample_text || ""),
+      "Representative URL": url(row.representative_url || links[0] || ""),
+      "Duplicate Links": richText(links.join("\n")),
+      "Review Status": select("Pending"),
+      "GitHub Run": url(GITHUB_RUN_URL),
+    };
+
+    if (existing) {
+      // Preserve a human decision once it is no longer Pending.
+      const reviewStatus = existing.properties?.["Review Status"]?.select?.name || "Pending";
+      if (reviewStatus !== "Pending") {
+        delete properties["Review Status"];
+      }
+      await notion.pages.update({ page_id: existing.id, properties });
+      updated += 1;
+    } else {
+      const page = await notion.pages.create({
+        parent: {
+          type: "data_source_id",
+          data_source_id: DUPLICATE_REVIEW_DATA_SOURCE_ID,
+        },
+        properties,
+      });
+      byCluster.set(clusterId, page);
+      created += 1;
+    }
+
+    await sleep(380);
+  }
+
+  return { created, updated };
+}
+
 async function upsertQueryRunHistory({
   summary,
   failedQueries,
@@ -408,6 +480,12 @@ async function upsertQueryRunHistory({
   else if (failed.length > 0) status = "Partial";
 
   const snapshotCount = Number(summary.snapshot_unique_rows || 0);
+  const uniqueSignals = Number(summary.unique_signals ?? snapshotCount);
+  const suppressedDuplicates = Number(summary.suppressed_duplicates ?? Math.max(0, snapshotCount - uniqueSignals));
+  const duplicateClusters = Number(summary.duplicate_clusters ?? 0);
+  const duplicateRate = snapshotCount > 0
+    ? Number(((suppressedDuplicates / snapshotCount) * 100).toFixed(1))
+    : 0;
   const newUnique = Number(syncResult.created || 0);
   const repeatedUpdated = Number(syncResult.updated || 0);
   const noveltyRate = snapshotCount > 0
@@ -483,6 +561,10 @@ async function upsertQueryRunHistory({
     "Repeated / Updated": number(repeatedUpdated),
     "Master Count": number(summary.master_unique_rows ?? 0),
     "Novelty Rate %": number(noveltyRate),
+    "Unique Signals": number(uniqueSignals),
+    "Suppressed Duplicates": number(suppressedDuplicates),
+    "Duplicate Clusters": number(duplicateClusters),
+    "Duplicate Rate %": number(duplicateRate),
     "New 3h": number(new3h),
     "New 12h": number(new12h),
     "Minutes Since Previous": number(minutesSincePrevious),
@@ -522,13 +604,15 @@ async function main() {
   const snapshotJson = await findOutput("snapshot_", ".json");
   const snapshotCsv = await findOutput("snapshot_", ".csv");
   const masterJson = join(OUTPUT_DIR, "master.json");
+  const duplicateReviewJsonl = join(OUTPUT_DIR, "duplicate_review.jsonl");
   const failedPath = join(OUTPUT_DIR, "failed_queries.txt");
 
   const masterJsonl = join(OUTPUT_DIR, "master.jsonl");
-  const [summary, snapshotRows, masterRows, failedQueries] = await Promise.all([
+  const [summary, snapshotRows, masterRows, duplicateRows, failedQueries] = await Promise.all([
     loadJson(summaryPath),
     loadJsonl(snapshotJsonl),
     loadJsonl(masterJsonl),
+    loadJsonl(duplicateReviewJsonl).catch(() => []),
     readFile(failedPath, "utf8").catch(() => ""),
   ]);
 
@@ -539,6 +623,11 @@ async function main() {
   const syncResult = await syncPosts(snapshotRows);
   console.log(
     `[notion] created ${syncResult.created}, updated ${syncResult.updated}`
+  );
+
+  const duplicateSync = await syncDuplicateReviewLog(duplicateRows, summary);
+  console.log(
+    `[notion] duplicate review created ${duplicateSync.created}, updated ${duplicateSync.updated}`
   );
 
   console.log("[notion] uploading snapshot CSV + JSONL");
