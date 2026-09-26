@@ -2,12 +2,12 @@ name: Next Stop Threads Collector
 
 on:
   schedule:
-    # GitHub cron uses UTC. Run hourly at minute 30 to build a rolling trend signal.
-    - cron: "30 * * * *"
+    # GitHub cron uses UTC. Run every 3 hours at minute 30.
+    - cron: "30 */3 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: nextstop-threads-collector
@@ -113,3 +113,38 @@ jobs:
           QUERY_FILE: ${{ env.QUERY_FILE }}
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         run: node collector/sync_notion.mjs
+
+      - name: Commit collector data back to repo
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p collector/archive/latest
+          mkdir -p collector/archive/snapshots
+          mkdir -p collector/archive/runs
+
+          cp collector/output/master.json collector/archive/latest/master.json
+          cp collector/output/master.jsonl collector/archive/latest/master.jsonl
+          cp collector/output/master.csv collector/archive/latest/master.csv
+
+          cp collector/output/snapshot_"$RUN_STAMP".json collector/archive/snapshots/
+          cp collector/output/snapshot_"$RUN_STAMP".jsonl collector/archive/snapshots/
+          cp collector/output/snapshot_"$RUN_STAMP".csv collector/archive/snapshots/
+
+          cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
+          cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
+          cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add collector/archive/
+
+          if git diff --cached --quiet; then
+            echo "[archive] no repository changes to commit"
+            exit 0
+          fi
+
+          git commit -m "data: collector snapshot $RUN_STAMP"
+          git pull --rebase origin main
+          git push origin HEAD:main
