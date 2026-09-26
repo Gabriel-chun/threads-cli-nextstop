@@ -19,6 +19,8 @@ const COLLECTOR_TRACK = process.env.COLLECTOR_TRACK || "";
 const COLLECTOR_CONFIG_KEY = process.env.COLLECTOR_CONFIG_KEY || "";
 const COLLECTOR_WINDOW_HOURS = Number(process.env.COLLECTOR_WINDOW_HOURS || 12);
 const COLLECTOR_MIN_SCORE = Number(process.env.COLLECTOR_MIN_SCORE || 30);
+const COLLECTOR_SEARCH_DEPTH = Number(process.env.COLLECTOR_SEARCH_DEPTH || 1);
+const COLLECTOR_GOOGLE_FALLBACK = String(process.env.COLLECTOR_GOOGLE_FALLBACK || "false") === "true";
 
 if (!NOTION_TOKEN) {
   throw new Error("NOTION_TOKEN is missing");
@@ -93,6 +95,9 @@ function postProperties(row, seenCountOverride = null) {
   const sourceQueries = Array.isArray(row.source_queries)
     ? JSON.stringify(row.source_queries, null, 0)
     : String(row.source_queries || "");
+  const retrievalSources = Array.isArray(row.retrieval_sources)
+    ? JSON.stringify(row.retrieval_sources, null, 0)
+    : String(row.retrieval_sources || "");
 
   return {
     "Post": title(cleanTitle(row)),
@@ -103,6 +108,7 @@ function postProperties(row, seenCountOverride = null) {
     "Posted At": date(row.timestamp || null),
     "Query": richText(row.query || ""),
     "Source Queries": richText(sourceQueries),
+    "Retrieval Sources": richText(retrievalSources),
     "Relevance Score": number(row.relevance_score ?? null),
     "Relevance Tier": select(row.relevance_tier || null),
     "First Seen": date(row.first_seen_at || row.searched_at || null),
@@ -415,6 +421,8 @@ async function upsertQueryRunHistory({
     "Query Count": number(queryLines.length),
     "Window Hours": number(COLLECTOR_WINDOW_HOURS),
     "Min Score": number(COLLECTOR_MIN_SCORE),
+    "Search Depth": number(COLLECTOR_SEARCH_DEPTH),
+    "Google Fallback": { checkbox: COLLECTOR_GOOGLE_FALLBACK },
     "Raw Rows": number(summary.raw_rows ?? 0),
     "Snapshot Unique": number(snapshotCount),
     "New Unique": number(newUnique),
