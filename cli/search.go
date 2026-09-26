@@ -8,6 +8,8 @@ import (
 
 func newSearchCmd(a *App) *cobra.Command {
 	var typ string
+	var depth int
+	var googleFallback bool
 	cmd := &cobra.Command{
 		Use:   "search <query>",
 		Short: "Keyword search across public posts",
@@ -21,7 +23,7 @@ search to anonymous callers, the stream ends honestly after what it found.`,
 			ctx := cmd.Context()
 			query := strings.Join(args, " ")
 			a.progress("searching %q", query)
-			for r, err := range a.Client.Search(ctx, query, a.Limit) {
+			for r, err := range a.Client.SearchWithOptions(ctx, query, a.Limit, depth, googleFallback) {
 				if err != nil {
 					return err
 				}
@@ -33,5 +35,7 @@ search to anonymous callers, the stream ends honestly after what it found.`,
 		},
 	}
 	cmd.Flags().StringVar(&typ, "type", "top", "top|recent")
+	cmd.Flags().IntVar(&depth, "depth", 1, "anonymous retrieval depth, 1-5 pages including the SSR window")
+	cmd.Flags().BoolVar(&googleFallback, "google-fallback", false, "add Google site:threads.com URL discovery as a best-effort coverage fallback")
 	return cmd
 }
