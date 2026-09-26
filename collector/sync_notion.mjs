@@ -289,6 +289,49 @@ async function upsertCollectorRun({
     notion_updated: syncResult.updated,
   };
 
+  const runAt = summary.run_at ? new Date(summary.run_at) : new Date();
+  const cutoff3h = new Date(runAt.getTime() - 3 * 60 * 60 * 1000);
+  const cutoff12h = new Date(runAt.getTime() - 12 * 60 * 60 * 1000);
+
+  const firstSeenDate = (row) => {
+    const value = row.first_seen_at || row.searched_at || null;
+    if (!value) return null;
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? null : d;
+  };
+
+  const new3h = masterRows.filter((row) => {
+    const d = firstSeenDate(row);
+    return d && d >= cutoff3h && d <= runAt;
+  }).length;
+  const new12h = masterRows.filter((row) => {
+    const d = firstSeenDate(row);
+    return d && d >= cutoff12h && d <= runAt;
+  }).length;
+
+  const sourceSet = (row) =>
+    Array.isArray(row.retrieval_sources) ? new Set(row.retrieval_sources) : new Set();
+
+  const ssrHits = snapshotRows.filter((row) => sourceSet(row).has("threads_ssr")).length;
+  const graphQLHits = snapshotRows.filter((row) => sourceSet(row).has("threads_graphql")).length;
+  const googleHits = snapshotRows.filter((row) => sourceSet(row).has("google_site")).length;
+
+  let minutesSincePrevious = null;
+  const previousRuns = await notion.dataSources.query({
+    data_source_id: QUERY_RUN_HISTORY_DATA_SOURCE_ID,
+    sorts: [{ property: "Run At", direction: "descending" }],
+    page_size: 10,
+  });
+  const previous = (previousRuns.results || [])
+    .filter((x) => x.object === "page")
+    .map((x) => x.properties?.["Run At"]?.date?.start)
+    .filter(Boolean)
+    .map((x) => new Date(x))
+    .find((d) => d < runAt);
+  if (previous) {
+    minutesSincePrevious = Math.round((runAt.getTime() - previous.getTime()) / 60000);
+  }
+
   const properties = {
     "Run": title(runTitle),
     "Run At": date(summary.run_at || null),
@@ -390,6 +433,8 @@ async function upsertQueryRunHistory({
   summary,
   failedQueries,
   syncResult,
+  snapshotRows,
+  masterRows,
 }) {
   const runTitle = `Query Run ${RUN_STAMP}`;
   const queryLines = (await readFile(QUERY_FILE, "utf8"))
@@ -429,6 +474,12 @@ async function upsertQueryRunHistory({
     "Repeated / Updated": number(repeatedUpdated),
     "Master Count": number(summary.master_unique_rows ?? 0),
     "Novelty Rate %": number(noveltyRate),
+    "New 3h": number(new3h),
+    "New 12h": number(new12h),
+    "Minutes Since Previous": number(minutesSincePrevious),
+    "SSR Hits": number(ssrHits),
+    "GraphQL Hits": number(graphQLHits),
+    "Google Hits": number(googleHits),
     "Status": select(status),
     "GitHub Run": url(GITHUB_RUN_URL),
   };
@@ -464,9 +515,11 @@ async function main() {
   const masterJson = join(OUTPUT_DIR, "master.json");
   const failedPath = join(OUTPUT_DIR, "failed_queries.txt");
 
-  const [summary, snapshotRows, failedQueries] = await Promise.all([
+  const masterJsonl = join(OUTPUT_DIR, "master.jsonl");
+  const [summary, snapshotRows, masterRows, failedQueries] = await Promise.all([
     loadJson(summaryPath),
     loadJsonl(snapshotJsonl),
+    loadJsonl(masterJsonl),
     readFile(failedPath, "utf8").catch(() => ""),
   ]);
 
@@ -511,6 +564,8 @@ async function main() {
     summary,
     failedQueries,
     syncResult,
+    snapshotRows,
+    masterRows,
   });
 
   console.log("[notion] sync complete");
