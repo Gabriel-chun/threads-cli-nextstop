@@ -31,6 +31,10 @@ function numberValue(prop, fallback) {
     : fallback;
 }
 
+function checkboxValue(prop, fallback = false) {
+  return prop?.type === "checkbox" ? Boolean(prop.checkbox) : fallback;
+}
+
 const response = await notion.dataSources.query({
   data_source_id: CONTROL_DATA_SOURCE_ID,
   filter: {
@@ -67,11 +71,13 @@ if (!queries.length) {
 
 const windowHours = Math.max(1, Math.floor(numberValue(props["Window Hours"], 12)));
 const minScore = Math.max(0, Math.floor(numberValue(props["Min Score"], 30)));
+const searchDepth = Math.min(5, Math.max(1, Math.floor(numberValue(props["Search Depth"], 3))));
+const googleFallback = checkboxValue(props["Google Fallback"], true);
 
 await writeFile(OUTPUT_QUERY_FILE, queries.join("\n") + "\n", "utf8");
 
 console.log(
-  `[config] track=${track || "(untitled)"} key=${configKey || "(none)"} queries=${queries.length} window_hours=${windowHours} min_score=${minScore}`
+  `[config] track=${track || "(untitled)"} key=${configKey || "(none)"} queries=${queries.length} window_hours=${windowHours} min_score=${minScore} search_depth=${searchDepth} google_fallback=${googleFallback}`
 );
 
 if (process.env.GITHUB_ENV) {
@@ -81,6 +87,8 @@ if (process.env.GITHUB_ENV) {
     `COLLECTOR_CONFIG_KEY=${configKey}`,
     `COLLECTOR_WINDOW_HOURS=${windowHours}`,
     `COLLECTOR_MIN_SCORE=${minScore}`,
+    `COLLECTOR_SEARCH_DEPTH=${searchDepth}`,
+    `COLLECTOR_GOOGLE_FALLBACK=${googleFallback ? "true" : "false"}`,
   ];
   await appendFile(process.env.GITHUB_ENV, lines.join("\n") + "\n", "utf8");
 }
