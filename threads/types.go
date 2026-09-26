@@ -71,8 +71,9 @@ type SearchResult struct {
 	IsQuotePost    bool      `json:"is_quote_post,omitempty"`
 	RelevanceScore int       `json:"relevance_score"`
 	RelevanceTier  string    `json:"relevance_tier"`
-	MatchedTerms   []string  `json:"matched_terms,omitempty"`
-	SearchedAt     time.Time `json:"searched_at"`
+	MatchedTerms     []string  `json:"matched_terms,omitempty"`
+	RetrievalSources []string  `json:"retrieval_sources,omitempty"`
+	SearchedAt       time.Time `json:"searched_at"`
 }
 
 // asReply converts a parsed post (a reply lives in the same thread_items shape
