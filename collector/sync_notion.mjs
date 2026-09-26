@@ -512,11 +512,12 @@ async function upsertQueryRunHistory({
   };
   const currentMasterRows = masterRows.filter(belongsToCurrentTrack);
 
-  const new3h = currentMasterRows.filter((row) => {
+  const currentSignalRows = currentMasterRows.filter((row) => Boolean(row.signal_counted));
+  const new3h = currentSignalRows.filter((row) => {
     const d = firstSeenDate(row);
     return d && d >= cutoff3h && d <= runAt;
   }).length;
-  const new12h = currentMasterRows.filter((row) => {
+  const new12h = currentSignalRows.filter((row) => {
     const d = firstSeenDate(row);
     return d && d >= cutoff12h && d <= runAt;
   }).length;
