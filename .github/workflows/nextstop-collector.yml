@@ -2,8 +2,8 @@ name: Next Stop Threads Collector
 
 on:
   schedule:
-    # GitHub cron uses UTC. These are 00:30 and 12:30 in Taiwan (UTC+8).
-    - cron: "30 16,4 * * *"
+    # GitHub cron uses UTC. Run hourly at minute 30 to build a rolling trend signal.
+    - cron: "30 * * * *"
   workflow_dispatch:
 
 permissions:
