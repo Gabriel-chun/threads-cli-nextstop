@@ -2,7 +2,7 @@ name: Next Stop Threads Collector
 
 on:
   schedule:
-    # GitHub scheduled events may be delayed or dropped. Trigger twice per hour,
+    # GitHub scheduled events may be delayed or dropped. ZIP upload smoke trigger. Trigger twice per hour,
     # then gate against the latest archived successful collector run so the
     # effective cadence stays roughly hourly with a fallback slot.
     - cron: "17,47 * * * *"
