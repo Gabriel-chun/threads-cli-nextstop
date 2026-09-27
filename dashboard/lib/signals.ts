@@ -10,6 +10,9 @@ export type RawPost = {
   last_seen_at?: string;
   seen_count?: number;
   relevance_score?: number;
+  dedupe_counted?: boolean;
+  signal_counted?: boolean;
+  clean_exclusion_reason?: string;
 };
 
 export type SignalKind = "actionable" | "context" | "noise";
@@ -128,9 +131,20 @@ export function concertPosts(posts: RawPost[]) {
   );
 }
 
+function hasUnifiedCleanState(post: RawPost) {
+  return (
+    Object.prototype.hasOwnProperty.call(post, "dedupe_counted") ||
+    Object.prototype.hasOwnProperty.call(post, "clean_exclusion_reason")
+  );
+}
+
 export function cleanSignals(posts: RawPost[]): Signal[] {
   return concertPosts(posts)
-    .filter((post) => !isTransaction(post.text || ""))
+    .filter((post) =>
+      hasUnifiedCleanState(post)
+        ? Boolean(post.signal_counted)
+        : !isTransaction(post.text || "")
+    )
     .map((post) => ({ ...post, ...classify(post.text || "") }))
     .sort((a, b) => {
       const at = new Date(a.timestamp || a.first_seen_at || 0).getTime();
@@ -199,7 +213,9 @@ export async function snapshot() {
     masterCount: posts.length,
     concertRaw: concert.length,
     cleanCount: signals.length,
-    excludedTransactions: concert.length - signals.length,
+    excludedTransactions: concert.some(hasUnifiedCleanState)
+      ? concert.filter((post) => post.clean_exclusion_reason === "ticket_resale").length
+      : concert.length - signals.length,
     actionable,
     context,
     noise,
