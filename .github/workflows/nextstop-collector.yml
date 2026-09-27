@@ -2,8 +2,10 @@ name: Next Stop Threads Collector
 
 on:
   schedule:
-    # GitHub cron uses UTC. Observe Threads once per hour at minute 30.
-    - cron: "30 * * * *"
+    # GitHub scheduled events may be delayed or dropped. Trigger twice per hour,
+    # then gate against the latest archived successful collector run so the
+    # effective cadence stays roughly hourly with a fallback slot.
+    - cron: "17,47 * * * *"
   workflow_dispatch:
   push:
     paths:
@@ -17,7 +19,62 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  cadence:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+      minutes_since_last: ${{ steps.gate.outputs.minutes_since_last }}
+    steps:
+      - name: Checkout cadence state
+        uses: actions/checkout@v4
+
+      - name: Decide whether collection is due
+        id: gate
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import glob
+          import json
+          import os
+          from datetime import datetime, timezone
+
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          if event != "schedule":
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+                  f.write("should_run=true\n")
+                  f.write("minutes_since_last=manual\n")
+              print("[cadence] non-scheduled event; collector is allowed to run")
+              raise SystemExit
+
+          paths = sorted(glob.glob("collector/archive/runs/summary_*.json"))
+          latest = None
+          if paths:
+              try:
+                  with open(paths[-1], encoding="utf-8") as fh:
+                      latest = json.load(fh).get("run_at")
+              except Exception:
+                  latest = None
+
+          minutes = None
+          if latest:
+              try:
+                  last = datetime.fromisoformat(latest.replace("Z", "+00:00")).astimezone(timezone.utc)
+                  minutes = (datetime.now(timezone.utc) - last).total_seconds() / 60
+              except Exception:
+                  minutes = None
+
+          should_run = minutes is None or minutes >= 45
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"should_run={'true' if should_run else 'false'}\n")
+              f.write(f"minutes_since_last={minutes:.1f}\n" if minutes is not None else "minutes_since_last=unknown\n")
+
+          print(f"[cadence] last archive age: {minutes if minutes is not None else 'unknown'} minutes")
+          print(f"[cadence] should_run={should_run}")
+          PY
+
   collect:
+    needs: cadence
+    if: needs.cadence.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
