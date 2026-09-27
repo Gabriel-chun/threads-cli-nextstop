@@ -31,6 +31,8 @@ CSV_FIELDS = [
     "signal_counted",
     "duplicate_group_size",
     "duplicate_reason",
+    "dedupe_counted",
+    "clean_exclusion_reason",
 ]
 
 def parse_time(value: Any) -> datetime | None:
@@ -74,6 +76,74 @@ def normalize_content(value: Any) -> str:
     text = re.sub(r"[@#]", "", text)
     text = re.sub(r"[^0-9a-z\u3400-\u9fff]+", "", text)
     return text
+
+PRESERVE_TICKET_FRICTION = re.compile(
+    r"Pia帳號|日本門號|本人確認|本確|護照|退票|客服|實名制|"
+    r"黃牛.{0,12}(?:搶不到|買不到)|(?:搶不到|沒搶到|未搶到).{0,12}票|"
+    r"抽選|公售|現場再換票|愛心席|入場|手環|購票紀錄|"
+    r"換票.{0,8}讓票.{0,8}退票|還有什麼機會.{0,12}(?:票|拿到票)|"
+    r"(?:買|拿|搶).{0,8}票.{0,16}(?:怎麼|如何|嗎|機會|失敗)",
+    re.I,
+)
+
+TRANSACTION_PATTERNS = [
+    re.compile(pattern, re.I)
+    for pattern in [
+        r"讓票",
+        r"出票",
+        r"售票",
+        r"原價讓",
+        r"原價出",
+        r"代友原價讓",
+        r"多搶到",
+        r"搶多了",
+        r"多搶一張",
+        r"轉讓",
+        r"降價賣",
+        r"降售",
+        r"#(?:讓票|讓售|售)",
+        r"pm\s*帶價",
+        r"帶價",
+        r"可拆",
+        r"票.{0,24}私訊",
+        r"私訊.{0,24}票",
+        r"求售",
+        r"現場給票",
+    ]
+]
+
+TICKET_CONTEXT = re.compile(r"演唱會|concert|門票|票種|演唱會飛", re.I)
+SALE_CONTEXT = re.compile(
+    r"連號|連坐|面交|匯款|原價|有意.{0,8}(?:私|dm)|"
+    r"(?:兩張|2張).{0,12}(?:售|讓|出)|一張可賣|付款|僅一張.{0,8}(?:私|dm)",
+    re.I,
+)
+
+
+def is_ticket_transaction(value: Any) -> bool:
+    text = unicodedata.normalize("NFKC", str(value or "")).strip()
+    if not text:
+        return False
+    if PRESERVE_TICKET_FRICTION.search(text):
+        return False
+    if any(pattern.search(text) for pattern in TRANSACTION_PATTERNS):
+        return True
+    return bool(TICKET_CONTEXT.search(text) and SALE_CONTEXT.search(text))
+
+
+def apply_clean_rules(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    for row in rows:
+        if not bool(row.get("dedupe_counted")):
+            row["signal_counted"] = False
+            row["clean_exclusion_reason"] = "content_duplicate"
+        elif is_ticket_transaction(row.get("text")):
+            row["signal_counted"] = False
+            row["clean_exclusion_reason"] = "ticket_resale"
+        else:
+            row["signal_counted"] = True
+            row["clean_exclusion_reason"] = ""
+    return rows
+
 
 def cluster_id_for(username: str, canonical: str) -> str:
     digest = hashlib.sha1(f"{username.lower()}|{canonical}".encode("utf-8")).hexdigest()[:16]
@@ -150,7 +220,7 @@ def assign_content_clusters(rows: list[dict[str, Any]], window_hours: int = 12, 
             row["content_cluster_id"] = group["id"]
             row["duplicate_group_size"] = size
             row["duplicate_reason"] = reason
-            row["signal_counted"] = key_for(row) == rep_key
+            row["dedupe_counted"] = key_for(row) == rep_key
     return rows
 
 def duplicate_review_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -164,7 +234,7 @@ def duplicate_review_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for cid, members in by_cluster.items():
         if len(members) <= 1:
             continue
-        representative = next((r for r in members if r.get("signal_counted")), members[0])
+        representative = next((r for r in members if r.get("dedupe_counted")), members[0])
         links = unique([r.get("permalink") for r in members])
         rule = "same_author_near_duplicate" if any(
             r.get("duplicate_reason") == "same_author_near_duplicate" for r in members
@@ -358,7 +428,7 @@ def main() -> None:
         else:
             snapshot_by_key[key] = row
 
-    snapshot_rows = sort_rows(assign_content_clusters(list(snapshot_by_key.values()), window_hours=window_hours))
+    snapshot_rows = sort_rows(apply_clean_rules(assign_content_clusters(list(snapshot_by_key.values()), window_hours=window_hours)))
 
     output_dir = Path(args.output_dir)
     snapshot_jsonl = output_dir / f"snapshot_{args.run_stamp}.jsonl"
@@ -386,7 +456,7 @@ def main() -> None:
         else:
             master_by_key[key] = row
 
-    master = sort_rows(assign_content_clusters(list(master_by_key.values()), window_hours=window_hours))
+    master = sort_rows(apply_clean_rules(assign_content_clusters(list(master_by_key.values()), window_hours=window_hours)))
     write_jsonl(master_jsonl, master)
     write_csv(state_dir / "master.csv", master)
 
@@ -398,8 +468,13 @@ def main() -> None:
     write_jsonl(output_dir / "duplicate_review.jsonl", duplicate_rows)
     write_json(output_dir / "duplicate_review.json", duplicate_rows)
 
+    dedupe_unique_signals = sum(1 for row in snapshot_rows if row.get("dedupe_counted"))
     unique_signals = sum(1 for row in snapshot_rows if row.get("signal_counted"))
-    suppressed_duplicates = max(0, len(snapshot_rows) - unique_signals)
+    suppressed_duplicates = max(0, len(snapshot_rows) - dedupe_unique_signals)
+    excluded_transactions = sum(
+        1 for row in snapshot_rows
+        if row.get("clean_exclusion_reason") == "ticket_resale"
+    )
     duplicate_clusters = len(duplicate_rows)
 
     summary = {
@@ -410,8 +485,11 @@ def main() -> None:
         "master_unique_rows": len(master),
         "min_score": args.min_score,
         "since_hours": window_hours,
+        "dedupe_unique_signals": dedupe_unique_signals,
         "unique_signals": unique_signals,
         "suppressed_duplicates": suppressed_duplicates,
+        "excluded_transactions": excluded_transactions,
+        "clean_rate_pct": round((unique_signals / dedupe_unique_signals) * 100, 1) if dedupe_unique_signals else 0,
         "duplicate_clusters": duplicate_clusters,
     }
     (output_dir / "summary.json").write_text(
