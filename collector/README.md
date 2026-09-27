@@ -4,7 +4,7 @@ This collector keeps the data layer separate from the intelligence layer. Each s
 
 ## Schedule
 
-GitHub Actions runs at **00:30 and 12:30 Taiwan time** every day. You can also run it manually from the Actions tab.
+GitHub Actions has two fallback schedule slots per hour. A cadence gate checks the latest successful archive and only runs collection when the previous successful run is at least 45 minutes old. This keeps the effective cadence roughly hourly while reducing gaps caused by delayed or dropped GitHub scheduled events. You can also run it manually from the Actions tab.
 
 ## Pipeline
 
@@ -14,11 +14,13 @@ queries.txt
   -> keep posts from the last 12 hours
   -> relevance_score >= 30
   -> deduplicate by permalink / post id
+  -> content-level dedupe (Dedupe Counted)
+  -> ticket-resale clean rule (Signal Counted)
   -> snapshot JSONL + CSV
-  -> merge into deduplicated master JSONL + CSV
+  -> merge into accumulated master JSONL + CSV
 ```
 
-The collector does **not** run the rule-based classifier. GPT/ChatGPT analysis can happen later against the raw master data.
+The collector now runs deterministic dedupe + ticket-resale clean rules. Raw rows remain preserved; `dedupe_counted`, `signal_counted`, and `clean_exclusion_reason` record how each row moves through the pipeline. Higher-level semantic classification can still happen later against the clean master data.
 
 ## Queries
 
