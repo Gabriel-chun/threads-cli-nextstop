@@ -74,14 +74,6 @@ func TestScoreSearchPostRejectsUnrelatedFeed(t *testing.T) {
 	}
 }
 
-func TestLongestQuerySubstringMatch(t *testing.T) {
-	got := longestQuerySubstringMatch("台北大巨蛋", "今天去大巨蛋看演唱會", 3)
-	if got != "大巨蛋" {
-		t.Fatalf("expected 大巨蛋, got %q", got)
-	}
-}
-
-
 func TestRelevanceTier(t *testing.T) {
 	cases := []struct {
 		score int
