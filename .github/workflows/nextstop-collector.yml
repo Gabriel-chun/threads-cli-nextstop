@@ -97,6 +97,9 @@ jobs:
           mkdir -p bin
           go build -o bin/th ./cmd/th
 
+      - name: Validate clean rules
+        run: python3 -m unittest collector/test_clean_rules.py
+
       - name: Set up Node for Notion config
         uses: actions/setup-node@v4
         with:
