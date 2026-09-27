@@ -4,12 +4,15 @@ import { snapshot, compact } from "../../../lib/signals";
 
 const handler = createMcpHandler(
   (server) => {
-    server.tool(
+    server.registerTool(
       "get_recent_signals",
-      "Return clean Next Stop Live concert signals with resale/transaction posts excluded.",
       {
-        limit: z.number().int().min(1).max(50).default(20),
-        kind: z.enum(["actionable", "context", "noise"]).optional()
+        title: "Get recent signals",
+        description: "Return clean Next Stop Live concert signals with resale/transaction posts excluded.",
+        inputSchema: z.object({
+          limit: z.number().int().min(1).max(50).default(20),
+          kind: z.enum(["actionable", "context", "noise"]).optional()
+        })
       },
       async ({ limit, kind }) => {
         const data = await snapshot();
@@ -23,10 +26,13 @@ const handler = createMcpHandler(
       }
     );
 
-    server.tool(
+    server.registerTool(
       "get_demand_clusters",
-      "Return current concert demand/context clusters and counts.",
-      {},
+      {
+        title: "Get demand clusters",
+        description: "Return current concert demand/context clusters and counts.",
+        inputSchema: z.object({})
+      },
       async () => {
         const data = await snapshot();
         return {
@@ -45,10 +51,13 @@ const handler = createMcpHandler(
       }
     );
 
-    server.tool(
+    server.registerTool(
       "get_signal_detail",
-      "Fetch one clean signal by Threads post ID.",
-      { id: z.string().min(1) },
+      {
+        title: "Get signal detail",
+        description: "Fetch one clean signal by Threads post ID.",
+        inputSchema: z.object({ id: z.string().min(1) })
+      },
       async ({ id }) => {
         const data = await snapshot();
         const signal = data.signals.find((row) => row.id === id);
@@ -61,10 +70,13 @@ const handler = createMcpHandler(
       }
     );
 
-    server.tool(
+    server.registerTool(
       "get_collector_health",
-      "Return collector health and archive statistics.",
-      {},
+      {
+        title: "Get collector health",
+        description: "Return collector health and archive statistics.",
+        inputSchema: z.object({})
+      },
       async () => {
         const data = await snapshot();
         return {
@@ -83,8 +95,12 @@ const handler = createMcpHandler(
       }
     );
   },
-  {},
-  { basePath: "/api" }
+  {
+    serverInfo: {
+      name: "next-stop-live",
+      version: "0.1.0"
+    }
+  }
 );
 
-export { handler as GET, handler as POST, handler as DELETE };
+export { handler as GET, handler as POST };
