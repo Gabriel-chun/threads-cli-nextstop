@@ -118,18 +118,10 @@ jobs:
       - name: Decide repository archive cadence
         id: archive_cadence
         shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
-          hour="$(date -u +'%H')"
-          if [[ "$EVENT_NAME" == "workflow_dispatch" || $((10#$hour % 3)) -eq 0 ]]; then
-            echo "commit=true" >> "$GITHUB_OUTPUT"
-            echo "[archive] repository commit is due"
-          else
-            echo "commit=false" >> "$GITHUB_OUTPUT"
-            echo "[archive] hourly observation only; repository commit is not due"
-          fi
+          echo "commit=true" >> "$GITHUB_OUTPUT"
+          echo "[archive] commit every successful collector run"
 
       - name: Commit collector data back to repo
         if: steps.archive_cadence.outputs.commit == 'true'
