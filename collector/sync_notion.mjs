@@ -602,6 +602,7 @@ async function upsertQueryRunHistory({
   const properties = {
     "Run": title(runTitle),
     "Run At": date(summary.run_at || null),
+    "Pipeline Version": richText("clean-v2"),
     "Track": richText(COLLECTOR_TRACK),
     "Config Key": richText(COLLECTOR_CONFIG_KEY),
     "Queries": richText(clip(queryLines.join("\n"))),
