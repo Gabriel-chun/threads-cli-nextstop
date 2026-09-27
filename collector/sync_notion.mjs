@@ -179,9 +179,8 @@ async function uploadFile(path, contentType, notionFilename = basename(path)) {
     content_type: contentType,
   });
 
-  // CSV/JSONL are UTF-8 text. Passing a string lets the official SDK build
-  // the multipart body itself and avoids runtime-specific Blob issues.
-  const data = await readFile(path, "utf8");
+  const isBinary = contentType === "application/zip";
+  const data = isBinary ? await readFile(path) : await readFile(path, "utf8");
 
   await notion.fileUploads.send({
     file_upload_id: upload.id,
@@ -389,6 +388,8 @@ async function upsertJsonArchive({
   failedQueries,
   snapshotJsonUpload,
   masterJsonUpload,
+  snapshotZipUpload,
+  masterZipUpload,
 }) {
   const runTitle = `JSON Archive ${RUN_STAMP}`;
   const failed = failedQueries
@@ -413,6 +414,8 @@ async function upsertJsonArchive({
     "Master Count": number(summary.master_unique_rows ?? 0),
     "Snapshot JSON": fileProperty(snapshotJsonUpload),
     "Master JSON": fileProperty(masterJsonUpload),
+    "Snapshot ZIP": fileProperty(snapshotZipUpload),
+    "Master ZIP": fileProperty(masterZipUpload),
     "GitHub Run": url(GITHUB_RUN_URL),
   };
 
@@ -662,7 +665,9 @@ async function main() {
   const snapshotJsonl = await findOutput("snapshot_", ".jsonl");
   const snapshotJson = await findOutput("snapshot_", ".json");
   const snapshotCsv = await findOutput("snapshot_", ".csv");
+  const snapshotZip = await findOutput("snapshot_", ".zip");
   const masterJson = join(OUTPUT_DIR, "master.json");
+  const masterZip = join(OUTPUT_DIR, "master.zip");
   const duplicateReviewJsonl = join(OUTPUT_DIR, "duplicate_review.jsonl");
   const failedPath = join(OUTPUT_DIR, "failed_queries.txt");
 
@@ -704,10 +709,12 @@ async function main() {
     syncResult,
   });
 
-  console.log("[notion] uploading JSON archive files");
-  const [snapshotJsonUpload, masterJsonUpload] = await Promise.all([
+  console.log("[notion] uploading JSON archive files + direct-download ZIPs");
+  const [snapshotJsonUpload, masterJsonUpload, snapshotZipUpload, masterZipUpload] = await Promise.all([
     uploadFile(snapshotJson, "application/json"),
     uploadFile(masterJson, "application/json"),
+    uploadFile(snapshotZip, "application/zip"),
+    uploadFile(masterZip, "application/zip"),
   ]);
 
   await upsertJsonArchive({
@@ -715,6 +722,8 @@ async function main() {
     failedQueries,
     snapshotJsonUpload,
     masterJsonUpload,
+    snapshotZipUpload,
+    masterZipUpload,
   });
 
   await upsertQueryRunHistory({

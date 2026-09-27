@@ -162,6 +162,21 @@ jobs:
           cp collector/failed_queries.txt collector/output/failed_queries.txt
           cp "$QUERY_FILE" collector/output/queries.txt
 
+      - name: Build direct-download JSON archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          snapshot_json="collector/output/snapshot_${RUN_STAMP}.json"
+          snapshot_zip="collector/output/snapshot_${RUN_STAMP}.zip"
+          master_json="collector/output/master.json"
+          master_zip="collector/output/master.zip"
+
+          zip -j -q "$snapshot_zip" "$snapshot_json"
+          zip -j -q "$master_zip" "$master_json"
+
+          unzip -t "$snapshot_zip"
+          unzip -t "$master_zip"
+
       - name: Save master database
         uses: actions/cache/save@v4
         with:
