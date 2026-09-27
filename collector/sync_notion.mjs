@@ -83,6 +83,10 @@ function numberValue(prop) {
   return prop?.type === "number" && typeof prop.number === "number" ? prop.number : 0;
 }
 
+function checkboxValue(prop) {
+  return prop?.type === "checkbox" ? Boolean(prop.checkbox) : false;
+}
+
 function chunkText(text, size = 1800) {
   const value = String(text || "");
   if (!value) return [];
@@ -112,7 +116,9 @@ function postProperties(row, seenCountOverride = null) {
     "Source Queries": richText(sourceQueries),
     "Retrieval Sources": richText(retrievalSources),
     "Content Cluster ID": richText(row.content_cluster_id || ""),
+    "Dedupe Counted": { checkbox: Boolean(row.dedupe_counted) },
     "Signal Counted": { checkbox: Boolean(row.signal_counted) },
+    "Clean Exclusion Reason": richText(row.clean_exclusion_reason || ""),
     "Duplicate Group Size": number(row.duplicate_group_size ?? 1),
     "Duplicate Reason": richText(row.duplicate_reason || ""),
     "Relevance Score": number(row.relevance_score ?? null),
@@ -204,7 +210,7 @@ function fileProperty(upload) {
   };
 }
 
-async function syncPosts(snapshotRows) {
+async function syncPosts(snapshotRows, masterRows) {
   const existingPages = await listAllPages(POSTS_DATA_SOURCE_ID);
   const byPostId = new Map();
   const byPermalink = new Map();
@@ -219,6 +225,10 @@ async function syncPosts(snapshotRows) {
 
   let created = 0;
   let updated = 0;
+  let cleanBackfilled = 0;
+  const snapshotKeys = new Set(
+    snapshotRows.map((row) => String(row.id || row.permalink || "")).filter(Boolean)
+  );
 
   for (const row of snapshotRows) {
     const id = String(row.id || row.permalink || "");
@@ -264,7 +274,45 @@ async function syncPosts(snapshotRows) {
     await sleep(380);
   }
 
-  return { created, updated };
+  // Backfill clean state for master rows that were not part of this snapshot.
+  // This makes Notion converge to the same source-of-truth clean flags as GitHub
+  // without rewriting every post on every hourly run.
+  for (const row of masterRows) {
+    const id = String(row.id || row.permalink || "");
+    if (!id || snapshotKeys.has(id)) continue;
+
+    const permalink = String(row.permalink || "");
+    const existing = byPostId.get(id) || byPermalink.get(permalink);
+    if (!existing) continue;
+
+    const existingSignal = checkboxValue(existing.properties?.["Signal Counted"]);
+    const existingDedupe = checkboxValue(existing.properties?.["Dedupe Counted"]);
+    const existingReason = plainText(existing.properties?.["Clean Exclusion Reason"]);
+    const desiredSignal = Boolean(row.signal_counted);
+    const desiredDedupe = Boolean(row.dedupe_counted);
+    const desiredReason = String(row.clean_exclusion_reason || "");
+
+    if (
+      existingSignal === desiredSignal &&
+      existingDedupe === desiredDedupe &&
+      existingReason === desiredReason
+    ) {
+      continue;
+    }
+
+    await notion.pages.update({
+      page_id: existing.id,
+      properties: {
+        "Dedupe Counted": { checkbox: desiredDedupe },
+        "Signal Counted": { checkbox: desiredSignal },
+        "Clean Exclusion Reason": richText(desiredReason),
+      },
+    });
+    cleanBackfilled += 1;
+    await sleep(380);
+  }
+
+  return { created, updated, cleanBackfilled };
 }
 
 async function upsertCollectorRun({
@@ -480,8 +528,14 @@ async function upsertQueryRunHistory({
   else if (failed.length > 0) status = "Partial";
 
   const snapshotCount = Number(summary.snapshot_unique_rows || 0);
-  const uniqueSignals = Number(summary.unique_signals ?? snapshotCount);
-  const suppressedDuplicates = Number(summary.suppressed_duplicates ?? Math.max(0, snapshotCount - uniqueSignals));
+  const dedupeUnique = Number(summary.dedupe_unique_signals ?? summary.unique_signals ?? snapshotCount);
+  const uniqueSignals = Number(summary.unique_signals ?? dedupeUnique);
+  const suppressedDuplicates = Number(summary.suppressed_duplicates ?? Math.max(0, snapshotCount - dedupeUnique));
+  const excludedTransactions = Number(summary.excluded_transactions ?? Math.max(0, dedupeUnique - uniqueSignals));
+  const cleanRate = Number(
+    summary.clean_rate_pct ??
+      (dedupeUnique > 0 ? ((uniqueSignals / dedupeUnique) * 100).toFixed(1) : 0)
+  );
   const duplicateClusters = Number(summary.duplicate_clusters ?? 0);
   const duplicateRate = snapshotCount > 0
     ? Number(((suppressedDuplicates / snapshotCount) * 100).toFixed(1))
@@ -562,7 +616,10 @@ async function upsertQueryRunHistory({
     "Repeated / Updated": number(repeatedUpdated),
     "Master Count": number(summary.master_unique_rows ?? 0),
     "Novelty Rate %": number(noveltyRate),
+    "Dedupe Unique": number(dedupeUnique),
     "Unique Signals": number(uniqueSignals),
+    "Excluded Transactions": number(excludedTransactions),
+    "Clean Rate %": number(cleanRate),
     "Suppressed Duplicates": number(suppressedDuplicates),
     "Duplicate Clusters": number(duplicateClusters),
     "Duplicate Rate %": number(duplicateRate),
@@ -621,9 +678,9 @@ async function main() {
     `[notion] syncing ${snapshotRows.length} snapshot rows to Threads Raw Database`
   );
 
-  const syncResult = await syncPosts(snapshotRows);
+  const syncResult = await syncPosts(snapshotRows, masterRows);
   console.log(
-    `[notion] created ${syncResult.created}, updated ${syncResult.updated}`
+    `[notion] created ${syncResult.created}, updated ${syncResult.updated}, clean backfilled ${syncResult.cleanBackfilled}`
   );
 
   const duplicateSync = await syncDuplicateReviewLog(duplicateRows, summary);
