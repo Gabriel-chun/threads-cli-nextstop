@@ -5,6 +5,9 @@ on:
     # GitHub cron uses UTC. Observe Threads once per hour at minute 30.
     - cron: "30 * * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/nextstop-collector.yml"
 
 permissions:
   contents: write
