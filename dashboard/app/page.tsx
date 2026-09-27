@@ -55,7 +55,7 @@ export default async function Page() {
               <p className="kicker">DEMAND MAP</p>
               <h2>目前訊號結構</h2>
             </div>
-            <p className="muted">自動由 archive 套用 v0.1 clean + intent rules</p>
+            <p className="muted">Collector clean-v2.1 + intent；技術 coverage 不進主視圖</p>
           </div>
           <div className="bars">
             {top.map((item) => (
@@ -116,7 +116,7 @@ export default async function Page() {
         <aside className="panel mcp">
           <p className="kicker">AI ACCESS</p>
           <h2>MCP Layer</h2>
-          <p className="muted">部署後 GPT / Claude 可直接呼叫同一套資料邏輯。</p>
+          <p className="muted">只暴露核心 clean signals 與 health；技術 coverage 指標留在 diagnostics。</p>
           <code>/api/mcp</code>
           <ul>
             <li>get_recent_signals</li>

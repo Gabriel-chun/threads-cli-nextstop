@@ -74,7 +74,7 @@ const handler = createMcpHandler(
       "get_collector_health",
       {
         title: "Get collector health",
-        description: "Return collector health and archive statistics.",
+        description: "Return core collector health and archive signal statistics; low-value source coverage metrics are intentionally omitted.",
         inputSchema: z.object({})
       },
       async () => {
@@ -98,7 +98,7 @@ const handler = createMcpHandler(
   {
     serverInfo: {
       name: "next-stop-live",
-      version: "0.1.0"
+      version: "0.2.0"
     }
   }
 );
