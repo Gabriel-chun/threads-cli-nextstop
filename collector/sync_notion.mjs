@@ -180,7 +180,9 @@ async function uploadFile(path, contentType, notionFilename = basename(path)) {
   });
 
   const isBinary = contentType === "application/zip";
-  const data = isBinary ? await readFile(path) : await readFile(path, "utf8");
+  const data = isBinary
+    ? new Blob([await readFile(path)], { type: contentType })
+    : await readFile(path, "utf8");
 
   await notion.fileUploads.send({
     file_upload_id: upload.id,
