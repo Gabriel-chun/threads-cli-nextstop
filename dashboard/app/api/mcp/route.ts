@@ -2,6 +2,9 @@ import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { snapshot, compact } from "../../../lib/signals";
 
+const LATEST_DOWNLOAD_URL =
+  "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/download/latest";
+
 const handler = createMcpHandler(
   (server) => {
     server.registerTool(
@@ -94,11 +97,30 @@ const handler = createMcpHandler(
         };
       }
     );
+
+    server.registerTool(
+      "get_latest_download",
+      {
+        title: "Get latest JSON ZIP download",
+        description: "Return the one-click URL for the latest Next Stop Live master.json ZIP.",
+        inputSchema: z.object({})
+      },
+      async () => ({
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            filename: "next-stop-live-master-latest.zip",
+            contains: "master.json",
+            downloadUrl: LATEST_DOWNLOAD_URL
+          }, null, 2)
+        }]
+      })
+    );
   },
   {
     serverInfo: {
       name: "next-stop-live",
-      version: "0.2.0"
+      version: "0.3.0"
     }
   }
 );

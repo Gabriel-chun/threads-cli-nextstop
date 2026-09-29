@@ -123,7 +123,15 @@ export default async function Page() {
             <li>get_demand_clusters</li>
             <li>get_signal_detail</li>
             <li>get_collector_health</li>
+            <li>get_latest_download</li>
           </ul>
+          <a className="downloadButton" href="/api/download/latest">
+            <span>⬇️</span>
+            <div>
+              <strong>下載最新 JSON ZIP</strong>
+              <small>即時打包最新 master.json</small>
+            </div>
+          </a>
           <div className="sourceNote">
             <strong>Source of truth</strong>
             <span>GitHub archive + Collector runs</span>
