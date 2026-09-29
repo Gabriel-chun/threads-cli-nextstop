@@ -86,5 +86,43 @@ class ObservationBundleTest(unittest.TestCase):
         self.assertEqual(event["delivery"], {"mode":"manifest_only","emitted":False,"phase":"phase1"})
 
 
+    def test_existing_historical_run_is_master_independent(self):
+        archive = Path(__file__).resolve().parents[1] / "collector" / "archive"
+        stamp = "2026-09-29_160951Z"
+        summary = obs.load_json(archive / "runs" / f"summary_{stamp}.json")
+        snapshot_path = archive / "snapshots" / f"snapshot_{stamp}.json"
+        snapshot = obs.load_json(snapshot_path, [])
+        history = obs.load_json(archive / "latest" / "history.json", [])
+        queries = obs.normalized_query_lines(archive / "runs" / f"queries_{stamp}.txt")
+        failed = obs.normalized_query_lines(archive / "runs" / f"failed_queries_{stamp}.txt")
+
+        args = dict(
+            summary=summary,
+            snapshot_rows=snapshot,
+            history=history,
+            queries=queries,
+            failed_queries=failed,
+            snapshot_path=snapshot_path,
+            runs_dir=archive / "runs",
+            snapshots_dir=archive / "snapshots",
+            observations_dir=archive / "observations",
+            track=None,
+            config_key=None,
+            evidence_limit=8,
+        )
+        first, _ = obs.build_bundle(**args)
+        with tempfile.TemporaryDirectory() as tmp:
+            fake_master = Path(tmp) / "master.json"
+            write_json(fake_master, [{"id": "changed-latest-master"}])
+            write_json(fake_master, [{"id": "changed-again"}])
+        second, _ = obs.build_bundle(**args)
+
+        self.assertEqual(first, second)
+        self.assertEqual(first["run"]["run_stamp"], stamp)
+        self.assertFalse(first["lineage"]["master_dependency"])
+        self.assertLessEqual(first["evidence"]["returned"], 8)
+
+
+
 if __name__ == "__main__":
     unittest.main()
