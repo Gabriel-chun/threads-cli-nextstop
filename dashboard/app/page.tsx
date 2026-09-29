@@ -29,22 +29,24 @@ export default async function Page() {
 
   return (
     <main>
-      <header className="hero">
+      <header className="workspaceHeader">
         <div>
-          <p className="eyebrow">NEXT STOP LIVE / SIGNAL DESK</p>
-          <h1>從一首歌開始，<br />看見人真正要去現場時遇到的事。</h1>
+          <p className="eyebrow">NEXT STOP LIVE · SIGNAL DESK</p>
+          <h1>Signal Desk</h1>
           <p className="lead">
-            Threads Collector → Clean → Demand / Context → MCP
+            從 Threads 自然語料整理出現場需求、背景脈絡與可行動訊號。
           </p>
         </div>
         <div className={`health ${data.health.healthy ? "ok" : "warn"}`}>
           <span className="dot" />
           <div>
-            <strong>Collector {data.health.healthy ? "Healthy" : data.health.status}</strong>
-            <small>Last run · {fmtDate(data.health.updatedAt)}</small>
+            <strong>{data.health.healthy ? "Collector 正常" : `Collector ${data.health.status}`}</strong>
+            <small>{fmtDate(data.health.updatedAt)}</small>
           </div>
         </div>
       </header>
+
+      <div className="workspaceRule" />
 
       <section className="metrics">
         <article><span>Master</span><strong>{data.masterCount}</strong><small>GitHub archive</small></article>
@@ -155,9 +157,9 @@ export default async function Page() {
         </div>
 
         <aside className="panel mcp">
-          <p className="kicker">AI ACCESS</p>
-          <h2>MCP Layer</h2>
-          <p className="muted">只暴露核心 clean signals 與 health；技術 coverage 指標留在 diagnostics。</p>
+          <p className="kicker">SYSTEM ACCESS</p>
+          <h2>MCP / Data Access</h2>
+          <p className="muted">趨勢、clean signals、health 與最新版資料下載都集中在這裡。</p>
           <code>/api/mcp</code>
           <ul>
             <li>get_recent_signals</li>
@@ -182,7 +184,7 @@ export default async function Page() {
       </section>
 
       <footer>
-        <span>Next Stop Live · Music Discovery × Live Experience</span>
+        <span>Next Stop Live · Data / Review / Signal</span>
         <span>Updated {fmtDate(data.generatedAt)}</span>
       </footer>
     </main>
