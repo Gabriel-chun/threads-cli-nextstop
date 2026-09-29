@@ -204,6 +204,9 @@ def comparable_history(history: list[dict[str, Any]], current_at: datetime, curr
         if dt is None or dt >= current_at or not run_stamp:
             continue
         other = archive_context(run_stamp, runs_dir, observations_dir)
+        if isinstance(other.get("summary"), dict) and not other["summary"].get("pipeline_version"):
+            if row.get("pipeline_version"):
+                other["summary"]["pipeline_version"] = row.get("pipeline_version")
         comp = compatibility(current_summary, qhash, config_key, track, other)
         item = dict(row)
         item["_compatibility"] = comp
