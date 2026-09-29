@@ -254,6 +254,47 @@ jobs:
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
           cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
 
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          history_path = Path("collector/archive/latest/history.json")
+          summary_path = Path("collector/output/summary.json")
+
+          try:
+              history = json.loads(history_path.read_text(encoding="utf-8"))
+              if not isinstance(history, list):
+                  history = []
+          except Exception:
+              history = []
+
+          summary = json.loads(summary_path.read_text(encoding="utf-8"))
+          row = {
+              "run_at": summary.get("run_at"),
+              "run_stamp": summary.get("run_stamp"),
+              "pipeline_version": summary.get("pipeline_version"),
+              "raw_rows": summary.get("raw_rows", 0),
+              "dedupe_unique_signals": summary.get("dedupe_unique_signals", 0),
+              "unique_signals": summary.get("unique_signals", 0),
+              "excluded_transactions": summary.get("excluded_transactions", 0),
+              "clean_rate_pct": summary.get("clean_rate_pct", 0),
+              "new_3h": summary.get("new_3h", 0),
+              "new_12h": summary.get("new_12h", 0),
+              "master_unique_rows": summary.get("master_unique_rows", 0),
+              "status": "Success",
+          }
+
+          history = [item for item in history if item.get("run_stamp") != row["run_stamp"]]
+          history.append(row)
+          history.sort(key=lambda item: item.get("run_at") or "")
+          history = history[-84:]
+          history_path.write_text(
+              json.dumps(history, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(f"[history] wrote {len(history)} trend points")
+          PY
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 

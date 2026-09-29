@@ -490,6 +490,21 @@ def main() -> None:
     )
     duplicate_clusters = len(duplicate_rows)
 
+    run_dt = parse_time(run_at) or datetime.now(timezone.utc)
+    def rolling_clean_count(hours: int) -> int:
+        cutoff = run_dt - timedelta(hours=hours)
+        count = 0
+        for row in master:
+            if not row.get("signal_counted"):
+                continue
+            first_seen = parse_time(row.get("first_seen_at"))
+            if first_seen is not None and first_seen >= cutoff:
+                count += 1
+        return count
+
+    new_3h = rolling_clean_count(3)
+    new_12h = rolling_clean_count(12)
+
     summary = {
         "run_at": run_at,
         "run_stamp": args.run_stamp,
@@ -504,6 +519,9 @@ def main() -> None:
         "excluded_transactions": excluded_transactions,
         "clean_rate_pct": round((unique_signals / dedupe_unique_signals) * 100, 1) if dedupe_unique_signals else 0,
         "duplicate_clusters": duplicate_clusters,
+        "new_3h": new_3h,
+        "new_12h": new_12h,
+        "pipeline_version": "clean-v2.1",
     }
     (output_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",

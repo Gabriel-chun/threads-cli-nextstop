@@ -26,6 +26,8 @@ const MASTER_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/master.json";
 const RUNS_URL =
   "https://api.github.com/repos/Gabriel-chun/threads-cli-nextstop/actions/runs?per_page=5";
+const HISTORY_URL =
+  "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/history.json";
 
 const preserveTicketFriction =
   /Pia帳號|日本門號|本人確認|本確|護照|退票|客服|換票[？?]讓票[？?]退票|實名制|黃牛.*搶不到|買不到票|抽選|公售|現場再換票|愛心席|入場|手環|購票紀錄/i;
@@ -236,4 +238,61 @@ export function compact(signal: Signal) {
     category: signal.category,
     kind: signal.kind
   };
+}
+
+export type TrendPoint = {
+  runAt: string;
+  runStamp: string;
+  pipelineVersion: string | null;
+  rawRows: number;
+  dedupeUnique: number;
+  cleanSignals: number;
+  excludedTransactions: number;
+  cleanRatePct: number;
+  new3h: number;
+  new12h: number;
+  masterCount: number;
+  status: "Success" | "Failed";
+};
+
+type TrendRow = {
+  run_at?: string;
+  run_stamp?: string;
+  pipeline_version?: string | null;
+  raw_rows?: number;
+  dedupe_unique_signals?: number;
+  unique_signals?: number;
+  excluded_transactions?: number;
+  clean_rate_pct?: number;
+  new_3h?: number;
+  new_12h?: number;
+  master_unique_rows?: number;
+  status?: "Success" | "Failed";
+};
+
+export async function loadTrendHistory(limit = 36, includeFailed = false): Promise<TrendPoint[]> {
+  const res = await fetch(HISTORY_URL, {
+    headers: { "User-Agent": "next-stop-live-dashboard" },
+    next: { revalidate: 300 }
+  });
+  if (!res.ok) return [];
+
+  const rows = (await res.json()) as TrendRow[];
+  return rows
+    .map((row) => ({
+      runAt: row.run_at || "",
+      runStamp: row.run_stamp || "",
+      pipelineVersion: row.pipeline_version ?? null,
+      rawRows: Number(row.raw_rows || 0),
+      dedupeUnique: Number(row.dedupe_unique_signals || 0),
+      cleanSignals: Number(row.unique_signals || 0),
+      excludedTransactions: Number(row.excluded_transactions || 0),
+      cleanRatePct: Number(row.clean_rate_pct || 0),
+      new3h: Number(row.new_3h || 0),
+      new12h: Number(row.new_12h || 0),
+      masterCount: Number(row.master_unique_rows || 0),
+      status: row.status === "Failed" ? "Failed" : "Success"
+    }))
+    .filter((row) => Boolean(row.runAt) && (includeFailed || row.status === "Success"))
+    .slice(-Math.max(1, Math.min(84, limit)));
 }

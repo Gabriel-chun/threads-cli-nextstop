@@ -1,4 +1,5 @@
-import { snapshot, compact } from "../lib/signals";
+import { snapshot, compact, loadTrendHistory } from "../lib/signals";
+import { TrendChart } from "../components/TrendChart";
 
 export const revalidate = 300;
 
@@ -15,8 +16,12 @@ function fmtDate(value: string | null) {
 }
 
 export default async function Page() {
-  const data = await snapshot();
+  const [data, history] = await Promise.all([
+    snapshot(),
+    loadTrendHistory(36)
+  ]);
   const top = data.clusters.slice(0, 7);
+  const latestTrend = history[history.length - 1];
   const evidence = data.signals
     .filter((s) => s.kind !== "noise")
     .slice(0, 8)
@@ -46,6 +51,42 @@ export default async function Page() {
         <article><span>演唱會 Raw</span><strong>{data.concertRaw}</strong><small>broad query</small></article>
         <article><span>Clean Signal</span><strong>{data.cleanCount}</strong><small>resale excluded</small></article>
         <article className="accent"><span>Actionable</span><strong>{data.actionable}</strong><small>可轉內容／服務</small></article>
+      </section>
+
+      <section className="trendGrid">
+        <div className="panel trendPanel">
+          <div className="panelHead">
+            <div>
+              <p className="kicker">SIGNAL VELOCITY</p>
+              <h2>3h / 12h Clean Trend</h2>
+            </div>
+            <p className="trendValue">{latestTrend ? `${latestTrend.new3h} / ${latestTrend.new12h}` : "—"}</p>
+          </div>
+          <TrendChart
+            data={history}
+            series={[
+              { key: "new3h", label: "Rolling 3h", className: "trendA" },
+              { key: "new12h", label: "Rolling 12h", className: "trendB" }
+            ]}
+          />
+        </div>
+
+        <div className="panel trendPanel">
+          <div className="panelHead">
+            <div>
+              <p className="kicker">PIPELINE QUALITY</p>
+              <h2>Clean / Resale Trend</h2>
+            </div>
+            <p className="trendValue">{latestTrend ? `${latestTrend.cleanRatePct}%` : "—"}</p>
+          </div>
+          <TrendChart
+            data={history}
+            series={[
+              { key: "cleanSignals", label: "Clean", className: "trendA" },
+              { key: "excludedTransactions", label: "Resale excluded", className: "trendC" }
+            ]}
+          />
+        </div>
       </section>
 
       <section className="grid">
@@ -123,6 +164,7 @@ export default async function Page() {
             <li>get_demand_clusters</li>
             <li>get_signal_detail</li>
             <li>get_collector_health</li>
+            <li>get_trend_history</li>
             <li>get_latest_download</li>
           </ul>
           <a className="downloadButton" href="/api/download/latest">

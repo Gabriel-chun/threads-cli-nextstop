@@ -1,6 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { snapshot, compact } from "../../../lib/signals";
+import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 
 const LATEST_DOWNLOAD_URL =
   "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/download/latest";
@@ -99,6 +99,27 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_trend_history",
+      {
+        title: "Get trend history",
+        description: "Return recent Next Stop Live rolling signal and clean-pipeline trend points.",
+        inputSchema: z.object({
+          limit: z.number().int().min(3).max(84).default(24),
+          includeFailed: z.boolean().default(false)
+        })
+      },
+      async ({ limit, includeFailed }) => {
+        const rows = await loadTrendHistory(limit, includeFailed);
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({ count: rows.length, points: rows }, null, 2)
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
       "get_latest_download",
       {
         title: "Get latest JSON ZIP download",
@@ -120,7 +141,7 @@ const handler = createMcpHandler(
   {
     serverInfo: {
       name: "next-stop-live",
-      version: "0.3.0"
+      version: "0.4.0"
     }
   }
 );

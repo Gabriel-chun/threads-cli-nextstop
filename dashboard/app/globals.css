@@ -125,3 +125,24 @@ footer { display:flex; justify-content:space-between; gap:20px; color:var(--mute
 .downloadButton > span { font-size:18px; }
 .downloadButton strong, .downloadButton small { display:block; }
 .downloadButton small { margin-top:3px; color:rgba(255,255,255,.72); font-size:11px; }
+
+
+.trendGrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.trendPanel { overflow:hidden; }
+.trendValue { margin:0; font:500 28px/1 Georgia, serif; letter-spacing:-.04em; }
+.trendChart { min-height:250px; }
+.trendChart svg { width:100%; height:auto; display:block; overflow:visible; }
+.trendLegend { display:flex; gap:16px; margin-bottom:10px; color:var(--muted); font-size:11px; }
+.trendLegend span { display:flex; align-items:center; gap:6px; }
+.trendLegend i { width:18px; height:3px; border-radius:999px; display:inline-block; }
+.trendLegend i.trendA { background:var(--green); }
+.trendLegend i.trendB { background:var(--blue); }
+.trendLegend i.trendC { background:var(--orange); }
+.trendGridLine { stroke:rgba(23,24,22,.08); stroke-width:1; vector-effect:non-scaling-stroke; }
+.trendLine { fill:none; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+.trendLine.trendA { stroke:var(--green); }
+.trendLine.trendB { stroke:var(--blue); }
+.trendLine.trendC { stroke:var(--orange); }
+.trendAxis { display:flex; justify-content:space-between; color:var(--muted); font-size:10px; margin-top:4px; }
+.trendEmpty { min-height:210px; display:grid; place-items:center; color:var(--muted); font-size:13px; }
+@media (max-width: 850px) { .trendGrid { grid-template-columns:1fr; } }
