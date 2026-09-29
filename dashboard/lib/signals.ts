@@ -279,7 +279,7 @@ export async function loadTrendHistory(limit = 36, includeFailed = false): Promi
 
   const rows = (await res.json()) as TrendRow[];
   return rows
-    .map((row) => ({
+    .map((row): TrendPoint => ({
       runAt: row.run_at || "",
       runStamp: row.run_stamp || "",
       pipelineVersion: row.pipeline_version ?? null,
