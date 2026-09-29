@@ -141,7 +141,7 @@ const handler = createMcpHandler(
   {
     serverInfo: {
       name: "next-stop-live",
-      version: "0.5.0"
+      version: "0.4.0"
     }
   }
 );
