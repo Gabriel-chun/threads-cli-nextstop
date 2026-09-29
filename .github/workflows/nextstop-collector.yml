@@ -2,10 +2,11 @@ name: Next Stop Threads Collector
 
 on:
   schedule:
-    # GitHub scheduled events may be delayed or dropped. ZIP upload smoke trigger. Trigger twice per hour,
-    # then gate against the latest archived successful collector run so the
-    # effective cadence stays roughly hourly with a fallback slot.
-    - cron: "17,47 * * * *"
+    # GitHub scheduled events are best-effort and may be delayed or dropped.
+    # Wake four times per hour, then gate against the latest successful archive.
+    # Effective target: one real collection about every 2 hours, with redundant slots
+    # so missed GitHub schedule events are less likely to create 4–7 hour gaps.
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
   push:
     paths:
@@ -46,14 +47,20 @@ jobs:
               print("[cadence] non-scheduled event; collector is allowed to run")
               raise SystemExit
 
-          paths = sorted(glob.glob("collector/archive/runs/summary_*.json"))
+          paths = sorted(glob.glob("collector/archive/runs/summary_*.json"), reverse=True)
           latest = None
-          if paths:
+          # Only archived runs count as successful cadence anchors. Failed all-query
+          # runs now stop before the archive commit, so the newest archived summary
+          # is the newest successful collection.
+          for path in paths:
               try:
-                  with open(paths[-1], encoding="utf-8") as fh:
-                      latest = json.load(fh).get("run_at")
+                  with open(path, encoding="utf-8") as fh:
+                      candidate = json.load(fh).get("run_at")
+                  if candidate:
+                      latest = candidate
+                      break
               except Exception:
-                  latest = None
+                  continue
 
           minutes = None
           if latest:
@@ -63,7 +70,7 @@ jobs:
               except Exception:
                   minutes = None
 
-          should_run = minutes is None or minutes >= 45
+          should_run = minutes is None or minutes >= 120
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
               f.write(f"should_run={'true' if should_run else 'false'}\n")
               f.write(f"minutes_since_last={minutes:.1f}\n" if minutes is not None else "minutes_since_last=unknown\n")
@@ -76,7 +83,7 @@ jobs:
     needs: cadence
     if: needs.cadence.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -207,6 +214,64 @@ jobs:
           QUERY_FILE: ${{ env.QUERY_FILE }}
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         run: node collector/sync_notion.mjs
+
+      - name: Fail workflow when every query failed
+        shell: bash
+        run: |
+          set -euo pipefail
+          total_queries="$(grep -Ev '^[[:space:]]*(#|$)' "$QUERY_FILE" | wc -l | tr -d ' ')"
+          failed_queries="$(grep -Ev '^[[:space:]]*
+        id: archive_cadence
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "commit=true" >> "$GITHUB_OUTPUT"
+          echo "[archive] commit every successful collector run"
+
+      - name: Commit collector data back to repo
+        if: steps.archive_cadence.outputs.commit == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p collector/archive/latest
+          mkdir -p collector/archive/snapshots
+          mkdir -p collector/archive/runs
+
+          cp collector/output/master.json collector/archive/latest/master.json
+          cp collector/output/master.jsonl collector/archive/latest/master.jsonl
+          cp collector/output/master.csv collector/archive/latest/master.csv
+
+          cp collector/output/snapshot_"$RUN_STAMP".json collector/archive/snapshots/
+          cp collector/output/snapshot_"$RUN_STAMP".jsonl collector/archive/snapshots/
+          cp collector/output/snapshot_"$RUN_STAMP".csv collector/archive/snapshots/
+
+          cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
+          cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
+          cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
+          cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add collector/archive/
+
+          if git diff --cached --quiet; then
+            echo "[archive] no repository changes to commit"
+            exit 0
+          fi
+
+          git commit -m "data: collector snapshot $RUN_STAMP"
+          git pull --rebase origin main
+          git push origin HEAD:main
+ collector/failed_queries.txt | wc -l | tr -d ' ')"
+
+          echo "[quality] total queries=$total_queries failed queries=$failed_queries"
+
+          if [[ "$total_queries" -gt 0 && "$failed_queries" -ge "$total_queries" ]]; then
+            echo "::error::All collector queries failed. Notion has recorded this run as Failed; repository archive will not advance."
+            exit 1
+          fi
 
       - name: Decide repository archive cadence
         id: archive_cadence

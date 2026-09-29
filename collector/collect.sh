@@ -8,6 +8,8 @@ FAILED_FILE="${FAILED_FILE:-collector/failed_queries.txt}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
 SEARCH_DEPTH="${COLLECTOR_SEARCH_DEPTH:-3}"
 GOOGLE_FALLBACK="${COLLECTOR_GOOGLE_FALLBACK:-false}"
+QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-2}"
+RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-20}"
 
 mkdir -p "$RAW_DIR"
 : > "$FAILED_FILE"
@@ -39,20 +41,38 @@ while IFS= read -r query || [[ -n "$query" ]]; do
   fi
   search_args+=("$query")
 
-  if "$TH_BIN" \
-      --delay 5s \
-      --retries 8 \
-      --timeout 45s \
-      --quiet \
-      -o jsonl \
-      -n 0 \
-      "${search_args[@]}" \
-      > "$outfile" 2> "$logfile"; then
-    :
-  else
-    status=$?
+  success=false
+  status=0
+  attempt=1
+
+  while [[ "$attempt" -le "$QUERY_ATTEMPTS" ]]; do
+    echo "[collector] query attempt $attempt/$QUERY_ATTEMPTS: $query"
+
+    if "$TH_BIN" \
+        --delay 5s \
+        --retries 8 \
+        --timeout 45s \
+        --quiet \
+        -o jsonl \
+        -n 0 \
+        "${search_args[@]}" \
+        > "$outfile" 2> "$logfile"; then
+      success=true
+      break
+    else
+      status=$?
+      echo "[collector] attempt $attempt failed (exit $status): $query" >&2
+      if [[ "$attempt" -lt "$QUERY_ATTEMPTS" ]]; then
+        sleep "$RETRY_SLEEP_SECONDS"
+      fi
+    fi
+
+    attempt=$((attempt + 1))
+  done
+
+  if [[ "$success" != "true" ]]; then
     printf '%s\n' "$query" >> "$FAILED_FILE"
-    echo "[collector] query failed (exit $status): $query" >&2
+    echo "[collector] query failed after $QUERY_ATTEMPTS attempts (last exit $status): $query" >&2
   fi
 
   sleep "$SLEEP_SECONDS"
