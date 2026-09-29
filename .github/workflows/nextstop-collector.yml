@@ -5,7 +5,7 @@ on:
     # GitHub scheduled events are best-effort and may be delayed or dropped.
     # Wake four times per hour, then gate against the latest successful archive.
     # Effective target: one real collection about every 2 hours, with redundant slots
-    # so missed GitHub schedule events are less likely to create 4–7 hour gaps.
+    # so missed schedule events are less likely to create 4–7 hour gaps.
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
   push:
@@ -47,20 +47,14 @@ jobs:
               print("[cadence] non-scheduled event; collector is allowed to run")
               raise SystemExit
 
-          paths = sorted(glob.glob("collector/archive/runs/summary_*.json"), reverse=True)
+          paths = sorted(glob.glob("collector/archive/runs/summary_*.json"))
           latest = None
-          # Only archived runs count as successful cadence anchors. Failed all-query
-          # runs now stop before the archive commit, so the newest archived summary
-          # is the newest successful collection.
-          for path in paths:
+          if paths:
               try:
-                  with open(path, encoding="utf-8") as fh:
-                      candidate = json.load(fh).get("run_at")
-                  if candidate:
-                      latest = candidate
-                      break
+                  with open(paths[-1], encoding="utf-8") as fh:
+                      latest = json.load(fh).get("run_at")
               except Exception:
-                  continue
+                  latest = None
 
           minutes = None
           if latest:
@@ -219,57 +213,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          total_queries="$(grep -Ev '^[[:space:]]*(#|$)' "$QUERY_FILE" | wc -l | tr -d ' ')"
-          failed_queries="$(grep -Ev '^[[:space:]]*
-        id: archive_cadence
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "commit=true" >> "$GITHUB_OUTPUT"
-          echo "[archive] commit every successful collector run"
-
-      - name: Commit collector data back to repo
-        if: steps.archive_cadence.outputs.commit == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p collector/archive/latest
-          mkdir -p collector/archive/snapshots
-          mkdir -p collector/archive/runs
-
-          cp collector/output/master.json collector/archive/latest/master.json
-          cp collector/output/master.jsonl collector/archive/latest/master.jsonl
-          cp collector/output/master.csv collector/archive/latest/master.csv
-
-          cp collector/output/snapshot_"$RUN_STAMP".json collector/archive/snapshots/
-          cp collector/output/snapshot_"$RUN_STAMP".jsonl collector/archive/snapshots/
-          cp collector/output/snapshot_"$RUN_STAMP".csv collector/archive/snapshots/
-
-          cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
-          cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
-          cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
-          cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add collector/archive/
-
-          if git diff --cached --quiet; then
-            echo "[archive] no repository changes to commit"
-            exit 0
-          fi
-
-          git commit -m "data: collector snapshot $RUN_STAMP"
-          git pull --rebase origin main
-          git push origin HEAD:main
- collector/failed_queries.txt | wc -l | tr -d ' ')"
+          total_queries="$(awk 'NF && $1 !~ /^#/ {count++} END {print count+0}' "$QUERY_FILE")"
+          failed_queries="$(awk 'NF {count++} END {print count+0}' collector/failed_queries.txt)"
 
           echo "[quality] total queries=$total_queries failed queries=$failed_queries"
 
           if [[ "$total_queries" -gt 0 && "$failed_queries" -ge "$total_queries" ]]; then
-            echo "::error::All collector queries failed. Notion has recorded this run as Failed; repository archive will not advance."
+            echo "::error::All collector queries failed. Notion recorded the run as Failed; the successful archive will not advance."
             exit 1
           fi
 
