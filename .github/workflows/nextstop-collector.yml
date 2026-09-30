@@ -4,7 +4,7 @@ on:
   schedule:
     # GitHub scheduled events are best-effort and may be delayed or dropped.
     # Wake four times per hour, then gate against the latest successful archive.
-    # Effective target: one real collection about every 2 hours, with redundant slots; Phase 1 observation smoke.
+    # Effective target: one real collection about every 2 hours, with redundant slots; Phase 1 observation hardening smoke.
     # so missed schedule events are less likely to create 4–7 hour gaps.
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
