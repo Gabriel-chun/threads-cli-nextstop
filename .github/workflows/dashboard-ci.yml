@@ -20,5 +20,7 @@ jobs:
           node-version: "20"
       - name: Install dependencies
         run: npm install
+      - name: Test MCP Events
+        run: npm run test:events
       - name: Build
         run: npm run build
