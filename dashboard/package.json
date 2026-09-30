@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:events": "tsx --test lib/mcpEvents/*.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
@@ -13,11 +14,14 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "zod": "^4.2.0",
-    "fflate": "^0.8.2"
+    "fflate": "^0.8.2",
+    "@vercel/blob": "^2.6.1",
+    "standardwebhooks": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.0",
     "@types/react": "^19.2.0",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "tsx": "^4.20.0"
   }
 }
