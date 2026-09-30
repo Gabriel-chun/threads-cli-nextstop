@@ -1,13 +1,18 @@
+export const runtime = "nodejs";
+
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 import { loadObservationBundle } from "../../../lib/observations";
+import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
   "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/download/latest";
 
 const handler = createMcpHandler(
   (server) => {
+    registerObservationEventHandlers(server);
+
     server.registerTool(
       "get_recent_signals",
       {
@@ -168,9 +173,11 @@ const handler = createMcpHandler(
     );
   },
   {
+    capabilities: { events: {} } as any,
+    instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.5.0"
+      version: "0.6.0"
     }
   }
 );
