@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { z } from "zod";
-import { buildObservationEvent, isEligibleObservationBundle } from "../../../lib/mcpEvents/core";
-import { dispatchObservationEvent } from "../../../lib/mcpEvents/delivery";
+import { buildObservationEvent, isEligibleObservationBundle } from "../../../../lib/mcpEvents/core";
+import { dispatchObservationEvent } from "../../../../lib/mcpEvents/delivery";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
