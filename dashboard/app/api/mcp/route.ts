@@ -1,6 +1,7 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
+import { loadObservationBundle } from "../../../lib/observations";
 
 const LATEST_DOWNLOAD_URL =
   "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/download/latest";
@@ -120,6 +121,34 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_observation_bundle",
+      {
+        title: "Get observation bundle",
+        description: "Return Observation Bundle v1. Omit run_id for latest; specify an archived run stamp for immutable historical data.",
+        inputSchema: z.object({
+          run_id: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}_\\d{6}Z$/).optional(),
+          evidence_limit: z.number().int().min(1).max(50).default(16)
+        })
+      },
+      async ({ run_id, evidence_limit }) => {
+        try {
+          const bundle = await loadObservationBundle(run_id, evidence_limit);
+          return {
+            content: [{ type: "text", text: JSON.stringify(bundle, null, 2) }]
+          };
+        } catch (error) {
+          return {
+            isError: true,
+            content: [{
+              type: "text",
+              text: error instanceof Error ? error.message : "Observation bundle unavailable."
+            }]
+          };
+        }
+      }
+    );
+
+    server.registerTool(
       "get_latest_download",
       {
         title: "Get latest JSON ZIP download",
@@ -141,7 +170,7 @@ const handler = createMcpHandler(
   {
     serverInfo: {
       name: "next-stop-live",
-      version: "0.4.0"
+      version: "0.5.0"
     }
   }
 );
