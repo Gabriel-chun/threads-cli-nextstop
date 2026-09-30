@@ -87,6 +87,31 @@ jobs:
         run: |
           echo "RUN_STAMP=$(date -u +'%Y-%m-%d_%H%M%SZ')" >> "$GITHUB_ENV"
 
+      - name: Set observation provenance
+        shell: bash
+        run: |
+          case "$GITHUB_EVENT_NAME" in
+            schedule)
+              provenance="scheduled"
+              baseline_eligible="true"
+              ;;
+            workflow_dispatch)
+              provenance="manual"
+              baseline_eligible="false"
+              ;;
+            push)
+              provenance="smoke"
+              baseline_eligible="false"
+              ;;
+            *)
+              provenance="unknown"
+              baseline_eligible="false"
+              ;;
+          esac
+          echo "OBS_RUN_PROVENANCE=$provenance" >> "$GITHUB_ENV"
+          echo "OBS_BASELINE_ELIGIBLE=$baseline_eligible" >> "$GITHUB_ENV"
+          echo "[observation] provenance=$provenance baseline_eligible=$baseline_eligible"
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -173,6 +198,10 @@ jobs:
             --track "$COLLECTOR_TRACK" \
             --config-key "$COLLECTOR_CONFIG_KEY" \
             --evidence-limit 16 \
+            --run-provenance "$OBS_RUN_PROVENANCE" \
+            --workflow-event "$GITHUB_EVENT_NAME" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --expected-cadence-minutes 120 \
             --output collector/output/observation_bundle.json \
             --event-output collector/output/observation_event.json
 
@@ -303,6 +332,10 @@ jobs:
               "new_12h": summary.get("new_12h", 0),
               "master_unique_rows": summary.get("master_unique_rows", 0),
               "status": "Success",
+              "provenance": __import__("os").environ.get("OBS_RUN_PROVENANCE", "unknown"),
+              "baseline_eligible": __import__("os").environ.get("OBS_BASELINE_ELIGIBLE", "false").lower() == "true",
+              "workflow_event": __import__("os").environ.get("GITHUB_EVENT_NAME"),
+              "github_run_id": __import__("os").environ.get("GITHUB_RUN_ID"),
           }
 
           history = [item for item in history if item.get("run_stamp") != row["run_stamp"]]
