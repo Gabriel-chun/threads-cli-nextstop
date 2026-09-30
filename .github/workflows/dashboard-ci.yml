@@ -24,3 +24,15 @@ jobs:
         run: npm run test:events
       - name: Build
         run: npm run build
+      - name: Runtime MCP discovery regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run start -- -p 3100 >/tmp/nextstop-dashboard.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid || true' EXIT
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:3100/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/test-mcp-events.mjs
