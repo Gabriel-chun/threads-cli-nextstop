@@ -124,5 +124,70 @@ class ObservationBundleTest(unittest.TestCase):
 
 
 
+    def test_coverage_complete_can_still_have_sparse_sampling(self):
+        current_at = obs.parse_time("2026-09-30T12:00:00Z")
+        self.assertIsNotNone(current_at)
+        eligible = [
+            {"run_stamp":"a","run_at":"2026-09-29T11:00:00Z","unique_signals":10,"new_3h":2,"new_12h":20,"clean_rate_pct":70,"_compatibility":{"config":"compatible"}},
+            {"run_stamp":"b","run_at":"2026-09-29T18:00:00Z","unique_signals":11,"new_3h":3,"new_12h":21,"clean_rate_pct":71,"_compatibility":{"config":"compatible"}},
+            {"run_stamp":"c","run_at":"2026-09-30T00:00:00Z","unique_signals":12,"new_3h":4,"new_12h":22,"clean_rate_pct":72,"_compatibility":{"config":"compatible"}},
+            {"run_stamp":"d","run_at":"2026-09-30T06:00:00Z","unique_signals":13,"new_3h":5,"new_12h":23,"clean_rate_pct":73,"_compatibility":{"config":"compatible"}},
+        ]
+        baseline = obs.baseline_window("24h", 24, current_at, eligible, [], [], 120)
+        self.assertTrue(baseline["complete"])
+        self.assertTrue(baseline["coverage_complete"])
+        self.assertEqual(baseline["coverage_hours"], 24.0)
+        self.assertEqual(baseline["sampling_quality"], "sparse")
+        self.assertFalse(baseline["sampling"]["cadence_within_tolerance"])
+        self.assertGreater(baseline["max_gap_minutes"], baseline["sampling"]["max_expected_gap_minutes"])
+
+    def test_smoke_run_is_archived_but_excluded_from_previous_baseline(self):
+        def setup(runs, snapshots):
+            for stamp, at, provenance, eligible in [
+                ("2026-09-29_080000Z", "2026-09-29T08:00:00Z", "scheduled", True),
+                ("2026-09-29_100000Z", "2026-09-29T10:00:00Z", "smoke", False),
+            ]:
+                write_json(runs / f"summary_{stamp}.json", {
+                    "run_stamp": stamp,
+                    "run_at": at,
+                    "pipeline_version": "clean-v2.1",
+                    "min_score": 30,
+                    "since_hours": 12,
+                })
+                (runs / f"queries_{stamp}.txt").write_text("演唱會\n", encoding="utf-8")
+                write_json(snapshots / f"snapshot_{stamp}.json", [row(1)])
+                obs_dir = runs.parent / "observations"
+                write_json(obs_dir / f"{stamp}.json", {
+                    "run": {
+                        "run_stamp": stamp,
+                        "pipeline_version": "clean-v2.1",
+                        "track": "演唱會",
+                        "config_key": "concert",
+                        "provenance": provenance,
+                        "baseline_eligible": eligible,
+                    }
+                })
+
+        history = [
+            {"run_stamp":"2026-09-29_080000Z","run_at":"2026-09-29T08:00:00Z","pipeline_version":"clean-v2.1","unique_signals":1,"new_3h":1,"new_12h":1,"clean_rate_pct":100},
+            {"run_stamp":"2026-09-29_100000Z","run_at":"2026-09-29T10:00:00Z","pipeline_version":"clean-v2.1","unique_signals":1,"new_3h":1,"new_12h":1,"clean_rate_pct":100},
+        ]
+        temp, bundle, _ = self.build(history=history, setup=setup)
+        self.addCleanup(temp.cleanup)
+        previous = bundle["deterministic_facts"]["previous_comparable_run"]
+        self.assertEqual(previous["run_stamp"], "2026-09-29_080000Z")
+        baseline = bundle["deterministic_facts"]["baselines"]["24h"]
+        self.assertEqual(baseline["compatibility"]["excluded_provenance_counts"].get("smoke"), 1)
+        self.assertIn("baseline_ineligible_history_present", bundle["data_quality"]["flags"])
+
+    def test_current_smoke_provenance_is_explicit_and_ineligible(self):
+        temp, bundle, event = self.build()
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(bundle["run"]["provenance"], "unknown")
+        self.assertFalse(bundle["run"]["baseline_eligible"])
+        self.assertFalse(event["run"]["baseline_eligible"])
+
+
+
 if __name__ == "__main__":
     unittest.main()
