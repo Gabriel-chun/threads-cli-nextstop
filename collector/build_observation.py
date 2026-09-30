@@ -16,6 +16,8 @@ EVENT_VERSION = "1"
 CLASSIFIER_NAME = "dashboard-intent-regex"
 CLASSIFIER_VERSION = "v1"
 DEFAULT_EVIDENCE_LIMIT = 16
+DEFAULT_EXPECTED_CADENCE_MINUTES = 120
+VALID_PROVENANCE = {"scheduled", "manual", "smoke", "unknown"}
 
 
 def parse_time(value: Any) -> datetime | None:
@@ -155,16 +157,33 @@ def summary_pipeline_version(summary: dict[str, Any]) -> str | None:
     return str(value).strip() if value not in (None, "") else None
 
 
+def normalize_provenance(value: Any) -> str:
+    provenance = str(value or "unknown").strip().lower()
+    return provenance if provenance in VALID_PROVENANCE else "unknown"
+
+
+def provenance_baseline_eligible(provenance: str) -> bool:
+    return provenance == "scheduled"
+
+
 def archive_context(run_stamp: str, runs_dir: Path, observations_dir: Path) -> dict[str, Any]:
     observation = load_json(observations_dir / f"{run_stamp}.json")
     summary = load_json(runs_dir / f"summary_{run_stamp}.json")
     queries = normalized_query_lines(runs_dir / f"queries_{run_stamp}.txt")
     run = observation.get("run", {}) if isinstance(observation, dict) else {}
+    provenance = normalize_provenance(run.get("provenance"))
+    baseline_eligible = (
+        bool(run.get("baseline_eligible"))
+        if "baseline_eligible" in run
+        else False
+    )
     return {
         "summary": summary if isinstance(summary, dict) else {},
         "query_hash": query_hash(queries),
         "config_key": run.get("config_key"),
         "track": run.get("track"),
+        "provenance": provenance,
+        "baseline_eligible": baseline_eligible,
     }
 
 
@@ -188,16 +207,21 @@ def compatibility(current_summary: dict[str, Any], current_qhash: str | None, co
     else:
         config = "unknown"
 
+    structurally_compatible = pipeline == "compatible" and query == "compatible" and config in {"compatible", "partial"}
+    baseline_eligible = bool(other.get("baseline_eligible"))
     return {
         "pipeline_version": pipeline,
         "query": query,
         "config": config,
-        "compatible_for_baseline": pipeline == "compatible" and query == "compatible" and config in {"compatible", "partial"},
+        "provenance": normalize_provenance(other.get("provenance")),
+        "baseline_eligible": baseline_eligible,
+        "structurally_compatible": structurally_compatible,
+        "compatible_for_baseline": structurally_compatible and baseline_eligible,
     }
 
 
 def comparable_history(history: list[dict[str, Any]], current_at: datetime, current_summary: dict[str, Any], qhash: str | None, config_key: str | None, track: str | None, runs_dir: Path, observations_dir: Path):
-    compatible_rows, incompatible_rows = [], []
+    eligible_rows, incompatible_rows, ineligible_rows = [], [], []
     for row in sorted(history, key=lambda x: str(x.get("run_at") or "")):
         dt = parse_time(row.get("run_at"))
         run_stamp = str(row.get("run_stamp") or "")
@@ -207,24 +231,41 @@ def comparable_history(history: list[dict[str, Any]], current_at: datetime, curr
         if isinstance(other.get("summary"), dict) and not other["summary"].get("pipeline_version"):
             if row.get("pipeline_version"):
                 other["summary"]["pipeline_version"] = row.get("pipeline_version")
+        if other.get("provenance") == "unknown" and row.get("provenance"):
+            other["provenance"] = normalize_provenance(row.get("provenance"))
+        if not other.get("baseline_eligible") and row.get("baseline_eligible") is True:
+            other["baseline_eligible"] = True
+
         comp = compatibility(current_summary, qhash, config_key, track, other)
         item = dict(row)
         item["_compatibility"] = comp
-        if comp["compatible_for_baseline"]:
-            compatible_rows.append(item)
-        else:
-            incompatible_rows.append(item)
-    return compatible_rows, incompatible_rows
+        item["_provenance"] = comp["provenance"]
+        item["_baseline_eligible"] = comp["baseline_eligible"]
 
+        if not comp["structurally_compatible"]:
+            incompatible_rows.append(item)
+        elif not comp["baseline_eligible"]:
+            ineligible_rows.append(item)
+        else:
+            eligible_rows.append(item)
+    return eligible_rows, incompatible_rows, ineligible_rows
 
 def median(values: list[float]) -> float | None:
     return float(statistics.median(values)) if values else None
 
 
-def baseline_window(label: str, hours: int, current_at: datetime, compatible_rows: list[dict[str, Any]], incompatible_rows: list[dict[str, Any]]) -> dict[str, Any]:
+def baseline_window(
+    label: str,
+    hours: int,
+    current_at: datetime,
+    eligible_rows: list[dict[str, Any]],
+    incompatible_rows: list[dict[str, Any]],
+    ineligible_rows: list[dict[str, Any]],
+    expected_cadence_minutes: int,
+) -> dict[str, Any]:
     start = current_at - timedelta(hours=hours)
     within, anchor = [], None
-    for row in compatible_rows:
+    for row in eligible_rows:
         dt = parse_time(row.get("run_at"))
         if dt is None:
             continue
@@ -235,9 +276,15 @@ def baseline_window(label: str, hours: int, current_at: datetime, compatible_row
 
     earliest = parse_time(within[0].get("run_at")) if within else None
     coverage_hours = float(hours) if anchor is not None else round((current_at - earliest).total_seconds() / 3600, 2) if earliest else 0.0
+    coverage_complete = anchor is not None and bool(within)
+
     timeline = ([parse_time(anchor.get("run_at"))] if anchor else []) + [parse_time(row.get("run_at")) for row in within] + [current_at]
     timeline = sorted({dt for dt in timeline if dt})
     gaps = [(timeline[i] - timeline[i - 1]).total_seconds() / 60 for i in range(1, len(timeline))]
+    max_gap_minutes = round(max(gaps), 1) if gaps else None
+    max_expected_gap_minutes = int(expected_cadence_minutes * 1.5)
+    cadence_within_tolerance = bool(gaps) and max_gap_minutes <= max_expected_gap_minutes
+    sampling_quality = "insufficient" if not within else ("adequate" if cadence_within_tolerance else "sparse")
 
     incompatible_in_window = []
     for row in incompatible_rows:
@@ -245,16 +292,37 @@ def baseline_window(label: str, hours: int, current_at: datetime, compatible_row
         if dt and start <= dt < current_at:
             incompatible_in_window.append(row)
 
+    ineligible_in_window = []
+    for row in ineligible_rows:
+        dt = parse_time(row.get("run_at"))
+        if dt and start <= dt < current_at:
+            ineligible_in_window.append(row)
+
     def nums(key: str) -> list[float]:
         return [float(row[key]) for row in within if isinstance(row.get(key), (int, float))]
+
+    provenance_counts: dict[str, int] = {}
+    for row in ineligible_in_window:
+        provenance = str(row.get("_provenance") or "unknown")
+        provenance_counts[provenance] = provenance_counts.get(provenance, 0) + 1
 
     return {
         "window": label,
         "hours": hours,
-        "complete": anchor is not None and bool(within),
+        "complete": coverage_complete,
+        "coverage_complete": coverage_complete,
         "coverage_hours": coverage_hours,
         "sample_count": len(within),
-        "max_gap_minutes": round(max(gaps), 1) if gaps else None,
+        "max_gap_minutes": max_gap_minutes,
+        "sampling_quality": sampling_quality,
+        "sampling": {
+            "quality": sampling_quality,
+            "eligible_sample_count": len(within),
+            "expected_cadence_minutes": expected_cadence_minutes,
+            "max_expected_gap_minutes": max_expected_gap_minutes,
+            "max_gap_minutes": max_gap_minutes,
+            "cadence_within_tolerance": cadence_within_tolerance,
+        },
         "compatibility": {
             "pipeline_version": "compatible",
             "query": "compatible",
@@ -263,6 +331,8 @@ def baseline_window(label: str, hours: int, current_at: datetime, compatible_row
             "excluded_pipeline_mismatch": sum(1 for row in incompatible_in_window if (row.get("_compatibility") or {}).get("pipeline_version") == "incompatible"),
             "excluded_query_mismatch": sum(1 for row in incompatible_in_window if (row.get("_compatibility") or {}).get("query") == "incompatible"),
             "excluded_config_mismatch": sum(1 for row in incompatible_in_window if (row.get("_compatibility") or {}).get("config") == "incompatible"),
+            "excluded_baseline_ineligible_samples": len(ineligible_in_window),
+            "excluded_provenance_counts": provenance_counts,
         },
         "metrics": {
             "clean_signals_median": median(nums("unique_signals")),
@@ -271,7 +341,6 @@ def baseline_window(label: str, hours: int, current_at: datetime, compatible_row
             "clean_rate_pct_median": median(nums("clean_rate_pct")),
         },
     }
-
 
 def evidence_entry(row: dict[str, Any], is_new: bool) -> dict[str, Any]:
     ann = classify_intent(normalize_text(row.get("text")))
@@ -293,7 +362,7 @@ def evidence_entry(row: dict[str, Any], is_new: bool) -> dict[str, Any]:
     }
 
 
-def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]], history: list[dict[str, Any]], queries: list[str], failed_queries: list[str], snapshot_path: Path, runs_dir: Path, snapshots_dir: Path, observations_dir: Path, track: str | None, config_key: str | None, evidence_limit: int = DEFAULT_EVIDENCE_LIMIT):
+def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]], history: list[dict[str, Any]], queries: list[str], failed_queries: list[str], snapshot_path: Path, runs_dir: Path, snapshots_dir: Path, observations_dir: Path, track: str | None, config_key: str | None, evidence_limit: int = DEFAULT_EVIDENCE_LIMIT, run_provenance: str = "unknown", workflow_event: str | None = None, github_run_id: str | None = None, expected_cadence_minutes: int = DEFAULT_EXPECTED_CADENCE_MINUTES):
     run_stamp = str(summary.get("run_stamp") or "")
     run_at = parse_time(summary.get("run_at"))
     if not run_stamp or run_at is None:
@@ -301,12 +370,15 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
 
     pipeline_version = summary_pipeline_version(summary)
     qhash = query_hash(queries)
+    provenance = normalize_provenance(run_provenance)
+    baseline_eligible = provenance_baseline_eligible(provenance)
+    expected_cadence_minutes = max(1, int(expected_cadence_minutes))
     current_clean = clean_rows(snapshot_rows)
     current_ids = {post_id(row) for row in current_clean if post_id(row)}
     authors = {str(row.get("username") or "").strip().lower() for row in current_clean if str(row.get("username") or "").strip()}
 
-    compatible_rows, incompatible_rows = comparable_history(history, run_at, summary, qhash, config_key, track, runs_dir, observations_dir)
-    previous = compatible_rows[-1] if compatible_rows else None
+    eligible_rows, incompatible_rows, ineligible_rows = comparable_history(history, run_at, summary, qhash, config_key, track, runs_dir, observations_dir)
+    previous = eligible_rows[-1] if eligible_rows else None
     previous_stamp = str(previous.get("run_stamp") or "") if previous else ""
     previous_path = snapshots_dir / f"snapshot_{previous_stamp}.json" if previous_stamp else None
     previous_rows = load_json(previous_path, []) if previous_path and previous_path.exists() else []
@@ -316,12 +388,19 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
     retained_ids = current_ids & previous_ids if overlap_available else set()
 
     baselines = {
-        "24h": baseline_window("24h", 24, run_at, compatible_rows, incompatible_rows),
-        "72h": baseline_window("72h", 72, run_at, compatible_rows, incompatible_rows),
-        "7d": baseline_window("7d", 168, run_at, compatible_rows, incompatible_rows),
+        "24h": baseline_window("24h", 24, run_at, eligible_rows, incompatible_rows, ineligible_rows, expected_cadence_minutes),
+        "72h": baseline_window("72h", 72, run_at, eligible_rows, incompatible_rows, ineligible_rows, expected_cadence_minutes),
+        "7d": baseline_window("7d", 168, run_at, eligible_rows, incompatible_rows, ineligible_rows, expected_cadence_minutes),
     }
 
-    flags = [f"baseline_{key}_incomplete" for key, value in baselines.items() if not value["complete"]]
+    flags = []
+    for key, value in baselines.items():
+        if not value["coverage_complete"]:
+            flags.extend([f"baseline_{key}_incomplete", f"baseline_{key}_coverage_incomplete"])
+        if value["sampling_quality"] == "sparse":
+            flags.append(f"baseline_{key}_sampling_sparse")
+        elif value["sampling_quality"] == "insufficient":
+            flags.append(f"baseline_{key}_sampling_insufficient")
     if previous is None:
         flags.append("previous_comparable_run_missing")
     elif not overlap_available:
@@ -334,6 +413,10 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         flags.append("incompatible_query_history_present")
     if any((row.get("_compatibility") or {}).get("config") == "incompatible" for row in incompatible_rows):
         flags.append("incompatible_config_history_present")
+    if ineligible_rows:
+        flags.append("baseline_ineligible_history_present")
+    if any(str(row.get("_provenance") or "unknown") == "unknown" for row in ineligible_rows):
+        flags.append("unknown_provenance_history_present")
 
     current = {
         "raw_rows": summary.get("raw_rows", 0),
@@ -385,6 +468,10 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
             "query_count": len(queries),
             "window_hours": summary.get("since_hours"),
             "min_score": summary.get("min_score"),
+            "provenance": provenance,
+            "baseline_eligible": baseline_eligible,
+            "workflow_event": workflow_event,
+            "github_run_id": github_run_id,
         },
         "lineage": {
             "snapshot_ref": f"collector/archive/snapshots/snapshot_{run_stamp}.json",
@@ -418,10 +505,14 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
             "flags": sorted(set(flags)),
             "failed_query_count": len(failed_queries),
             "query_count": len(queries),
-            "baseline_complete_24h": baselines["24h"]["complete"],
-            "baseline_complete_72h": baselines["72h"]["complete"],
-            "baseline_complete_7d": baselines["7d"]["complete"],
+            "baseline_complete_24h": baselines["24h"]["coverage_complete"],
+            "baseline_complete_72h": baselines["72h"]["coverage_complete"],
+            "baseline_complete_7d": baselines["7d"]["coverage_complete"],
+            "baseline_sampling_quality_24h": baselines["24h"]["sampling_quality"],
+            "baseline_sampling_quality_72h": baselines["72h"]["sampling_quality"],
+            "baseline_sampling_quality_7d": baselines["7d"]["sampling_quality"],
             "incompatible_history_sample_count": len(incompatible_rows),
+            "baseline_ineligible_history_sample_count": len(ineligible_rows),
         },
     }
     event = {
@@ -431,7 +522,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         "idempotency_key": observation_id,
         "occurred_at": iso_z(run_at),
         "delivery": {"mode": "manifest_only", "emitted": False, "phase": "phase1"},
-        "run": {"run_stamp": run_stamp, "pipeline_version": pipeline_version, "status": bundle["run"]["status"]},
+        "run": {"run_stamp": run_stamp, "pipeline_version": pipeline_version, "status": bundle["run"]["status"], "provenance": provenance, "baseline_eligible": baseline_eligible},
         "bundle_ref": f"collector/archive/observations/{run_stamp}.json",
         "summary": {
             "clean_count": current["clean_signals"],
@@ -460,6 +551,10 @@ def main() -> None:
     parser.add_argument("--track")
     parser.add_argument("--config-key")
     parser.add_argument("--evidence-limit", type=int, default=DEFAULT_EVIDENCE_LIMIT)
+    parser.add_argument("--run-provenance", choices=sorted(VALID_PROVENANCE), default="unknown")
+    parser.add_argument("--workflow-event")
+    parser.add_argument("--github-run-id")
+    parser.add_argument("--expected-cadence-minutes", type=int, default=DEFAULT_EXPECTED_CADENCE_MINUTES)
     parser.add_argument("--output", default="collector/output/observation_bundle.json")
     parser.add_argument("--event-output", default="collector/output/observation_event.json")
     args = parser.parse_args()
@@ -485,6 +580,10 @@ def main() -> None:
         track=args.track,
         config_key=args.config_key,
         evidence_limit=args.evidence_limit,
+        run_provenance=args.run_provenance,
+        workflow_event=args.workflow_event,
+        github_run_id=args.github_run_id,
+        expected_cadence_minutes=args.expected_cadence_minutes,
     )
     write_json(Path(args.output), bundle)
     write_json(Path(args.event_output), event)
