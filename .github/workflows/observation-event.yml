@@ -1,0 +1,90 @@
+name: Next Stop Observation Event
+
+on:
+  workflow_run:
+    workflows: ["Next Stop Threads Collector"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  deliver:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gate scheduled source
+        id: source
+        shell: bash
+        run: |
+          if [[ "${{ github.event.workflow_run.event }}" == "schedule" ]]; then
+            echo "scheduled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "scheduled=false" >> "$GITHUB_OUTPUT"
+            echo "[event] non-scheduled collector run; no MCP Event"
+          fi
+
+      - name: Checkout archived observation
+        if: steps.source.outputs.scheduled == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Resolve immutable eligible bundle
+        if: steps.source.outputs.scheduled == 'true'
+        id: observation
+        shell: bash
+        env:
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          candidates=sorted(Path("collector/archive/observations").glob("*.json"), reverse=True)
+          match=None
+          for path in candidates[:30]:
+              try:
+                  bundle=json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  continue
+              run=bundle.get("run") or {}
+              if str(run.get("github_run_id") or "") == os.environ["SOURCE_RUN_ID"]:
+                  match=(path,bundle)
+                  break
+
+          eligible=False
+          run_id=""
+          if match:
+              path,bundle=match
+              run=bundle.get("run") or {}
+              eligible=(
+                  run.get("status")=="success"
+                  and run.get("provenance")=="scheduled"
+                  and run.get("baseline_eligible") is True
+              )
+              run_id=str(run.get("run_stamp") or "")
+              print(f"[event] bundle={path} provenance={run.get('provenance')} baseline_eligible={run.get('baseline_eligible')} eligible={eligible}")
+          else:
+              print("[event] no immutable observation matched source workflow run")
+
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as f:
+              f.write(f"eligible={'true' if eligible else 'false'}\n")
+              if eligible:
+                  f.write(f"run_id={run_id}\n")
+          PY
+
+      - name: Deliver MCP Event
+        if: steps.observation.outputs.eligible == 'true'
+        shell: bash
+        env:
+          EVENT_EMIT_TOKEN: ${{ secrets.NEXTSTOP_EVENT_EMIT_TOKEN }}
+          RUN_ID: ${{ steps.observation.outputs.run_id }}
+          EVENT_EMIT_URL: "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/events/emit"
+        run: |
+          set -euo pipefail
+          if [[ -z "$EVENT_EMIT_TOKEN" ]]; then
+            echo "::warning::NEXTSTOP_EVENT_EMIT_TOKEN is not configured; MCP Event delivery is paused."
+            exit 0
+          fi
+          curl --silent --show-error --fail-with-body             --retry 3 --retry-all-errors --retry-delay 2             -X POST "$EVENT_EMIT_URL"             -H "Authorization: Bearer $EVENT_EMIT_TOKEN"             -H "Content-Type: application/json"             --data "{\"run_id\":\"$RUN_ID\"}"
