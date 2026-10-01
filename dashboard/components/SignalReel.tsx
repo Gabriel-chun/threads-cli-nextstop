@@ -214,6 +214,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           window: windowKey,
           label,
           category: card.category,
+          username: card.username || null,
+          posted_at: card.posted_at || null,
+          query: card.query || card.source_queries?.join(" / ") || null,
           text_excerpt: card.text.slice(0, 1200),
           feature_tags: card.feature_tags || [],
           base_score: card.base_score ?? card.score,
@@ -329,9 +332,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 selected={selectedKey === card.post_key}
                 drag={drag}
                 reviewView={reviewView}
-                onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {} }
-                onPointerMove={pointerMove}
-                onPointerUp={pointerUp}
+                onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {}}
+                onPointerMove={index === 0 || reviewView !== "queue" ? pointerMove : () => {}}
+                onPointerUp={index === 0 || reviewView !== "queue" ? pointerUp : () => {}}
                 onPointerCancel={() => setDrag(null)}
                 onOpen={() => {
                   if (reviewView !== "queue" || index === 0) {
