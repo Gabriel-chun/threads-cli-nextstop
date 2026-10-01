@@ -3,7 +3,6 @@ import {
   loadFeedbackMap,
   putSignalDeckFeedback
 } from "../../../../lib/signalDeckFeedback";
-import { mirrorFeedbackToNotion } from "../../../../lib/signalDeckNotion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -59,17 +58,11 @@ export async function POST(request: Request) {
 
   try {
     const record = await putSignalDeckFeedback(input);
-    let notionMirror: unknown = null;
-    try {
-      notionMirror = await mirrorFeedbackToNotion(record);
-    } catch (error) {
-      notionMirror = {
-        ok: false,
-        skipped: false,
-        error: error instanceof Error ? error.message : "Notion mirror failed"
-      };
-    }
-    return Response.json({ ok: true, feedback: record, notion_mirror: notionMirror });
+    return Response.json({
+      ok: true,
+      feedback: record,
+      archive_status: "pending_daily_archive"
+    });
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : "Feedback store unavailable." },

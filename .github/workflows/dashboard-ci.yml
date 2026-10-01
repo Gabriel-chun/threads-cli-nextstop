@@ -24,6 +24,8 @@ jobs:
         run: npm run test:events
       - name: Test Signal Deck feedback profile
         run: npm run test:deck-feedback
+      - name: Test Taipei daily review archive
+        run: npx tsx --test lib/reviewArchive.test.ts
       - name: Build
         run: npm run build
       - name: Runtime MCP discovery regression
