@@ -183,11 +183,11 @@ export default async function Page() {
               <small>即時打包最新 master.json</small>
             </div>
           </a>
-          <a className="downloadButton" href="/api/download/reviews/latest">
-            <span>🗂️</span>
+          <a className="downloadButton" href="/reviews">
+            <span>🧭</span>
             <div>
-              <strong>下載 Reviewed Cards JSON</strong>
-              <small>最近一次日結的 Relevant / Irrelevant 貼文卡</small>
+              <strong>開啟 Review Ledger</strong>
+              <small>去識別化檢視已分類 Relevant / Irrelevant</small>
             </div>
           </a>
           <div className="sourceNote">
