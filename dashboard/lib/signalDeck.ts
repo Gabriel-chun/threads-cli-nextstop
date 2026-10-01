@@ -44,6 +44,8 @@ export type SignalDeckWindow = {
   days: number;
   signal_count: number;
   card_count: number;
+  default_review_limit?: number;
+  extend_step?: number;
   display_limit?: number;
   cards: SignalPostCard[];
   relevant_clusters?: RelevantCluster[];
@@ -67,6 +69,8 @@ const emptyWindow = (label: string, days: number): SignalDeckWindow => ({
   days,
   signal_count: 0,
   card_count: 0,
+  default_review_limit: 40,
+  extend_step: 10,
   display_limit: 5,
   cards: [],
   relevant_clusters: []
@@ -191,6 +195,8 @@ export function selectSignalDeckWindow(
     label: selected.label,
     signalCount: selected.signal_count,
     candidateCount: selected.card_count,
+    defaultReviewLimit: selected.default_review_limit ?? Math.min(40, selected.card_count),
+    extendStep: selected.extend_step ?? 10,
     profileApplied: selected.cards.some((card) => Boolean(card.ranking_delta)),
     reviewCounts: {
       unreviewed: queue.length,
