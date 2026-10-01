@@ -13,20 +13,22 @@ const (
 	DefaultTimeout = 30 * time.Second
 )
 
-// DefaultUserAgent identifies this project without impersonating a browser,
-// search-engine crawler, or another third-party service.
-const DefaultUserAgent = "NextStopLiveCollector/0.1 (+https://next-stop-live.vercel.app)"
+// CrawlerUA is the user agent that makes Threads serve server-rendered HTML.
+// Presenting as a crawler is what unlocks anonymous, no-browser access.
+const CrawlerUA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 
-// Web and API hosts. Anonymous HTML reads use threads.com; the official
-// Graph API lives on graph.threads.net.
+// Web and API hosts. The crawler surface lives on threads.com; the official
+// Graph API on graph.threads.net.
 const (
 	WebBase    = "https://www.threads.com"
 	GraphQLURL = "https://www.threads.com/api/graphql"
 	APIBase    = "https://graph.threads.net/v1.0"
 )
 
-// doc_id values are retained for legacy CLI helpers. The Next Stop Live
-// collector does not use internal GraphQL pagination for anonymous search.
+// doc_id values for the logged-out persisted queries. Threads rotates these
+// every two to four weeks; when a query starts returning an unexpected shape,
+// refresh these from a logged-out page load and the anonymous pagination path
+// recovers. The SSR path does not depend on them.
 const (
 	DocIDProfileThreads = "33773912952222602" // a profile's threads tab
 	DocIDPostPage       = "7448594591874178"  // a single post page and its replies
@@ -47,7 +49,7 @@ type Config struct {
 	DataDir   string
 	Verbose   int
 
-	// Optional modes retained for non-collector CLI compatibility.
+	// Optional depth, off by default.
 	Token   string // official Graph API token (own account)
 	Session string // logged-in session id cookie
 	CSRF    string // session CSRF token
@@ -60,7 +62,7 @@ func DefaultConfig() Config {
 		Delay:     DefaultDelay,
 		Retries:   DefaultRetries,
 		Timeout:   DefaultTimeout,
-		UserAgent: DefaultUserAgent,
+		UserAgent: CrawlerUA,
 		Lang:      "en-US",
 		CacheDir:  filepath.Join(cacheHome(), "th"),
 		CacheTTL:  time.Hour,
