@@ -195,9 +195,17 @@ def compatibility(current_summary: dict[str, Any], current_qhash: str | None, co
     other_qhash = other.get("query_hash")
     query = "compatible" if current_qhash and other_qhash and current_qhash == other_qhash else ("unknown" if not current_qhash or not other_qhash else "incompatible")
 
-    current_cfg = {"window_hours": current_summary.get("since_hours"), "min_score": current_summary.get("min_score")}
+    current_cfg = {
+        "window_hours": current_summary.get("since_hours"),
+        "min_score": current_summary.get("min_score"),
+        "collector_mode": current_summary.get("collector_mode"),
+    }
     other_summary = other.get("summary") or {}
-    other_cfg = {"window_hours": other_summary.get("since_hours"), "min_score": other_summary.get("min_score")}
+    other_cfg = {
+        "window_hours": other_summary.get("since_hours"),
+        "min_score": other_summary.get("min_score"),
+        "collector_mode": other_summary.get("collector_mode"),
+    }
     numeric_known = all(current_cfg[k] is not None and other_cfg[k] is not None for k in current_cfg)
     numeric_match = numeric_known and all(current_cfg[k] == other_cfg[k] for k in current_cfg)
     if config_key and other.get("config_key") and track and other.get("track") and numeric_known:
@@ -468,6 +476,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
             "query_count": len(queries),
             "window_hours": summary.get("since_hours"),
             "min_score": summary.get("min_score"),
+            "collector_mode": summary.get("collector_mode"),
             "provenance": provenance,
             "baseline_eligible": baseline_eligible,
             "workflow_event": workflow_event,
