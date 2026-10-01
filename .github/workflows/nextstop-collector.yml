@@ -191,6 +191,46 @@ jobs:
             --collector-mode browser \
             --run-stamp "$RUN_STAMP"
 
+      - name: Assess browser coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          summary_path = Path("collector/output/summary.json")
+          diagnostics_path = Path("collector/raw/browser_diagnostics.json")
+          summary = json.loads(summary_path.read_text(encoding="utf-8"))
+          diagnostics = {}
+          if diagnostics_path.exists():
+              diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
+
+          query_states = [
+              str(item.get("status") or "")
+              for item in diagnostics.get("queries", [])
+              if isinstance(item, dict)
+          ]
+          raw_rows = int(summary.get("raw_rows") or 0)
+          degraded = raw_rows == 0 and bool(query_states) and all(
+              state in {"coverage_degraded", "failed"} for state in query_states
+          )
+
+          summary["coverage_status"] = "degraded" if degraded else "observed"
+          summary_path.write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
+              env.write(f"COLLECTOR_COVERAGE_STATUS={summary['coverage_status']}\n")
+              if degraded:
+                  env.write("OBS_BASELINE_ELIGIBLE=false\n")
+
+          print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows} query_states={query_states}")
+          PY
+
       - name: Build observation bundle
         shell: bash
         run: |
