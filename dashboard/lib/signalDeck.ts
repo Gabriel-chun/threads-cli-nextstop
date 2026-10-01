@@ -182,9 +182,11 @@ export function selectSignalDeckWindow(
   limit = 5
 ) {
   const selected = deck.windows[window];
-  const queue = selected.cards.filter((card) => !card.triage_label);
-  const relevant = selected.cards.filter((card) => card.triage_label === "relevant");
-  const irrelevant = selected.cards.filter((card) => card.triage_label === "irrelevant");
+  const defaultLimit = selected.default_review_limit ?? Math.min(40, selected.card_count);
+  const defaultCards = selected.cards.slice(0, defaultLimit);
+  const queue = defaultCards.filter((card) => !card.triage_label);
+  const relevant = defaultCards.filter((card) => card.triage_label === "relevant");
+  const irrelevant = defaultCards.filter((card) => card.triage_label === "irrelevant");
 
   return {
     schemaVersion: deck.schema_version,
@@ -195,7 +197,8 @@ export function selectSignalDeckWindow(
     label: selected.label,
     signalCount: selected.signal_count,
     candidateCount: selected.card_count,
-    defaultReviewLimit: selected.default_review_limit ?? Math.min(40, selected.card_count),
+    defaultReviewLimit: defaultLimit,
+    reserveCount: Math.max(0, selected.card_count - defaultLimit),
     extendStep: selected.extend_step ?? 10,
     profileApplied: selected.cards.some((card) => Boolean(card.ranking_delta)),
     reviewCounts: {
