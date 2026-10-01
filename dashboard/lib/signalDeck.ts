@@ -1,3 +1,9 @@
+import {
+  loadFeedbackMap,
+  loadRelevanceProfile,
+  type RelevanceProfile
+} from "./signalDeckFeedback";
+
 export type SignalDeckEvidence = {
   id?: string;
   username?: string;
@@ -52,12 +58,6 @@ export type SignalDeck = {
   source_master_count: number;
   windows: Record<"1d" | "3d" | "5d", SignalDeckWindow>;
 };
-
-import {
-  loadFeedbackMap,
-  loadRelevanceProfile,
-  type RelevanceProfile
-} from "./signalDeckFeedback";
 
 const SIGNAL_DECK_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck.json";
