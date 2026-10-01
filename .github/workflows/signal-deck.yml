@@ -1,0 +1,57 @@
+name: Daily Signal Deck
+
+on:
+  schedule:
+    # 08:17 Asia/Taipei. This is intentionally independent of the ~2h collector cadence.
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "collector/build_signal_deck.py"
+      - ".github/workflows/signal-deck.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nextstop-signal-deck
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Signal Deck
+        run: python3 -m unittest collector/test_signal_deck.py
+
+      - name: Build daily Signal Deck
+        run: |
+          python3 collector/build_signal_deck.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          deck = json.loads(Path("collector/archive/latest/signal_deck.json").read_text(encoding="utf-8"))
+          print("[signal-deck] generated_at", deck["generated_at"])
+          for key, window in deck["windows"].items():
+              print(f"[signal-deck] {key}: cards={window['card_count']} signals={window['signal_count']}")
+          PY
+
+      - name: Commit Signal Deck snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add collector/archive/latest/signal_deck.json
+          if git diff --cached --quiet; then
+            echo "[signal-deck] no changes"
+            exit 0
+          fi
+          git commit -m "data: refresh daily signal deck"
+          git pull --rebase origin main
+          git push origin HEAD:main

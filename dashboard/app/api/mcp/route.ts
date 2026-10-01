@@ -4,6 +4,7 @@ import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 import { loadObservationBundle } from "../../../lib/observations";
+import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck";
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
@@ -154,6 +155,27 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_signal_deck",
+      {
+        title: "Get Signal Deck",
+        description: "Return the daily Signal Deck v0.1 for a 1-day, 3-day, or 5-day window, including source evidence links.",
+        inputSchema: z.object({
+          window: z.enum(["1d", "3d", "5d"]).default("3d"),
+          limit: z.number().int().min(1).max(5).default(5)
+        })
+      },
+      async ({ window, limit }) => {
+        const deck = await loadSignalDeck();
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify(selectSignalDeckWindow(deck, window, limit), null, 2)
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
       "get_latest_download",
       {
         title: "Get latest JSON ZIP download",
@@ -177,7 +199,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.6.0"
+      version: "0.7.0"
     }
   }
 );
