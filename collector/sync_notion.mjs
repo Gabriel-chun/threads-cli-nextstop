@@ -23,7 +23,7 @@ const COLLECTOR_WINDOW_HOURS = Number(process.env.COLLECTOR_WINDOW_HOURS || 12);
 const COLLECTOR_MIN_SCORE = Number(process.env.COLLECTOR_MIN_SCORE || 30);
 const COLLECTOR_SEARCH_DEPTH = Number(process.env.COLLECTOR_SEARCH_DEPTH || 1);
 const COLLECTOR_GOOGLE_FALLBACK = String(process.env.COLLECTOR_GOOGLE_FALLBACK || "false") === "true";
-const COLLECTOR_MODE = process.env.COLLECTOR_MODE || "hybrid";
+const COLLECTOR_MODE = process.env.COLLECTOR_MODE || "depth3";
 
 if (!NOTION_TOKEN) {
   throw new Error("NOTION_TOKEN is missing");
@@ -616,7 +616,7 @@ async function upsertQueryRunHistory({
   const properties = {
     "Run": title(runTitle),
     "Run At": date(summary.run_at || null),
-    "Pipeline Version": richText(summary.pipeline_version || "clean-v2.3-hybrid"),
+    "Pipeline Version": richText(summary.pipeline_version || "clean-v2.4-depth3"),
     "Collector Mode": richText(summary.collector_mode || COLLECTOR_MODE),
     "Coverage Status": richText(summary.coverage_status || "unknown"),
     "Track": richText(COLLECTOR_TRACK),
