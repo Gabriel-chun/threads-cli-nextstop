@@ -415,6 +415,7 @@ def main() -> None:
     parser.add_argument("--since-hours", type=int, default=12)
     parser.add_argument("--since-days", type=int, default=None, help="legacy override; converted to hours")
     parser.add_argument("--run-stamp", required=True)
+    parser.add_argument("--collector-mode", default="browser", choices=["browser", "http"])
     args = parser.parse_args()
 
     run_at = iso_now()
@@ -521,7 +522,8 @@ def main() -> None:
         "duplicate_clusters": duplicate_clusters,
         "new_3h": new_3h,
         "new_12h": new_12h,
-        "pipeline_version": "clean-v2.1",
+        "pipeline_version": "clean-v2.2-browser",
+        "collector_mode": args.collector_mode,
     }
     (output_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
