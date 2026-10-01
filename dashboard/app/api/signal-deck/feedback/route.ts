@@ -8,13 +8,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const schema = z.object({
-  snapshot_id: z.string().min(1).max(160),
-  card_id: z.string().min(1).max(100),
+  post_key: z.string().min(1).max(160),
+  post_id: z.string().max(240).nullish(),
+  permalink: z.string().url().max(1000).nullish(),
+  snapshot_id: z.string().min(1).max(180),
   window: z.enum(["1d", "3d", "5d"]),
   label: z.enum(["relevant", "irrelevant"]),
   category: z.string().min(1).max(120),
-  headline: z.string().min(1).max(240),
-  summary: z.string().max(1000),
+  text_excerpt: z.string().max(1200),
   feature_tags: z.array(z.string().min(1).max(80)).max(30),
   base_score: z.number().finite(),
   deck_generated_at: z.string().min(1).max(80)
@@ -35,8 +36,8 @@ function sameOrigin(request: Request) {
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const ids = url.searchParams.getAll("snapshot_id").filter(Boolean).slice(0, 100);
-  const feedback = await loadFeedbackMap(ids.length ? ids : undefined);
+  const keys = url.searchParams.getAll("post_key").filter(Boolean).slice(0, 200);
+  const feedback = await loadFeedbackMap(keys.length ? keys : undefined);
   return Response.json({ feedback });
 }
 
