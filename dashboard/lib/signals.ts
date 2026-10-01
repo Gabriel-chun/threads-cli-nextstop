@@ -25,7 +25,7 @@ export type Signal = RawPost & {
 const MASTER_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/master.json";
 const RUNS_URL =
-  "https://api.github.com/repos/Gabriel-chun/threads-cli-nextstop/actions/runs?per_page=5";
+  "https://api.github.com/repos/Gabriel-chun/threads-cli-nextstop/actions/workflows/nextstop-collector.yml/runs?branch=main&per_page=5";
 const HISTORY_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/history.json";
 
@@ -176,9 +176,7 @@ export async function collectorHealth() {
   });
   if (!res.ok) throw new Error(`workflow fetch failed: ${res.status}`);
   const data = await res.json();
-  const runs = (data.workflow_runs || []).filter(
-    (run: any) => run.name === "Next Stop Threads Collector"
-  );
+  const runs = data.workflow_runs || [];
   const latest = runs[0];
   return {
     healthy: latest?.conclusion === "success",
