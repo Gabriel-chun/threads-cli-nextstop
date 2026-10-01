@@ -349,6 +349,7 @@ async function upsertCollectorRun({
     "Run": title(runTitle),
     "Run At": date(summary.run_at || null),
     "Status": select(status),
+    "Collector Mode": richText(summary.collector_mode || COLLECTOR_MODE),
     "Snapshot Count": number(summary.snapshot_unique_rows ?? 0),
     "Master Count": number(summary.master_unique_rows ?? 0),
     "Failed Query Count": number(failed.length),
