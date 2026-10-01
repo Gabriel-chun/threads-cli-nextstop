@@ -41,6 +41,8 @@ function PostCard({
   selected,
   drag,
   reviewView,
+  stacked,
+  interactive,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -52,6 +54,8 @@ function PostCard({
   selected: boolean;
   drag: DragState | null;
   reviewView: ReviewView;
+  stacked: boolean;
+  interactive: boolean;
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) => void;
   onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp: (event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) => void;
@@ -61,7 +65,11 @@ function PostCard({
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const style = dragging
-    ? { transform: `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)` }
+    ? {
+        transform: stacked
+          ? `translate3d(calc(-50% + ${dx}px), -6px, 0) rotate(${dx / 28}deg)`
+          : `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)`
+      }
     : undefined;
 
   return (
@@ -69,7 +77,7 @@ function PostCard({
       className={`reelCard postCard reelCard${index % 5} ${selected ? "selected" : ""} ${dragging ? "dragging" : ""} ${card.triage_label || ""}`}
       style={style}
       role="button"
-      tabIndex={0}
+      tabIndex={interactive ? 0 : -1}
       aria-expanded={selected}
       aria-label={`${card.category}，${card.summary}`}
       onPointerDown={(event) => onPointerDown(event, card)}
@@ -332,6 +340,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 selected={selectedKey === card.post_key}
                 drag={drag}
                 reviewView={reviewView}
+                stacked={reviewView === "queue"}
+                interactive={reviewView !== "queue" || index === 0}
                 onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {}}
                 onPointerMove={index === 0 || reviewView !== "queue" ? pointerMove : () => {}}
                 onPointerUp={index === 0 || reviewView !== "queue" ? pointerUp : () => {}}
