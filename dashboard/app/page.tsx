@@ -172,6 +172,7 @@ export default async function Page() {
             <li>get_signal_detail</li>
             <li>get_collector_health</li>
             <li>get_trend_history</li>
+            <li>get_signal_deck</li>
             <li>get_latest_download</li>
           </ul>
           <a className="downloadButton" href="/api/download/latest">
