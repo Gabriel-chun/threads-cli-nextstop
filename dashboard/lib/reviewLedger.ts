@@ -36,8 +36,8 @@ export function reviewAnonymousId(row: ReviewRecordLike) {
 
 export function deidentifyReviewText(value: string) {
   return String(value || "")
-    .replace(/@[A-Za-z0-9._]+/g, "@user")
     .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[email]")
+    .replace(/@[A-Za-z0-9._]+/g, "@user")
     .replace(/https?:\/\/\S+/gi, "[link]")
     .replace(/\s+/g, " ")
     .trim();
