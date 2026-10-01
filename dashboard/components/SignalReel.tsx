@@ -145,15 +145,34 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const window = deck.windows[windowKey];
   const reviewLimit = Math.min(reviewLimits[windowKey], window.card_count);
 
-  const cards = useMemo(
+  const windowCards = useMemo(
     () =>
-      window.cards
-        .slice(0, reviewLimit)
-        .map((card) => ({
-          ...card,
-          triage_label: labels[card.post_key] ?? card.triage_label ?? null
-        })),
-    [window.cards, labels, reviewLimit]
+      window.cards.map((card) => ({
+        ...card,
+        triage_label: labels[card.post_key] ?? card.triage_label ?? null
+      })),
+    [window.cards, labels]
+  );
+
+  const allCounts = useMemo(
+    () => ({
+      total: windowCards.length,
+      relevant: windowCards.filter((card) => card.triage_label === "relevant").length,
+      irrelevant: windowCards.filter((card) => card.triage_label === "irrelevant").length,
+      unreviewed: windowCards.filter((card) => !card.triage_label).length
+    }),
+    [windowCards]
+  );
+
+  const reviewedPct = allCounts.total
+    ? ((allCounts.relevant + allCounts.irrelevant) / allCounts.total) * 100
+    : 0;
+  const relevantPct = allCounts.total ? (allCounts.relevant / allCounts.total) * 100 : 0;
+  const irrelevantPct = allCounts.total ? (allCounts.irrelevant / allCounts.total) * 100 : 0;
+
+  const cards = useMemo(
+    () => windowCards.slice(0, reviewLimit),
+    [windowCards, reviewLimit]
   );
 
   const counts = useMemo(
@@ -341,8 +360,30 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
       <div className="signalDeckSub">
         <span>{reviewLimit} / {window.card_count} 篇今日額度</span>
-        <span>{counts.queue} 篇待分類</span>
+        <span>{counts.queue} 篇今日待分類</span>
         <span>Daily snapshot · {fmtDate(deck.generated_at)}</span>
+      </div>
+
+      <div className="reviewProgress" aria-label={window.label + "分類進度"}>
+        <div className="reviewProgressHead">
+          <div>
+            <span>分類進度 · {window.label}</span>
+            <strong>{allCounts.relevant + allCounts.irrelevant} / {allCounts.total}</strong>
+          </div>
+          <div className="reviewProgressLegend">
+            <span className="relevant">Relevant {allCounts.relevant}</span>
+            <span className="irrelevant">Irrelevant {allCounts.irrelevant}</span>
+            <span className="unreviewed">未分類 {allCounts.unreviewed}</span>
+          </div>
+        </div>
+        <div className="reviewHpTrack" title={"已分類 " + reviewedPct.toFixed(0) + "% · 未分類 " + allCounts.unreviewed}>
+          <span className="reviewHpRelevant" style={{ width: relevantPct + "%" }} />
+          <span className="reviewHpIrrelevant" style={{ width: irrelevantPct + "%" }} />
+        </div>
+        <div className="reviewProgressFoot">
+          <span>已分類 {reviewedPct.toFixed(0)}%</span>
+          <a href="/reviews">開啟 Review Ledger ↗</a>
+        </div>
       </div>
 
       <div className={`signalRailWrap swipeWorkspace ${drag ? "isDragging" : ""}`}>
