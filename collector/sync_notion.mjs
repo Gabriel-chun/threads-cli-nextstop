@@ -109,6 +109,11 @@ function postProperties(row, seenCountOverride = null) {
   return {
     "Post": title(cleanTitle(row)),
     "Post ID": richText(String(row.id || row.permalink || "")),
+    "Collector Mode": richText(
+      Array.isArray(row.retrieval_sources) && row.retrieval_sources.includes("threads_browser_dom")
+        ? "browser"
+        : "http"
+    ),
     "Text": richText(clip(row.text || "")),
     "Username": richText(row.username || ""),
     "Permalink": url(row.permalink || ""),
