@@ -136,16 +136,24 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
+  const [reviewLimits, setReviewLimits] = useState<Record<WindowKey, number>>({
+    "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
+    "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
+    "5d": deck.windows["5d"].default_review_limit ?? Math.min(40, deck.windows["5d"].card_count)
+  });
 
   const window = deck.windows[windowKey];
+  const reviewLimit = Math.min(reviewLimits[windowKey], window.card_count);
 
   const cards = useMemo(
     () =>
-      window.cards.map((card) => ({
-        ...card,
-        triage_label: labels[card.post_key] ?? card.triage_label ?? null
-      })),
-    [window.cards, labels]
+      window.cards
+        .slice(0, reviewLimit)
+        .map((card) => ({
+          ...card,
+          triage_label: labels[card.post_key] ?? card.triage_label ?? null
+        })),
+    [window.cards, labels, reviewLimit]
   );
 
   const counts = useMemo(
@@ -204,6 +212,16 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     setSelectedKey(null);
     setDrag(null);
     setSaveError("");
+  }
+
+  function addTen() {
+    const step = window.extend_step ?? 10;
+    setReviewLimits((current) => ({
+      ...current,
+      [windowKey]: Math.min(window.card_count, current[windowKey] + step)
+    }));
+    setReviewView("queue");
+    setSelectedKey(null);
   }
 
   async function classify(card: SignalPostCard, label: TriageLabel) {
@@ -322,7 +340,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       </div>
 
       <div className="signalDeckSub">
-        <span>{window.signal_count} 篇候選貼文</span>
+        <span>{reviewLimit} / {window.card_count} 篇今日額度</span>
         <span>{counts.queue} 篇待分類</span>
         <span>Daily snapshot · {fmtDate(deck.generated_at)}</span>
       </div>
@@ -367,9 +385,20 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           </div>
         ) : (
           <div className="signalDeckEmpty">
-            {reviewView === "queue"
-              ? "這個時間窗目前沒有待分類貼文。"
-              : `目前沒有 ${reviewView === "relevant" ? "Relevant" : "Irrelevant"} 貼文。`}
+            {reviewView === "queue" ? (
+              <>
+                <strong>今天這一批已經整理完了。</strong>
+                {reviewLimit < window.card_count ? (
+                  <button type="button" className="addTenButton" onClick={addTen}>
+                    有余力，再加 {Math.min(window.extend_step ?? 10, window.card_count - reviewLimit)} 篇
+                  </button>
+                ) : (
+                  <span>目前沒有更多候選。</span>
+                )}
+              </>
+            ) : (
+              `目前沒有 ${reviewView === "relevant" ? "Relevant" : "Irrelevant"} 貼文。`
+            )}
           </div>
         )}
       </div>
