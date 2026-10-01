@@ -27,7 +27,7 @@ A/B tests use isolated state directories and never write test rows into the prod
 
 ## Coverage semantics
 
-A successful browser request can still return zero matching rows. That is treated as a coverage observation, not proof that discussion volume is zero. Browser diagnostics record each query's status, HTTP status, row count, final URL, and any visible login-wall/access-challenge condition.
+A successful browser request can still return zero matching rows. That is treated as a coverage observation, not proof that discussion volume is zero. When all browser queries are degraded/failed and raw rows are zero, the run is marked `coverage_status=degraded` and excluded from trend baselines. Browser diagnostics record each query's status, HTTP status, row count, final URL, and any visible login-wall/access-challenge condition.
 
 ## Schedule
 
