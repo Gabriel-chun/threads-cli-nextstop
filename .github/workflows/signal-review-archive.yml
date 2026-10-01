@@ -1,0 +1,120 @@
+name: Daily Signal Review Archive
+
+on:
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+    inputs:
+      archive_date:
+        description: "Taipei review date (YYYY-MM-DD). Empty = previous Taipei day."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nextstop-daily-signal-review-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve Taipei archive date
+        shell: bash
+        env:
+          REQUESTED_DATE: ${{ inputs.archive_date }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
+
+          requested = (os.environ.get("REQUESTED_DATE") or "").strip()
+          if requested:
+              datetime.strptime(requested, "%Y-%m-%d")
+              target = requested
+          else:
+              target = (datetime.now(ZoneInfo("Asia/Taipei")).date() - timedelta(days=1)).isoformat()
+
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as fh:
+              fh.write(f"ARCHIVE_DATE={target}\n")
+          print(f"[review-archive] target={target} Asia/Taipei")
+          PY
+
+      - name: Fetch daily reviews
+        shell: bash
+        env:
+          EXPORT_TOKEN: ${{ secrets.NEXTSTOP_REVIEW_EXPORT_TOKEN }}
+          EXPORT_BASE_URL: "https://next-stop-live.vercel.app"
+        run: |
+          set -euo pipefail
+          if [[ -z "${EXPORT_TOKEN:-}" ]]; then
+            echo "::error::NEXTSTOP_REVIEW_EXPORT_TOKEN repository secret is missing"
+            exit 1
+          fi
+
+          mkdir -p collector/archive/reviews
+          target="collector/archive/reviews/${ARCHIVE_DATE}.json"
+
+          curl --fail --silent --show-error --retry 3             -H "Authorization: Bearer ${EXPORT_TOKEN}"             "${EXPORT_BASE_URL}/api/signal-deck/review-export?date=${ARCHIVE_DATE}"             -o "${target}"
+
+          cp "${target}" collector/archive/reviews/latest.json
+
+      - name: Validate archive
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("collector/archive/reviews") / f"{os.environ['ARCHIVE_DATE']}.json"
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          assert payload["schema_version"] == "signal-review-archive-v0.1"
+          assert payload["archive_date"] == os.environ["ARCHIVE_DATE"]
+          assert payload["timezone"] == "Asia/Taipei"
+          assert payload["count"] == len(payload["rows"])
+          print(
+              "[review-archive]",
+              f"count={payload['count']}",
+              f"relevant={payload['relevant_count']}",
+              f"irrelevant={payload['irrelevant_count']}",
+          )
+          PY
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Notion client
+        run: npm install --no-save --no-package-lock @notionhq/client@5.26.0
+
+      - name: Sync archive to Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_SIGNAL_REVIEW_DATA_SOURCE_ID: "1c78f7c4-8325-4838-aa5b-64c6c1b88a22"
+        run: node collector/sync_signal_reviews_notion.mjs "collector/archive/reviews/${ARCHIVE_DATE}.json"
+
+      - name: Commit daily review archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "collector/archive/reviews/${ARCHIVE_DATE}.json" collector/archive/reviews/latest.json
+
+          if git diff --cached --quiet; then
+            echo "[review-archive] no changes"
+            exit 0
+          fi
+
+          git commit -m "data: archive signal reviews ${ARCHIVE_DATE}"
+          git pull --rebase origin main
+          git push origin HEAD:main
