@@ -136,8 +136,6 @@ def classify(text: str) -> tuple[str, str, str] | None:
     for category, kind, headline, pattern in RULES:
         if pattern.search(text):
             return category, kind, headline
-    if QUESTION.search(text):
-        return "其他問題／需求", "context", "演出相關問題正在重複出現"
     return None
 
 
