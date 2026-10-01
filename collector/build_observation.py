@@ -415,6 +415,8 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         flags.append("previous_comparable_run_missing")
     elif not overlap_available:
         flags.append("previous_snapshot_missing")
+    if summary.get("coverage_status") == "degraded":
+        flags.append("collector_coverage_degraded")
     if failed_queries:
         flags.append("all_queries_failed" if len(failed_queries) >= len(queries) and queries else "partial_query_failure")
     if any((row.get("_compatibility") or {}).get("pipeline_version") == "incompatible" for row in incompatible_rows):
@@ -479,6 +481,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
             "window_hours": summary.get("since_hours"),
             "min_score": summary.get("min_score"),
             "collector_mode": summary.get("collector_mode"),
+            "coverage_status": summary.get("coverage_status"),
             "provenance": provenance,
             "baseline_eligible": baseline_eligible,
             "workflow_event": workflow_event,
@@ -514,6 +517,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         },
         "data_quality": {
             "flags": sorted(set(flags)),
+            "coverage_status": summary.get("coverage_status"),
             "failed_query_count": len(failed_queries),
             "query_count": len(queries),
             "baseline_complete_24h": baselines["24h"]["coverage_complete"],
