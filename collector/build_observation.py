@@ -195,15 +195,25 @@ def compatibility(current_summary: dict[str, Any], current_qhash: str | None, co
     other_qhash = other.get("query_hash")
     query = "compatible" if current_qhash and other_qhash and current_qhash == other_qhash else ("unknown" if not current_qhash or not other_qhash else "incompatible")
 
-    current_cfg = {"window_hours": current_summary.get("since_hours"), "min_score": current_summary.get("min_score")}
+    current_cfg = {
+        "window_hours": current_summary.get("since_hours"),
+        "min_score": current_summary.get("min_score"),
+    }
     other_summary = other.get("summary") or {}
-    other_cfg = {"window_hours": other_summary.get("since_hours"), "min_score": other_summary.get("min_score")}
+    other_cfg = {
+        "window_hours": other_summary.get("since_hours"),
+        "min_score": other_summary.get("min_score"),
+    }
     numeric_known = all(current_cfg[k] is not None and other_cfg[k] is not None for k in current_cfg)
     numeric_match = numeric_known and all(current_cfg[k] == other_cfg[k] for k in current_cfg)
+
+    current_mode = current_summary.get("collector_mode")
+    other_mode = other_summary.get("collector_mode")
+    mode_compatible = not current_mode or not other_mode or current_mode == other_mode
     if config_key and other.get("config_key") and track and other.get("track") and numeric_known:
-        config = "compatible" if numeric_match and config_key == other.get("config_key") and track == other.get("track") else "incompatible"
+        config = "compatible" if numeric_match and mode_compatible and config_key == other.get("config_key") and track == other.get("track") else "incompatible"
     elif numeric_known:
-        config = "partial" if numeric_match else "incompatible"
+        config = "partial" if numeric_match and mode_compatible else "incompatible"
     else:
         config = "unknown"
 
@@ -405,6 +415,8 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         flags.append("previous_comparable_run_missing")
     elif not overlap_available:
         flags.append("previous_snapshot_missing")
+    if summary.get("coverage_status") == "degraded":
+        flags.append("collector_coverage_degraded")
     if failed_queries:
         flags.append("all_queries_failed" if len(failed_queries) >= len(queries) and queries else "partial_query_failure")
     if any((row.get("_compatibility") or {}).get("pipeline_version") == "incompatible" for row in incompatible_rows):
@@ -468,6 +480,8 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
             "query_count": len(queries),
             "window_hours": summary.get("since_hours"),
             "min_score": summary.get("min_score"),
+            "collector_mode": summary.get("collector_mode"),
+            "coverage_status": summary.get("coverage_status"),
             "provenance": provenance,
             "baseline_eligible": baseline_eligible,
             "workflow_event": workflow_event,
@@ -503,6 +517,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         },
         "data_quality": {
             "flags": sorted(set(flags)),
+            "coverage_status": summary.get("coverage_status"),
             "failed_query_count": len(failed_queries),
             "query_count": len(queries),
             "baseline_complete_24h": baselines["24h"]["coverage_complete"],

@@ -9,6 +9,8 @@ on:
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths:
       - ".github/workflows/nextstop-collector.yml"
 
@@ -128,13 +130,15 @@ jobs:
           python3 -m unittest collector/test_clean_rules.py
           python3 -m unittest collector/test_observation.py
 
-      - name: Set up Node for Notion config
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install Notion SDK
-        run: npm install --no-save @notionhq/client@5.26.0
+      - name: Install collector dependencies
+        run: |
+          npm install --no-save --no-package-lock @notionhq/client@5.26.0 playwright@1.56.1
+          npx playwright install --with-deps chromium
 
       - name: Load collector config from Notion
         env:
@@ -172,7 +176,10 @@ jobs:
 
       - name: Collect Threads snapshots
         env:
+          COLLECTOR_MODE: browser
           QUERY_FILE: ${{ env.QUERY_FILE }}
+          COLLECTOR_BROWSER_SCROLLS: "2"
+          COLLECTOR_BROWSER_MAX_POSTS: "40"
         run: bash collector/collect.sh
 
       - name: Build snapshot and master files
@@ -183,7 +190,48 @@ jobs:
             --state-dir collector/state \
             --min-score "$COLLECTOR_MIN_SCORE" \
             --since-hours "$COLLECTOR_WINDOW_HOURS" \
+            --collector-mode browser \
             --run-stamp "$RUN_STAMP"
+
+      - name: Assess browser coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          summary_path = Path("collector/output/summary.json")
+          diagnostics_path = Path("collector/raw/browser_diagnostics.json")
+          summary = json.loads(summary_path.read_text(encoding="utf-8"))
+          diagnostics = {}
+          if diagnostics_path.exists():
+              diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
+
+          query_states = [
+              str(item.get("status") or "")
+              for item in diagnostics.get("queries", [])
+              if isinstance(item, dict)
+          ]
+          raw_rows = int(summary.get("raw_rows") or 0)
+          degraded = raw_rows == 0 and bool(query_states) and all(
+              state in {"coverage_degraded", "failed"} for state in query_states
+          )
+
+          summary["coverage_status"] = "degraded" if degraded else "observed"
+          summary_path.write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
+              env.write(f"COLLECTOR_COVERAGE_STATUS={summary['coverage_status']}\n")
+              if degraded:
+                  env.write("OBS_BASELINE_ELIGIBLE=false\n")
+
+          print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows} query_states={query_states}")
+          PY
 
       - name: Build observation bundle
         shell: bash
@@ -251,6 +299,7 @@ jobs:
           COLLECTOR_CONFIG_KEY: ${{ env.COLLECTOR_CONFIG_KEY }}
           COLLECTOR_WINDOW_HOURS: ${{ env.COLLECTOR_WINDOW_HOURS }}
           COLLECTOR_MIN_SCORE: ${{ env.COLLECTOR_MIN_SCORE }}
+          COLLECTOR_MODE: browser
           OUTPUT_DIR: collector/output
           QUERY_FILE: ${{ env.QUERY_FILE }}
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -300,6 +349,9 @@ jobs:
           cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
           cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
+          if [[ -s collector/raw/browser_diagnostics.json ]]; then
+            cp collector/raw/browser_diagnostics.json collector/archive/runs/browser_diagnostics_"$RUN_STAMP".json
+          fi
           cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
           cp collector/output/observation_bundle.json collector/archive/observations/"$RUN_STAMP".json
           cp collector/output/observation_bundle.json collector/archive/latest/observation.json
@@ -323,6 +375,8 @@ jobs:
               "run_at": summary.get("run_at"),
               "run_stamp": summary.get("run_stamp"),
               "pipeline_version": summary.get("pipeline_version"),
+              "collector_mode": summary.get("collector_mode"),
+              "coverage_status": summary.get("coverage_status"),
               "raw_rows": summary.get("raw_rows", 0),
               "dedupe_unique_signals": summary.get("dedupe_unique_signals", 0),
               "unique_signals": summary.get("unique_signals", 0),
