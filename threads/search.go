@@ -9,43 +9,96 @@ import (
 	"time"
 )
 
-// Search streams candidates from the public Threads search page.
-// Anonymous search intentionally stays within the single public HTML window.
+// Search streams candidates from the crawler-rendered Threads search page.
+// It preserves the historical one-window behavior. Use SearchWithOptions when
+// retrieval depth or Google coverage fallback is desired.
 func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[SearchResult, error] {
 	return c.SearchWithOptions(ctx, query, limit, 1, false)
 }
 
-// SearchWithOptions reads only the public Threads search page returned to this
-// explicitly identified client. It does not use logged-out internal GraphQL
-// pagination, crawler relay flags, login state, proxy rotation, or external
-// search-engine fallback. depth and googleFallback are retained only for API
-// compatibility and are intentionally ignored.
+// SearchWithOptions combines three anonymous retrieval surfaces:
+//   1. Threads SSR search window
+//   2. logged-out Threads GraphQL pagination (up to depth pages total)
+//   3. optional Google site:threads.com coverage fallback
+//
+// All candidates are deduplicated before relevance scoring, and every surviving
+// row records which retrieval sources found it.
 func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, depth int, googleFallback bool) iter.Seq2[SearchResult, error] {
 	return func(yield func(SearchResult, error) bool) {
-		posts, _, _, err := c.searchSSRPage(ctx, query)
+		if depth < 1 {
+			depth = 1
+		}
+		if depth > 5 {
+			depth = 5
+		}
+
+		type sourcedPost struct {
+			post   Post
+			source string
+		}
+		var candidates []sourcedPost
+
+		posts, cursor, hasMore, err := c.searchSSRPage(ctx, query)
 		if err != nil {
 			yield(SearchResult{}, err)
 			return
 		}
-
-		results := make([]SearchResult, 0, len(posts))
-		seen := map[string]bool{}
 		for _, p := range posts {
+			candidates = append(candidates, sourcedPost{post: p, source: "threads_ssr"})
+		}
+
+		// Depth counts the SSR window as page 1. Resume from its cursor when
+		// available; otherwise ask GraphQL for its first anonymous page.
+		graphCursor := cursor
+		for page := 2; page <= depth; page++ {
+			if page > 2 && !hasMore {
+				break
+			}
+			gPosts, next, more, gErr := c.graphqlSearchPage(ctx, query, graphCursor)
+			if gErr != nil {
+				c.logf(1, "anonymous GraphQL search depth stopped at page %d: %v", page, gErr)
+				break
+			}
+			for _, p := range gPosts {
+				candidates = append(candidates, sourcedPost{post: p, source: "threads_graphql"})
+			}
+			if next == "" || next == graphCursor {
+				break
+			}
+			graphCursor, hasMore = next, more
+			if !more {
+				break
+			}
+		}
+
+		if googleFallback {
+			gPosts, gErr := c.googleThreadsSearch(ctx, query, 5)
+			if gErr != nil {
+				c.logf(1, "Google coverage fallback unavailable: %v", gErr)
+			} else {
+				for _, p := range gPosts {
+					candidates = append(candidates, sourcedPost{post: p, source: "google_site"})
+				}
+			}
+		}
+
+		byKey := map[string]SearchResult{}
+		for _, item := range candidates {
+			p := item.post
 			key := p.ID
 			if key == "" {
 				key = p.Permalink
 			}
-			if key == "" || seen[key] {
+			if key == "" {
 				continue
 			}
-			seen[key] = true
 
 			score, matched := scoreSearchPost(p, query)
 			if score <= 0 {
 				continue
 			}
 
-			results = append(results, SearchResult{
+			r := SearchResult{
 				ID:               p.ID,
 				Query:            query,
 				SourceQueries:    []string{query},
@@ -59,12 +112,22 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 				RelevanceScore:   score,
 				RelevanceTier:    relevanceTier(score),
 				MatchedTerms:     matched,
-				RetrievalSources: []string{"threads_public_html"},
+				RetrievalSources: []string{item.source},
 				SearchedAt:       time.Now(),
-			})
+			}
+			if existing, ok := byKey[key]; ok {
+				byKey[key] = mergeSearchResults(existing, r)
+			} else {
+				byKey[key] = r
+			}
 		}
 
+		results := make([]SearchResult, 0, len(byKey))
+		for _, r := range byKey {
+			results = append(results, r)
+		}
 		sortSearchResults(results)
+
 		for i, r := range results {
 			if limit > 0 && i >= limit {
 				return
