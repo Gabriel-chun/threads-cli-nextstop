@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -u
+
+TH_BIN="${TH_BIN:-./bin/th}"
+QUERY_FILE="${QUERY_FILE:-collector/queries.txt}"
+RAW_DIR="${RAW_DIR:-collector/raw}"
+FAILED_FILE="${FAILED_FILE:-collector/failed_queries.txt}"
+SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
+QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-1}"
+RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-30}"
+
+mkdir -p "$RAW_DIR"
+: > "$FAILED_FILE"
+
+if [[ ! -x "$TH_BIN" ]]; then
+  echo "th binary not found or not executable: $TH_BIN" >&2
+  exit 1
+fi
+
+if [[ ! -f "$QUERY_FILE" ]]; then
+  echo "query file not found: $QUERY_FILE" >&2
+  exit 1
+fi
+
+i=0
+while IFS= read -r query || [[ -n "$query" ]]; do
+  query="$(printf '%s' "$query" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+  [[ -z "$query" ]] && continue
+
+  i=$((i + 1))
+  outfile="$RAW_DIR/query_$(printf '%02d' "$i").jsonl"
+  logfile="$RAW_DIR/query_$(printf '%02d' "$i").log"
+
+  echo "[http] ($i) $query"
+
+  search_args=(search "$query")
+
+  success=false
+  status=0
+  attempt=1
+
+  while [[ "$attempt" -le "$QUERY_ATTEMPTS" ]]; do
+    echo "[collector] query attempt $attempt/$QUERY_ATTEMPTS: $query"
+
+    if "$TH_BIN" \
+        --delay 8s \
+        --retries 2 \
+        --timeout 45s \
+        --quiet \
+        -o jsonl \
+        -n 0 \
+        "${search_args[@]}" \
+        > "$outfile" 2> "$logfile"; then
+      success=true
+      break
+    else
+      status=$?
+      echo "[collector] attempt $attempt failed (exit $status): $query" >&2
+      if [[ "$attempt" -lt "$QUERY_ATTEMPTS" ]]; then
+        sleep "$RETRY_SLEEP_SECONDS"
+      fi
+    fi
+
+    attempt=$((attempt + 1))
+  done
+
+  if [[ "$success" != "true" ]]; then
+    printf '%s\n' "$query" >> "$FAILED_FILE"
+    echo "[collector] query failed after $QUERY_ATTEMPTS attempts (last exit $status): $query" >&2
+  fi
+
+  sleep "$SLEEP_SECONDS"
+done < "$QUERY_FILE"
+
+echo "[collector] finished $i queries"
+if [[ -s "$FAILED_FILE" ]]; then
+  echo "[collector] some queries failed:"
+  cat "$FAILED_FILE"
+fi
