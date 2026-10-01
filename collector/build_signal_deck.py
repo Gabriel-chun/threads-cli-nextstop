@@ -10,7 +10,9 @@ from pathlib import Path
 from typing import Any
 
 WINDOWS = {"1d": 1, "3d": 3, "5d": 5}
-MAX_CANDIDATES = 40
+MAX_CANDIDATES = 100
+DEFAULT_REVIEW_LIMIT = 40
+EXTEND_STEP = 10
 DISPLAY_LIMIT = 5
 
 CATEGORY_RULES = [
@@ -261,6 +263,8 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
             "days": days,
             "signal_count": len(scoped),
             "card_count": len(cards),
+            "default_review_limit": min(DEFAULT_REVIEW_LIMIT, len(cards)),
+            "extend_step": EXTEND_STEP,
             "display_limit": DISPLAY_LIMIT,
             "cards": cards,
         }
