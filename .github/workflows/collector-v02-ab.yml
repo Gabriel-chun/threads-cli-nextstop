@@ -2,6 +2,9 @@ name: Collector V0.2 A-B Test
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "collector/**"
 
 permissions:
   contents: read
