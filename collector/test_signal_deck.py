@@ -61,6 +61,33 @@ class SignalDeckTests(unittest.TestCase):
         three_day_categories = {card["category"] for card in deck["windows"]["3d"]["cards"]}
         self.assertIn("交通／散場", three_day_categories)
 
+    def test_excludes_resale_and_does_not_match_bigbang_as_ig(self):
+        now = datetime(2026, 10, 1, 3, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "sale",
+                "text": "出兩張 BIGBANG 演唱會門票，原價出售，有意私訊",
+                "username": "seller",
+                "permalink": "https://www.threads.com/@seller/post/sale",
+                "timestamp": "2026-10-01T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+            },
+            {
+                "id": "bigbang",
+                "text": "BIGBANG 演唱會真的太感動了",
+                "username": "fan",
+                "permalink": "https://www.threads.com/@fan/post/bigbang",
+                "timestamp": "2026-10-01T01:30:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+            },
+        ]
+        deck = build_deck(posts, now)
+        categories = {card["category"] for card in deck["windows"]["1d"]["cards"]}
+        self.assertNotIn("演後社群／內容需求", categories)
+        self.assertEqual(deck["windows"]["1d"]["signal_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
