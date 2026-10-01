@@ -198,20 +198,22 @@ def compatibility(current_summary: dict[str, Any], current_qhash: str | None, co
     current_cfg = {
         "window_hours": current_summary.get("since_hours"),
         "min_score": current_summary.get("min_score"),
-        "collector_mode": current_summary.get("collector_mode"),
     }
     other_summary = other.get("summary") or {}
     other_cfg = {
         "window_hours": other_summary.get("since_hours"),
         "min_score": other_summary.get("min_score"),
-        "collector_mode": other_summary.get("collector_mode"),
     }
     numeric_known = all(current_cfg[k] is not None and other_cfg[k] is not None for k in current_cfg)
     numeric_match = numeric_known and all(current_cfg[k] == other_cfg[k] for k in current_cfg)
+
+    current_mode = current_summary.get("collector_mode")
+    other_mode = other_summary.get("collector_mode")
+    mode_compatible = not current_mode or not other_mode or current_mode == other_mode
     if config_key and other.get("config_key") and track and other.get("track") and numeric_known:
-        config = "compatible" if numeric_match and config_key == other.get("config_key") and track == other.get("track") else "incompatible"
+        config = "compatible" if numeric_match and mode_compatible and config_key == other.get("config_key") and track == other.get("track") else "incompatible"
     elif numeric_known:
-        config = "partial" if numeric_match else "incompatible"
+        config = "partial" if numeric_match and mode_compatible else "incompatible"
     else:
         config = "unknown"
 
