@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Any
 
 WINDOWS = {"1d": 1, "3d": 3, "5d": 5}
-MAX_CARDS = 5
+MAX_CANDIDATES = 12
+DISPLAY_LIMIT = 5
 MAX_EVIDENCE = 5
 
 RULES = [
@@ -79,6 +80,31 @@ RULES = [
 
 NOISE = re.compile(r"市長|市长|政見|政见|參選|参选|唯一支持|政治|同框|CP|哥哥們碰面|哥哥们碰面", re.I)
 QUESTION = re.compile(r"請問|请问|想問|想问|有人有.*經驗|有人有.*经验|怎麼|怎么|如何|為什麼|为什么|有沒有人|有没有人", re.I)
+
+FEATURE_PATTERNS = {
+    "question_intent": re.compile(r"請問|请问|想問|想问|怎麼|怎么|如何|有沒有人|有没有人|有人有.*經驗|有人有.*经验", re.I),
+    "first_timer": re.compile(r"第一次|小白|完全沒有概念|完全没有概念", re.I),
+    "transport_need": re.compile(r"接駁|捷運|地鐵|高鐵|火車|公車|計程車|uber|散場|末班|機場|航班|趕場|行李|車票|车票", re.I),
+    "ticketing_need": re.compile(r"購票|购票|門票|门票|實名制|实名制|抽選|公售|退票|入場|入场|手環|票務|票务", re.I),
+    "vip_benefit": re.compile(r"VIP|合照|拍立得|簽名|签名|福利|meet\s*&?\s*greet|hi[- ]?bye|soundcheck|彩排|擊掌|击掌|歡送|欢送", re.I),
+    "merch_need": re.compile(r"周邊|周边|場販|场贩|手燈|手灯|代購|代购|缺貨|缺货|merch|goods|物販", re.I),
+    "venue_experience": re.compile(r"場館|场馆|視線|视线|搖滾區|摇滚区|站起來|站起来|坐下|被擠|被挤|工作人員|工作人员|應援|应援", re.I),
+    "accommodation_need": re.compile(r"住宿|飯店|酒店|hotel|hostel|民宿|住哪|stay in|accommodation", re.I),
+    "solo_attendance": re.compile(r"一個人|一个人|找個伴|找个伴|同行|solo", re.I),
+    "cp_fandom_language": re.compile(r"\bCP\b|同人|磕|嗑|夢女|梦女|ship|配對|配对", re.I),
+}
+
+NARRATIVE_MARKERS = re.compile(r"溫柔|温柔|耳邊|耳边|眼神|身體|身体|碎髮|碎发|拉著|拉着|靠向|撥著|拨着|笑笑|輕輕|轻轻|不自覺|不自觉", re.I)
+
+
+def extract_features(text: str) -> set[str]:
+    tags = {tag for tag, pattern in FEATURE_PATTERNS.items() if pattern.search(text)}
+    narrative_hits = len(NARRATIVE_MARKERS.findall(text))
+    if len(text) >= 220 and narrative_hits >= 3 and not QUESTION.search(text):
+        tags.add("fan_narrative")
+    if len(text) >= 180 and not QUESTION.search(text) and re.search(r"演唱會|演唱会", text, re.I):
+        tags.add("long_fandom_story")
+    return tags
 
 PRESERVE_TICKET_FRICTION = re.compile(
     r"Pia帳號|日本門號|本人確認|本確|護照|退票|客服|實名制|黃牛.*搶不到|买不到票|買不到票|抽選|公售|入場|手環|購票紀錄",
@@ -164,7 +190,7 @@ def activity_buckets(posts: list[dict[str, Any]], now: datetime, days: int) -> l
     return values
 
 
-def build_card(category: str, rows: list[dict[str, Any]], now: datetime, days: int) -> dict[str, Any]:
+def build_card(category: str, rows: list[dict[str, Any]], now: datetime, days: int, window_key: str) -> dict[str, Any]:
     rows = sorted(rows, key=lambda row: post_time(row) or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
     representative = next((row for row in rows if QUESTION.search(str(row.get("text") or ""))), rows[0])
     first = min((post_time(row) for row in rows if post_time(row)), default=None)
@@ -184,6 +210,19 @@ def build_card(category: str, rows: list[dict[str, Any]], now: datetime, days: i
 
     score = round(len(rows) * 3 + len(authors) * 2 + max(0, 6 - min(6, age_hours / 4)) + min(span_hours / 12, 6), 2)
 
+    representative_text = str(representative.get("text") or "")
+    feature_counts: dict[str, int] = defaultdict(int)
+    for row in rows:
+        for tag in extract_features(str(row.get("text") or "")):
+            feature_counts[tag] += 1
+    representative_features = extract_features(representative_text)
+    feature_tags = sorted({
+        tag
+        for tag, count in feature_counts.items()
+        if tag in representative_features or count / max(1, len(rows)) >= 0.35
+    })
+    snapshot_id = "deck_" + now.date().isoformat() + "_" + window_key + "_" + card_id(category).replace("sig_", "")
+
     evidence = []
     for row in rows[:MAX_EVIDENCE]:
         evidence.append({
@@ -199,12 +238,16 @@ def build_card(category: str, rows: list[dict[str, Any]], now: datetime, days: i
 
     return {
         "id": card_id(category),
+        "snapshot_id": snapshot_id,
         "category": category,
         "kind": kind,
         "headline": headline,
         "summary": trimmed(str(representative.get("text") or ""), 170),
         "status": status,
         "score": score,
+        "base_score": score,
+        "feature_tags": feature_tags,
+        "feature_counts": dict(sorted(feature_counts.items())),
         "mentions": len(rows),
         "authors": len(authors),
         "first_seen": first.isoformat().replace("+00:00", "Z") if first else None,
@@ -240,20 +283,21 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
         for row in scoped:
             grouped[row["_deck_category"]].append(row)
 
-        cards = [build_card(category, rows, now, days) for category, rows in grouped.items()]
+        cards = [build_card(category, rows, now, days, key) for category, rows in grouped.items()]
         cards.sort(key=lambda card: (-card["score"], -card["mentions"], card["category"]))
-        cards = cards[:MAX_CARDS]
+        cards = cards[:MAX_CANDIDATES]
 
         windows[key] = {
             "label": f"{days}日",
             "days": days,
             "signal_count": len(scoped),
             "card_count": len(cards),
+            "display_limit": DISPLAY_LIMIT,
             "cards": cards,
         }
 
     return {
-        "schema_version": "signal-deck-v0.1",
+        "schema_version": "signal-deck-v0.2",
         "generated_at": now.isoformat().replace("+00:00", "Z"),
         "refresh_policy": "daily",
         "source": "collector/archive/latest/master.json",
