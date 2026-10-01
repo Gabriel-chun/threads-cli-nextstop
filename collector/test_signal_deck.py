@@ -47,6 +47,8 @@ class SignalDeckV03Tests(unittest.TestCase):
         one_day = deck["windows"]["1d"]
         self.assertEqual(one_day["card_count"], 2)
         self.assertEqual(one_day["display_limit"], 5)
+        self.assertEqual(one_day["default_review_limit"], 2)
+        self.assertEqual(one_day["extend_step"], 10)
         self.assertEqual({card["post_id"] for card in one_day["cards"]}, {"a", "b"})
         self.assertEqual(len({card["post_key"] for card in one_day["cards"]}), 2)
         self.assertTrue(all(card["snapshot_id"].startswith("deck_2026-10-01_1d_") for card in one_day["cards"]))
@@ -108,6 +110,26 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertIn("fan_narrative", cards[0]["feature_tags"])
         self.assertIn("long_fandom_story", cards[0]["feature_tags"])
 
+
+    def test_reserve_pool_can_exceed_default_review_limit(self):
+        now = datetime(2026, 10, 1, 3, 0, tzinfo=timezone.utc)
+        posts = []
+        for i in range(55):
+            posts.append({
+                "id": f"p{i}",
+                "text": f"演唱會心得 {i}",
+                "username": "fan",
+                "permalink": f"https://www.threads.com/@fan/post/p{i}",
+                "timestamp": "2026-10-01T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60 - (i / 100),
+            })
+        deck = build_deck(posts, now)
+        one_day = deck["windows"]["1d"]
+        self.assertEqual(one_day["card_count"], 55)
+        self.assertEqual(one_day["default_review_limit"], 40)
+        self.assertEqual(one_day["extend_step"], 10)
 
 if __name__ == "__main__":
     unittest.main()
