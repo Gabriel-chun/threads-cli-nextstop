@@ -153,8 +153,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       if (reviewView === "queue") return !card.triage_label;
       return card.triage_label === reviewView;
     });
-    return filtered.slice(0, window.display_limit || 5);
-  }, [cards, reviewView, window.display_limit]);
+    return reviewView === "queue" ? filtered.slice(0, 3) : filtered.slice(0, 5);
+  }, [cards, reviewView]);
 
   const selected = useMemo(
     () => cards.find((card) => card.post_key === selectedKey) || null,
@@ -282,7 +282,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <p className="kicker">SIGNAL DECK · POST SWIPE</p>
           <h2>近期貼文卡</h2>
           <p className="muted">
-            一篇貼文一張卡。點開確認完整內容；右拖 Relevant、左拖 Irrelevant。分類不會刪除 Master。
+            一次只處理最上面一張。點開確認完整內容；右拖 Relevant、左拖 Irrelevant，下一張會自動補上。
           </p>
         </div>
         <div className="windowTabs" aria-label="Signal Deck 時間範圍">
@@ -320,7 +320,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         ) : null}
 
         {visibleCards.length ? (
-          <div className="signalRail">
+          <div className={`signalRail ${reviewView === "queue" ? "signalStack" : ""}`}>
             {visibleCards.map((card, index) => (
               <PostCard
                 key={card.post_key}
@@ -329,13 +329,15 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 selected={selectedKey === card.post_key}
                 drag={drag}
                 reviewView={reviewView}
-                onPointerDown={pointerDown}
+                onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {} }
                 onPointerMove={pointerMove}
                 onPointerUp={pointerUp}
                 onPointerCancel={() => setDrag(null)}
-                onOpen={() =>
-                  setSelectedKey(selectedKey === card.post_key ? null : card.post_key)
-                }
+                onOpen={() => {
+                  if (reviewView !== "queue" || index === 0) {
+                    setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
+                  }
+                }}
               />
             ))}
           </div>
