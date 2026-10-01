@@ -158,7 +158,7 @@ const handler = createMcpHandler(
       "get_signal_deck",
       {
         title: "Get Signal Deck",
-        description: "Return the daily Signal Deck v0.1 for a 1-day, 3-day, or 5-day window, including source evidence links.",
+        description: "Return the daily Signal Deck v0.2 for a 1-day, 3-day, or 5-day window, including source evidence links.",
         inputSchema: z.object({
           window: z.enum(["1d", "3d", "5d"]).default("3d"),
           limit: z.number().int().min(1).max(5).default(5)
@@ -199,7 +199,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.7.0"
+      version: "0.8.0"
     }
   }
 );

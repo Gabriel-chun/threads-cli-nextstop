@@ -47,7 +47,7 @@ class SignalDeckTests(unittest.TestCase):
         ]
 
         deck = build_deck(posts, now)
-        self.assertEqual(deck["schema_version"], "signal-deck-v0.1")
+        self.assertEqual(deck["schema_version"], "signal-deck-v0.2")
         self.assertEqual(deck["refresh_policy"], "daily")
         self.assertEqual(set(deck["windows"]), {"1d", "3d", "5d"})
 
@@ -57,6 +57,10 @@ class SignalDeckTests(unittest.TestCase):
         self.assertEqual(one_day["cards"][0]["mentions"], 2)
         self.assertEqual(one_day["cards"][0]["authors"], 2)
         self.assertEqual(len(one_day["cards"][0]["evidence"]), 2)
+        self.assertEqual(one_day["display_limit"], 5)
+        self.assertTrue(one_day["cards"][0]["snapshot_id"].startswith("deck_2026-10-01_1d_"))
+        self.assertIn("vip_benefit", one_day["cards"][0]["feature_tags"])
+        self.assertIn("first_timer", one_day["cards"][0]["feature_tags"])
 
         three_day_categories = {card["category"] for card in deck["windows"]["3d"]["cards"]}
         self.assertIn("交通／散場", three_day_categories)
