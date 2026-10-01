@@ -41,6 +41,8 @@ function PostCard({
   selected,
   drag,
   reviewView,
+  stacked,
+  interactive,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -52,6 +54,8 @@ function PostCard({
   selected: boolean;
   drag: DragState | null;
   reviewView: ReviewView;
+  stacked: boolean;
+  interactive: boolean;
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) => void;
   onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp: (event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) => void;
@@ -61,7 +65,11 @@ function PostCard({
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const style = dragging
-    ? { transform: `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)` }
+    ? {
+        transform: stacked
+          ? `translate3d(calc(-50% + ${dx}px), -6px, 0) rotate(${dx / 28}deg)`
+          : `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)`
+      }
     : undefined;
 
   return (
@@ -69,7 +77,7 @@ function PostCard({
       className={`reelCard postCard reelCard${index % 5} ${selected ? "selected" : ""} ${dragging ? "dragging" : ""} ${card.triage_label || ""}`}
       style={style}
       role="button"
-      tabIndex={0}
+      tabIndex={interactive ? 0 : -1}
       aria-expanded={selected}
       aria-label={`${card.category}，${card.summary}`}
       onPointerDown={(event) => onPointerDown(event, card)}
@@ -153,8 +161,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       if (reviewView === "queue") return !card.triage_label;
       return card.triage_label === reviewView;
     });
-    return filtered.slice(0, window.display_limit || 5);
-  }, [cards, reviewView, window.display_limit]);
+    return reviewView === "queue" ? filtered.slice(0, 3) : filtered.slice(0, 5);
+  }, [cards, reviewView]);
 
   const selected = useMemo(
     () => cards.find((card) => card.post_key === selectedKey) || null,
@@ -214,6 +222,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           window: windowKey,
           label,
           category: card.category,
+          username: card.username || null,
+          posted_at: card.posted_at || null,
+          query: card.query || card.source_queries?.join(" / ") || null,
           text_excerpt: card.text.slice(0, 1200),
           feature_tags: card.feature_tags || [],
           base_score: card.base_score ?? card.score,
@@ -282,7 +293,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <p className="kicker">SIGNAL DECK · POST SWIPE</p>
           <h2>近期貼文卡</h2>
           <p className="muted">
-            一篇貼文一張卡。點開確認完整內容；右拖 Relevant、左拖 Irrelevant。分類不會刪除 Master。
+            一次只處理最上面一張。點開確認完整內容；右拖 Relevant、左拖 Irrelevant，下一張會自動補上。
           </p>
         </div>
         <div className="windowTabs" aria-label="Signal Deck 時間範圍">
@@ -320,7 +331,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         ) : null}
 
         {visibleCards.length ? (
-          <div className="signalRail">
+          <div className={`signalRail ${reviewView === "queue" ? "signalStack" : ""}`}>
             {visibleCards.map((card, index) => (
               <PostCard
                 key={card.post_key}
@@ -329,13 +340,17 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 selected={selectedKey === card.post_key}
                 drag={drag}
                 reviewView={reviewView}
-                onPointerDown={pointerDown}
-                onPointerMove={pointerMove}
-                onPointerUp={pointerUp}
+                stacked={reviewView === "queue"}
+                interactive={reviewView !== "queue" || index === 0}
+                onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {}}
+                onPointerMove={index === 0 || reviewView !== "queue" ? pointerMove : () => {}}
+                onPointerUp={index === 0 || reviewView !== "queue" ? pointerUp : () => {}}
                 onPointerCancel={() => setDrag(null)}
-                onOpen={() =>
-                  setSelectedKey(selectedKey === card.post_key ? null : card.post_key)
-                }
+                onOpen={() => {
+                  if (reviewView !== "queue" || index === 0) {
+                    setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
+                  }
+                }}
               />
             ))}
           </div>

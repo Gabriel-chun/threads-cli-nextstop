@@ -3,6 +3,7 @@ import {
   loadFeedbackMap,
   putSignalDeckFeedback
 } from "../../../../lib/signalDeckFeedback";
+import { mirrorFeedbackToNotion } from "../../../../lib/signalDeckNotion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,9 @@ const schema = z.object({
   window: z.enum(["1d", "3d", "5d"]),
   label: z.enum(["relevant", "irrelevant"]),
   category: z.string().min(1).max(120),
+  username: z.string().max(240).nullish(),
+  posted_at: z.string().max(80).nullish(),
+  query: z.string().max(500).nullish(),
   text_excerpt: z.string().max(1200),
   feature_tags: z.array(z.string().min(1).max(80)).max(30),
   base_score: z.number().finite(),
@@ -55,7 +59,17 @@ export async function POST(request: Request) {
 
   try {
     const record = await putSignalDeckFeedback(input);
-    return Response.json({ ok: true, feedback: record });
+    let notionMirror: unknown = null;
+    try {
+      notionMirror = await mirrorFeedbackToNotion(record);
+    } catch (error) {
+      notionMirror = {
+        ok: false,
+        skipped: false,
+        error: error instanceof Error ? error.message : "Notion mirror failed"
+      };
+    }
+    return Response.json({ ok: true, feedback: record, notion_mirror: notionMirror });
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : "Feedback store unavailable." },

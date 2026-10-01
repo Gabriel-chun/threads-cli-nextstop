@@ -12,6 +12,9 @@ export type SignalDeckFeedback = {
   window: "1d" | "3d" | "5d";
   label: TriageLabel;
   category: string;
+  username?: string | null;
+  posted_at?: string | null;
+  query?: string | null;
   text_excerpt: string;
   feature_tags: string[];
   base_score: number;
