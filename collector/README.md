@@ -1,6 +1,6 @@
 # Next Stop Live Collector V0.1
 
-This collector keeps the data layer separate from the intelligence layer. Each scheduled run is a 12-hour collection window; the master database keeps accumulating unique posts across windows.
+This collector keeps the data layer separate from the intelligence layer. Each scheduled run is a 12-hour collection window; the master database keeps accumulating unique posts across windows. The collector does not log in to Threads, does not use brand-account cookies, does not impersonate Googlebot or another crawler, does not rotate proxies, and does not bypass access controls. If the public page does not expose enough data, the run accepts that coverage gap.
 
 ## Schedule
 
@@ -10,7 +10,7 @@ GitHub Actions has two fallback schedule slots per hour. A cadence gate checks t
 
 ```
 queries.txt
-  -> anonymous Threads search
+  -> anonymous public Threads search page
   -> keep posts from the last 12 hours
   -> relevance_score >= 30
   -> deduplicate by permalink / post id

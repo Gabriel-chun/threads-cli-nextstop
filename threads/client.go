@@ -1,12 +1,9 @@
-// Package threads is the library behind the th command line: the crawler HTTP
-// client, the server-rendered-page parsers, the logged-out GraphQL queries, and
-// the typed data models for Threads (threads.com).
+// Package threads is the library behind the th command line: the anonymous HTTP
+// client, the server-rendered-page parsers, optional Graph API helpers, and the
+// typed data models for Threads (threads.com).
 //
-// The default transport presents a crawler user agent, which is what makes
-// Threads answer with server-rendered HTML that carries the post text, the
-// engagement counts, the media, and a window of replies. No login, no cookie,
-// and no browser are involved. The optional token and session modes layer depth
-// on top of that anonymous floor.
+// Anonymous reads identify this project directly and do not impersonate a browser,
+// search-engine crawler, or another third-party service.
 package threads
 
 import (
@@ -21,7 +18,7 @@ import (
 	"time"
 )
 
-// Client speaks the Threads web surface as a crawler.
+// Client speaks the public Threads web surface over HTTP.
 type Client struct {
 	cfg     Config
 	http    *http.Client
@@ -51,7 +48,7 @@ func NewClient(cfg Config) (*Client, error) {
 	}, nil
 }
 
-// UserAgent reports the crawler identity requests are sent with.
+// UserAgent reports the explicit client identity requests are sent with.
 func (c *Client) UserAgent() string { return c.cfg.UserAgent }
 
 // Cache exposes the client's blob cache (for the cache command).
@@ -69,14 +66,14 @@ func (c *Client) Mode() string {
 	}
 }
 
-// getHTML fetches a page as the crawler and returns the body as a string, with
+// getHTML fetches a public page and returns the body as a string, with
 // login walls and error shells mapped to typed CodeErrors.
 func (c *Client) getHTML(ctx context.Context, rawURL string) (string, error) {
 	b, err := c.getBytes(ctx, rawURL)
 	return string(b), err
 }
 
-// GetRaw returns the raw crawler response body for --raw.
+// GetRaw returns the raw public-page response body for --raw.
 func (c *Client) GetRaw(ctx context.Context, rawURL string) ([]byte, error) {
 	return c.getBytes(ctx, rawURL)
 }

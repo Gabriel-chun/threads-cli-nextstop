@@ -62,8 +62,8 @@ func Root() *cobra.Command {
 
 Resolve a profile to a rich record; stream its recent posts and replies; pull a
 single post's thread; search; and build datasets, all from one binary. Reads are
-anonymous: th crawls the same server-rendered pages Threads serves to search
-engines, so there is no login and no browser.
+anonymous: th requests public Threads pages without logging in. The default client
+identifies itself as Next Stop Live rather than impersonating a browser or crawler.
 
 Quick start:
   th profile zuck                    a profile's full record
@@ -96,7 +96,7 @@ Quick start:
 	pf.BoolVarP(&g.quiet, "quiet", "q", false, "suppress progress on stderr")
 	pf.CountVarP(&g.verbose, "verbose", "v", "increase verbosity (repeatable)")
 	pf.StringVar(&g.proxy, "proxy", "", "HTTP/SOCKS proxy URL")
-	pf.StringVar(&g.userAgent, "user-agent", "", "override the default crawler UA")
+	pf.StringVar(&g.userAgent, "user-agent", "", "override the default explicit client UA")
 	pf.StringVar(&g.token, "token", "", "official Graph API token (or THREADS_TOKEN)")
 	pf.StringVar(&g.session, "session", "", "logged-in session id (or THREADS_SESSION)")
 	pf.StringVar(&g.csrf, "csrf", "", "session CSRF token (or THREADS_CSRF)")

@@ -1,0 +1,35 @@
+name: Hardening CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "hardening/**"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Go tests
+        run: go test ./...
+      - name: Collector unit tests
+        run: |
+          python3 -m unittest collector/test_clean_rules.py
+          python3 -m unittest collector/test_observation.py
+      - name: Verify conservative collector boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -RIn "Googlebot" threads collector cli
+          ! grep -RIn '"__relay_internal__pv__BarcelonaIsCrawlerrelayprovider":[[:space:]]*true' threads
+          ! grep -RIn -- "--google-fallback" collector/collect.sh
+          ! grep -RIn -- "--depth" collector/collect.sh
+          ! grep -RIn "THREADS_SESSION\|THREADS_CSRF\|THREADS_TOKEN" .github/workflows/nextstop-collector.yml
