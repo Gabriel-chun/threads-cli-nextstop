@@ -1259,3 +1259,77 @@ footer {
     gap: 8px;
   }
 }
+
+
+/* Signal Deck v0.4 — single-card stack */
+.signalStack {
+  position: relative;
+  min-width: 0;
+  width: min(100%, 520px);
+  min-height: 320px;
+  margin: 0 auto;
+  justify-content: center;
+  padding: 0;
+}
+
+.signalStack .postCard {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  width: min(420px, 82vw);
+  min-width: min(420px, 82vw);
+  min-height: 250px;
+  margin: 0;
+}
+
+.signalStack .postCard:nth-child(1) {
+  z-index: 30;
+  transform: translateX(-50%) translateY(0) rotate(0deg);
+}
+
+.signalStack .postCard:nth-child(2) {
+  z-index: 20;
+  pointer-events: none;
+  opacity: .78;
+  transform: translateX(-50%) translateY(14px) scale(.97) rotate(1.2deg);
+}
+
+.signalStack .postCard:nth-child(3) {
+  z-index: 10;
+  pointer-events: none;
+  opacity: .55;
+  transform: translateX(-50%) translateY(28px) scale(.94) rotate(-1deg);
+}
+
+.signalStack .postCard.dragging {
+  left: 50%;
+}
+
+.signalStack .postCard:hover,
+.signalStack .postCard:focus-visible,
+.signalStack .postCard.selected {
+  transform: translateX(-50%) translateY(-4px) rotate(0) scale(1.01);
+}
+
+.signalStack .postCard:nth-child(n+2):hover,
+.signalStack .postCard:nth-child(n+2):focus-visible,
+.signalStack .postCard:nth-child(n+2).selected {
+  transform: translateX(-50%) translateY(14px) scale(.97) rotate(1.2deg);
+}
+
+.signalDeckSub::after {
+  content: " · 一次一張";
+  color: var(--accent);
+}
+
+@media (max-width: 520px) {
+  .signalStack {
+    min-height: 340px;
+  }
+
+  .signalStack .postCard {
+    width: 84vw;
+    min-width: 84vw;
+    left: 50%;
+  }
+}
