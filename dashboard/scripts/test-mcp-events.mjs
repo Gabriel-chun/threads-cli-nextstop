@@ -40,7 +40,7 @@ const names=(tools.result?.tools||[]).map(x=>x.name);
 for(const name of [
   "get_recent_signals","get_demand_clusters","get_signal_detail",
   "get_collector_health","get_trend_history","get_observation_bundle",
-  "get_latest_download"
+  "get_signal_deck","get_latest_download"
 ]) if(!names.includes(name)) throw new Error("missing tool "+name);
 
 console.log(JSON.stringify({protocol:"2026-07-28",event:events[0].name,tools:names.sort()}));
