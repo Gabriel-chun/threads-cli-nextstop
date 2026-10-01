@@ -10,16 +10,15 @@ import (
 	"strings"
 )
 
-// The logged-out GraphQL path. Threads marks a caller as a crawler through a set
-// of relay provider flags; with those set, the persisted profile-threads, post,
-// and search queries return data without a session. doc_id values rotate (see
-// config.go), so a stale id degrades to "no extra data" rather than an error.
+// Legacy logged-out GraphQL helpers retained for non-collector CLI compatibility.
+// They explicitly declare logged-out/non-internal state and do not claim crawler status.
+// The Next Stop Live collector does not use this path for anonymous search.
 
 func relayProviderVars() map[string]any {
 	return map[string]any{
 		"__relay_internal__pv__BarcelonaIsLoggedInrelayprovider":             false,
 		"__relay_internal__pv__BarcelonaIsInternalUserrelayprovider":         false,
-		"__relay_internal__pv__BarcelonaIsCrawlerrelayprovider":              true,
+		"__relay_internal__pv__BarcelonaIsCrawlerrelayprovider":              false,
 		"__relay_internal__pv__BarcelonaOptionalCookiesEnabledrelayprovider": true,
 		"__relay_internal__pv__BarcelonaIsLoggedOutrelayprovider":            true,
 	}
