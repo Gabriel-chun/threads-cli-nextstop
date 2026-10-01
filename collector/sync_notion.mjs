@@ -23,6 +23,7 @@ const COLLECTOR_WINDOW_HOURS = Number(process.env.COLLECTOR_WINDOW_HOURS || 12);
 const COLLECTOR_MIN_SCORE = Number(process.env.COLLECTOR_MIN_SCORE || 30);
 const COLLECTOR_SEARCH_DEPTH = Number(process.env.COLLECTOR_SEARCH_DEPTH || 1);
 const COLLECTOR_GOOGLE_FALLBACK = String(process.env.COLLECTOR_GOOGLE_FALLBACK || "false") === "true";
+const COLLECTOR_MODE = process.env.COLLECTOR_MODE || "browser";
 
 if (!NOTION_TOKEN) {
   throw new Error("NOTION_TOKEN is missing");
@@ -584,7 +585,8 @@ async function upsertQueryRunHistory({
   const sourceSet = (row) =>
     Array.isArray(row.retrieval_sources) ? new Set(row.retrieval_sources) : new Set();
 
-  const ssrHits = snapshotRows.filter((row) => sourceSet(row).has("threads_ssr")).length;
+  const ssrHits = snapshotRows.filter((row) => sourceSet(row).has("threads_ssr") || sourceSet(row).has("threads_public_html")).length;
+  const browserHits = snapshotRows.filter((row) => sourceSet(row).has("threads_browser_dom")).length;
   const graphQLHits = snapshotRows.filter((row) => sourceSet(row).has("threads_graphql")).length;
   const googleHits = snapshotRows.filter((row) => sourceSet(row).has("google_site")).length;
 
@@ -607,7 +609,8 @@ async function upsertQueryRunHistory({
   const properties = {
     "Run": title(runTitle),
     "Run At": date(summary.run_at || null),
-    "Pipeline Version": richText("clean-v2.1"),
+    "Pipeline Version": richText(summary.pipeline_version || "clean-v2.2-browser"),
+    "Collector Mode": richText(summary.collector_mode || COLLECTOR_MODE),
     "Track": richText(COLLECTOR_TRACK),
     "Config Key": richText(COLLECTOR_CONFIG_KEY),
     "Queries": richText(clip(queryLines.join("\n"))),
@@ -633,6 +636,7 @@ async function upsertQueryRunHistory({
     "New 12h": number(new12h),
     "Minutes Since Previous": number(minutesSincePrevious),
     "SSR Hits": number(ssrHits),
+    "Browser Hits": number(browserHits),
     "GraphQL Hits": number(graphQLHits),
     "Google Hits": number(googleHits),
     "Status": select(status),
