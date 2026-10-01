@@ -10,7 +10,7 @@ export type DeidentifiedReviewRow = {
   label: TriageLabel;
   category: string;
   excerpt: string;
-  source_url: string | null;
+  evidence_url: string;
   posted_at: string | null;
   reviewed_at: string;
   window: "1d" | "3d" | "5d";
@@ -29,7 +29,7 @@ type ReviewRecordLike = Partial<SignalDeckFeedback> & {
   base_score?: number | null;
 };
 
-function anonymousId(row: ReviewRecordLike) {
+export function reviewAnonymousId(row: ReviewRecordLike) {
   const source = String(row.post_key || row.post_id || row.permalink || row.id || "");
   return "SIG-" + createHash("sha256").update(source).digest("hex").slice(0, 8).toUpperCase();
 }
@@ -43,23 +43,14 @@ export function deidentifyReviewText(value: string) {
     .trim();
 }
 
-function threadsUrl(value?: string | null) {
-  if (!value) return null;
-  try {
-    const url = new URL(value);
-    const host = url.hostname.toLowerCase();
-    if (host === "threads.com" || host.endsWith(".threads.com")) return url.toString();
-  } catch {}
-  return null;
-}
-
 export function deidentifyReviewRow(row: ReviewRecordLike): DeidentifiedReviewRow {
+  const anonymous_id = reviewAnonymousId(row);
   return {
-    anonymous_id: anonymousId(row),
+    anonymous_id,
     label: row.label === "relevant" ? "relevant" : "irrelevant",
     category: String(row.category || "Uncategorized"),
     excerpt: deidentifyReviewText(String(row.text_excerpt || "")).slice(0, 420),
-    source_url: threadsUrl(row.permalink),
+    evidence_url: "/api/reviews/source/" + anonymous_id,
     posted_at: row.posted_at ? String(row.posted_at) : null,
     reviewed_at: String(row.reviewed_at || ""),
     window: row.window === "1d" || row.window === "5d" ? row.window : "3d",
