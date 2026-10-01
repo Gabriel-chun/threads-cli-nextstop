@@ -1,0 +1,83 @@
+name: Collector V0.2 A-B Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build HTTP collector
+        run: |
+          mkdir -p bin
+          go build -o bin/th ./cmd/th
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Prepare isolated A/B state
+        run: |
+          mkdir -p collector/ab/http/raw collector/ab/http/output collector/ab/http/state
+          mkdir -p collector/ab/browser/raw collector/ab/browser/output collector/ab/browser/state
+          if [[ -s collector/archive/latest/master.jsonl ]]; then
+            cp collector/archive/latest/master.jsonl collector/ab/http/state/master.jsonl
+            cp collector/archive/latest/master.jsonl collector/ab/browser/state/master.jsonl
+          fi
+
+      - name: A - transparent HTTP client
+        env:
+          COLLECTOR_MODE: http
+          QUERY_FILE: collector/ab_queries.txt
+          RAW_DIR: collector/ab/http/raw
+          FAILED_FILE: collector/ab/http/failed_queries.txt
+        run: bash collector/collect.sh
+
+      - name: Build A snapshot
+        run: |
+          python3 collector/build_snapshot.py             --raw-dir collector/ab/http/raw             --output-dir collector/ab/http/output             --state-dir collector/ab/http/state             --min-score 30             --since-hours 12             --collector-mode http             --run-stamp ab-http
+
+      - name: B - anonymous Chromium
+        env:
+          COLLECTOR_MODE: browser
+          QUERY_FILE: collector/ab_queries.txt
+          RAW_DIR: collector/ab/browser/raw
+          FAILED_FILE: collector/ab/browser/failed_queries.txt
+          COLLECTOR_BROWSER_SCROLLS: "2"
+        run: bash collector/collect.sh
+
+      - name: Build B snapshot
+        run: |
+          python3 collector/build_snapshot.py             --raw-dir collector/ab/browser/raw             --output-dir collector/ab/browser/output             --state-dir collector/ab/browser/state             --min-score 30             --since-hours 12             --collector-mode browser             --run-stamp ab-browser
+
+      - name: Compare
+        run: |
+          mkdir -p collector/ab/result
+          python3 collector/compare_ab.py             --http-summary collector/ab/http/output/summary.json             --browser-summary collector/ab/browser/output/summary.json             --http-snapshot collector/ab/http/output/snapshot_ab-http.jsonl             --browser-snapshot collector/ab/browser/output/snapshot_ab-browser.jsonl             --output-json collector/ab/result/ab_result.json             --output-md collector/ab/result/ab_result.md
+          echo "=== A/B RESULT ==="
+          cat collector/ab/result/ab_result.json
+          echo "=== BROWSER DIAGNOSTICS ==="
+          cat collector/ab/browser/raw/browser_diagnostics.json
+
+      - name: Upload A/B evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: collector-v0.2-ab
+          path: collector/ab/
+          retention-days: 30
