@@ -174,12 +174,20 @@ export default async function Page() {
             <li>get_trend_history</li>
             <li>get_signal_deck</li>
             <li>get_latest_download</li>
+            <li>get_reviewed_cards_download</li>
           </ul>
           <a className="downloadButton" href="/api/download/latest">
             <span>⬇️</span>
             <div>
               <strong>下載最新 JSON ZIP</strong>
               <small>即時打包最新 master.json</small>
+            </div>
+          </a>
+          <a className="downloadButton" href="/api/download/reviews/latest">
+            <span>🗂️</span>
+            <div>
+              <strong>下載 Reviewed Cards JSON</strong>
+              <small>最近一次日結的 Relevant / Irrelevant 貼文卡</small>
             </div>
           </a>
           <div className="sourceNote">

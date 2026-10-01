@@ -8,7 +8,9 @@ import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck"
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
-  "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/download/latest";
+  "https://next-stop-live.vercel.app/api/download/latest";
+const REVIEWED_DOWNLOAD_URL =
+  "https://next-stop-live.vercel.app/api/download/reviews/latest";
 
 const handler = createMcpHandler(
   (server) => {
@@ -176,6 +178,26 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_reviewed_cards_download",
+      {
+        title: "Get reviewed cards JSON download",
+        description: "Return the download URL for the latest GitHub-archived Relevant / Irrelevant Signal Review cards JSON.",
+        inputSchema: z.object({})
+      },
+      async () => ({
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            filename: "next-stop-live-reviewed-cards-latest.json",
+            contains: "latest completed daily Signal Review archive",
+            source: "collector/archive/reviews/latest.json",
+            downloadUrl: REVIEWED_DOWNLOAD_URL
+          }, null, 2)
+        }]
+      })
+    );
+
+    server.registerTool(
       "get_latest_download",
       {
         title: "Get latest JSON ZIP download",
@@ -199,7 +221,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.9.0"
+      version: "0.10.0"
     }
   }
 );
