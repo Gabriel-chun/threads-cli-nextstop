@@ -58,8 +58,8 @@ function PostCard({
   onPointerCancel: () => void;
   onOpen: () => void;
 }) {
-  const dragging = drag?.postKey === card.post_key;
-  const dx = dragging ? drag.currentX - drag.startX : 0;
+  const dragging = Boolean(drag && drag.postKey === card.post_key);
+  const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const style = dragging
     ? { transform: `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)` }
     : undefined;
