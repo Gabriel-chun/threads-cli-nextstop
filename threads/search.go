@@ -9,9 +9,8 @@ import (
 	"time"
 )
 
-// Search streams candidates from the crawler-rendered Threads search page.
-// It preserves the historical one-window behavior. Use SearchWithOptions when
-// retrieval depth or Google coverage fallback is desired.
+// Search streams candidates from the public Threads search page.
+// Anonymous search intentionally stays within the single public HTML window.
 func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[SearchResult, error] {
 	return c.SearchWithOptions(ctx, query, limit, 1, false)
 }
