@@ -73,12 +73,31 @@ RULES = [
         "演後社群／內容需求",
         "context",
         "演後找影片、照片與社群內容",
-        re.compile(r"徵.*影片|征.*影片|找.*影片|影片.*糊|桌布|壁紙|壁纸|找人|IG|哀居", re.I),
+        re.compile(r"徵.*影片|征.*影片|找.*影片|影片.*糊|桌布|壁紙|壁纸|找人|\\bIG\\b|哀居", re.I),
     ),
 ]
 
 NOISE = re.compile(r"市長|市长|政見|政见|參選|参选|唯一支持|政治|同框|CP|哥哥們碰面|哥哥们碰面", re.I)
 QUESTION = re.compile(r"請問|请问|想問|想问|有人有.*經驗|有人有.*经验|怎麼|怎么|如何|為什麼|为什么|有沒有人|有没有人", re.I)
+
+PRESERVE_TICKET_FRICTION = re.compile(
+    r"Pia帳號|日本門號|本人確認|本確|護照|退票|客服|實名制|黃牛.*搶不到|买不到票|買不到票|抽選|公售|入場|手環|購票紀錄",
+    re.I,
+)
+RESALE = re.compile(
+    r"讓票|让票|出票|售票|原價讓|原价让|原價出|原价出|多搶到|多抢到|搶多了|抢多了|多搶一張|多抢一张|轉讓|转让|降價賣|降价卖|降售|#售|pm\\s*帶價|带价|帶價|可拆|票.*私訊|票.*私信|私訊.*票|私信.*票|求售|現場給票|现场给票",
+    re.I,
+)
+
+
+def is_transaction(text: str) -> bool:
+    if PRESERVE_TICKET_FRICTION.search(text):
+        return False
+    if RESALE.search(text):
+        return True
+    ticket_context = re.search(r"演唱會|演唱会|concert|門票|门票|票種|票种|小巨蛋|巨蛋", text, re.I)
+    sale_context = re.search(r"連號|连号|連坐|连坐|面交|匯款|汇款|原價|原价|票價|票价|有意|兩張|两张|2張|2张|一張可賣|一张可卖|付款|僅一張|仅一张", text, re.I)
+    return bool(ticket_context and sale_context)
 
 
 def parse_dt(value: Any) -> datetime | None:
@@ -110,6 +129,8 @@ def is_clean_signal(post: dict[str, Any]) -> bool:
 
 
 def classify(text: str) -> tuple[str, str, str] | None:
+    if is_transaction(text):
+        return None
     if NOISE.search(text):
         return None
     for category, kind, headline, pattern in RULES:
