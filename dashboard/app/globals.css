@@ -916,3 +916,92 @@ footer {
     transform: translateY(-4px);
   }
 }
+
+
+/* Signal Deck v0.2 triage */
+.triageTabs {
+  display: flex;
+  gap: 7px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.triageTabs button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.triageTabs button.active {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: #C9BFB5;
+}
+
+.triageTabs button span {
+  margin-left: 4px;
+  color: var(--quiet);
+}
+
+.reelCard.relevant { border-color: rgba(66, 106, 83, .46); }
+.reelCard.irrelevant { opacity: .72; border-color: rgba(177, 51, 51, .24); }
+
+.featureTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.featureTags span {
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--quiet);
+  font: 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.triageActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.triageActions button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.triageActions button.relevant {
+  border: 1px solid rgba(66, 106, 83, .45);
+  background: rgba(66, 106, 83, .09);
+  color: var(--success);
+}
+
+.triageActions button.irrelevant {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+}
+
+.triageActions button:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+.triageError {
+  margin: 8px 0 0 !important;
+  color: var(--error) !important;
+  font-size: 11px !important;
+}
