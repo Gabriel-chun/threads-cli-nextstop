@@ -28,7 +28,7 @@ test("review row removes direct identifiers but keeps a safe Threads source link
   assert.match(row.anonymous_id, /^SIG-[A-F0-9]{8}$/);
   assert.equal(row.excerpt, "@user 想問入場");
   assert.equal(row.label, "relevant");
-  assert.equal(row.source_url, "https://www.threads.com/@someone/post/ABC");
+  assert.equal(row.evidence_url, "/api/reviews/source/" + row.anonymous_id);
   assert.equal("username" in row, false);
   assert.equal("post_key" in row, false);
   assert.equal("post_id" in row, false);
