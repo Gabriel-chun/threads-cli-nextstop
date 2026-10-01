@@ -181,7 +181,7 @@ const handler = createMcpHandler(
       "get_reviewed_cards_download",
       {
         title: "Get reviewed cards JSON download",
-        description: "Return the download URL for the latest GitHub-archived Relevant / Irrelevant Signal Review cards JSON.",
+        description: "Return the de-identified download URL for the latest GitHub-archived Relevant / Irrelevant Signal Review cards JSON.",
         inputSchema: z.object({})
       },
       async () => ({
@@ -189,8 +189,9 @@ const handler = createMcpHandler(
           type: "text",
           text: JSON.stringify({
             filename: "next-stop-live-reviewed-cards-latest.json",
-            contains: "latest completed daily Signal Review archive",
+            contains: "de-identified latest completed daily Signal Review archive",
             source: "collector/archive/reviews/latest.json",
+            reviewPageUrl: "https://next-stop-live.vercel.app/reviews",
             downloadUrl: REVIEWED_DOWNLOAD_URL
           }, null, 2)
         }]
@@ -221,7 +222,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.10.0"
+      version: "0.11.0"
     }
   }
 );
