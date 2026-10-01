@@ -154,19 +154,21 @@ jobs:
           restore-keys: |
             nextstop-master-
 
-      - name: Seed master from repository archive when cache is unavailable
+      - name: Use repository archive as authoritative master
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p collector/state
-          if [[ ! -s collector/state/master.jsonl && -s collector/archive/latest/master.jsonl ]]; then
+          if [[ -s collector/archive/latest/master.jsonl ]]; then
             cp collector/archive/latest/master.jsonl collector/state/master.jsonl
             if [[ -s collector/archive/latest/master.csv ]]; then
               cp collector/archive/latest/master.csv collector/state/master.csv
             fi
-            echo "[state] seeded master from repository archive"
+            echo "[state] repository archive is authoritative; restored master from archive"
+          elif [[ -s collector/state/master.jsonl ]]; then
+            echo "[state] repository archive unavailable; using restored cache as bootstrap"
           else
-            echo "[state] cache/state already available; archive seed not needed"
+            echo "[state] no prior master available; starting empty"
           fi
 
       - name: Reset run directories
