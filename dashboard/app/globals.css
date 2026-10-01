@@ -557,3 +557,362 @@ footer {
 
   footer { flex-direction: column; }
 }
+
+
+/* Signal Deck v0.1 */
+.signalDeckPanel {
+  margin-bottom: 16px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.signalDeckHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.signalDeckHead h2 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -.015em;
+}
+
+.windowTabs {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  flex: none;
+}
+
+.windowTabs button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 13px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.windowTabs button.active {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.signalDeckSub {
+  display: flex;
+  gap: 14px;
+  margin: 14px 0 8px;
+  color: var(--quiet);
+  font-size: 11px;
+}
+
+.signalRailWrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thin;
+  padding: 28px 10px 34px;
+  margin: 0 -10px;
+}
+
+.signalRail {
+  min-width: 930px;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 10px;
+}
+
+.reelCard {
+  position: relative;
+  width: 220px;
+  min-width: 220px;
+  min-height: 212px;
+  margin-left: -20px;
+  padding: 15px;
+  text-align: left;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 12px 28px rgba(70, 57, 45, .06);
+  font: inherit;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  transform-origin: center bottom;
+}
+
+.reelCard:first-child { margin-left: 0; }
+.reelCard0 { transform: translateY(12px) rotate(-2.2deg); z-index: 1; }
+.reelCard1 { transform: translateY(0) rotate(1.4deg); z-index: 2; }
+.reelCard2 { transform: translateY(18px) rotate(-.8deg); z-index: 3; }
+.reelCard3 { transform: translateY(5px) rotate(2deg); z-index: 4; }
+.reelCard4 { transform: translateY(15px) rotate(-1.4deg); z-index: 5; }
+
+.reelCard:hover,
+.reelCard:focus-visible,
+.reelCard.selected {
+  z-index: 20;
+  transform: translateY(-10px) rotate(0) scale(1.03);
+  border-color: #C4A899;
+  box-shadow: 0 18px 40px rgba(70, 57, 45, .14);
+  outline: none;
+}
+
+.reelCardTop,
+.reelCardMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.reelKind {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.reelKind.context { color: #775D4E; }
+
+.reelStatus {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.reelStatus i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.reelCardCore {
+  display: grid;
+  grid-template-columns: auto 1fr 74px;
+  align-items: end;
+  gap: 6px;
+  min-height: 72px;
+  padding: 18px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.reelCardCore strong {
+  font-size: 34px;
+  line-height: .9;
+  letter-spacing: -.04em;
+  font-weight: 650;
+}
+
+.reelCardCore > span {
+  color: var(--muted);
+  font-size: 10px;
+  padding-bottom: 2px;
+}
+
+.reelActivity {
+  height: 34px;
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.reelActivity i {
+  width: 6px;
+  min-height: 4px;
+  max-height: 34px;
+  border-radius: 2px 2px 0 0;
+  background: #B9A79B;
+}
+
+.reelCardMeta {
+  padding-top: 9px;
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.reelPeek {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .22s ease, opacity .16s ease, padding .22s ease;
+}
+
+.reelCard:hover .reelPeek,
+.reelCard:focus-visible .reelPeek,
+.reelCard.selected .reelPeek {
+  max-height: 180px;
+  opacity: 1;
+  padding-top: 13px;
+}
+
+.reelPeek h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.reelPeek p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.reelPeek small {
+  display: block;
+  margin-top: 9px;
+  color: var(--accent);
+  font-size: 9px;
+}
+
+.evidenceBoard {
+  display: grid;
+  grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr);
+  gap: 18px;
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.evidenceSummary h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.evidenceSummary > p:not(.kicker) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.evidenceStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.evidenceStats span {
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.evidenceList {
+  border-top: 1px solid var(--line);
+}
+
+.evidenceItem {
+  position: relative;
+  display: block;
+  padding: 11px 54px 11px 2px;
+  border-bottom: 1px solid var(--line);
+}
+
+.evidenceItem:hover { background: var(--accent-soft); }
+
+.evidenceItem > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.evidenceItem strong {
+  color: var(--accent);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.evidenceItem span {
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.evidenceItem p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.evidenceItem em {
+  position: absolute;
+  right: 2px;
+  top: 12px;
+  color: var(--accent);
+  font-size: 10px;
+  font-style: normal;
+}
+
+.evidenceHint,
+.signalDeckEmpty {
+  margin-top: 6px;
+  padding: 13px 0 0;
+  border-top: 1px solid var(--line);
+  color: var(--quiet);
+  font-size: 11px;
+}
+
+@media (max-width: 850px) {
+  .signalDeckHead {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .signalRail { min-width: max-content; }
+
+  .reelCard {
+    width: 240px;
+    min-width: 240px;
+    margin-left: -8px;
+  }
+
+  .evidenceBoard { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .signalDeckPanel { padding: 16px; }
+
+  .signalDeckSub {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+
+  .signalRailWrap {
+    padding-top: 18px;
+    scroll-snap-type: x proximity;
+  }
+
+  .reelCard {
+    width: 82vw;
+    min-width: 82vw;
+    margin-left: 10px;
+    transform: none;
+    scroll-snap-align: start;
+  }
+
+  .reelCard:first-child { margin-left: 0; }
+
+  .reelCard:hover,
+  .reelCard:focus-visible,
+  .reelCard.selected {
+    transform: translateY(-4px);
+  }
+}
