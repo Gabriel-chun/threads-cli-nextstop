@@ -1,6 +1,6 @@
 {
-  "schema_version": "signal-deck-v0.1",
-  "generated_at": "2026-10-01T03:36:04.132470Z",
+  "schema_version": "signal-deck-v0.2",
+  "generated_at": "2026-10-01T04:02:36.664674Z",
   "refresh_policy": "daily",
   "source": "collector/archive/latest/master.json",
   "source_master_count": 478,
@@ -8,17 +8,32 @@
     "1d": {
       "label": "1日",
       "days": 1,
-      "signal_count": 16,
-      "card_count": 5,
+      "signal_count": 15,
+      "card_count": 6,
+      "display_limit": 5,
       "cards": [
         {
           "id": "sig_ba8d31181d",
+          "snapshot_id": "deck_2026-10-01_1d_ba8d31181d",
           "category": "票務／入場摩擦",
           "kind": "actionable",
           "headline": "購票、實名與入場流程的摩擦",
           "summary": "想問有買過日本演唱會電影的電影院預售票的克拉～ 預售票的特典是購票時就可以拿到的嗎？還是跟台灣一樣電影入場時領取？",
           "status": "近期",
-          "score": 33.83,
+          "score": 33.72,
+          "base_score": 33.72,
+          "feature_tags": [
+            "question_intent",
+            "ticketing_need"
+          ],
+          "feature_counts": {
+            "first_timer": 1,
+            "long_fandom_story": 2,
+            "merch_need": 1,
+            "question_intent": 1,
+            "ticketing_need": 6,
+            "venue_experience": 1
+          },
           "mentions": 6,
           "authors": 6,
           "first_seen": "2026-09-30T10:55:04Z",
@@ -102,12 +117,31 @@
         },
         {
           "id": "sig_2beeda24c4",
+          "snapshot_id": "deck_2026-10-01_1d_2beeda24c4",
           "category": "VIP／互動福利",
           "kind": "actionable",
           "headline": "VIP、合照與互動流程正在被問",
           "summary": "打擾了，請問有看過其他場次演唱會的VIP，請問會不會唱Let's not fall in love這一首，因為這是我最喜歡的歌曲～ 下週大巨蛋我會進場✨️",
           "status": "近期",
-          "score": 28.79,
+          "score": 28.68,
+          "base_score": 28.68,
+          "feature_tags": [
+            "first_timer",
+            "merch_need",
+            "question_intent",
+            "solo_attendance",
+            "vip_benefit"
+          ],
+          "feature_counts": {
+            "first_timer": 3,
+            "long_fandom_story": 1,
+            "merch_need": 2,
+            "question_intent": 2,
+            "solo_attendance": 2,
+            "ticketing_need": 1,
+            "transport_need": 1,
+            "vip_benefit": 5
+          },
           "mentions": 5,
           "authors": 5,
           "first_seen": "2026-09-30T05:53:02Z",
@@ -190,66 +224,21 @@
           ]
         },
         {
-          "id": "sig_e44b106f00",
-          "category": "周邊／現場商品",
-          "kind": "actionable",
-          "headline": "周邊、現場商品與購買時機",
-          "summary": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
-          "status": "近期",
-          "score": 11.43,
-          "mentions": 2,
-          "authors": 2,
-          "first_seen": "2026-09-30T03:54:26Z",
-          "last_seen": "2026-09-30T07:58:45Z",
-          "activity": [
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          "source_breakdown": [
-            {
-              "source": "Threads",
-              "count": 2
-            }
-          ],
-          "evidence": [
-            {
-              "id": "3997466183800781093",
-              "username": "sn_nw.memi_soso",
-              "text": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
-              "permalink": "https://www.threads.com/@sn_nw.memi_soso/post/Dd52lCPFPkl",
-              "posted_at": "2026-09-30T07:58:45Z",
-              "query": "演唱會",
-              "source_queries": [
-                "演唱會"
-              ],
-              "source": "Threads"
-            },
-            {
-              "id": "3997343213191094222",
-              "username": "jhxxg__",
-              "text": "還有人可以接TWIMI代購嗎… 我的代購感覺會買不到 好想帶🈸啾去演唱會🥹",
-              "permalink": "https://www.threads.com/@jhxxg__/post/Dd5ank7kt_O",
-              "posted_at": "2026-09-30T03:54:26Z",
-              "query": "演唱會",
-              "source_queries": [
-                "演唱會"
-              ],
-              "source": "Threads"
-            }
-          ]
-        },
-        {
           "id": "sig_290828ae4d",
+          "snapshot_id": "deck_2026-10-01_1d_290828ae4d",
           "category": "拍攝／現場規則",
           "kind": "actionable",
           "headline": "拍攝、錄音與現場規則",
           "summary": "不知道有沒有人是預定要cos去看演唱會的 也不知道台灣有沒有這方面的淺規則 但是我真心希望沒有",
           "status": "近期",
-          "score": 8.02,
+          "score": 7.91,
+          "base_score": 7.91,
+          "feature_tags": [
+            "question_intent"
+          ],
+          "feature_counts": {
+            "question_intent": 1
+          },
           "mentions": 1,
           "authors": 1,
           "first_seen": "2026-09-30T15:40:04Z",
@@ -257,8 +246,8 @@
           "activity": [
             0,
             0,
-            0,
             1,
+            0,
             0,
             0
           ],
@@ -285,12 +274,22 @@
         },
         {
           "id": "sig_40f91c4793",
+          "snapshot_id": "deck_2026-10-01_1d_40f91c4793",
           "category": "場館／現場體驗",
           "kind": "context",
           "headline": "場館視線、站坐與現場體驗",
           "summary": "今天晚上看完了。 以紀錄片來說，節奏抓得很好，不會有紀錄片常出現的拖沓問題。 如果把它當演唱會電影來看，可能會覺得表演部分偏少，但可以聽到不少新舊歌曲，還是可以嗨到想跟著動。（所以回家就買了應援場的票） 整部片就像片名一樣，是把這個樂團重新拼湊回來，但是是個不同版本的LINKIN PARK 身為樂迷，看到他們並非為了樂迷勉強自己，而是真…",
           "status": "近期",
-          "score": 7.88,
+          "score": 7.77,
+          "base_score": 7.77,
+          "feature_tags": [
+            "long_fandom_story",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "long_fandom_story": 1,
+            "venue_experience": 1
+          },
           "mentions": 1,
           "authors": 1,
           "first_seen": "2026-09-30T15:06:18Z",
@@ -323,6 +322,108 @@
               "source": "Threads"
             }
           ]
+        },
+        {
+          "id": "sig_c383233b86",
+          "snapshot_id": "deck_2026-10-01_1d_c383233b86",
+          "category": "交通／散場",
+          "kind": "actionable",
+          "headline": "進場、散場與跨城移動安排",
+          "summary": "10/3 83演唱會結束有小z要一起搭UBER或計程車去高鐵嗎",
+          "status": "近期",
+          "score": 6.87,
+          "base_score": 6.87,
+          "feature_tags": [
+            "transport_need"
+          ],
+          "feature_counts": {
+            "transport_need": 1
+          },
+          "mentions": 1,
+          "authors": 1,
+          "first_seen": "2026-09-30T11:31:53Z",
+          "last_seen": "2026-09-30T11:31:53Z",
+          "activity": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 1
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997573458385222179",
+              "username": "yunguilin",
+              "text": "10/3 83演唱會結束有小z要一起搭UBER或計程車去高鐵嗎",
+              "permalink": "https://www.threads.com/@yunguilin/post/Dd6O-FelLoj",
+              "posted_at": "2026-09-30T11:31:53Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_e44b106f00",
+          "snapshot_id": "deck_2026-10-01_1d_e44b106f00",
+          "category": "周邊／現場商品",
+          "kind": "actionable",
+          "headline": "周邊、現場商品與購買時機",
+          "summary": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
+          "status": "近期",
+          "score": 5.98,
+          "base_score": 5.98,
+          "feature_tags": [
+            "first_timer",
+            "merch_need",
+            "question_intent"
+          ],
+          "feature_counts": {
+            "first_timer": 1,
+            "merch_need": 1,
+            "question_intent": 1
+          },
+          "mentions": 1,
+          "authors": 1,
+          "first_seen": "2026-09-30T07:58:45Z",
+          "last_seen": "2026-09-30T07:58:45Z",
+          "activity": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 1
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997466183800781093",
+              "username": "sn_nw.memi_soso",
+              "text": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
+              "permalink": "https://www.threads.com/@sn_nw.memi_soso/post/Dd52lCPFPkl",
+              "posted_at": "2026-09-30T07:58:45Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
         }
       ]
     },
@@ -330,16 +431,35 @@
       "label": "3日",
       "days": 3,
       "signal_count": 44,
-      "card_count": 5,
+      "card_count": 8,
+      "display_limit": 5,
       "cards": [
         {
           "id": "sig_2beeda24c4",
+          "snapshot_id": "deck_2026-10-01_3d_2beeda24c4",
           "category": "VIP／互動福利",
           "kind": "actionable",
           "headline": "VIP、合照與互動流程正在被問",
           "summary": "打擾了，請問有看過其他場次演唱會的VIP，請問會不會唱Let's not fall in love這一首，因為這是我最喜歡的歌曲～ 下週大巨蛋我會進場✨️",
           "status": "持續",
-          "score": 72.1,
+          "score": 71.99,
+          "base_score": 71.99,
+          "feature_tags": [
+            "question_intent",
+            "vip_benefit"
+          ],
+          "feature_counts": {
+            "accommodation_need": 1,
+            "first_timer": 4,
+            "long_fandom_story": 3,
+            "merch_need": 2,
+            "question_intent": 3,
+            "solo_attendance": 4,
+            "ticketing_need": 1,
+            "transport_need": 2,
+            "venue_experience": 2,
+            "vip_benefit": 13
+          },
           "mentions": 13,
           "authors": 13,
           "first_seen": "2026-09-28T14:12:04Z",
@@ -423,12 +543,26 @@
         },
         {
           "id": "sig_ba8d31181d",
+          "snapshot_id": "deck_2026-10-01_3d_ba8d31181d",
           "category": "票務／入場摩擦",
           "kind": "actionable",
           "headline": "購票、實名與入場流程的摩擦",
           "summary": "想問有買過日本演唱會電影的電影院預售票的克拉～ 預售票的特典是購票時就可以拿到的嗎？還是跟台灣一樣電影入場時領取？",
           "status": "持續",
-          "score": 56.38,
+          "score": 56.27,
+          "base_score": 56.27,
+          "feature_tags": [
+            "question_intent",
+            "ticketing_need"
+          ],
+          "feature_counts": {
+            "first_timer": 2,
+            "long_fandom_story": 2,
+            "merch_need": 1,
+            "question_intent": 4,
+            "ticketing_need": 10,
+            "venue_experience": 2
+          },
           "mentions": 10,
           "authors": 10,
           "first_seen": "2026-09-29T04:20:00Z",
@@ -512,12 +646,22 @@
         },
         {
           "id": "sig_40f91c4793",
+          "snapshot_id": "deck_2026-10-01_3d_40f91c4793",
           "category": "場館／現場體驗",
           "kind": "context",
           "headline": "場館視線、站坐與現場體驗",
           "summary": "今天晚上看完了。 以紀錄片來說，節奏抓得很好，不會有紀錄片常出現的拖沓問題。 如果把它當演唱會電影來看，可能會覺得表演部分偏少，但可以聽到不少新舊歌曲，還是可以嗨到想跟著動。（所以回家就買了應援場的票） 整部片就像片名一樣，是把這個樂團重新拼湊回來，但是是個不同版本的LINKIN PARK 身為樂迷，看到他們並非為了樂迷勉強自己，而是真…",
           "status": "持續",
-          "score": 32.03,
+          "score": 31.92,
+          "base_score": 31.92,
+          "feature_tags": [
+            "long_fandom_story",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "long_fandom_story": 3,
+            "venue_experience": 5
+          },
           "mentions": 5,
           "authors": 5,
           "first_seen": "2026-09-28T13:16:42Z",
@@ -601,12 +745,31 @@
         },
         {
           "id": "sig_c383233b86",
+          "snapshot_id": "deck_2026-10-01_3d_c383233b86",
           "category": "交通／散場",
           "kind": "actionable",
           "headline": "進場、散場與跨城移動安排",
           "summary": "演唱會小白求助🙏🙏 我竟然抽中咗😭，但第一次睇演唱會，唔知到時安排會係點，想問問各大佬意見🧎 諗住帶A3 file裝poster ,但主辦規則寫“不準攜帶任何超過38×30×20厘米以上的物品”，咁A3file俾唔俾入場🗿 同埋有冇大佬知道喺活動接待處攞完海報之後仲去唔去到行李寄存？因為主辦話離開主場館之後不得再次進入，咁攞海報嘅接待處…",
           "status": "持續",
-          "score": 31.16,
+          "score": 31.05,
+          "base_score": 31.05,
+          "feature_tags": [
+            "first_timer",
+            "long_fandom_story",
+            "question_intent",
+            "ticketing_need",
+            "transport_need",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "first_timer": 2,
+            "long_fandom_story": 2,
+            "merch_need": 1,
+            "question_intent": 1,
+            "ticketing_need": 2,
+            "transport_need": 4,
+            "venue_experience": 2
+          },
           "mentions": 5,
           "authors": 5,
           "first_seen": "2026-09-28T09:23:15Z",
@@ -690,12 +853,24 @@
         },
         {
           "id": "sig_e44b106f00",
+          "snapshot_id": "deck_2026-10-01_3d_e44b106f00",
           "category": "周邊／現場商品",
           "kind": "actionable",
           "headline": "周邊、現場商品與購買時機",
           "summary": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
           "status": "持續",
-          "score": 28.26,
+          "score": 28.15,
+          "base_score": 28.15,
+          "feature_tags": [
+            "first_timer",
+            "merch_need",
+            "question_intent"
+          ],
+          "feature_counts": {
+            "first_timer": 1,
+            "merch_need": 5,
+            "question_intent": 2
+          },
           "mentions": 5,
           "authors": 5,
           "first_seen": "2026-09-29T05:58:24Z",
@@ -704,8 +879,8 @@
             0,
             0,
             3,
-            0,
-            2,
+            1,
+            1,
             0
           ],
           "source_breakdown": [
@@ -776,29 +951,242 @@
               "source": "Threads"
             }
           ]
+        },
+        {
+          "id": "sig_365e7ab8b1",
+          "snapshot_id": "deck_2026-10-01_3d_365e7ab8b1",
+          "category": "住宿／落腳",
+          "kind": "actionable",
+          "headline": "演出前後的住宿與落腳選擇",
+          "summary": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 脆友幫選 1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000） 2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3） 差別在於要不要…",
+          "status": "近期",
+          "score": 16.26,
+          "base_score": 16.26,
+          "feature_tags": [
+            "accommodation_need",
+            "question_intent",
+            "solo_attendance",
+            "transport_need",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "accommodation_need": 3,
+            "question_intent": 1,
+            "solo_attendance": 1,
+            "ticketing_need": 1,
+            "transport_need": 1,
+            "venue_experience": 1
+          },
+          "mentions": 3,
+          "authors": 3,
+          "first_seen": "2026-09-29T11:19:25Z",
+          "last_seen": "2026-09-30T02:28:44Z",
+          "activity": [
+            0,
+            0,
+            2,
+            1,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 3
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997300081250456558",
+              "username": "yintong_woo6chen",
+              "text": "出新飛高雄11.21演唱會門票，位置如圖，走閑魚，實在是訂不到住宿。或者有誰願意在11.20-11.22收留小女子（預算3000TWD內） 求N.fia 帶走",
+              "permalink": "https://www.threads.com/@yintong_woo6chen/post/Dd5Qz7LktPu",
+              "posted_at": "2026-09-30T02:28:44Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996912210430059452",
+              "username": "jfork84",
+              "text": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 脆友幫選 1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000） 2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3） 差別在於要不要住一晚跟價格的部分 想問各位的建議😣😣😣🙏🏻",
+              "permalink": "https://www.threads.com/@jfork84/post/Dd34nqVGuO8",
+              "posted_at": "2026-09-29T13:38:06Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996842406263964586",
+              "username": "ariayumira",
+              "text": "《屬於我們的…》演唱會收官場 北京場11/27-29 . 啊啊啊啊～這麼這麼剛好卡死▓ 各位bbg們 機票飯店訂起來了🙌🏻 說好的排除萬難 走了走了！！！！",
+              "permalink": "https://www.threads.com/@ariayumira/post/Dd3ov4IlMOq",
+              "posted_at": "2026-09-29T11:19:25Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_290828ae4d",
+          "snapshot_id": "deck_2026-10-01_3d_290828ae4d",
+          "category": "拍攝／現場規則",
+          "kind": "actionable",
+          "headline": "拍攝、錄音與現場規則",
+          "summary": "不知道有沒有人是預定要cos去看演唱會的 也不知道台灣有沒有這方面的淺規則 但是我真心希望沒有",
+          "status": "持續",
+          "score": 14.96,
+          "base_score": 14.96,
+          "feature_tags": [
+            "long_fandom_story",
+            "merch_need",
+            "question_intent",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "long_fandom_story": 1,
+            "merch_need": 1,
+            "question_intent": 1,
+            "venue_experience": 1
+          },
+          "mentions": 2,
+          "authors": 2,
+          "first_seen": "2026-09-29T15:03:47Z",
+          "last_seen": "2026-09-30T15:40:04Z",
+          "activity": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 2
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997698375395352804",
+              "username": "an_1019_rin",
+              "text": "不知道有沒有人是預定要cos去看演唱會的 也不知道台灣有沒有這方面的淺規則 但是我真心希望沒有",
+              "permalink": "https://www.threads.com/@an_1019_rin/post/Dd6rX3gmKDk",
+              "posted_at": "2026-09-30T15:40:04Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996955335550634019",
+              "username": "sin_yue1234",
+              "text": "《流光穿梭 十週年傳說》10/31傳說十週年演唱會 來支持油豆腐啦！！ 我做了minnini+shunini的飲料應援杯套 以下為示意圖 ✨️因為還沒拿到所以拿到當天會在拍實體 ‼️總共只有22個 ‼️想以交換為優先 要交換的可以底下留言你的應援物喔～～ ----------------規則------------------ 若沒換完其他的可開放領取 但❗️先說領取條件 1.證明你是nebobo 不管是小卡/娃娃/手燈或者出示追蹤i…",
+              "permalink": "https://www.threads.com/@sin_yue1234/post/Dd4CbNumQgj",
+              "posted_at": "2026-09-29T15:03:47Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_521296245b",
+          "snapshot_id": "deck_2026-10-01_3d_521296245b",
+          "category": "陪同／Solo Attendance",
+          "kind": "actionable",
+          "headline": "一個人看演出與同行需求",
+          "summary": "挑戰自己一個人聽演唱會✅",
+          "status": "近期",
+          "score": 5.0,
+          "base_score": 5.0,
+          "feature_tags": [
+            "solo_attendance"
+          ],
+          "feature_counts": {
+            "solo_attendance": 1
+          },
+          "mentions": 1,
+          "authors": 1,
+          "first_seen": "2026-09-28T14:35:37Z",
+          "last_seen": "2026-09-28T14:35:37Z",
+          "activity": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 1
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3996216381343856918",
+              "username": "fangchi.94",
+              "text": "挑戰自己一個人聽演唱會✅",
+              "permalink": "https://www.threads.com/@fangchi.94/post/Dd1aaA_mPkW",
+              "posted_at": "2026-09-28T14:35:37Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
         }
       ]
     },
     "5d": {
       "label": "5日",
       "days": 5,
-      "signal_count": 100,
-      "card_count": 5,
+      "signal_count": 99,
+      "card_count": 10,
+      "display_limit": 5,
       "cards": [
         {
           "id": "sig_ba8d31181d",
+          "snapshot_id": "deck_2026-10-01_5d_ba8d31181d",
           "category": "票務／入場摩擦",
           "kind": "actionable",
           "headline": "購票、實名與入場流程的摩擦",
           "summary": "想問有買過日本演唱會電影的電影院預售票的克拉～ 預售票的特典是購票時就可以拿到的嗎？還是跟台灣一樣電影入場時領取？",
           "status": "持續",
-          "score": 134.33,
-          "mentions": 25,
-          "authors": 25,
-          "first_seen": "2026-09-26T03:37:56Z",
+          "score": 129.22,
+          "base_score": 129.22,
+          "feature_tags": [
+            "question_intent",
+            "ticketing_need"
+          ],
+          "feature_counts": {
+            "first_timer": 2,
+            "long_fandom_story": 4,
+            "merch_need": 2,
+            "question_intent": 6,
+            "ticketing_need": 20,
+            "venue_experience": 7
+          },
+          "mentions": 24,
+          "authors": 24,
+          "first_seen": "2026-09-26T04:04:40Z",
           "last_seen": "2026-09-30T16:54:42Z",
           "activity": [
-            9,
+            8,
             6,
             0,
             4,
@@ -807,7 +1195,7 @@
           "source_breakdown": [
             {
               "source": "Threads",
-              "count": 25
+              "count": 24
             }
           ],
           "evidence": [
@@ -875,12 +1263,30 @@
         },
         {
           "id": "sig_2beeda24c4",
+          "snapshot_id": "deck_2026-10-01_5d_2beeda24c4",
           "category": "VIP／互動福利",
           "kind": "actionable",
           "headline": "VIP、合照與互動流程正在被問",
           "summary": "打擾了，請問有看過其他場次演唱會的VIP，請問會不會唱Let's not fall in love這一首，因為這是我最喜歡的歌曲～ 下週大巨蛋我會進場✨️",
           "status": "持續",
-          "score": 103.99,
+          "score": 103.88,
+          "base_score": 103.88,
+          "feature_tags": [
+            "question_intent",
+            "vip_benefit"
+          ],
+          "feature_counts": {
+            "accommodation_need": 1,
+            "first_timer": 5,
+            "long_fandom_story": 5,
+            "merch_need": 2,
+            "question_intent": 4,
+            "solo_attendance": 4,
+            "ticketing_need": 2,
+            "transport_need": 2,
+            "venue_experience": 4,
+            "vip_benefit": 19
+          },
           "mentions": 19,
           "authors": 19,
           "first_seen": "2026-09-26T06:36:47Z",
@@ -963,19 +1369,33 @@
         },
         {
           "id": "sig_40f91c4793",
+          "snapshot_id": "deck_2026-10-01_5d_40f91c4793",
           "category": "場館／現場體驗",
           "kind": "context",
           "headline": "場館視線、站坐與現場體驗",
           "summary": "好奇Lany 演唱會怎麼一半以上都是東南亞人 而且都是一大群那種 在搖滾區被擠到嚇瘋⋯ 真的嚇瘋從zeppㄧ路看到現在 這場最可怕🥲",
           "status": "持續",
-          "score": 98.88,
+          "score": 98.77,
+          "base_score": 98.77,
+          "feature_tags": [
+            "long_fandom_story",
+            "question_intent",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "first_timer": 2,
+            "long_fandom_story": 8,
+            "question_intent": 1,
+            "venue_experience": 14,
+            "vip_benefit": 1
+          },
           "mentions": 18,
           "authors": 18,
           "first_seen": "2026-09-26T05:33:09Z",
           "last_seen": "2026-09-30T15:06:18Z",
           "activity": [
-            8,
-            5,
+            9,
+            4,
             2,
             2,
             1
@@ -1051,12 +1471,30 @@
         },
         {
           "id": "sig_c383233b86",
+          "snapshot_id": "deck_2026-10-01_5d_c383233b86",
           "category": "交通／散場",
           "kind": "actionable",
           "headline": "進場、散場與跨城移動安排",
           "summary": "演唱會小白求助🙏🙏 我竟然抽中咗😭，但第一次睇演唱會，唔知到時安排會係點，想問問各大佬意見🧎 諗住帶A3 file裝poster ,但主辦規則寫“不準攜帶任何超過38×30×20厘米以上的物品”，咁A3file俾唔俾入場🗿 同埋有冇大佬知道喺活動接待處攞完海報之後仲去唔去到行李寄存？因為主辦話離開主場館之後不得再次進入，咁攞海報嘅接待處…",
           "status": "持續",
-          "score": 52.98,
+          "score": 52.87,
+          "base_score": 52.87,
+          "feature_tags": [
+            "first_timer",
+            "question_intent",
+            "ticketing_need",
+            "transport_need",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "first_timer": 4,
+            "long_fandom_story": 3,
+            "merch_need": 1,
+            "question_intent": 1,
+            "ticketing_need": 2,
+            "transport_need": 8,
+            "venue_experience": 3
+          },
           "mentions": 9,
           "authors": 9,
           "first_seen": "2026-09-26T09:59:12Z",
@@ -1139,12 +1577,24 @@
         },
         {
           "id": "sig_e44b106f00",
+          "snapshot_id": "deck_2026-10-01_5d_e44b106f00",
           "category": "周邊／現場商品",
           "kind": "actionable",
           "headline": "周邊、現場商品與購買時機",
           "summary": "想問問大家如果去看演唱會，我應該現場買周邊還是該怎麼樣？(第一次看Snow Man演唱會😭😭)",
           "status": "持續",
-          "score": 47.09,
+          "score": 46.98,
+          "base_score": 46.98,
+          "feature_tags": [
+            "first_timer",
+            "merch_need",
+            "question_intent"
+          ],
+          "feature_counts": {
+            "first_timer": 1,
+            "merch_need": 8,
+            "question_intent": 3
+          },
           "mentions": 8,
           "authors": 8,
           "first_seen": "2026-09-27T01:05:36Z",
@@ -1153,8 +1603,8 @@
             1,
             2,
             0,
-            3,
-            2
+            4,
+            1
           ],
           "source_breakdown": [
             {
@@ -1217,6 +1667,403 @@
               "text": "齁呦怎麼辦我的代購沒買到，但是我真的很想要在演唱會前拿到炅潣的娃娃跟卡套啦～ 有沒有人可以幫忙代購🥹",
               "permalink": "https://www.threads.com/@hzz_31.3/post/Dd3EArOEpnc",
               "posted_at": "2026-09-29T05:58:24Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_521296245b",
+          "snapshot_id": "deck_2026-10-01_5d_521296245b",
+          "category": "陪同／Solo Attendance",
+          "kind": "actionable",
+          "headline": "一個人看演出與同行需求",
+          "summary": "有沒有人明天自己一個人去聽Henry Moodie 演唱會的！😭（希望是女生~） 可以一起排隊進場、場內場外拍拍照❤️",
+          "status": "持續",
+          "score": 44.24,
+          "base_score": 44.24,
+          "feature_tags": [
+            "first_timer",
+            "question_intent",
+            "solo_attendance"
+          ],
+          "feature_counts": {
+            "first_timer": 3,
+            "question_intent": 1,
+            "solo_attendance": 7,
+            "venue_experience": 1
+          },
+          "mentions": 8,
+          "authors": 8,
+          "first_seen": "2026-09-26T11:42:08Z",
+          "last_seen": "2026-09-28T14:35:37Z",
+          "activity": [
+            3,
+            4,
+            1,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 8
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3996216381343856918",
+              "username": "fangchi.94",
+              "text": "挑戰自己一個人聽演唱會✅",
+              "permalink": "https://www.threads.com/@fangchi.94/post/Dd1aaA_mPkW",
+              "posted_at": "2026-09-28T14:35:37Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995479636184303507",
+              "username": "light_90319",
+              "text": "誰懂！！！我搶道票啦！！！▓▓ 人生的第一場演唱會我來了！好期待呀▓ 也希望每個真愛粉都可以刷到票! 想要上來問一下：第一次看演唱會需要注意什麼？希望各位大前輩們指點一二▓▓",
+              "permalink": "https://www.threads.com/@light_90319/post/Ddyy49mEoeT",
+              "posted_at": "2026-09-27T14:11:50Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995475711757985262",
+              "username": "143_yiiiii",
+              "text": "有沒有人明天自己一個人去聽Henry Moodie 演唱會的！😭（希望是女生~） 可以一起排隊進場、場內場外拍拍照❤️",
+              "permalink": "https://www.threads.com/@143_yiiiii/post/Ddyx_2sCSXu",
+              "posted_at": "2026-09-27T14:04:02Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995228379171518948",
+              "username": "star.hmh0803",
+              "text": "盼星星盼月亮剛剛本來不抱希望了 但現在我可以大聲說哥哥鄭州我來了🥺 雖然最希望1599但有1299已經很滿足 希望二開可以搶到1599啊啊啊 有沒有搶到的寶要一起去的！！！ 第一次一個人去看演唱會我好緊張啊",
+              "permalink": "https://www.threads.com/@star.hmh0803/post/Ddx5wsRE_nk",
+              "posted_at": "2026-09-27T05:52:38Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995184023173412528",
+              "username": "ruru18146",
+              "text": "我有一個喜歡的女生 也很努力追求中 她也知道我喜歡她 我也知道她有其他人追 昨天看到她去看演唱會 卻發現她是跟別的男生去 所以我試探性的問了她 妳是自己一個人去看演唱會嗎？ 她回答 對呀 他自己一個人 但我也沒有戳破她 只是我不懂為什麼要騙我？ 她在想什麼呢？ 是在享受多人對她的好嗎？",
+              "permalink": "https://www.threads.com/@ruru18146/post/DdxvrOhkTaw",
+              "posted_at": "2026-09-27T04:24:30Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_290828ae4d",
+          "snapshot_id": "deck_2026-10-01_5d_290828ae4d",
+          "category": "拍攝／現場規則",
+          "kind": "actionable",
+          "headline": "拍攝、錄音與現場規則",
+          "summary": "不知道有沒有人是預定要cos去看演唱會的 也不知道台灣有沒有這方面的淺規則 但是我真心希望沒有",
+          "status": "持續",
+          "score": 38.91,
+          "base_score": 38.91,
+          "feature_tags": [
+            "question_intent"
+          ],
+          "feature_counts": {
+            "long_fandom_story": 2,
+            "merch_need": 1,
+            "question_intent": 3,
+            "venue_experience": 1
+          },
+          "mentions": 6,
+          "authors": 6,
+          "first_seen": "2026-09-26T12:41:01Z",
+          "last_seen": "2026-09-30T15:40:04Z",
+          "activity": [
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 6
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997698375395352804",
+              "username": "an_1019_rin",
+              "text": "不知道有沒有人是預定要cos去看演唱會的 也不知道台灣有沒有這方面的淺規則 但是我真心希望沒有",
+              "permalink": "https://www.threads.com/@an_1019_rin/post/Dd6rX3gmKDk",
+              "posted_at": "2026-09-30T15:40:04Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996955335550634019",
+              "username": "sin_yue1234",
+              "text": "《流光穿梭 十週年傳說》10/31傳說十週年演唱會 來支持油豆腐啦！！ 我做了minnini+shunini的飲料應援杯套 以下為示意圖 ✨️因為還沒拿到所以拿到當天會在拍實體 ‼️總共只有22個 ‼️想以交換為優先 要交換的可以底下留言你的應援物喔～～ ----------------規則------------------ 若沒換完其他的可開放領取 但❗️先說領取條件 1.證明你是nebobo 不管是小卡/娃娃/手燈或者出示追蹤i…",
+              "permalink": "https://www.threads.com/@sin_yue1234/post/Dd4CbNumQgj",
+              "posted_at": "2026-09-29T15:03:47Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995509459355008601",
+              "username": "danpa_farawayuan",
+              "text": "現場看過一次回家再回看一次！ 哇嗚，我對製播團隊大膽的運鏡嚇到欸🤯 必須說有一點韓團攝影棚/演唱會的感覺了，雖然有些焦段縮放的片段有點把人晃暈了，但我好喜歡某些局部對小芊的大特寫😍 小芊真的美到爆炸🫪 根本已經是K-pop明星等級的妝造和表演了吧！ Source: 緯來電視網app",
+              "permalink": "https://www.threads.com/@danpa_farawayuan/post/Ddy5q8lkX5Z",
+              "posted_at": "2026-09-27T15:13:36Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3995297562814961072",
+              "username": "forwork_liao",
+              "text": "ado事件懶人包，就我所知的整理，有錯請糾正。 一、背景說明 ado參加在日本舉行的韓國拼盤演唱會，卡司陣容大多是韓團藝人，台下是喜歡韓團的櫻花妹。第一天日本嘉賓是ikura。 二、爭議點 第一天活動中，所有韓團藝人都有出來謝幕（這對韓團粉絲很重要，因為很容易獲得偶像飯撒）。 但第二天卻沒有謝幕活動，因此有部分韓團粉絲質疑，是不是礙於壓軸的ado是覆面系歌手，才導致謝幕遭到取消。 三、衝突爆發 特地花6萬日圓以及花很長時間等待的韓團粉…",
+              "permalink": "https://www.threads.com/@forwork_liao/post/DdyJfcjkdWw",
+              "posted_at": "2026-09-27T08:10:05Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3994836325043975150",
+              "username": "lt_zone",
+              "text": "你換位思考一下 你花了幾萬塊 特別飛到日本看你最愛的偶像 本來這個類型的演唱會都可以拍照、錄影、還有結束之後大家最喜歡的飯撒巡場環節 結果你到了才知道 因為有一個壓軸嘉賓 所以剛剛上述行為全部被禁止，然後那個壓軸嘉賓你聽都沒聽過（不要跟說什麼Ado怎麼可能不認識之類的 不同圈子本來就有不同的喜好） 然後那個壓軸嘉賓還是唱櫻桃小丸子的主題曲 我就問這樣你會不會生氣？",
+              "permalink": "https://www.threads.com/@lt_zone/post/DdwgnjaErPu",
+              "posted_at": "2026-09-26T16:53:41Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_365e7ab8b1",
+          "snapshot_id": "deck_2026-10-01_5d_365e7ab8b1",
+          "category": "住宿／落腳",
+          "kind": "actionable",
+          "headline": "演出前後的住宿與落腳選擇",
+          "summary": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 脆友幫選 1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000） 2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3） 差別在於要不要…",
+          "status": "近期",
+          "score": 16.26,
+          "base_score": 16.26,
+          "feature_tags": [
+            "accommodation_need",
+            "question_intent",
+            "solo_attendance",
+            "transport_need",
+            "venue_experience"
+          ],
+          "feature_counts": {
+            "accommodation_need": 3,
+            "question_intent": 1,
+            "solo_attendance": 1,
+            "ticketing_need": 1,
+            "transport_need": 1,
+            "venue_experience": 1
+          },
+          "mentions": 3,
+          "authors": 3,
+          "first_seen": "2026-09-29T11:19:25Z",
+          "last_seen": "2026-09-30T02:28:44Z",
+          "activity": [
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 3
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3997300081250456558",
+              "username": "yintong_woo6chen",
+              "text": "出新飛高雄11.21演唱會門票，位置如圖，走閑魚，實在是訂不到住宿。或者有誰願意在11.20-11.22收留小女子（預算3000TWD內） 求N.fia 帶走",
+              "permalink": "https://www.threads.com/@yintong_woo6chen/post/Dd5Qz7LktPu",
+              "posted_at": "2026-09-30T02:28:44Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996912210430059452",
+              "username": "jfork84",
+              "text": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 脆友幫選 1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000） 2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3） 差別在於要不要住一晚跟價格的部分 想問各位的建議😣😣😣🙏🏻",
+              "permalink": "https://www.threads.com/@jfork84/post/Dd34nqVGuO8",
+              "posted_at": "2026-09-29T13:38:06Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3996842406263964586",
+              "username": "ariayumira",
+              "text": "《屬於我們的…》演唱會收官場 北京場11/27-29 . 啊啊啊啊～這麼這麼剛好卡死▓ 各位bbg們 機票飯店訂起來了🙌🏻 說好的排除萬難 走了走了！！！！",
+              "permalink": "https://www.threads.com/@ariayumira/post/Dd3ov4IlMOq",
+              "posted_at": "2026-09-29T11:19:25Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_cfce67dedb",
+          "snapshot_id": "deck_2026-10-01_5d_cfce67dedb",
+          "category": "演後社群／內容需求",
+          "kind": "context",
+          "headline": "演後找影片、照片與社群內容",
+          "summary": "想找今天LANY演唱會坐2C第二排大概是12.13號然後整場都很投入的男生 我是坐在你後面的人！在後面一直看到你的解鎖畫面(應該是Paul吧)覺得很好看 剛剛自己去Pinterest翻了很久 都沒找到類似的 想問你能不能分享你的好看桌布🥹",
+          "status": "近期",
+          "score": 15.06,
+          "base_score": 15.06,
+          "feature_tags": [
+            "question_intent"
+          ],
+          "feature_counts": {
+            "question_intent": 1
+          },
+          "mentions": 3,
+          "authors": 3,
+          "first_seen": "2026-09-26T18:52:00Z",
+          "last_seen": "2026-09-26T19:32:33Z",
+          "activity": [
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 3
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3994916279575213815",
+              "username": "froomy1813",
+              "text": "徵以下lany演唱會影片 我自己都有錄但位子太遠都是糊的😣 1. why 2. 開頭pjk說感謝大家在各自忙碌生活中過來之類的致詞 3. hericane 4. let me know 5. ILYSB（後半段主舞台） 6. pink skies 7. malibu nights（主舞台） 8. 最後致謝 非常感謝大家😭😭",
+              "permalink": "https://www.threads.com/@froomy1813/post/DdwyzC3gXb3",
+              "posted_at": "2026-09-26T19:32:33Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3994901519703151066",
+              "username": "qtyggi",
+              "text": "想找今天LANY演唱會坐2C第二排大概是12.13號然後整場都很投入的男生 我是坐在你後面的人！在後面一直看到你的解鎖畫面(應該是Paul吧)覺得很好看 剛剛自己去Pinterest翻了很久 都沒找到類似的 想問你能不能分享你的好看桌布🥹",
+              "permalink": "https://www.threads.com/@qtyggi/post/DdwvcQqkxHa",
+              "posted_at": "2026-09-26T19:03:13Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            },
+            {
+              "id": "3994895873875232014",
+              "username": "jun._.0206",
+              "text": "聽說脆上找人很厲害 今天去看蕭景鴻阿弟演唱會 除了阿弟很帥唱歌很好聽之外 連穿無袖的那位吉他手老師也好帥😍 阿弟在介紹的時候 後面聽不太清楚他叫什麼名字 在此尋找吉他手老師本人有沒有哀居😆",
+              "permalink": "https://www.threads.com/@jun._.0206/post/DdwuKGlAcUO",
+              "posted_at": "2026-09-26T18:52:00Z",
+              "query": "演唱會",
+              "source_queries": [
+                "演唱會"
+              ],
+              "source": "Threads"
+            }
+          ]
+        },
+        {
+          "id": "sig_11a6ca9044",
+          "snapshot_id": "deck_2026-10-01_5d_11a6ca9044",
+          "category": "散場後消費",
+          "kind": "actionable",
+          "headline": "散場後吃什麼、去哪裡與延伸行程",
+          "summary": "演唱會結束海底撈吃吃 *禁二傳",
+          "status": "近期",
+          "score": 5.0,
+          "base_score": 5.0,
+          "feature_tags": [],
+          "feature_counts": {},
+          "mentions": 1,
+          "authors": 1,
+          "first_seen": "2026-09-26T15:40:45Z",
+          "last_seen": "2026-09-26T15:40:45Z",
+          "activity": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "source_breakdown": [
+            {
+              "source": "Threads",
+              "count": 1
+            }
+          ],
+          "evidence": [
+            {
+              "id": "3994799612862867063",
+              "username": "ni_hi_o_0",
+              "text": "演唱會結束海底撈吃吃 *禁二傳",
+              "permalink": "https://www.threads.com/@ni_hi_o_0/post/DdwYRUhjyZ3",
+              "posted_at": "2026-09-26T15:40:45Z",
               "query": "演唱會",
               "source_queries": [
                 "演唱會"
