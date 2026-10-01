@@ -1,49 +1,46 @@
-# Next Stop Live Collector V0.3
+# Next Stop Live Collector V0.4
 
-Collector V0.3 uses two conservative public retrieval paths for the same query set and merges them before the existing clean/dedupe pipeline:
+Production retrieval has been restored to the last known high-coverage anonymous mode that was working before the 2026-10-01 hardening regression.
 
-1. anonymous real Chromium, logged out, reading the rendered public Threads DOM;
-2. a transparent HTTP client reading the public Threads search page.
-
-Production currently keeps the broad `演唱會` query only. V0.3 does **not** add more keywords.
-
-The collector does not use brand-account cookies, Googlebot impersonation, stealth plugins, proxy rotation, CAPTCHA bypass, or internal Threads GraphQL pagination.
-
-## Production flow
+The production query remains exactly:
 
 ```
-Notion Collector Control
-  -> same query (currently: 演唱會)
-  -> Anonymous Chromium public DOM
-  -> Transparent public HTTP
-  -> merge raw candidates
+演唱會
+```
+
+No additional keywords are added.
+
+## Retrieval
+
+Production uses:
+
+1. crawler-rendered Threads SSR search;
+2. logged-out Threads persisted GraphQL search pagination;
+3. depth 3 total search windows.
+
+Google site fallback remains disabled. No login/session cookies are required for the production collector.
+
+This is the same retrieval behavior that produced the stable 16–27 raw rows per run before the coverage regression. The downstream pipeline is unchanged:
+
+```
+演唱會
+  -> SSR + logged-out GraphQL depth 3
+  -> relevance threshold
   -> permalink/content dedupe
-  -> 12-hour window + relevance threshold
   -> ticket-resale clean rules
   -> snapshot
-  -> accumulated master
-  -> observation bundle
+  -> accumulated Master
+  -> Observation
   -> Notion sync
+  -> Daily Signal Deck
 ```
 
-Overlapping posts from browser + HTTP are merged downstream. Their `retrieval_sources` are preserved, so one post can show both `threads_browser_dom` and `threads_public_html`.
-
-## Collector modes
-
-- `hybrid` — production mode. Runs both conservative public retrieval paths and merges them.
-- `browser` — anonymous Chromium only, retained for diagnostics.
-- `http` — transparent public HTTP only, retained for diagnostics.
-
-## Coverage semantics
-
-A browser HTTP 200 with no rendered post cards is not treated as zero market demand. In hybrid mode, the HTTP path still contributes candidates. A run is marked `coverage_status=degraded` only when the **combined** hybrid raw set is empty.
-
-`collector/raw/hybrid_diagnostics.json` records browser rows, HTTP rows, merged raw rows, merged unique candidates, and hard query failures.
+An empty retrieval run never clears prior Master data. Coverage zero is marked degraded.
 
 ## Schedule
 
-The production GitHub workflow keeps the existing cadence gate: target about one real collection every 2 hours.
+The GitHub workflow keeps the existing effective target of about one collection every 2 hours.
 
-## Persistence
+## Data responsibility
 
-Production snapshots, master files, run summaries, hybrid/browser diagnostics, and observation bundles are archived in the repository. Master remains append/merge oriented; an empty retrieval run never clears prior Master data.
+Retrieval only affects candidate coverage. Clean rules, Master accumulation, Signal Deck review, Relevant / Irrelevant feedback, and weekly relevance learning remain separate downstream layers.
