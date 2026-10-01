@@ -6,10 +6,8 @@ QUERY_FILE="${QUERY_FILE:-collector/queries.txt}"
 RAW_DIR="${RAW_DIR:-collector/raw}"
 FAILED_FILE="${FAILED_FILE:-collector/failed_queries.txt}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
-SEARCH_DEPTH="${COLLECTOR_SEARCH_DEPTH:-3}"
-GOOGLE_FALLBACK="${COLLECTOR_GOOGLE_FALLBACK:-false}"
-QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-2}"
-RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-20}"
+QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-1}"
+RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-30}"
 
 mkdir -p "$RAW_DIR"
 : > "$FAILED_FILE"
@@ -35,11 +33,7 @@ while IFS= read -r query || [[ -n "$query" ]]; do
 
   echo "[collector] ($i) $query"
 
-  search_args=(search --depth "$SEARCH_DEPTH")
-  if [[ "$GOOGLE_FALLBACK" == "true" ]]; then
-    search_args+=(--google-fallback)
-  fi
-  search_args+=("$query")
+  search_args=(search "$query")
 
   success=false
   status=0
@@ -49,8 +43,8 @@ while IFS= read -r query || [[ -n "$query" ]]; do
     echo "[collector] query attempt $attempt/$QUERY_ATTEMPTS: $query"
 
     if "$TH_BIN" \
-        --delay 5s \
-        --retries 8 \
+        --delay 8s \
+        --retries 2 \
         --timeout 45s \
         --quiet \
         -o jsonl \
