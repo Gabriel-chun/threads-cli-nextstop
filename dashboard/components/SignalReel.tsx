@@ -64,11 +64,12 @@ function PostCard({
 }) {
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
+  const visualDx = Math.max(-150, Math.min(150, dx));
   const style = dragging
     ? {
         transform: stacked
-          ? `translate3d(calc(-50% + ${dx}px), -6px, 0) rotate(${dx / 28}deg)`
-          : `translate3d(${dx}px, -6px, 0) rotate(${dx / 28}deg)`
+          ? `translate3d(calc(-50% + ${visualDx}px), -6px, 0) rotate(${visualDx / 28}deg)`
+          : `translate3d(${visualDx}px, -6px, 0) rotate(${visualDx / 28}deg)`
       }
     : undefined;
 
@@ -263,13 +264,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     );
   }
 
-  function pointerUp(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
-    if (!drag || drag.pointerId !== event.pointerId) {
-      setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
-      return;
-    }
-
-    const dx = event.clientX - drag.startX;
+  function finishDrag(card: SignalPostCard, dx: number, allowOpen: boolean) {
     setDrag(null);
 
     if (reviewView === "queue" && dx >= SWIPE_THRESHOLD) {
@@ -281,9 +276,25 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       return;
     }
 
-    if (Math.abs(dx) < 12) {
+    if (allowOpen && Math.abs(dx) < 12) {
       setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
     }
+  }
+
+  function pointerUp(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
+    if (!drag || drag.pointerId !== event.pointerId) {
+      setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
+      return;
+    }
+    finishDrag(card, event.clientX - drag.startX, true);
+  }
+
+  function pointerCancel(card: SignalPostCard) {
+    if (!drag || drag.postKey !== card.post_key) {
+      setDrag(null);
+      return;
+    }
+    finishDrag(card, drag.currentX - drag.startX, false);
   }
 
   return (
@@ -345,7 +356,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {}}
                 onPointerMove={index === 0 || reviewView !== "queue" ? pointerMove : () => {}}
                 onPointerUp={index === 0 || reviewView !== "queue" ? pointerUp : () => {}}
-                onPointerCancel={() => setDrag(null)}
+                onPointerCancel={() => pointerCancel(card)}
                 onOpen={() => {
                   if (reviewView !== "queue" || index === 0) {
                     setSelectedKey(selectedKey === card.post_key ? null : card.post_key);

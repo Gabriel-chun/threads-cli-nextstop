@@ -178,7 +178,7 @@ jobs:
 
       - name: Collect Threads snapshots
         env:
-          COLLECTOR_MODE: browser
+          COLLECTOR_MODE: hybrid
           QUERY_FILE: ${{ env.QUERY_FILE }}
           COLLECTOR_BROWSER_SCROLLS: "2"
           COLLECTOR_BROWSER_MAX_POSTS: "40"
@@ -192,10 +192,10 @@ jobs:
             --state-dir collector/state \
             --min-score "$COLLECTOR_MIN_SCORE" \
             --since-hours "$COLLECTOR_WINDOW_HOURS" \
-            --collector-mode browser \
+            --collector-mode hybrid \
             --run-stamp "$RUN_STAMP"
 
-      - name: Assess browser coverage
+      - name: Assess hybrid coverage
         shell: bash
         run: |
           set -euo pipefail
@@ -205,23 +205,21 @@ jobs:
           from pathlib import Path
 
           summary_path = Path("collector/output/summary.json")
-          diagnostics_path = Path("collector/raw/browser_diagnostics.json")
+          diagnostics_path = Path("collector/raw/hybrid_diagnostics.json")
           summary = json.loads(summary_path.read_text(encoding="utf-8"))
           diagnostics = {}
           if diagnostics_path.exists():
               diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
 
-          query_states = [
-              str(item.get("status") or "")
-              for item in diagnostics.get("queries", [])
-              if isinstance(item, dict)
-          ]
           raw_rows = int(summary.get("raw_rows") or 0)
-          degraded = raw_rows == 0 and bool(query_states) and all(
-              state in {"coverage_degraded", "failed"} for state in query_states
-          )
+          browser_rows = int(diagnostics.get("browser_raw_rows") or 0)
+          http_rows = int(diagnostics.get("http_raw_rows") or 0)
+          hard_failed = diagnostics.get("hard_failed_queries") or []
+          degraded = raw_rows == 0
 
           summary["coverage_status"] = "degraded" if degraded else "observed"
+          summary["browser_raw_rows"] = browser_rows
+          summary["http_raw_rows"] = http_rows
           summary_path.write_text(
               json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
@@ -232,7 +230,7 @@ jobs:
               if degraded:
                   env.write("OBS_BASELINE_ELIGIBLE=false\n")
 
-          print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows} query_states={query_states}")
+          print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows} browser_rows={browser_rows} http_rows={http_rows} hard_failed={hard_failed}")
           PY
 
       - name: Build observation bundle
@@ -301,7 +299,7 @@ jobs:
           COLLECTOR_CONFIG_KEY: ${{ env.COLLECTOR_CONFIG_KEY }}
           COLLECTOR_WINDOW_HOURS: ${{ env.COLLECTOR_WINDOW_HOURS }}
           COLLECTOR_MIN_SCORE: ${{ env.COLLECTOR_MIN_SCORE }}
-          COLLECTOR_MODE: browser
+          COLLECTOR_MODE: hybrid
           OUTPUT_DIR: collector/output
           QUERY_FILE: ${{ env.QUERY_FILE }}
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -353,6 +351,9 @@ jobs:
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
           if [[ -s collector/raw/browser_diagnostics.json ]]; then
             cp collector/raw/browser_diagnostics.json collector/archive/runs/browser_diagnostics_"$RUN_STAMP".json
+          fi
+          if [[ -s collector/raw/hybrid_diagnostics.json ]]; then
+            cp collector/raw/hybrid_diagnostics.json collector/archive/runs/hybrid_diagnostics_"$RUN_STAMP".json
           fi
           cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
           cp collector/output/observation_bundle.json collector/archive/observations/"$RUN_STAMP".json
