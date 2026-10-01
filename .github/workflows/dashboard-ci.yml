@@ -26,6 +26,8 @@ jobs:
         run: npm run test:deck-feedback
       - name: Test Taipei daily review archive
         run: npx tsx --test lib/reviewArchive.test.ts
+      - name: Test Review Ledger de-identification
+        run: npx tsx --test lib/reviewLedger.test.ts
       - name: Build
         run: npm run build
       - name: Runtime MCP discovery regression
