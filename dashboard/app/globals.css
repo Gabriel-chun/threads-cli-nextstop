@@ -1005,3 +1005,257 @@ footer {
   color: var(--error) !important;
   font-size: 11px !important;
 }
+
+
+/* Signal Deck v0.3 — post-level swipe triage */
+.swipeWorkspace {
+  position: relative;
+  min-height: 300px;
+}
+
+.postCard {
+  user-select: none;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.postCard.dragging {
+  z-index: 80 !important;
+  cursor: grabbing;
+  transition: none !important;
+  box-shadow: 0 24px 58px rgba(70, 57, 45, .2);
+}
+
+.postCardText {
+  min-height: 112px;
+  margin: 18px 0 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.postCardMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.swipeZone {
+  position: absolute;
+  top: 22px;
+  bottom: 28px;
+  width: 118px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 14px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  background: rgba(255, 253, 249, .9);
+  opacity: .46;
+  pointer-events: none;
+  transition: opacity .14s ease, transform .14s ease, background .14s ease;
+}
+
+.swipeZone strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.swipeZone span {
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.swipeZoneLeft {
+  left: 6px;
+  color: var(--error);
+}
+
+.swipeZoneRight {
+  right: 6px;
+  color: var(--success);
+  text-align: right;
+}
+
+.swipeZone.active {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.swipeZoneLeft.active {
+  background: rgba(177, 51, 51, .08);
+  border-color: rgba(177, 51, 51, .46);
+}
+
+.swipeZoneRight.active {
+  background: rgba(66, 106, 83, .09);
+  border-color: rgba(66, 106, 83, .48);
+}
+
+.reviewLedger {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.reviewLedger > span {
+  margin-right: 3px;
+  color: var(--quiet);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.reviewLedger button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.reviewLedger button:hover,
+.reviewLedger button.active {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.reviewLedger button.active.relevant { color: var(--success); }
+.reviewLedger button.active.irrelevant { color: var(--error); }
+
+.postPreview {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.postPreviewMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.postPreviewMeta h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.postPreviewMeta p:not(.kicker) {
+  margin: 4px 0 0;
+  color: var(--quiet);
+  font-size: 11px;
+}
+
+.postPreviewMeta a {
+  color: var(--accent);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.postPreviewText {
+  margin: 16px 0 0;
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.postProvenance {
+  margin: 10px 0 0;
+  color: var(--quiet);
+  font: 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.relevantSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.relevantSummary > span {
+  color: var(--quiet);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.relevantSummary > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(66, 106, 83, .2);
+  border-radius: 999px;
+  background: rgba(66, 106, 83, .05);
+}
+
+.relevantSummary strong {
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.relevantSummary em {
+  color: var(--success);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.relevantSummary small {
+  color: var(--quiet);
+  font-size: 8px;
+}
+
+@media (max-width: 520px) {
+  .swipeWorkspace {
+    min-height: 330px;
+  }
+
+  .signalRail {
+    gap: 0;
+  }
+
+  .postCard {
+    width: 84vw;
+    min-width: 84vw;
+  }
+
+  .swipeZone {
+    position: fixed;
+    top: auto;
+    bottom: 18px;
+    height: 74px;
+    width: 42vw;
+    z-index: 100;
+  }
+
+  .swipeZoneLeft { left: 4vw; }
+  .swipeZoneRight { right: 4vw; }
+
+  .postPreviewMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

@@ -5,13 +5,14 @@ export type TriageLabel = "relevant" | "irrelevant";
 
 export type SignalDeckFeedback = {
   id: string;
+  post_key: string;
+  post_id?: string | null;
+  permalink?: string | null;
   snapshot_id: string;
-  card_id: string;
   window: "1d" | "3d" | "5d";
   label: TriageLabel;
   category: string;
-  headline: string;
-  summary: string;
+  text_excerpt: string;
   feature_tags: string[];
   base_score: number;
   deck_generated_at: string;
@@ -19,7 +20,7 @@ export type SignalDeckFeedback = {
 };
 
 export type RelevanceProfile = {
-  schema_version: "relevance-profile-v0.1";
+  schema_version: "relevance-profile-v0.2";
   generated_at: string;
   feedback_count: number;
   relevant_count: number;
@@ -30,7 +31,7 @@ export type RelevanceProfile = {
   category_stats: Record<string, { relevant: number; irrelevant: number; weight: number }>;
 };
 
-const ROOT = "signal-deck/v0.2";
+const ROOT = "signal-deck/v0.3";
 const PROFILE_PATH = ROOT + "/relevance-profile/latest.json";
 
 async function readJson<T>(pathname: string): Promise<T | null> {
@@ -56,8 +57,8 @@ function safeKey(value: string) {
   return createHash("sha256").update(value).digest("hex").slice(0, 40);
 }
 
-function feedbackPath(snapshotId: string) {
-  return ROOT + "/feedback/" + safeKey(snapshotId) + ".json";
+function feedbackPath(postKey: string) {
+  return ROOT + "/feedback/" + safeKey(postKey) + ".json";
 }
 
 export async function putSignalDeckFeedback(
@@ -65,16 +66,17 @@ export async function putSignalDeckFeedback(
 ): Promise<SignalDeckFeedback> {
   const record: SignalDeckFeedback = {
     ...input,
-    id: "fb_" + safeKey(input.snapshot_id),
+    id: "fb_" + safeKey(input.post_key),
     reviewed_at: new Date().toISOString()
   };
-  await putJson(feedbackPath(input.snapshot_id), record);
+  await putJson(feedbackPath(input.post_key), record);
   return record;
 }
 
 export async function listSignalDeckFeedback(): Promise<SignalDeckFeedback[]> {
   const paths: string[] = [];
   let cursor: string | undefined;
+
   try {
     do {
       const page = await list({
@@ -95,13 +97,13 @@ export async function listSignalDeckFeedback(): Promise<SignalDeckFeedback[]> {
     .sort((a, b) => Date.parse(b.reviewed_at) - Date.parse(a.reviewed_at));
 }
 
-export async function loadFeedbackMap(snapshotIds?: string[]) {
+export async function loadFeedbackMap(postKeys?: string[]) {
   const rows = await listSignalDeckFeedback();
-  const filter = snapshotIds ? new Set(snapshotIds) : null;
+  const filter = postKeys ? new Set(postKeys) : null;
   return Object.fromEntries(
     rows
-      .filter((row) => !filter || filter.has(row.snapshot_id))
-      .map((row) => [row.snapshot_id, row])
+      .filter((row) => !filter || filter.has(row.post_key))
+      .map((row) => [row.post_key, row])
   );
 }
 
@@ -122,9 +124,9 @@ export function buildRelevanceProfile(
   const categoryCounts = new Map<string, { relevant: number; irrelevant: number }>();
 
   for (const row of recent) {
-    const cat = categoryCounts.get(row.category) || { relevant: 0, irrelevant: 0 };
-    cat[row.label] += 1;
-    categoryCounts.set(row.category, cat);
+    const category = categoryCounts.get(row.category) || { relevant: 0, irrelevant: 0 };
+    category[row.label] += 1;
+    categoryCounts.set(row.category, category);
 
     for (const tag of new Set(row.feature_tags || [])) {
       const stats = featureCounts.get(tag) || { relevant: 0, irrelevant: 0 };
@@ -142,17 +144,19 @@ export function buildRelevanceProfile(
       ])
   );
 
+  // Category is deliberately a weak prior. Post-level text features carry most of
+  // the weekly learning so one irrelevant fandom post cannot suppress a whole topic.
   const category_stats = Object.fromEntries(
     [...categoryCounts.entries()]
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([category, stats]) => [
         category,
-        { ...stats, weight: weight(stats.relevant, stats.irrelevant, 8) }
+        { ...stats, weight: weight(stats.relevant, stats.irrelevant, 2) }
       ])
   );
 
   return {
-    schema_version: "relevance-profile-v0.1",
+    schema_version: "relevance-profile-v0.2",
     generated_at: now.toISOString(),
     feedback_count: recent.length,
     relevant_count: recent.filter((row) => row.label === "relevant").length,
