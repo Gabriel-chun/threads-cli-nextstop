@@ -89,10 +89,10 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                 </td>
                 <td><small>{fmtDate(row.reviewed_at)}</small></td>
                 <td>
-                  {row.source_url ? (
+                  {row.evidence_url ? (
                     <a
                       className="reviewSourceLink"
-                      href={row.source_url}
+                      href={row.evidence_url}
                       target="_blank"
                       rel="noreferrer"
                     >
