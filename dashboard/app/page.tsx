@@ -2,7 +2,6 @@ import { snapshot, compact, loadTrendHistory } from "../lib/signals";
 import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
-import { listSignalDeckFeedback } from "../lib/signalDeckFeedback";
 
 export const revalidate = 300;
 
@@ -19,11 +18,10 @@ function fmtDate(value: string | null) {
 }
 
 export default async function Page() {
-  const [data, history, signalDeck, reviewHistory] = await Promise.all([
+  const [data, history, signalDeck] = await Promise.all([
     snapshot(),
     loadTrendHistory(36),
-    loadSignalDeck(),
-    listSignalDeckFeedback()
+    loadSignalDeck()
   ]);
   const top = data.clusters.slice(0, 7);
   const latestTrend = history[history.length - 1];
@@ -60,13 +58,7 @@ export default async function Page() {
         <article className="accent"><span>Actionable</span><strong>{data.actionable}</strong><small>可轉內容／服務</small></article>
       </section>
 
-      <SignalReel
-        deck={signalDeck}
-        savedReviewCounts={{
-          relevant: reviewHistory.filter((row) => row.label === "relevant").length,
-          irrelevant: reviewHistory.filter((row) => row.label === "irrelevant").length
-        }}
-      />
+      <SignalReel deck={signalDeck} />
 
       <section className="trendGrid">
         <div className="panel trendPanel">
