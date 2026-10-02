@@ -2,8 +2,17 @@ name: Daily Signal Deck
 
 on:
   schedule:
-    # 08:17 Asia/Taipei. This is intentionally independent of the ~2h collector cadence.
-    - cron: "17 0 * * *"
+    # GitHub schedule delivery is best-effort, so wake several times in the morning.
+    # A date gate below guarantees that only one real daily build is performed.
+    - cron: "17,32,47 8 * * *"
+      timezone: "Asia/Taipei"
+    - cron: "2,17 9 * * *"
+      timezone: "Asia/Taipei"
+  workflow_run:
+    workflows:
+      - "Next Stop Threads Collector"
+    types:
+      - completed
   workflow_dispatch:
   push:
     branches:
@@ -20,7 +29,81 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.daily_gate.outputs.should_run }}
+      reason: ${{ steps.daily_gate.outputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide whether today's deck needs a build
+        id: daily_gate
+        shell: bash
+        env:
+          TRIGGER_EVENT: ${{ github.event_name }}
+          COLLECTOR_CONCLUSION: ${{ github.event.workflow_run.conclusion || '' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          event = os.environ.get("TRIGGER_EVENT", "")
+          collector_conclusion = os.environ.get("COLLECTOR_CONCLUSION", "")
+          taipei = ZoneInfo("Asia/Taipei")
+          now = datetime.now(timezone.utc).astimezone(taipei)
+
+          def emit(should_run: bool, reason: str) -> None:
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+                  f.write(f"should_run={'true' if should_run else 'false'}\n")
+                  f.write(f"reason={reason}\n")
+              print(f"[signal-deck gate] should_run={should_run} reason={reason}")
+
+          # Code/config changes should still validate and refresh immediately.
+          if event in {"push", "workflow_dispatch"}:
+              emit(True, f"{event}_forced")
+              raise SystemExit
+
+          if event == "workflow_run" and collector_conclusion != "success":
+              emit(False, f"collector_{collector_conclusion or 'unknown'}")
+              raise SystemExit
+
+          # Collector-completion fallback is only needed after the morning refresh window opens.
+          if now.hour < 8:
+              emit(False, "before_08_taipei")
+              raise SystemExit
+
+          deck_path = Path("collector/archive/latest/signal_deck.json")
+          if not deck_path.exists():
+              emit(True, "deck_missing")
+              raise SystemExit
+
+          try:
+              deck = json.loads(deck_path.read_text(encoding="utf-8"))
+              generated_at = str(deck.get("generated_at") or "")
+              if generated_at.endswith("Z"):
+                  generated_at = generated_at[:-1] + "+00:00"
+              generated = datetime.fromisoformat(generated_at)
+              if generated.tzinfo is None:
+                  generated = generated.replace(tzinfo=timezone.utc)
+              deck_date = generated.astimezone(taipei).date()
+          except Exception as exc:
+              print(f"[signal-deck gate] could not read generated_at: {exc}")
+              emit(True, "deck_timestamp_unreadable")
+              raise SystemExit
+
+          if deck_date == now.date():
+              emit(False, "today_already_built")
+          else:
+              emit(True, f"stale_{deck_date.isoformat()}")
+          PY
+
   build:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
