@@ -16,7 +16,9 @@ test("review row removes direct identifiers but keeps a safe Threads source link
     post_id: "123",
     username: "someone",
     permalink: "https://www.threads.com/@someone/post/ABC",
-    label: "relevant",
+    label: "irrelevant",
+    original_label: "relevant",
+    label_updated_at: "2026-10-02T01:15:00Z",
     category: "交通／散場",
     original_category: "其他演出內容",
     category_source: "human_override",
@@ -30,7 +32,9 @@ test("review row removes direct identifiers but keeps a safe Threads source link
 
   assert.match(row.anonymous_id, /^SIG-[A-F0-9]{8}$/);
   assert.equal(row.excerpt, "@user 想問入場");
-  assert.equal(row.label, "relevant");
+  assert.equal(row.label, "irrelevant");
+  assert.equal(row.original_label, "relevant");
+  assert.equal(row.label_updated_at, "2026-10-02T01:15:00Z");
   assert.equal(row.category, "交通／散場");
   assert.equal(row.original_category, "其他演出內容");
   assert.equal(row.category_source, "human_override");
