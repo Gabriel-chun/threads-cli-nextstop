@@ -3,7 +3,7 @@ import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 function fmtDate(value: string | null) {
   if (!value) return "尚未取得";
