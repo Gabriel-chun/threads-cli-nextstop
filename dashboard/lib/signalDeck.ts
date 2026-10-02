@@ -1,5 +1,3 @@
-import { buildRelevanceProfile, type RelevanceProfile } from "./signalDeckFeedback";
-import { listSignalReviewsFromNotion } from "./signalDeckNotion.server";
 
 export type TriageLabel = "relevant" | "irrelevant";
 
@@ -130,41 +128,15 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
 
   const deck = (await res.json()) as SignalDeck;
 
-  let profile: RelevanceProfile | null = null;
-  let feedback: Record<string, any> = {};
-  try {
-    const keys = [
-      ...new Set(
-        Object.values(deck.windows)
-          .flatMap((window) => window.cards.map((card) => card.post_key))
-          .filter(Boolean)
-      )
-    ];
-    const rows = await listSignalReviewsFromNotion();
-    profile = buildRelevanceProfile(rows);
-    const keySet = new Set(keys);
-    feedback = Object.fromEntries(rows.filter((row) => keySet.has(row.post_key)).map((row) => [row.post_key, row]));
-  } catch {}
-
   for (const window of Object.values(deck.windows)) {
     window.cards = window.cards
-      .map((card) => {
-        const categoryDelta = profile?.category_weights?.[card.category] || 0;
-        const featureDelta = (card.feature_tags || []).reduce(
-          (sum, tag) => sum + (profile?.feature_weights?.[tag] || 0),
-          0
-        );
-        const rankingDelta = Number((categoryDelta + featureDelta).toFixed(3));
-        const triage = feedback[card.post_key];
-
-        return {
-          ...card,
-          ranking_delta: rankingDelta,
-          score: Number(((card.base_score ?? card.score) + rankingDelta).toFixed(3)),
-          triage_label: triage?.label || null,
-          triage_reviewed_at: triage?.reviewed_at || null
-        };
-      })
+      .map((card) => ({
+        ...card,
+        ranking_delta: 0,
+        score: Number(card.base_score ?? card.score),
+        triage_label: card.triage_label || null,
+        triage_reviewed_at: card.triage_reviewed_at || null
+      }))
       .sort((a, b) => b.score - a.score || a.post_key.localeCompare(b.post_key));
 
     window.relevant_clusters = relevantClusters(window.cards);

@@ -158,6 +158,46 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   });
 
   useEffect(() => {
+    const controller = new AbortController();
+    const keys = [
+      ...new Set(
+        Object.values(deck.windows)
+          .flatMap((window) => window.cards.map((card) => card.post_key))
+          .filter(Boolean)
+      )
+    ].slice(0, 200);
+
+    if (!keys.length) return () => controller.abort();
+
+    const params = new URLSearchParams();
+    for (const key of keys) params.append("post_key", key);
+
+    void fetch("/api/signal-deck/feedback?" + params.toString(), {
+      signal: controller.signal,
+      cache: "no-store"
+    })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return response.json();
+      })
+      .then((payload) => {
+        if (!payload?.feedback) return;
+        setLabels((current) => ({
+          ...current,
+          ...Object.fromEntries(
+            Object.entries(payload.feedback).map(([key, value]: [string, any]) => [
+              key,
+              value?.label === "relevant" || value?.label === "irrelevant" ? value.label : null
+            ])
+          )
+        }));
+      })
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [deck]);
+
+  useEffect(() => {
     try {
       const raw = globalThis.localStorage.getItem(LOCAL_REVIEW_KEY);
       if (!raw) return;
