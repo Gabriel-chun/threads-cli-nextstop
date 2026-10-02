@@ -31,7 +31,7 @@ export default async function Page() {
     .map(compact);
 
   return (
-    <main>
+    <main className="signalWorkspace">
       <header className="workspaceHeader">
         <div>
           <p className="eyebrow">NEXT STOP LIVE · SIGNAL DESK</p>
