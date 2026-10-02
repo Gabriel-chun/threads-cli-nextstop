@@ -132,6 +132,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
+  const [saveNotice, setSaveNotice] = useState("");
   const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
@@ -188,6 +189,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     setSelectedKey(null);
     setDrag(null);
     setSaveError("");
+    setSaveNotice("");
   }
 
   function addTen() {
@@ -211,6 +213,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     if (savingKey) return;
     setSavingKey(card.post_key);
     setSaveError("");
+    setSaveNotice("正在保存…");
 
     try {
       const response = await fetch("/api/signal-deck/feedback", {
@@ -240,7 +243,10 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
       setLabels((current) => ({ ...current, [card.post_key]: label }));
       setSelectedKey(null);
+      setSaveNotice(label === "relevant" ? "已存为 Relevant" : "已存为 Irrelevant");
+      window.setTimeout(() => setSaveNotice(""), 2200);
     } catch (error) {
+      setSaveNotice("");
       setSaveError(error instanceof Error ? error.message : "分類沒有成功保存");
     } finally {
       setSavingKey(null);
@@ -345,6 +351,16 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <a href="/reviews">查看 Review Ledger ↗</a>
         </div>
       </div>
+
+      {(saveNotice || saveError) ? (
+        <div
+          className={saveError ? "reviewActionFeedback error" : "reviewActionFeedback success"}
+          role="status"
+          aria-live="polite"
+        >
+          {saveError || saveNotice}
+        </div>
+      ) : null}
 
       <div className={`signalRailWrap swipeWorkspace ${drag ? "isDragging" : ""}`}>
         {drag ? (
