@@ -6,7 +6,11 @@
     "build": "next build",
     "start": "next start",
     "test:events": "tsx --test lib/mcpEvents/*.test.ts",
-    "test:deck-feedback": "tsx --test lib/signalDeckFeedback.test.ts"
+    "test:deck-feedback": "tsx --test lib/signalDeckFeedback.test.ts",
+    "dev:vinext": "vite dev --port 3001",
+    "build:vinext": "vite build",
+    "start:vinext": "wrangler dev --config dist/server/wrangler.json",
+    "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
@@ -24,6 +28,11 @@
     "@types/node": "^20.19.0",
     "@types/react": "^19.2.0",
     "typescript": "^5.9.0",
-    "tsx": "^4.20.0"
+    "tsx": "^4.20.0",
+    "vinext": "latest",
+    "@vinext/cloudflare": "latest",
+    "@cloudflare/vite-plugin": "latest",
+    "vite": "latest",
+    "wrangler": "latest"
   }
 }
