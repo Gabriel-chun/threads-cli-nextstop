@@ -7,7 +7,7 @@ import {
   normalizeSubscriptionExpiry,
   type SubscriptionRecord
 } from "./core";
-import { BlobEventStore } from "./store";
+import { EventStore } from "./store";
 import { validateWebhookSecret, verifyCallback } from "./webhook";
 
 const listSchema={params:z.object({cursor:z.string().nullable().optional()}),result:z.any()};
@@ -39,7 +39,7 @@ export function registerObservationEventHandlers(server:McpServer) {
     async(params:any,ctx:any)=>{
       const owner=principal(ctx);
       const id=deriveSubscriptionId(owner,params.delivery.url,params.name,params.arguments||{});
-      const store=new BlobEventStore();
+      const store=new EventStore();
       try { validateWebhookSecret(params.delivery.secret); }
       catch(e) {
         throw new ProtocolError(-32015 as any,"CallbackEndpointError",{reason:"invalid_secret",message:e instanceof Error?e.message:"invalid_secret"});
@@ -74,7 +74,7 @@ export function registerObservationEventHandlers(server:McpServer) {
     {params:unsubscribeParams,result:z.any()} as any,
     async(params:any,ctx:any)=>{
       const id=deriveSubscriptionId(principal(ctx),params.delivery.url,params.name,params.arguments||{});
-      await new BlobEventStore().deleteSubscription(id);
+      await new EventStore().deleteSubscription(id);
       return {};
     }
   );

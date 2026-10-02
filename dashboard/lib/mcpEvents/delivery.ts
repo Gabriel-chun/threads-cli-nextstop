@@ -1,13 +1,13 @@
 import type { EventState, ObservationEvent } from "./core";
 import { isSubscriptionActive } from "./core";
-import { BlobEventStore } from "./store";
+import { EventStore } from "./store";
 import { deliverEvent } from "./webhook";
 
 const BACKOFF=[0,1000,4000];
 
 export async function dispatchObservationEvent(
   event: ObservationEvent,
-  store: BlobEventStore = new BlobEventStore()
+  store: EventStore = new EventStore()
 ) {
   if (!(await store.acquireEventLock(event.eventId))) {
     const state = await store.getEventState(event.eventId);

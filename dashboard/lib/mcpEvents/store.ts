@@ -1,53 +1,44 @@
-import { del, get, list, put } from "@vercel/blob";
+import { env } from "cloudflare:workers";
 import type { EventState, SubscriptionRecord } from "./core";
 import { stableHash } from "./core";
 
-const ROOT = "mcp-events/v1";
+const ROOT = "mcp-events/v2";
+const kv = () => (env as any).MCP_EVENTS_KV as any;
 
-async function readJson<T>(pathname: string): Promise<T | null> {
-  const result = await get(pathname, { access: "private", useCache: false });
-  if (!result || result.statusCode !== 200 || !result.stream) return null;
-  return JSON.parse(await new Response(result.stream).text()) as T;
+async function readJson<T>(key: string): Promise<T | null> {
+  const value = await kv().get(key, "json");
+  return (value as T | null) ?? null;
 }
 
-async function putJson(
-  pathname: string,
-  value: unknown,
-  allowOverwrite = true
-): Promise<void> {
-  await put(pathname, JSON.stringify(value), {
-    access: "private",
-    allowOverwrite,
-    addRandomSuffix: false,
-    contentType: "application/json"
-  });
+async function putJson(key: string, value: unknown): Promise<void> {
+  await kv().put(key, JSON.stringify(value));
 }
 
-async function listPaths(prefix: string): Promise<string[]> {
+async function listKeys(prefix: string): Promise<string[]> {
   const out: string[] = [];
   let cursor: string | undefined;
   do {
-    const page = await list({ prefix, cursor, limit: 1000 });
-    out.push(...page.blobs.map((blob) => blob.pathname));
-    cursor = page.hasMore ? page.cursor : undefined;
+    const page = await kv().list({ prefix, cursor, limit: 1000 });
+    out.push(...page.keys.map((item: any) => item.name));
+    cursor = page.list_complete ? undefined : page.cursor;
   } while (cursor);
   return out;
 }
 
 function subPath(id: string) {
-  return ROOT + "/subscriptions/" + id + ".json";
+  return ROOT + "/subscriptions/" + id;
 }
 function eventPath(id: string) {
-  return ROOT + "/events/" + stableHash(id) + ".json";
+  return ROOT + "/events/" + stableHash(id);
 }
 function lockPath(id: string) {
-  return ROOT + "/locks/" + stableHash(id) + ".json";
+  return ROOT + "/locks/" + stableHash(id);
 }
 function verificationPath(principal: string, url: string) {
-  return ROOT + "/verifications/" + stableHash(principal + "\n" + url) + ".json";
+  return ROOT + "/verifications/" + stableHash(principal + "\n" + url);
 }
 
-export class BlobEventStore {
+export class EventStore {
   async getSubscription(id: string) {
     return readJson<SubscriptionRecord>(subPath(id));
   }
@@ -55,15 +46,15 @@ export class BlobEventStore {
     await putJson(subPath(record.id), record);
   }
   async deleteSubscription(id: string) {
-    try { await del(subPath(id)); } catch {}
+    await kv().delete(subPath(id));
   }
   async listSubscriptions(): Promise<SubscriptionRecord[]> {
     const records = await Promise.all(
-      (await listPaths(ROOT + "/subscriptions/")).map((p) =>
-        readJson<SubscriptionRecord>(p)
+      (await listKeys(ROOT + "/subscriptions/")).map((key) =>
+        readJson<SubscriptionRecord>(key)
       )
     );
-    return records.filter((r): r is SubscriptionRecord => Boolean(r));
+    return records.filter((record): record is SubscriptionRecord => Boolean(record));
   }
 
   async getVerification(principal: string, url: string): Promise<boolean> {
@@ -86,22 +77,15 @@ export class BlobEventStore {
   }
 
   async acquireEventLock(eventId: string): Promise<boolean> {
-    const path = lockPath(eventId);
-    const existing = await readJson<{ createdAt: string }>(path);
+    const key = lockPath(eventId);
+    const existing = await readJson<{ createdAt: string }>(key);
     if (existing && Date.now() - Date.parse(existing.createdAt) < 5 * 60 * 1000) {
       return false;
     }
-    if (existing) {
-      try { await del(path); } catch {}
-    }
-    try {
-      await putJson(path, { createdAt: new Date().toISOString() }, false);
-      return true;
-    } catch {
-      return false;
-    }
+    await putJson(key, { createdAt: new Date().toISOString() });
+    return true;
   }
   async releaseEventLock(eventId: string) {
-    try { await del(lockPath(eventId)); } catch {}
+    await kv().delete(lockPath(eventId));
   }
 }
