@@ -309,17 +309,55 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   }
 
   async function syncPendingToNotion() {
-    if(syncingNotion||!pendingReviews.length)return;
-    setSyncingNotion(true);setSaveError("");setSaveNotice(`正在同步 ${pendingReviews.length} 筆到 Notion…`);
-    try{
-      const response=await fetch("/api/signal-deck/sync-notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({rows:pendingReviews.map((e)=>e.row)})});
-      const payload=await response.json().catch(()=>null);
-      if(!response.ok)throw new Error(payload?.error||`Notion 同步失敗（HTTP ${response.status}）`);
-      const synced=new Set<string>(payload?.synced_keys||[]);
-      saveLocalReviews(Object.fromEntries(Object.entries(localReviews).map(([k,e])=>[k,synced.has(k)?{...e,synced:true,updated_at:new Date().toISOString()}:e])));
-      setSaveNotice(`已同步 ${synced.size} 筆到 Notion`);globalThis.setTimeout(()=>setSaveNotice(""),2200);
-    }catch(error){setSaveNotice("");setSaveError(error instanceof Error?error.message:"Notion 同步失敗");}
-    finally{setSyncingNotion(false);}
+    if (syncingNotion || !pendingReviews.length) return;
+
+    const batchSize = 10;
+    const queue = pendingReviews.map((entry) => entry.row);
+    let workingReviews = { ...localReviews };
+    let totalSynced = 0;
+
+    setSyncingNotion(true);
+    setSaveError("");
+    setSaveNotice(`正在同步 0 / ${queue.length} 筆到 Notion…`);
+
+    try {
+      for (let offset = 0; offset < queue.length; offset += batchSize) {
+        const batch = queue.slice(offset, offset + batchSize);
+        const response = await fetch("/api/signal-deck/sync-notion", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rows: batch })
+        });
+        const payload = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(payload?.error || `Notion 同步失敗（HTTP ${response.status}）`);
+        }
+
+        const synced = new Set<string>(payload?.synced_keys || []);
+        const now = new Date().toISOString();
+        workingReviews = Object.fromEntries(
+          Object.entries(workingReviews).map(([key, entry]) => [
+            key,
+            synced.has(key) ? { ...entry, synced: true, updated_at: now } : entry
+          ])
+        );
+        saveLocalReviews(workingReviews);
+        totalSynced += synced.size;
+
+        setSaveNotice(
+          `正在同步 ${Math.min(offset + batch.length, queue.length)} / ${queue.length} 筆到 Notion…`
+        );
+      }
+
+      setSaveNotice(`已同步 ${totalSynced} 筆到 Notion`);
+      globalThis.setTimeout(() => setSaveNotice(""), 2200);
+    } catch (error) {
+      setSaveNotice("");
+      setSaveError(error instanceof Error ? error.message : "Notion 同步失敗");
+    } finally {
+      setSyncingNotion(false);
+    }
   }
 
   function pointerDown(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
