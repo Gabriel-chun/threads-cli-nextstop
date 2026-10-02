@@ -9,6 +9,9 @@ export type DeidentifiedReviewRow = {
   anonymous_id: string;
   label: TriageLabel;
   category: string;
+  original_category: string | null;
+  category_source: "system" | "human_override";
+  category_updated_at: string | null;
   excerpt: string;
   evidence_url: string;
   posted_at: string | null;
@@ -49,6 +52,9 @@ export function deidentifyReviewRow(row: ReviewRecordLike): DeidentifiedReviewRo
     anonymous_id,
     label: row.label === "relevant" ? "relevant" : "irrelevant",
     category: String(row.category || "Uncategorized"),
+    original_category: row.original_category ? String(row.original_category) : null,
+    category_source: row.category_source === "human_override" ? "human_override" : "system",
+    category_updated_at: row.category_updated_at ? String(row.category_updated_at) : null,
     excerpt: deidentifyReviewText(String(row.text_excerpt || "")).slice(0, 420),
     evidence_url: "/api/reviews/source/" + anonymous_id,
     posted_at: row.posted_at ? String(row.posted_at) : null,
