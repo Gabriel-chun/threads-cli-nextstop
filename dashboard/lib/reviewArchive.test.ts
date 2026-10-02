@@ -74,3 +74,33 @@ test("category edits are archived on the edit date even when review is older", (
   assert.equal(archive.rows[0].category_source, "human_override");
 });
 
+
+test("label edits are archived on the edit date even when review is older", () => {
+  const archive = buildDailyReviewArchive(
+    [
+      {
+        id: "fb_label_old",
+        post_key: "post_label_old",
+        snapshot_id: "deck_label_old",
+        window: "3d",
+        label: "irrelevant",
+        original_label: "relevant",
+        label_updated_at: "2026-10-02T01:20:00Z",
+        category: "其他演出內容",
+        text_excerpt: "舊 review 今日重新判斷",
+        feature_tags: ["long_fandom_story"],
+        base_score: 40,
+        deck_generated_at: "2026-10-01T00:00:00Z",
+        reviewed_at: "2026-10-01T03:00:00Z"
+      }
+    ],
+    "2026-10-02",
+    new Date("2026-10-02T16:00:00Z")
+  );
+
+  assert.equal(archive.count, 1);
+  assert.equal(archive.irrelevant_count, 1);
+  assert.equal(archive.rows[0].label, "irrelevant");
+  assert.equal(archive.rows[0].original_label, "relevant");
+  assert.equal(archive.rows[0].label_updated_at, "2026-10-02T01:20:00Z");
+});
