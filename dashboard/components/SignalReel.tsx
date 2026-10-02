@@ -10,6 +10,11 @@ import type {
   SignalPostCard,
   TriageLabel
 } from "../lib/signalDeck";
+import {
+  buildReviewBatch,
+  nextUnreviewedKeys,
+  remainingUnreviewedCount
+} from "../lib/reviewQuota";
 
 type WindowKey = "1d" | "3d" | "5d";
 type ReviewView = "queue" | "relevant" | "irrelevant";
@@ -136,14 +141,19 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
-  const [reviewLimits, setReviewLimits] = useState<Record<WindowKey, number>>({
+  const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
     "5d": deck.windows["5d"].default_review_limit ?? Math.min(40, deck.windows["5d"].card_count)
+  };
+  const [extraReviewKeys, setExtraReviewKeys] = useState<Record<WindowKey, string[]>>({
+    "1d": [],
+    "3d": [],
+    "5d": []
   });
 
   const window = deck.windows[windowKey];
-  const reviewLimit = Math.min(reviewLimits[windowKey], window.card_count);
+  const baseReviewLimit = Math.min(baseReviewLimits[windowKey], window.card_count);
 
   const windowCards = useMemo(
     () =>
@@ -171,9 +181,15 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const irrelevantPct = allCounts.total ? (allCounts.irrelevant / allCounts.total) * 100 : 0;
 
   const cards = useMemo(
-    () => windowCards.slice(0, reviewLimit),
-    [windowCards, reviewLimit]
+    () => buildReviewBatch(windowCards, baseReviewLimit, extraReviewKeys[windowKey]),
+    [windowCards, baseReviewLimit, extraReviewKeys, windowKey]
   );
+
+  const remainingUnreviewed = useMemo(
+    () => remainingUnreviewedCount(windowCards, baseReviewLimit, extraReviewKeys[windowKey]),
+    [windowCards, baseReviewLimit, extraReviewKeys, windowKey]
+  );
+  const reviewLimit = cards.length;
 
   const counts = useMemo(
     () => ({
@@ -199,7 +215,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
   const relevantClusters = useMemo(() => {
     const grouped = new Map<string, { category: string; count: number; features: Map<string, number> }>();
-    for (const card of cards.filter((item) => item.triage_label === "relevant")) {
+    for (const card of windowCards.filter((item) => item.triage_label === "relevant")) {
       const current = grouped.get(card.category) || {
         category: card.category,
         count: 0,
@@ -221,7 +237,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           .map(([tag]) => tag)
       }))
       .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category));
-  }, [cards]);
+  }, [windowCards]);
 
   const dragDx = drag ? drag.currentX - drag.startX : 0;
 
@@ -235,9 +251,17 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
   function addTen() {
     const step = window.extend_step ?? 10;
-    setReviewLimits((current) => ({
+    const nextKeys = nextUnreviewedKeys(
+      windowCards,
+      baseReviewLimit,
+      extraReviewKeys[windowKey],
+      step
+    );
+    if (!nextKeys.length) return;
+
+    setExtraReviewKeys((current) => ({
       ...current,
-      [windowKey]: Math.min(window.card_count, current[windowKey] + step)
+      [windowKey]: [...current[windowKey], ...nextKeys]
     }));
     setReviewView("queue");
     setSelectedKey(null);
@@ -429,12 +453,12 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             {reviewView === "queue" ? (
               <>
                 <strong>今天這一批已經整理完了。</strong>
-                {reviewLimit < window.card_count ? (
+                {remainingUnreviewed > 0 ? (
                   <button type="button" className="addTenButton" onClick={addTen}>
-                    有余力，再加 {Math.min(window.extend_step ?? 10, window.card_count - reviewLimit)} 篇
+                    有余力，再加 {Math.min(window.extend_step ?? 10, remainingUnreviewed)} 篇
                   </button>
                 ) : (
-                  <span>目前沒有更多候選。</span>
+                  <span>目前這個時間窗已全部整理完成。</span>
                 )}
               </>
             ) : (

@@ -24,6 +24,8 @@ jobs:
         run: npm run test:events
       - name: Test Signal Deck feedback profile
         run: npm run test:deck-feedback
+      - name: Test Signal Deck review quota
+        run: npx tsx --test lib/reviewQuota.test.ts
       - name: Test Taipei daily review archive
         run: npx tsx --test lib/reviewArchive.test.ts
       - name: Test Review Ledger de-identification
