@@ -1,5 +1,5 @@
 import { buildRelevanceProfile } from "../../../../../lib/signalDeckFeedback";
-import { listSignalReviewsFromNotion } from "../../../../../lib/signalDeckNotion";
+import { listSignalReviewsFromNotion } from "../../../../../lib/signalDeckNotion.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
