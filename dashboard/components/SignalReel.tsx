@@ -127,7 +127,13 @@ function PostCard({
   );
 }
 
-export function SignalReel({ deck }: { deck: SignalDeck }) {
+export function SignalReel({
+  deck,
+  savedReviewCounts
+}: {
+  deck: SignalDeck;
+  savedReviewCounts: { relevant: number; irrelevant: number };
+}) {
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
   const [reviewView, setReviewView] = useState<ReviewView>("queue");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -474,7 +480,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       </div>
 
       <div className="reviewLedger">
-        <span>分類紀錄</span>
+        <span>本批分類</span>
         {reviewView !== "queue" ? (
           <button type="button" onClick={() => { setReviewView("queue"); setSelectedKey(null); }}>
             ← 回待分類 {counts.queue}
@@ -485,15 +491,18 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           className={reviewView === "relevant" ? "active relevant" : ""}
           onClick={() => { setReviewView("relevant"); setSelectedKey(null); }}
         >
-          Relevant {counts.relevant}
+          本批 Relevant {counts.relevant}
         </button>
         <button
           type="button"
           className={reviewView === "irrelevant" ? "active irrelevant" : ""}
           onClick={() => { setReviewView("irrelevant"); setSelectedKey(null); }}
         >
-          Irrelevant {counts.irrelevant}
+          本批 Irrelevant {counts.irrelevant}
         </button>
+        <a className="savedReviewSummary" href="/reviews">
+          已保存總帳 · Relevant {savedReviewCounts.relevant} · Irrelevant {savedReviewCounts.irrelevant} ↗
+        </a>
       </div>
 
       {selected ? (
