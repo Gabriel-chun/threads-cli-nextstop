@@ -39,8 +39,18 @@ export function buildDailyReviewArchive(
   }
 
   const selected = rows
-    .filter((row) => taipeiCalendarDate(row.reviewed_at) === archiveDate)
-    .sort((a, b) => Date.parse(a.reviewed_at) - Date.parse(b.reviewed_at));
+    .filter((row) => {
+      const reviewedToday = taipeiCalendarDate(row.reviewed_at) === archiveDate;
+      const categoryEditedToday = row.category_updated_at
+        ? taipeiCalendarDate(row.category_updated_at) === archiveDate
+        : false;
+      return reviewedToday || categoryEditedToday;
+    })
+    .sort((a, b) => {
+      const aTouched = Date.parse(a.category_updated_at || a.reviewed_at);
+      const bTouched = Date.parse(b.category_updated_at || b.reviewed_at);
+      return aTouched - bTouched;
+    });
 
   return {
     schema_version: "signal-review-archive-v0.1",
