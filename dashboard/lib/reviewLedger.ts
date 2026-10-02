@@ -8,6 +8,8 @@ import {
 export type DeidentifiedReviewRow = {
   anonymous_id: string;
   label: TriageLabel;
+  original_label: TriageLabel | null;
+  label_updated_at: string | null;
   category: string;
   original_category: string | null;
   category_source: "system" | "human_override";
@@ -51,6 +53,11 @@ export function deidentifyReviewRow(row: ReviewRecordLike): DeidentifiedReviewRo
   return {
     anonymous_id,
     label: row.label === "relevant" ? "relevant" : "irrelevant",
+    original_label:
+      row.original_label === "relevant" || row.original_label === "irrelevant"
+        ? row.original_label
+        : null,
+    label_updated_at: row.label_updated_at ? String(row.label_updated_at) : null,
     category: String(row.category || "Uncategorized"),
     original_category: row.original_category ? String(row.original_category) : null,
     category_source: row.category_source === "human_override" ? "human_override" : "system",
