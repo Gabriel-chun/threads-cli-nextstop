@@ -43,13 +43,19 @@ export default async function ReviewsPage() {
               這裡是即時已分類資料；下載檔則是最近一次已完成日結的 GitHub archive。
             </p>
           </div>
-          <a className="downloadButton reviewDownloadButton" href="/api/download/reviews/latest">
-            <span>🗂️</span>
-            <div>
-              <strong>下載 Reviewed Cards JSON</strong>
-              <small>去識別化 · 最近一次完成日結</small>
+          <div className="reviewLedgerActions">
+            <div className="reviewArchiveStatus" aria-label="Review archive sync status">
+              <strong>即時保存</strong>
+              <small>00:00 Asia/Taipei 自動歸檔 GitHub</small>
             </div>
-          </a>
+            <a className="downloadButton reviewDownloadButton" href="/api/download/reviews/latest">
+              <span>🗂️</span>
+              <div>
+                <strong>下載 Reviewed Cards JSON</strong>
+                <small>去識別化 · 最近一次完成日結</small>
+              </div>
+            </a>
+          </div>
         </div>
 
         <ReviewLedger rows={rows} />

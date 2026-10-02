@@ -43,3 +43,34 @@ test("daily archive contains only the requested Taipei review day", () => {
   assert.equal(second.irrelevant_count, 1);
   assert.equal(second.rows[0].post_key, "post_y");
 });
+
+test("category edits are archived on the edit date even when review is older", () => {
+  const archive = buildDailyReviewArchive(
+    [
+      {
+        id: "fb_old",
+        post_key: "post_old",
+        snapshot_id: "deck_old",
+        window: "3d",
+        label: "relevant",
+        category: "交通／散場",
+        original_category: "其他演出內容",
+        category_source: "human_override",
+        category_updated_at: "2026-10-02T00:30:00Z",
+        text_excerpt: "散場交通",
+        feature_tags: ["transport_need"],
+        base_score: 50,
+        deck_generated_at: "2026-10-01T00:00:00Z",
+        reviewed_at: "2026-10-01T03:00:00Z"
+      }
+    ],
+    "2026-10-02",
+    new Date("2026-10-02T16:00:00Z")
+  );
+
+  assert.equal(archive.count, 1);
+  assert.equal(archive.rows[0].category, "交通／散場");
+  assert.equal(archive.rows[0].original_category, "其他演出內容");
+  assert.equal(archive.rows[0].category_source, "human_override");
+});
+

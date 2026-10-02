@@ -12,6 +12,9 @@ export type SignalDeckFeedback = {
   window: "1d" | "3d" | "5d";
   label: TriageLabel;
   category: string;
+  original_category?: string | null;
+  category_source?: "system" | "human_override";
+  category_updated_at?: string | null;
   username?: string | null;
   posted_at?: string | null;
   query?: string | null;
@@ -67,13 +70,41 @@ function feedbackPath(postKey: string) {
 export async function putSignalDeckFeedback(
   input: Omit<SignalDeckFeedback, "id" | "reviewed_at">
 ): Promise<SignalDeckFeedback> {
+  const existing = await readJson<SignalDeckFeedback>(feedbackPath(input.post_key));
   const record: SignalDeckFeedback = {
+    ...existing,
     ...input,
     id: "fb_" + safeKey(input.post_key),
+    original_category:
+      existing?.original_category || existing?.category || input.category,
+    category_source: existing?.category_source || "system",
+    category_updated_at: existing?.category_updated_at || null,
     reviewed_at: new Date().toISOString()
   };
   await putJson(feedbackPath(input.post_key), record);
   return record;
+}
+
+export async function updateSignalDeckCategory(
+  postKey: string,
+  category: string
+): Promise<SignalDeckFeedback> {
+  const pathname = feedbackPath(postKey);
+  const existing = await readJson<SignalDeckFeedback>(pathname);
+  if (!existing) throw new Error("Review feedback not found.");
+
+  const updated: SignalDeckFeedback = {
+    ...existing,
+    category,
+    original_category: existing.original_category || existing.category,
+    category_source:
+      category === (existing.original_category || existing.category)
+        ? "system"
+        : "human_override",
+    category_updated_at: new Date().toISOString()
+  };
+  await putJson(pathname, updated);
+  return updated;
 }
 
 export async function listSignalDeckFeedback(): Promise<SignalDeckFeedback[]> {
