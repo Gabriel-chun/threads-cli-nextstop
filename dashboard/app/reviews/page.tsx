@@ -9,7 +9,7 @@ export default async function ReviewsPage() {
   const irrelevant = rows.filter((row) => row.label === "irrelevant").length;
 
   return (
-    <main>
+    <main className="reviewsWorkspace">
       <header className="workspaceHeader">
         <div>
           <p className="eyebrow">NEXT STOP LIVE · REVIEW LEDGER</p>

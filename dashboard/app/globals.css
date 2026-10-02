@@ -1825,3 +1825,65 @@ footer {
   white-space: nowrap;
   border: 0;
 }
+
+
+.reviewsWorkspace {
+  width: min(1480px, calc(100% - 48px));
+}
+
+.reviewsWorkspace .lead {
+  max-width: 860px;
+}
+
+.reviewsWorkspace .reviewLedgerPanel {
+  padding: 24px;
+}
+
+.reviewsWorkspace .reviewDataTable {
+  min-width: 1160px;
+}
+
+.reviewsWorkspace .reviewDataTable th,
+.reviewsWorkspace .reviewDataTable td {
+  padding: 12px 14px;
+}
+
+.reviewsWorkspace .reviewDataTable th:nth-child(1) { width: 105px; }
+.reviewsWorkspace .reviewDataTable th:nth-child(2) { width: 120px; }
+.reviewsWorkspace .reviewDataTable th:nth-child(3) { width: 180px; }
+.reviewsWorkspace .reviewDataTable th:nth-child(5) { width: 120px; }
+.reviewsWorkspace .reviewDataTable th:nth-child(6) { width: 100px; }
+
+.reviewsWorkspace .reviewExcerpt {
+  font-size: 12px;
+  line-height: 1.62;
+}
+
+.reviewsWorkspace .reviewCategoryEditor select {
+  min-height: 34px;
+  font-size: 11px;
+}
+
+.reviewsWorkspace .reviewTableScroll {
+  max-height: 72vh;
+}
+
+@media (max-width: 850px) {
+  .reviewsWorkspace {
+    width: min(100% - 24px, 1480px);
+  }
+
+  .reviewsWorkspace .reviewLedgerPanel {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .reviewsWorkspace {
+    width: calc(100% - 20px);
+  }
+
+  .reviewsWorkspace .reviewLedgerPanel {
+    padding: 16px;
+  }
+}
