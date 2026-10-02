@@ -8,7 +8,7 @@
     "test:events": "tsx --test lib/mcpEvents/*.test.ts",
     "test:deck-feedback": "tsx --test lib/signalDeckFeedback.test.ts",
     "dev:vinext": "vite dev --port 3001",
-    "build:vinext": "vite build",
+    "build:vinext": "vite build && node scripts/check-client-secret-boundary.mjs",
     "start:vinext": "wrangler dev --config dist/server/wrangler.json",
     "deploy:vinext": "node scripts/deploy-cloudflare.mjs"
   },
@@ -22,7 +22,6 @@
     "fflate": "^0.8.2",
     "@vercel/blob": "^2.6.1",
     "standardwebhooks": "^1.0.0",
-    "@notionhq/client": "^5.26.0",
     "react-server-dom-webpack": "latest"
   },
   "devDependencies": {
