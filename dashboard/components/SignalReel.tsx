@@ -159,7 +159,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(LOCAL_REVIEW_KEY);
+      const raw = globalThis.localStorage.getItem(LOCAL_REVIEW_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw) as Record<string, LocalReviewEntry>;
       setLocalReviews(parsed);
@@ -170,7 +170,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const pendingReviews = useMemo(() => Object.values(localReviews).filter((e) => !e.synced), [localReviews]);
   function saveLocalReviews(next: Record<string, LocalReviewEntry>) {
     setLocalReviews(next);
-    window.localStorage.setItem(LOCAL_REVIEW_KEY, JSON.stringify(next));
+    globalThis.localStorage.setItem(LOCAL_REVIEW_KEY, JSON.stringify(next));
   }
 
   const window = deck.windows[windowKey];
