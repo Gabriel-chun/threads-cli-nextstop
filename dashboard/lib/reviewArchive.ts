@@ -44,11 +44,22 @@ export function buildDailyReviewArchive(
       const categoryEditedToday = row.category_updated_at
         ? taipeiCalendarDate(row.category_updated_at) === archiveDate
         : false;
-      return reviewedToday || categoryEditedToday;
+      const labelEditedToday = row.label_updated_at
+        ? taipeiCalendarDate(row.label_updated_at) === archiveDate
+        : false;
+      return reviewedToday || categoryEditedToday || labelEditedToday;
     })
     .sort((a, b) => {
-      const aTouched = Date.parse(a.category_updated_at || a.reviewed_at);
-      const bTouched = Date.parse(b.category_updated_at || b.reviewed_at);
+      const aTouched = Math.max(
+        Date.parse(a.reviewed_at),
+        Date.parse(a.category_updated_at || "1970-01-01T00:00:00Z"),
+        Date.parse(a.label_updated_at || "1970-01-01T00:00:00Z")
+      );
+      const bTouched = Math.max(
+        Date.parse(b.reviewed_at),
+        Date.parse(b.category_updated_at || "1970-01-01T00:00:00Z"),
+        Date.parse(b.label_updated_at || "1970-01-01T00:00:00Z")
+      );
       return aTouched - bTouched;
     });
 
