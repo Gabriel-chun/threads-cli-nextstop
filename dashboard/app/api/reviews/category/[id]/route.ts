@@ -1,4 +1,4 @@
-import { listSignalReviewsFromNotion, updateSignalReviewCategoryInNotion } from "../../../../../lib/signalDeckNotion";
+import { listSignalReviewsFromNotion, updateSignalReviewCategoryInNotion } from "../../../../../lib/signalDeckNotion.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -61,8 +61,9 @@ export async function PATCH(
       archive_status: "pending_daily_archive"
     });
   } catch (error) {
+    console.error("[reviews/category] server-side Notion update failed", error);
     return Response.json(
-      { error: error instanceof Error ? error.message : "Category update unavailable." },
+      { error: "分類更新暫時不可用，請稍後再試。" },
       { status: 503 }
     );
   }

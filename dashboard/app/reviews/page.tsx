@@ -15,7 +15,7 @@ export default async function ReviewsPage() {
           <p className="eyebrow">NEXT STOP LIVE · REVIEW LEDGER</p>
           <h1>Reviewed Signals</h1>
           <p className="lead">
-            已完成 Relevant / Irrelevant 判斷的資料檢視。頁面使用即時 Blob review state，顯示內容經去識別化；原始 Threads 連結只保留作 evidence provenance。
+            已完成 Relevant / Irrelevant 判斷的資料檢視。頁面使用 Notion review database 作即時已分類資料來源，顯示內容經去識別化；原始 Threads 連結只保留作 evidence provenance。
           </p>
         </div>
         <a className="backButton" href="/">← Signal Desk</a>
@@ -24,7 +24,7 @@ export default async function ReviewsPage() {
       <div className="workspaceRule" />
 
       <section className="metrics reviewMetrics">
-        <article><span>Reviewed</span><strong>{rows.length}</strong><small>live review state</small></article>
+        <article><span>Reviewed</span><strong>{rows.length}</strong><small>Notion review state</small></article>
         <article><span>Relevant</span><strong>{relevant}</strong><small>human selected</small></article>
         <article><span>Irrelevant</span><strong>{irrelevant}</strong><small>human excluded</small></article>
         <article className="accent">

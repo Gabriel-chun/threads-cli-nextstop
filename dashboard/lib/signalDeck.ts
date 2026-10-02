@@ -1,5 +1,5 @@
 import { buildRelevanceProfile, type RelevanceProfile } from "./signalDeckFeedback";
-import { listSignalReviewsFromNotion } from "./signalDeckNotion";
+import { listSignalReviewsFromNotion } from "./signalDeckNotion.server";
 
 export type TriageLabel = "relevant" | "irrelevant";
 

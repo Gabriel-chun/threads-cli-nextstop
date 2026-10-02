@@ -1,5 +1,5 @@
 import type { SignalDeckFeedback, TriageLabel } from "./signalDeckFeedback";
-import { listSignalReviewsFromNotion } from "./signalDeckNotion";
+import { listSignalReviewsFromNotion } from "./signalDeckNotion.server";
 
 export type DeidentifiedReviewRow = {
   anonymous_id: string;
