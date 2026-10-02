@@ -1,4 +1,4 @@
-import { listSignalDeckFeedback } from "../../../../../lib/signalDeckFeedback";
+import { listSignalReviewsFromNotion } from "../../../../../lib/signalDeckNotion";
 import { reviewAnonymousId } from "../../../../../lib/reviewLedger";
 
 export const runtime = "nodejs";
@@ -23,7 +23,7 @@ export async function GET(
     return new Response("Invalid signal id.", { status: 400 });
   }
 
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   const row = rows.find((item) => reviewAnonymousId(item) === id);
   const target = safeThreadsUrl(row?.permalink);
 

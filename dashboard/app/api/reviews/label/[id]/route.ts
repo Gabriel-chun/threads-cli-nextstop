@@ -1,9 +1,4 @@
-import { z } from "zod";
-import { reviewAnonymousId } from "../../../../../lib/reviewLedger";
-import {
-  listSignalDeckFeedback,
-  updateSignalDeckLabel
-} from "../../../../../lib/signalDeckFeedback";
+import { listSignalReviewsFromNotion, updateSignalReviewLabelInNotion } from "../../../../../lib/signalDeckNotion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,14 +40,14 @@ export async function PATCH(
     return Response.json({ error: "Invalid label payload." }, { status: 400 });
   }
 
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   const row = rows.find((item) => reviewAnonymousId(item) === id);
   if (!row) {
     return Response.json({ error: "Review signal not found." }, { status: 404 });
   }
 
   try {
-    const updated = await updateSignalDeckLabel(row.post_key, input.label);
+    const updated = await updateSignalReviewLabelInNotion(row.post_key, input.label);
     return Response.json({
       ok: true,
       label: updated.label,

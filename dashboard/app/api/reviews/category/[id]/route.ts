@@ -1,10 +1,4 @@
-import { z } from "zod";
-import { isReviewCategory } from "../../../../../lib/reviewCategories";
-import { reviewAnonymousId } from "../../../../../lib/reviewLedger";
-import {
-  listSignalDeckFeedback,
-  updateSignalDeckCategory
-} from "../../../../../lib/signalDeckFeedback";
+import { listSignalReviewsFromNotion, updateSignalReviewCategoryInNotion } from "../../../../../lib/signalDeckNotion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,14 +44,14 @@ export async function PATCH(
     return Response.json({ error: "Unsupported review category." }, { status: 400 });
   }
 
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   const row = rows.find((item) => reviewAnonymousId(item) === id);
   if (!row) {
     return Response.json({ error: "Review signal not found." }, { status: 404 });
   }
 
   try {
-    const updated = await updateSignalDeckCategory(row.post_key, input.category);
+    const updated = await updateSignalReviewCategoryInNotion(row.post_key, input.category);
     return Response.json({
       ok: true,
       category: updated.category,

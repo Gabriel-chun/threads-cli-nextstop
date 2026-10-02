@@ -1,4 +1,4 @@
-import { listSignalDeckFeedback } from "../../../../lib/signalDeckFeedback";
+import { listSignalReviewsFromNotion } from "../../../../lib/signalDeckNotion";
 import { buildDailyReviewArchive } from "../../../../lib/reviewArchive";
 
 export const runtime = "nodejs";
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   const archive = buildDailyReviewArchive(rows, archiveDate);
 
   return Response.json(archive, {

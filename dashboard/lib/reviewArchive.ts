@@ -5,7 +5,7 @@ export type DailyReviewArchive = {
   archive_date: string;
   timezone: "Asia/Taipei";
   generated_at: string;
-  source: "vercel_blob:signal-deck/v0.3/feedback";
+  source: "notion:signal-review";
   count: number;
   relevant_count: number;
   irrelevant_count: number;
@@ -68,7 +68,7 @@ export function buildDailyReviewArchive(
     archive_date: archiveDate,
     timezone: "Asia/Taipei",
     generated_at: generatedAt.toISOString(),
-    source: "vercel_blob:signal-deck/v0.3/feedback",
+    source: "notion:signal-review",
     count: selected.length,
     relevant_count: selected.filter((row) => row.label === "relevant").length,
     irrelevant_count: selected.filter((row) => row.label === "irrelevant").length,

@@ -88,20 +88,6 @@ jobs:
           )
           PY
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install Notion client
-        run: npm install --no-save --no-package-lock @notionhq/client@5.26.0
-
-      - name: Sync archive to Notion
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_SIGNAL_REVIEW_DATA_SOURCE_ID: "1c78f7c4-8325-4838-aa5b-64c6c1b88a22"
-        run: node collector/sync_signal_reviews_notion.mjs "collector/archive/reviews/${ARCHIVE_DATE}.json"
-
       - name: Commit daily review archive
         shell: bash
         run: |

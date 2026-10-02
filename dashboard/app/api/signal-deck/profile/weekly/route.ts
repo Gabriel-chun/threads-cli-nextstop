@@ -1,8 +1,5 @@
-import {
-  buildRelevanceProfile,
-  listSignalDeckFeedback,
-  saveRelevanceProfile
-} from "../../../../../lib/signalDeckFeedback";
+import { buildRelevanceProfile } from "../../../../../lib/signalDeckFeedback";
+import { listSignalReviewsFromNotion } from "../../../../../lib/signalDeckNotion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,9 +17,8 @@ export async function GET(request: Request) {
     return Response.json({ error: "Unauthorized cron request." }, { status: 401 });
   }
 
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   const profile = buildRelevanceProfile(rows);
-  await saveRelevanceProfile(profile);
 
   return Response.json({
     ok: true,

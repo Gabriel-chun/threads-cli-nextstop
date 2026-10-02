@@ -7,6 +7,7 @@ import {
   useState
 } from "react";
 import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { DeidentifiedReviewRow } from "../lib/reviewLedger";
 import { REVIEW_CATEGORIES } from "../lib/reviewCategories";
 
@@ -52,6 +53,23 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
   useEffect(() => {
     setItems(rows);
   }, [rows]);
+
+  useEffect(() => {
+    setItems(rows);
+  }, [rows]);
+
+  useEffect(() => {
+    const refresh = () => router.refresh();
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, [router]);
 
   useEffect(() => {
     if (!undo) return;
