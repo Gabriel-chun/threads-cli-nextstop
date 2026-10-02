@@ -141,6 +141,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
+  const [saveNotice, setSaveNotice] = useState("");
   const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
@@ -247,6 +248,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     setSelectedKey(null);
     setDrag(null);
     setSaveError("");
+    setSaveNotice("");
   }
 
   function addTen() {
@@ -269,8 +271,16 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
   async function classify(card: SignalPostCard, label: TriageLabel) {
     if (savingKey) return;
+
+    const previousLabel = labels[card.post_key] ?? card.triage_label ?? null;
     setSavingKey(card.post_key);
     setSaveError("");
+    setSaveNotice(label === "relevant" ? "正在放入 Relevant…" : "正在放入 Irrelevant…");
+
+    // Optimistic UI: the card should move immediately. Persistence is verified
+    // below; if Blob/API fails, roll the card back into the queue.
+    setLabels((current) => ({ ...current, [card.post_key]: label }));
+    setSelectedKey(null);
 
     try {
       const response = await fetch("/api/signal-deck/feedback", {
@@ -294,13 +304,27 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         })
       });
 
+      const payload = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error("分類沒有成功保存");
+        throw new Error(payload?.error || `分類保存失敗（HTTP ${response.status}）`);
       }
 
-      setLabels((current) => ({ ...current, [card.post_key]: label }));
-      setSelectedKey(null);
+      const verifyResponse = await fetch(
+        "/api/signal-deck/feedback?post_key=" + encodeURIComponent(card.post_key),
+        { cache: "no-store" }
+      );
+      const verifyPayload = await verifyResponse.json().catch(() => null);
+      const saved = verifyPayload?.feedback?.[card.post_key];
+
+      if (!verifyResponse.ok || saved?.label !== label) {
+        throw new Error("分類已送出，但從 feedback store 讀回驗證失敗");
+      }
+
+      setSaveNotice(label === "relevant" ? "已放入 Relevant" : "已放入 Irrelevant");
+      globalThis.setTimeout(() => setSaveNotice(""), 1800);
     } catch (error) {
+      setLabels((current) => ({ ...current, [card.post_key]: previousLabel }));
+      setSaveNotice("");
       setSaveError(error instanceof Error ? error.message : "分類沒有成功保存");
     } finally {
       setSavingKey(null);
@@ -405,6 +429,12 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <a href="/reviews">查看 Review Ledger ↗</a>
         </div>
       </div>
+
+      {(saveNotice || saveError) ? (
+        <div className={saveError ? "triageError" : "reviewSaveMessage"} role="status" aria-live="polite">
+          {saveError || saveNotice}
+        </div>
+      ) : null}
 
       <div className={`signalRailWrap swipeWorkspace ${drag ? "isDragging" : ""}`}>
         {drag ? (
