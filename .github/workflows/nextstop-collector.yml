@@ -265,16 +265,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          snapshot_json="collector/output/snapshot_${RUN_STAMP}.json"
-          snapshot_zip="collector/output/snapshot_${RUN_STAMP}.zip"
-          master_json="collector/output/master.json"
-          master_zip="collector/output/master.zip"
+          python3 - <<'PY'
+          import os
+          import zipfile
+          from pathlib import Path
 
-          zip -j -q "$snapshot_zip" "$snapshot_json"
-          zip -j -q "$master_zip" "$master_json"
+          output = Path("collector/output")
+          run_stamp = os.environ["RUN_STAMP"]
+          pairs = [
+              (output / f"snapshot_{run_stamp}.json", output / f"snapshot_{run_stamp}.zip"),
+              (output / "master.json", output / "master.zip"),
+          ]
 
-          unzip -t "$snapshot_zip"
-          unzip -t "$master_zip"
+          for source, archive in pairs:
+              with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                  zf.write(source, arcname=source.name)
+              with zipfile.ZipFile(archive, "r") as zf:
+                  bad = zf.testzip()
+                  if bad:
+                      raise RuntimeError(f"Corrupt ZIP member: {bad}")
+              print(f"[archive] verified {archive}")
+          PY
 
       - name: Save master database
         uses: actions/cache/save@v4
