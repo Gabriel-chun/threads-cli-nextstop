@@ -1,9 +1,5 @@
-import { createHash } from "node:crypto";
-import {
-  listSignalDeckFeedback,
-  type SignalDeckFeedback,
-  type TriageLabel
-} from "./signalDeckFeedback";
+import type { SignalDeckFeedback, TriageLabel } from "./signalDeckFeedback";
+import { listSignalReviewsFromNotion } from "./signalDeckNotion";
 
 export type DeidentifiedReviewRow = {
   anonymous_id: string;
@@ -78,6 +74,6 @@ export function deidentifyReviewRow(row: ReviewRecordLike): DeidentifiedReviewRo
 }
 
 export async function loadDeidentifiedReviewRows(): Promise<DeidentifiedReviewRow[]> {
-  const rows = await listSignalDeckFeedback();
+  const rows = await listSignalReviewsFromNotion();
   return rows.map(deidentifyReviewRow);
 }

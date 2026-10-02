@@ -2,6 +2,7 @@
 
 import {
   type PointerEvent as ReactPointerEvent,
+  useEffect,
   useMemo,
   useState
 } from "react";
@@ -10,6 +11,7 @@ import type {
   SignalPostCard,
   TriageLabel
 } from "../lib/signalDeck";
+import type { SignalDeckFeedback } from "../lib/signalDeckFeedback";
 import {
   buildReviewBatch,
   nextUnreviewedKeys,
@@ -27,6 +29,8 @@ type DragState = {
 };
 
 const SWIPE_THRESHOLD = 86;
+const LOCAL_REVIEW_KEY = "next-stop-live:signal-review-session:v1";
+type LocalReviewEntry = { row: SignalDeckFeedback; synced: boolean; updated_at: string };
 
 function fmtDate(value?: string | null) {
   if (!value) return "—";
@@ -142,16 +146,32 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
   const [saveNotice, setSaveNotice] = useState("");
+  const [localReviews, setLocalReviews] = useState<Record<string, LocalReviewEntry>>({});
+  const [syncingNotion, setSyncingNotion] = useState(false);
   const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
     "5d": deck.windows["5d"].default_review_limit ?? Math.min(40, deck.windows["5d"].card_count)
   };
   const [extraReviewKeys, setExtraReviewKeys] = useState<Record<WindowKey, string[]>>({
-    "1d": [],
-    "3d": [],
-    "5d": []
+    "1d": [], "3d": [], "5d": []
   });
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(LOCAL_REVIEW_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as Record<string, LocalReviewEntry>;
+      setLocalReviews(parsed);
+      setLabels((current) => ({...current,...Object.fromEntries(Object.values(parsed).map((e)=>[e.row.post_key,e.row.label]))}));
+    } catch {}
+  }, []);
+
+  const pendingReviews = useMemo(() => Object.values(localReviews).filter((e) => !e.synced), [localReviews]);
+  function saveLocalReviews(next: Record<string, LocalReviewEntry>) {
+    setLocalReviews(next);
+    window.localStorage.setItem(LOCAL_REVIEW_KEY, JSON.stringify(next));
+  }
 
   const window = deck.windows[windowKey];
   const baseReviewLimit = Math.min(baseReviewLimits[windowKey], window.card_count);
@@ -269,56 +289,37 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     setSelectedKey(null);
   }
 
-  async function classify(card: SignalPostCard, label: TriageLabel) {
-    if (savingKey) return;
+  function classify(card: SignalPostCard, label: TriageLabel) {
+    const now=new Date().toISOString();
+    const prev=localReviews[card.post_key]?.row;
+    const row:SignalDeckFeedback={
+      id:prev?.id||"local_"+card.post_key,post_key:card.post_key,post_id:card.post_id||null,permalink:card.permalink||null,
+      snapshot_id:card.snapshot_id,window:windowKey,label,original_label:prev?.original_label||prev?.label||label,
+      label_updated_at:prev&&prev.label!==label?now:(prev?.label_updated_at||null),
+      category:card.category,original_category:prev?.original_category||prev?.category||card.category,
+      category_source:prev?.category_source||"system",category_updated_at:prev?.category_updated_at||null,
+      username:card.username||null,posted_at:card.posted_at||null,query:card.query||card.source_queries?.join(" / ")||null,
+      text_excerpt:card.text.slice(0,1200),feature_tags:card.feature_tags||[],base_score:card.base_score??card.score,
+      deck_generated_at:deck.generated_at,reviewed_at:prev?.reviewed_at||now
+    };
+    setLabels((current)=>({...current,[card.post_key]:label})); setSelectedKey(null); setSaveError("");
+    const next={...localReviews,[card.post_key]:{row,synced:false,updated_at:now}}; saveLocalReviews(next);
+    setSaveNotice(label==="relevant"?"已放入 Relevant · 待同步":"已放入 Irrelevant · 待同步");
+    globalThis.setTimeout(()=>setSaveNotice(""),1800);
+  }
 
-    setSavingKey(card.post_key);
-    setSaveError("");
-    setSaveNotice(label === "relevant" ? "正在保存 Relevant…" : "正在保存 Irrelevant…");
-
-    // Human judgment is the UI source of truth. Persistence must never undo
-    // the routing decision in the current review session.
-    setLabels((current) => ({ ...current, [card.post_key]: label }));
-    setSelectedKey(null);
-
-    try {
-      const response = await fetch("/api/signal-deck/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          post_key: card.post_key,
-          post_id: card.post_id || null,
-          permalink: card.permalink || null,
-          snapshot_id: card.snapshot_id,
-          window: windowKey,
-          label,
-          category: card.category,
-          username: card.username || null,
-          posted_at: card.posted_at || null,
-          query: card.query || card.source_queries?.join(" / ") || null,
-          text_excerpt: card.text.slice(0, 1200),
-          feature_tags: card.feature_tags || [],
-          base_score: card.base_score ?? card.score,
-          deck_generated_at: deck.generated_at
-        })
-      });
-
-      const payload = await response.json().catch(() => null);
-      if (!response.ok) {
-        throw new Error(payload?.error || `分類保存失敗（HTTP ${response.status}）`);
-      }
-
-      setSaveNotice(label === "relevant" ? "Relevant 已保存" : "Irrelevant 已保存");
-      globalThis.setTimeout(() => setSaveNotice(""), 1800);
-    } catch (error) {
-      setSaveNotice("");
-      setSaveError(
-        "分類已保留在目前畫面，但尚未同步："
-        + (error instanceof Error ? error.message : "feedback store unavailable")
-      );
-    } finally {
-      setSavingKey(null);
-    }
+  async function syncPendingToNotion() {
+    if(syncingNotion||!pendingReviews.length)return;
+    setSyncingNotion(true);setSaveError("");setSaveNotice(`正在同步 ${pendingReviews.length} 筆到 Notion…`);
+    try{
+      const response=await fetch("/api/signal-deck/sync-notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({rows:pendingReviews.map((e)=>e.row)})});
+      const payload=await response.json().catch(()=>null);
+      if(!response.ok)throw new Error(payload?.error||`Notion 同步失敗（HTTP ${response.status}）`);
+      const synced=new Set<string>(payload?.synced_keys||[]);
+      saveLocalReviews(Object.fromEntries(Object.entries(localReviews).map(([k,e])=>[k,synced.has(k)?{...e,synced:true,updated_at:new Date().toISOString()}:e])));
+      setSaveNotice(`已同步 ${synced.size} 筆到 Notion`);globalThis.setTimeout(()=>setSaveNotice(""),2200);
+    }catch(error){setSaveNotice("");setSaveError(error instanceof Error?error.message:"Notion 同步失敗");}
+    finally{setSyncingNotion(false);}
   }
 
   function pointerDown(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
@@ -416,7 +417,12 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         </div>
         <div className="reviewProgressFoot">
           <span>只表示目前每日批次的推估進度</span>
-          <a href="/reviews">查看 Review Ledger ↗</a>
+          <div className="reviewProgressActions">
+            <button type="button" className="syncNotionButton" disabled={syncingNotion || pendingReviews.length===0} onClick={()=>void syncPendingToNotion()}>
+              {syncingNotion ? "同步中…" : pendingReviews.length ? `同步到 Notion · 待同步 ${pendingReviews.length}` : "Notion 已同步"}
+            </button>
+            <a href="/reviews">查看 Review Ledger ↗</a>
+          </div>
         </div>
       </div>
 
@@ -539,7 +545,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               <button
                 type="button"
                 className="irrelevant"
-                disabled={savingKey === selected.post_key}
+                disabled={false}
                 onClick={() => void classify(selected, "irrelevant")}
               >
                 ← Irrelevant
@@ -547,7 +553,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               <button
                 type="button"
                 className="relevant"
-                disabled={savingKey === selected.post_key}
+                disabled={false}
                 onClick={() => void classify(selected, "relevant")}
               >
                 Relevant →

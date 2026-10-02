@@ -1,8 +1,5 @@
-import {
-  loadFeedbackMap,
-  loadRelevanceProfile,
-  type RelevanceProfile
-} from "./signalDeckFeedback";
+import { buildRelevanceProfile, type RelevanceProfile } from "./signalDeckFeedback";
+import { listSignalReviewsFromNotion } from "./signalDeckNotion";
 
 export type TriageLabel = "relevant" | "irrelevant";
 
@@ -143,10 +140,10 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
           .filter(Boolean)
       )
     ];
-    [profile, feedback] = await Promise.all([
-      loadRelevanceProfile(),
-      loadFeedbackMap(keys)
-    ]);
+    const rows = await listSignalReviewsFromNotion();
+    profile = buildRelevanceProfile(rows);
+    const keySet = new Set(keys);
+    feedback = Object.fromEntries(rows.filter((row) => keySet.has(row.post_key)).map((row) => [row.post_key, row]));
   } catch {}
 
   for (const window of Object.values(deck.windows)) {
