@@ -82,16 +82,24 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.56.1-noble
     timeout-minutes: 30
+    outputs:
+      run_stamp: ${{ steps.stamp.outputs.run_stamp }}
+      provenance: ${{ steps.provenance.outputs.provenance }}
+      baseline_eligible: ${{ steps.provenance.outputs.baseline_eligible }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set run stamp
+        id: stamp
         run: |
-          echo "RUN_STAMP=$(date -u +'%Y-%m-%d_%H%M%SZ')" >> "$GITHUB_ENV"
+          run_stamp="$(date -u +'%Y-%m-%d_%H%M%SZ')"
+          echo "RUN_STAMP=$run_stamp" >> "$GITHUB_ENV"
+          echo "run_stamp=$run_stamp" >> "$GITHUB_OUTPUT"
 
       - name: Set observation provenance
+        id: provenance
         shell: bash
         run: |
           case "$GITHUB_EVENT_NAME" in
@@ -120,6 +128,8 @@ jobs:
           esac
           echo "OBS_RUN_PROVENANCE=$provenance" >> "$GITHUB_ENV"
           echo "OBS_BASELINE_ELIGIBLE=$baseline_eligible" >> "$GITHUB_ENV"
+          echo "provenance=$provenance" >> "$GITHUB_OUTPUT"
+          echo "baseline_eligible=$baseline_eligible" >> "$GITHUB_OUTPUT"
           echo "[observation] provenance=$provenance baseline_eligible=$baseline_eligible"
 
       - name: Set up Go
@@ -260,6 +270,9 @@ jobs:
         run: |
           cp collector/failed_queries.txt collector/output/failed_queries.txt
           cp "$QUERY_FILE" collector/output/queries.txt
+          if [[ -s collector/raw/browser_diagnostics.json ]]; then
+            cp collector/raw/browser_diagnostics.json collector/output/browser_diagnostics.json
+          fi
 
       - name: Build direct-download JSON archives
         shell: bash
@@ -333,16 +346,28 @@ jobs:
             exit 1
           fi
 
-      - name: Decide repository archive cadence
-        id: archive_cadence
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "commit=true" >> "$GITHUB_OUTPUT"
-          echo "[archive] commit every successful collector run"
+  archive:
+    needs: collect
+    if: needs.collect.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      RUN_STAMP: ${{ needs.collect.outputs.run_stamp }}
+      OBS_RUN_PROVENANCE: ${{ needs.collect.outputs.provenance }}
+      OBS_BASELINE_ELIGIBLE: ${{ needs.collect.outputs.baseline_eligible }}
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download collector output
+        uses: actions/download-artifact@v4
+        with:
+          name: nextstop-threads-${{ needs.collect.outputs.run_stamp }}
+          path: collector/output
 
       - name: Commit collector data back to repo
-        if: steps.archive_cadence.outputs.commit == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -363,8 +388,8 @@ jobs:
           cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
           cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
-          if [[ -s collector/raw/browser_diagnostics.json ]]; then
-            cp collector/raw/browser_diagnostics.json collector/archive/runs/browser_diagnostics_"$RUN_STAMP".json
+          if [[ -s collector/output/browser_diagnostics.json ]]; then
+            cp collector/output/browser_diagnostics.json collector/archive/runs/browser_diagnostics_"$RUN_STAMP".json
           fi
 
           cp collector/output/duplicate_review.json collector/archive/runs/duplicate_review_"$RUN_STAMP".json
@@ -373,6 +398,7 @@ jobs:
 
           python3 - <<'PY'
           import json
+          import os
           from pathlib import Path
 
           history_path = Path("collector/archive/latest/history.json")
@@ -401,10 +427,10 @@ jobs:
               "new_12h": summary.get("new_12h", 0),
               "master_unique_rows": summary.get("master_unique_rows", 0),
               "status": "Success",
-              "provenance": __import__("os").environ.get("OBS_RUN_PROVENANCE", "unknown"),
-              "baseline_eligible": __import__("os").environ.get("OBS_BASELINE_ELIGIBLE", "false").lower() == "true",
-              "workflow_event": __import__("os").environ.get("GITHUB_EVENT_NAME"),
-              "github_run_id": __import__("os").environ.get("GITHUB_RUN_ID"),
+              "provenance": os.environ.get("OBS_RUN_PROVENANCE", "unknown"),
+              "baseline_eligible": os.environ.get("OBS_BASELINE_ELIGIBLE", "false").lower() == "true",
+              "workflow_event": os.environ.get("GITHUB_EVENT_NAME"),
+              "github_run_id": os.environ.get("GITHUB_RUN_ID"),
           }
 
           history = [item for item in history if item.get("run_stamp") != row["run_stamp"]]
@@ -420,7 +446,6 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add collector/archive/
 
           if git diff --cached --quiet; then
