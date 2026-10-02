@@ -8,9 +8,9 @@ import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck"
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
-  "https://next-stop-live.vercel.app/api/download/latest";
+  "https://threads-cli-nextstop.gabrielchun336.workers.dev/api/download/latest";
 const REVIEWED_DOWNLOAD_URL =
-  "https://next-stop-live.vercel.app/api/download/reviews/latest";
+  "https://threads-cli-nextstop.gabrielchun336.workers.dev/api/download/reviews/latest";
 
 const handler = createMcpHandler(
   (server) => {
@@ -191,7 +191,7 @@ const handler = createMcpHandler(
             filename: "next-stop-live-reviewed-cards-latest.json",
             contains: "de-identified latest completed daily Signal Review archive",
             source: "collector/archive/reviews/latest.json",
-            reviewPageUrl: "https://next-stop-live.vercel.app/reviews",
+            reviewPageUrl: "https://threads-cli-nextstop.gabrielchun336.workers.dev/reviews",
             downloadUrl: REVIEWED_DOWNLOAD_URL
           }, null, 2)
         }]

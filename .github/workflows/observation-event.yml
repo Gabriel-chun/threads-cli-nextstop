@@ -80,7 +80,7 @@ jobs:
         env:
           EVENT_EMIT_TOKEN: ${{ secrets.NEXTSTOP_EVENT_EMIT_TOKEN }}
           RUN_ID: ${{ steps.observation.outputs.run_id }}
-          EVENT_EMIT_URL: "https://next-stop-live-git-main-jasonhcj0825-4567s-projects.vercel.app/api/events/emit"
+          EVENT_EMIT_URL: "https://threads-cli-nextstop.gabrielchun336.workers.dev/api/events/emit"
         run: |
           set -euo pipefail
           if [[ -z "$EVENT_EMIT_TOKEN" ]]; then
