@@ -101,6 +101,8 @@ jobs:
       - name: Set observation provenance
         id: provenance
         shell: bash
+        env:
+          PUSH_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           case "$GITHUB_EVENT_NAME" in
             schedule)
@@ -112,7 +114,7 @@ jobs:
               baseline_eligible="false"
               ;;
             push)
-              if git log -1 --pretty=%B | grep -Fq "[pipe-test]"; then
+              if [[ "$PUSH_COMMIT_MESSAGE" == *"[pipe-test]"* ]]; then
                 provenance="scheduled"
                 baseline_eligible="true"
                 echo "[observation] explicit [pipe-test] push; treating as scheduled-equivalent for end-to-end validation"
