@@ -194,19 +194,24 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const counts = useMemo(
     () => ({
       queue: cards.filter((card) => !card.triage_label).length,
-      relevant: cards.filter((card) => card.triage_label === "relevant").length,
-      irrelevant: cards.filter((card) => card.triage_label === "irrelevant").length
+      relevant: windowCards.filter((card) => card.triage_label === "relevant").length,
+      irrelevant: windowCards.filter((card) => card.triage_label === "irrelevant").length
     }),
-    [cards]
+    [cards, windowCards]
   );
 
   const visibleCards = useMemo(() => {
-    const filtered = cards.filter((card) => {
-      if (reviewView === "queue") return !card.triage_label;
-      return card.triage_label === reviewView;
-    });
-    return reviewView === "queue" ? filtered.slice(0, 3) : filtered.slice(0, 5);
-  }, [cards, reviewView]);
+    if (reviewView === "queue") {
+      return cards.filter((card) => !card.triage_label).slice(0, 3);
+    }
+
+    // Classified history must come from the full active time window, not only
+    // the current review batch. Otherwise a refresh / rerank can make saved
+    // Relevant or Irrelevant cards appear to disappear.
+    return windowCards
+      .filter((card) => card.triage_label === reviewView)
+      .slice(0, 5);
+  }, [cards, reviewView, windowCards]);
 
   const selected = useMemo(
     () => cards.find((card) => card.post_key === selectedKey) || null,
