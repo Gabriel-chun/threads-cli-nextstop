@@ -17,7 +17,8 @@ import {
 } from "../lib/reviewQuota";
 
 type WindowKey = "1d" | "3d" | "5d";
-type SessionView = "queue" | "relevant" | "irrelevant";
+type ReviewView = "queue" | "relevant" | "irrelevant";
+
 type DragState = {
   postKey: string;
   pointerId: number;
@@ -44,6 +45,7 @@ function PostCard({
   index,
   selected,
   drag,
+  reviewView,
   stacked,
   interactive,
   onPointerDown,
@@ -56,6 +58,7 @@ function PostCard({
   index: number;
   selected: boolean;
   drag: DragState | null;
+  reviewView: ReviewView;
   stacked: boolean;
   interactive: boolean;
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) => void;
@@ -114,7 +117,11 @@ function PostCard({
       </div>
 
       <div className="reelPeek">
-        <small>點一下看完整內容 · 左拖 Irrelevant · 右拖 Relevant</small>
+        <small>
+          {reviewView === "queue"
+            ? "點一下看完整內容 · 左拖 Irrelevant · 右拖 Relevant"
+            : "點一下回看完整內容"}
+        </small>
       </div>
     </div>
   );
@@ -122,9 +129,8 @@ function PostCard({
 
 export function SignalReel({ deck }: { deck: SignalDeck }) {
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
+  const [reviewView, setReviewView] = useState<ReviewView>("queue");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [sessionView, setSessionView] = useState<SessionView>("queue");
-  const [sessionLabels, setSessionLabels] = useState<Record<string, TriageLabel>>({});
   const [drag, setDrag] = useState<DragState | null>(null);
   const [labels, setLabels] = useState<Record<string, TriageLabel | null>>(
     Object.fromEntries(
@@ -135,7 +141,6 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [saveError, setSaveError] = useState("");
-  const [saveNotice, setSaveNotice] = useState("");
   const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
@@ -159,6 +164,22 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     [window.cards, labels]
   );
 
+  const allCounts = useMemo(
+    () => ({
+      total: windowCards.length,
+      relevant: windowCards.filter((card) => card.triage_label === "relevant").length,
+      irrelevant: windowCards.filter((card) => card.triage_label === "irrelevant").length,
+      unreviewed: windowCards.filter((card) => !card.triage_label).length
+    }),
+    [windowCards]
+  );
+
+  const reviewedPct = allCounts.total
+    ? ((allCounts.relevant + allCounts.irrelevant) / allCounts.total) * 100
+    : 0;
+  const relevantPct = allCounts.total ? (allCounts.relevant / allCounts.total) * 100 : 0;
+  const irrelevantPct = allCounts.total ? (allCounts.irrelevant / allCounts.total) * 100 : 0;
+
   const cards = useMemo(
     () => buildReviewBatch(windowCards, baseReviewLimit, extraReviewKeys[windowKey]),
     [windowCards, baseReviewLimit, extraReviewKeys, windowKey]
@@ -168,46 +189,64 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     () => remainingUnreviewedCount(windowCards, baseReviewLimit, extraReviewKeys[windowKey]),
     [windowCards, baseReviewLimit, extraReviewKeys, windowKey]
   );
+  const reviewLimit = cards.length;
 
-  const currentRemaining = cards.filter((card) => !card.triage_label).length;
-  const currentProgressPct = cards.length
-    ? ((cards.length - currentRemaining) / cards.length) * 100
-    : 100;
-  const currentRemainingPct = Math.max(0, 100 - currentProgressPct);
-
-  const sessionReviewedCards = useMemo(
-    () =>
-      windowCards.filter((card) => {
-        const label = sessionLabels[card.post_key];
-        return label === "relevant" || label === "irrelevant";
-      }),
-    [windowCards, sessionLabels]
+  const counts = useMemo(
+    () => ({
+      queue: cards.filter((card) => !card.triage_label).length,
+      relevant: cards.filter((card) => card.triage_label === "relevant").length,
+      irrelevant: cards.filter((card) => card.triage_label === "irrelevant").length
+    }),
+    [cards]
   );
 
   const visibleCards = useMemo(() => {
-    if (sessionView === "queue") {
-      return cards.filter((card) => !card.triage_label).slice(0, 3);
-    }
-    return sessionReviewedCards
-      .filter((card) => sessionLabels[card.post_key] === sessionView)
-      .slice(0, 5);
-  }, [cards, sessionReviewedCards, sessionLabels, sessionView]);
+    const filtered = cards.filter((card) => {
+      if (reviewView === "queue") return !card.triage_label;
+      return card.triage_label === reviewView;
+    });
+    return reviewView === "queue" ? filtered.slice(0, 3) : filtered.slice(0, 5);
+  }, [cards, reviewView]);
 
   const selected = useMemo(
-    () =>
-      [...cards, ...sessionReviewedCards].find((card) => card.post_key === selectedKey) || null,
-    [cards, sessionReviewedCards, selectedKey]
+    () => cards.find((card) => card.post_key === selectedKey) || null,
+    [cards, selectedKey]
   );
+
+  const relevantClusters = useMemo(() => {
+    const grouped = new Map<string, { category: string; count: number; features: Map<string, number> }>();
+    for (const card of windowCards.filter((item) => item.triage_label === "relevant")) {
+      const current = grouped.get(card.category) || {
+        category: card.category,
+        count: 0,
+        features: new Map<string, number>()
+      };
+      current.count += 1;
+      for (const tag of card.feature_tags || []) {
+        current.features.set(tag, (current.features.get(tag) || 0) + 1);
+      }
+      grouped.set(card.category, current);
+    }
+    return [...grouped.values()]
+      .map((cluster) => ({
+        category: cluster.category,
+        count: cluster.count,
+        features: [...cluster.features.entries()]
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 2)
+          .map(([tag]) => tag)
+      }))
+      .sort((a, b) => b.count - a.count || a.category.localeCompare(b.category));
+  }, [windowCards]);
 
   const dragDx = drag ? drag.currentX - drag.startX : 0;
 
   function changeWindow(next: WindowKey) {
     setWindowKey(next);
+    setReviewView("queue");
     setSelectedKey(null);
-    setSessionView("queue");
     setDrag(null);
     setSaveError("");
-    setSaveNotice("");
   }
 
   function addTen() {
@@ -224,6 +263,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       ...current,
       [windowKey]: [...current[windowKey], ...nextKeys]
     }));
+    setReviewView("queue");
     setSelectedKey(null);
   }
 
@@ -231,7 +271,6 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     if (savingKey) return;
     setSavingKey(card.post_key);
     setSaveError("");
-    setSaveNotice("正在保存…");
 
     try {
       const response = await fetch("/api/signal-deck/feedback", {
@@ -260,12 +299,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       }
 
       setLabels((current) => ({ ...current, [card.post_key]: label }));
-      setSessionLabels((current) => ({ ...current, [card.post_key]: label }));
       setSelectedKey(null);
-      setSaveNotice(label === "relevant" ? "已放入 Relevant" : "已放入 Irrelevant");
-      window.setTimeout(() => setSaveNotice(""), 2200);
     } catch (error) {
-      setSaveNotice("");
       setSaveError(error instanceof Error ? error.message : "分類沒有成功保存");
     } finally {
       setSavingKey(null);
@@ -273,7 +308,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   }
 
   function pointerDown(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
-    if (sessionView !== "queue" || savingKey) return;
+    if (reviewView !== "queue" || savingKey) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     setDrag({
       postKey: card.post_key,
@@ -293,11 +328,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   function finishDrag(card: SignalPostCard, dx: number, allowOpen: boolean) {
     setDrag(null);
 
-    if (sessionView === "queue" && dx >= SWIPE_THRESHOLD) {
+    if (reviewView === "queue" && dx >= SWIPE_THRESHOLD) {
       void classify(card, "relevant");
       return;
     }
-    if (sessionView === "queue" && dx <= -SWIPE_THRESHOLD) {
+    if (reviewView === "queue" && dx <= -SWIPE_THRESHOLD) {
       void classify(card, "irrelevant");
       return;
     }
@@ -356,30 +391,20 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         <div className="reviewProgressHead">
           <div>
             <span>今日進度</span>
-            <strong>約 {currentProgressPct.toFixed(0)}%</strong>
+            <strong>約 {reviewedPct.toFixed(0)}%</strong>
           </div>
           <div className="reviewProgressLegend">
-            <span className="unreviewed">尚餘約 {currentRemainingPct.toFixed(0)}%</span>
+            <span className="unreviewed">尚餘約 {(100 - reviewedPct).toFixed(0)}%</span>
           </div>
         </div>
-        <div className="reviewHpTrack" title={"今日進度約 " + currentProgressPct.toFixed(0) + "%"}>
-          <span className="reviewHpRelevant" style={{ width: currentProgressPct + "%" }} />
+        <div className="reviewHpTrack" title={"今日進度約 " + reviewedPct.toFixed(0) + "%"}>
+          <span className="reviewHpRelevant" style={{ width: reviewedPct + "%" }} />
         </div>
         <div className="reviewProgressFoot">
           <span>只表示目前每日批次的推估進度</span>
           <a href="/reviews">查看 Review Ledger ↗</a>
         </div>
       </div>
-
-      {(saveNotice || saveError) ? (
-        <div
-          className={saveError ? "reviewActionFeedback error" : "reviewActionFeedback success"}
-          role="status"
-          aria-live="polite"
-        >
-          {saveError || saveNotice}
-        </div>
-      ) : null}
 
       <div className={`signalRailWrap swipeWorkspace ${drag ? "isDragging" : ""}`}>
         {drag ? (
@@ -396,7 +421,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         ) : null}
 
         {visibleCards.length ? (
-          <div className={sessionView === "queue" ? "signalRail signalStack" : "signalRail"}>
+          <div className={`signalRail ${reviewView === "queue" ? "signalStack" : ""}`}>
             {visibleCards.map((card, index) => (
               <PostCard
                 key={card.post_key}
@@ -404,14 +429,15 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 index={index}
                 selected={selectedKey === card.post_key}
                 drag={drag}
-                stacked={sessionView === "queue"}
-                interactive={sessionView !== "queue" || index === 0}
-                onPointerDown={sessionView === "queue" && index === 0 ? pointerDown : () => {}}
-                onPointerMove={sessionView === "queue" && index === 0 ? pointerMove : () => {}}
-                onPointerUp={sessionView === "queue" && index === 0 ? pointerUp : () => {}}
+                reviewView={reviewView}
+                stacked={reviewView === "queue"}
+                interactive={reviewView !== "queue" || index === 0}
+                onPointerDown={index === 0 || reviewView !== "queue" ? pointerDown : () => {}}
+                onPointerMove={index === 0 || reviewView !== "queue" ? pointerMove : () => {}}
+                onPointerUp={index === 0 || reviewView !== "queue" ? pointerUp : () => {}}
                 onPointerCancel={() => pointerCancel(card)}
                 onOpen={() => {
-                  if (sessionView !== "queue" || index === 0) {
+                  if (reviewView !== "queue" || index === 0) {
                     setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
                   }
                 }}
@@ -420,42 +446,45 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           </div>
         ) : (
           <div className="signalDeckEmpty">
-            <strong>今天這一批已經整理完了。</strong>
-            {remainingUnreviewed > 0 ? (
-              <button type="button" className="addTenButton" onClick={addTen}>
-                有余力，再加 {Math.min(window.extend_step ?? 10, remainingUnreviewed)} 篇
-              </button>
+            {reviewView === "queue" ? (
+              <>
+                <strong>今天這一批已經整理完了。</strong>
+                {remainingUnreviewed > 0 ? (
+                  <button type="button" className="addTenButton" onClick={addTen}>
+                    有余力，再加 {Math.min(window.extend_step ?? 10, remainingUnreviewed)} 篇
+                  </button>
+                ) : (
+                  <span>目前這個時間窗已全部整理完成。</span>
+                )}
+              </>
             ) : (
-              <span>目前這個時間窗已全部整理完成。</span>
+              `目前沒有 ${reviewView === "relevant" ? "Relevant" : "Irrelevant"} 貼文。`
             )}
           </div>
         )}
       </div>
 
-      <div className="reviewLedger" aria-label="本次分類">
-        <span>本次分類</span>
+      <div className="reviewLedger">
+        <span>分類紀錄</span>
+        {reviewView !== "queue" ? (
+          <button type="button" onClick={() => { setReviewView("queue"); setSelectedKey(null); }}>
+            ← 回待分類
+          </button>
+        ) : null}
         <button
           type="button"
-          className={sessionView === "queue" ? "active" : ""}
-          onClick={() => { setSessionView("queue"); setSelectedKey(null); }}
-        >
-          待分類
-        </button>
-        <button
-          type="button"
-          className={sessionView === "relevant" ? "active relevant" : ""}
-          onClick={() => { setSessionView("relevant"); setSelectedKey(null); }}
+          className={reviewView === "relevant" ? "active relevant" : ""}
+          onClick={() => { setReviewView("relevant"); setSelectedKey(null); }}
         >
           Relevant
         </button>
         <button
           type="button"
-          className={sessionView === "irrelevant" ? "active irrelevant" : ""}
-          onClick={() => { setSessionView("irrelevant"); setSelectedKey(null); }}
+          className={reviewView === "irrelevant" ? "active irrelevant" : ""}
+          onClick={() => { setReviewView("irrelevant"); setSelectedKey(null); }}
         >
           Irrelevant
         </button>
-        <a href="/reviews">Review Ledger ↗</a>
       </div>
 
       {selected ? (
@@ -485,7 +514,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             </p>
           ) : null}
 
-          {sessionView === "queue" ? <div className="triageActions">
+          {reviewView === "queue" ? (
+            <div className="triageActions">
               <button
                 type="button"
                 className="irrelevant"
@@ -502,7 +532,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               >
                 Relevant →
               </button>
-          </div> : null}
+            </div>
+          ) : null}
 
           {saveError ? <p className="triageError">{saveError}</p> : null}
         </div>
@@ -512,6 +543,18 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         </div>
       )}
 
+      {relevantClusters.length ? (
+        <div className="relevantSummary">
+          <span>Relevant summary</span>
+          {relevantClusters.map((cluster) => (
+            <div key={cluster.category}>
+              <strong>{cluster.category}</strong>
+              <em>{cluster.count}</em>
+              {cluster.features.length ? <small>{cluster.features.join(" · ")}</small> : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }
