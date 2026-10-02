@@ -1,5 +1,4 @@
 name: Next Stop Threads Collector
-# pipe-test trigger: review-ledger-regression-2026-10-02
 
 on:
   schedule:
@@ -80,6 +79,8 @@ jobs:
     needs: cadence
     if: needs.cadence.outputs.should_run == 'true'
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
     timeout-minutes: 30
 
     steps:
@@ -142,10 +143,10 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install collector dependencies
+      - name: Install collector Node dependencies
         run: |
           npm install --no-save --no-package-lock @notionhq/client@5.26.0 playwright@1.56.1
-          npx playwright install --with-deps chromium
+          node -e "const { chromium } = require('playwright'); console.log('[playwright] preloaded Chromium executable:', chromium.executablePath())"
 
       - name: Load collector config from Notion
         env:
