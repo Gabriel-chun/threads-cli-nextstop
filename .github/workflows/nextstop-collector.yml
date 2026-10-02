@@ -131,7 +131,7 @@ jobs:
       - name: Build Threads CLI
         run: |
           mkdir -p bin
-          go build -o bin/th ./cmd/th
+          go build -buildvcs=false -o bin/th ./cmd/th
 
       - name: Validate clean rules
         run: |
