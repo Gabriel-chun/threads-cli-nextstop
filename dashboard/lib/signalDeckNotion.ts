@@ -1,9 +1,9 @@
-import { Client } from "@notionhq/client";
 import type { SignalDeckFeedback, TriageLabel } from "./signalDeckFeedback";
 
 const DATA_SOURCE_ID =
   process.env.NOTION_SIGNAL_REVIEW_DATA_SOURCE_ID ||
   "1c78f7c4-8325-4838-aa5b-64c6c1b88a22";
+const NOTION_VERSION = "2026-03-11";
 
 const clip = (value: unknown, max = 1900) => {
   const text = String(value ?? "");
@@ -17,11 +17,40 @@ const url = (value: string | null | undefined) => ({ url: value || null });
 const number = (value: number | null | undefined) => ({ number: value ?? null });
 const multiSelect = (values: string[]) => ({ multi_select: values.map((name) => ({ name })) });
 
-function notionClient() {
+function notionToken() {
   const token = process.env.NOTION_TOKEN;
   if (!token) throw new Error("NOTION_TOKEN missing");
-  return new Client({ auth: token, notionVersion: "2026-03-11" });
+  return token;
 }
+
+async function notionRequest<T = any>(
+  path: string,
+  init: { method?: "GET" | "POST" | "PATCH"; body?: unknown } = {}
+): Promise<T> {
+  const response = await fetch(`https://api.notion.com/v1${path}`, {
+    method: init.method || "GET",
+    headers: {
+      Authorization: `Bearer ${notionToken()}`,
+      "Notion-Version": NOTION_VERSION,
+      "Content-Type": "application/json"
+    },
+    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+    cache: "no-store"
+  });
+
+  if (!response.ok) {
+    const raw = await response.text();
+    let detail = raw;
+    try {
+      const parsed = JSON.parse(raw);
+      detail = parsed?.message || parsed?.code || raw;
+    } catch {}
+    throw new Error(`Notion API ${response.status}: ${detail}`);
+  }
+
+  return (await response.json()) as T;
+}
+
 function plainText(prop: any) {
   if (!prop) return "";
   if (prop.type === "rich_text") return (prop.rich_text || []).map((x: any) => x.plain_text || "").join("");
@@ -54,6 +83,7 @@ function properties(row: SignalDeckFeedback) {
     "Source": select("Threads")
   };
 }
+
 function pageToFeedback(page:any):SignalDeckFeedback|null {
   const p=page?.properties||{}, post_key=plainText(p["Post Key"]);
   const ln=selectName(p["Label"]);
@@ -73,38 +103,76 @@ function pageToFeedback(page:any):SignalDeckFeedback|null {
     deck_generated_at:reviewed_at,reviewed_at
   };
 }
+
 async function findByPostKey(postKey:string){
-  const notion=notionClient();
-  const r=await notion.dataSources.query({data_source_id:DATA_SOURCE_ID,filter:{property:"Post Key",rich_text:{equals:postKey}},page_size:5});
-  return {notion,page:(r.results||[]).find((x:any)=>x.object==="page")||null};
+  const r=await notionRequest<any>(`/data_sources/${DATA_SOURCE_ID}/query`, {
+    method:"POST",
+    body:{filter:{property:"Post Key",rich_text:{equals:postKey}},page_size:5}
+  });
+  return (r.results||[]).find((x:any)=>x.object==="page")||null;
 }
+
 export async function upsertSignalReviewToNotion(row:SignalDeckFeedback){
-  const {notion,page}=await findByPostKey(row.post_key);
-  if(page){await notion.pages.update({page_id:page.id,properties:properties(row) as any});return {created:false,post_key:row.post_key};}
-  await notion.pages.create({parent:{type:"data_source_id",data_source_id:DATA_SOURCE_ID},properties:properties(row) as any});
+  const page=await findByPostKey(row.post_key);
+  if(page){
+    await notionRequest(`/pages/${page.id}`,{method:"PATCH",body:{properties:properties(row)}});
+    return {created:false,post_key:row.post_key};
+  }
+  await notionRequest("/pages",{
+    method:"POST",
+    body:{parent:{type:"data_source_id",data_source_id:DATA_SOURCE_ID},properties:properties(row)}
+  });
   return {created:true,post_key:row.post_key};
 }
+
 export async function syncSignalReviewsToNotion(rows:SignalDeckFeedback[]){
   let created=0,updated=0; const synced_keys:string[]=[];
-  for(const row of rows){const r=await upsertSignalReviewToNotion(row);r.created?created++:updated++;synced_keys.push(r.post_key);}
+  for(const row of rows){
+    const r=await upsertSignalReviewToNotion(row);
+    r.created?created++:updated++;
+    synced_keys.push(r.post_key);
+  }
   return {created,updated,synced_keys};
 }
+
 export async function listSignalReviewsFromNotion():Promise<SignalDeckFeedback[]>{
-  const notion=notionClient(),rows:SignalDeckFeedback[]=[];let cursor:string|undefined;
+  const rows:SignalDeckFeedback[]=[];let cursor:string|undefined;
   do{
-    const r=await notion.dataSources.query({data_source_id:DATA_SOURCE_ID,page_size:100,...(cursor?{start_cursor:cursor}:{})});
-    for(const item of r.results||[]){if(item.object==="page"){const row=pageToFeedback(item);if(row)rows.push(row);}}
+    const r=await notionRequest<any>(`/data_sources/${DATA_SOURCE_ID}/query`,{
+      method:"POST",
+      body:{page_size:100,...(cursor?{start_cursor:cursor}:{})}
+    });
+    for(const item of r.results||[]){
+      if(item.object==="page"){
+        const row=pageToFeedback(item);
+        if(row)rows.push(row);
+      }
+    }
     cursor=r.has_more?(r.next_cursor||undefined):undefined;
   }while(cursor);
   return rows.sort((a,b)=>Date.parse(b.reviewed_at)-Date.parse(a.reviewed_at));
 }
+
 export async function updateSignalReviewLabelInNotion(postKey:string,label:TriageLabel){
-  const {notion,page}=await findByPostKey(postKey); if(!page)throw new Error("Review feedback not found.");
-  const updated=await notion.pages.update({page_id:page.id,properties:{"Label":select(label==="relevant"?"Relevant":"Irrelevant")} as any});
-  const row=pageToFeedback(updated); if(!row)throw new Error("Updated review could not be read."); return row;
+  const page=await findByPostKey(postKey);
+  if(!page)throw new Error("Review feedback not found.");
+  const updated=await notionRequest<any>(`/pages/${page.id}`,{
+    method:"PATCH",
+    body:{properties:{"Label":select(label==="relevant"?"Relevant":"Irrelevant")}}
+  });
+  const row=pageToFeedback(updated);
+  if(!row)throw new Error("Updated review could not be read.");
+  return row;
 }
+
 export async function updateSignalReviewCategoryInNotion(postKey:string,category:string){
-  const {notion,page}=await findByPostKey(postKey); if(!page)throw new Error("Review feedback not found.");
-  const updated=await notion.pages.update({page_id:page.id,properties:{"Category":richText(category)} as any});
-  const row=pageToFeedback(updated); if(!row)throw new Error("Updated review could not be read."); return row;
+  const page=await findByPostKey(postKey);
+  if(!page)throw new Error("Review feedback not found.");
+  const updated=await notionRequest<any>(`/pages/${page.id}`,{
+    method:"PATCH",
+    body:{properties:{"Category":richText(category)}}
+  });
+  const row=pageToFeedback(updated);
+  if(!row)throw new Error("Updated review could not be read.");
+  return row;
 }
