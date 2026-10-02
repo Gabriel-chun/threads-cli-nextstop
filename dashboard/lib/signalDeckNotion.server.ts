@@ -27,28 +27,37 @@ async function notionRequest<T = any>(
   path: string,
   init: { method?: "GET" | "POST" | "PATCH"; body?: unknown } = {}
 ): Promise<T> {
-  const response = await fetch(`https://api.notion.com/v1${path}`, {
-    method: init.method || "GET",
-    headers: {
-      Authorization: `Bearer ${notionToken()}`,
-      "Notion-Version": NOTION_VERSION,
-      "Content-Type": "application/json"
-    },
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
-    cache: "no-store"
-  });
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetch(`https://api.notion.com/v1${path}`, {
+      method: init.method || "GET",
+      headers: {
+        Authorization: `Bearer ${notionToken()}`,
+        "Notion-Version": NOTION_VERSION,
+        "Content-Type": "application/json"
+      },
+      body: init.body === undefined ? undefined : JSON.stringify(init.body),
+      cache: "no-store"
+    });
 
-  if (!response.ok) {
+    if (response.ok) return (await response.json()) as T;
+
     const raw = await response.text();
     let detail = raw;
     try {
       const parsed = JSON.parse(raw);
       detail = parsed?.message || parsed?.code || raw;
     } catch {}
+
+    if (response.status === 429 && attempt < 2) {
+      const retryAfter = Number(response.headers.get("retry-after") || "1");
+      await new Promise((resolve) => setTimeout(resolve, Math.max(250, retryAfter * 1000)));
+      continue;
+    }
+
     throw new Error(`Notion API ${response.status}: ${detail}`);
   }
 
-  return (await response.json()) as T;
+  throw new Error("Notion API retry exhausted.");
 }
 
 function plainText(prop: any) {
@@ -126,12 +135,35 @@ export async function upsertSignalReviewToNotion(row:SignalDeckFeedback){
 }
 
 export async function syncSignalReviewsToNotion(rows:SignalDeckFeedback[]){
-  let created=0,updated=0; const synced_keys:string[]=[];
-  for(const row of rows){
-    const r=await upsertSignalReviewToNotion(row);
-    r.created?created++:updated++;
-    synced_keys.push(r.post_key);
+  const existingRows = await listSignalReviewsFromNotion();
+  const existingByKey = new Map(existingRows.map((row) => [row.post_key, row]));
+
+  let created = 0;
+  let updated = 0;
+  const synced_keys: string[] = [];
+
+  for (const row of rows) {
+    const existing = existingByKey.get(row.post_key);
+    if (existing?.id?.startsWith("notion_")) {
+      const pageId = existing.id.slice("notion_".length);
+      await notionRequest(`/pages/${pageId}`, {
+        method: "PATCH",
+        body: { properties: properties(row) }
+      });
+      updated += 1;
+    } else {
+      await notionRequest("/pages", {
+        method: "POST",
+        body: {
+          parent: { type: "data_source_id", data_source_id: DATA_SOURCE_ID },
+          properties: properties(row)
+        }
+      });
+      created += 1;
+    }
+    synced_keys.push(row.post_key);
   }
+
   return {created,updated,synced_keys};
 }
 
