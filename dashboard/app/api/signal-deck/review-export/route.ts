@@ -1,4 +1,4 @@
-import { listSignalReviewsFromNotion } from "../../../../lib/signalDeckNotion";
+import { listSignalReviewsFromNotion } from "../../../../lib/signalDeckNotion.server";
 import { buildDailyReviewArchive } from "../../../../lib/reviewArchive";
 
 export const runtime = "nodejs";
