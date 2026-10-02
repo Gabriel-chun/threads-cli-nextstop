@@ -17,6 +17,7 @@ import {
 } from "../lib/reviewQuota";
 
 type WindowKey = "1d" | "3d" | "5d";
+type SessionView = "queue" | "relevant" | "irrelevant";
 type DragState = {
   postKey: string;
   pointerId: number;
@@ -122,6 +123,8 @@ function PostCard({
 export function SignalReel({ deck }: { deck: SignalDeck }) {
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [sessionView, setSessionView] = useState<SessionView>("queue");
+  const [sessionLabels, setSessionLabels] = useState<Record<string, TriageLabel>>({});
   const [drag, setDrag] = useState<DragState | null>(null);
   const [labels, setLabels] = useState<Record<string, TriageLabel | null>>(
     Object.fromEntries(
@@ -172,14 +175,28 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     : 100;
   const currentRemainingPct = Math.max(0, 100 - currentProgressPct);
 
-  const visibleCards = useMemo(
-    () => cards.filter((card) => !card.triage_label).slice(0, 3),
-    [cards]
+  const sessionReviewedCards = useMemo(
+    () =>
+      windowCards.filter((card) => {
+        const label = sessionLabels[card.post_key];
+        return label === "relevant" || label === "irrelevant";
+      }),
+    [windowCards, sessionLabels]
   );
 
+  const visibleCards = useMemo(() => {
+    if (sessionView === "queue") {
+      return cards.filter((card) => !card.triage_label).slice(0, 3);
+    }
+    return sessionReviewedCards
+      .filter((card) => sessionLabels[card.post_key] === sessionView)
+      .slice(0, 5);
+  }, [cards, sessionReviewedCards, sessionLabels, sessionView]);
+
   const selected = useMemo(
-    () => cards.find((card) => card.post_key === selectedKey) || null,
-    [cards, selectedKey]
+    () =>
+      [...cards, ...sessionReviewedCards].find((card) => card.post_key === selectedKey) || null,
+    [cards, sessionReviewedCards, selectedKey]
   );
 
   const dragDx = drag ? drag.currentX - drag.startX : 0;
@@ -187,6 +204,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   function changeWindow(next: WindowKey) {
     setWindowKey(next);
     setSelectedKey(null);
+    setSessionView("queue");
     setDrag(null);
     setSaveError("");
     setSaveNotice("");
@@ -242,8 +260,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       }
 
       setLabels((current) => ({ ...current, [card.post_key]: label }));
+      setSessionLabels((current) => ({ ...current, [card.post_key]: label }));
       setSelectedKey(null);
-      setSaveNotice(label === "relevant" ? "已存为 Relevant" : "已存为 Irrelevant");
+      setSaveNotice(label === "relevant" ? "已放入 Relevant" : "已放入 Irrelevant");
       window.setTimeout(() => setSaveNotice(""), 2200);
     } catch (error) {
       setSaveNotice("");
@@ -254,7 +273,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   }
 
   function pointerDown(event: ReactPointerEvent<HTMLDivElement>, card: SignalPostCard) {
-    if (savingKey) return;
+    if (sessionView !== "queue" || savingKey) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     setDrag({
       postKey: card.post_key,
@@ -274,11 +293,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   function finishDrag(card: SignalPostCard, dx: number, allowOpen: boolean) {
     setDrag(null);
 
-    if (dx >= SWIPE_THRESHOLD) {
+    if (sessionView === "queue" && dx >= SWIPE_THRESHOLD) {
       void classify(card, "relevant");
       return;
     }
-    if (dx <= -SWIPE_THRESHOLD) {
+    if (sessionView === "queue" && dx <= -SWIPE_THRESHOLD) {
       void classify(card, "irrelevant");
       return;
     }
@@ -377,7 +396,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         ) : null}
 
         {visibleCards.length ? (
-          <div className="signalRail signalStack">
+          <div className={sessionView === "queue" ? "signalRail signalStack" : "signalRail"}>
             {visibleCards.map((card, index) => (
               <PostCard
                 key={card.post_key}
@@ -385,14 +404,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 index={index}
                 selected={selectedKey === card.post_key}
                 drag={drag}
-                stacked={true}
-                interactive={index === 0}
-                onPointerDown={index === 0 ? pointerDown : () => {}}
-                onPointerMove={index === 0 ? pointerMove : () => {}}
-                onPointerUp={index === 0 ? pointerUp : () => {}}
+                stacked={sessionView === "queue"}
+                interactive={sessionView !== "queue" || index === 0}
+                onPointerDown={sessionView === "queue" && index === 0 ? pointerDown : () => {}}
+                onPointerMove={sessionView === "queue" && index === 0 ? pointerMove : () => {}}
+                onPointerUp={sessionView === "queue" && index === 0 ? pointerUp : () => {}}
                 onPointerCancel={() => pointerCancel(card)}
                 onOpen={() => {
-                  if (index === 0) {
+                  if (sessionView !== "queue" || index === 0) {
                     setSelectedKey(selectedKey === card.post_key ? null : card.post_key);
                   }
                 }}
@@ -411,6 +430,32 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             )}
           </div>
         )}
+      </div>
+
+      <div className="reviewLedger" aria-label="本次分類">
+        <span>本次分類</span>
+        <button
+          type="button"
+          className={sessionView === "queue" ? "active" : ""}
+          onClick={() => { setSessionView("queue"); setSelectedKey(null); }}
+        >
+          待分類
+        </button>
+        <button
+          type="button"
+          className={sessionView === "relevant" ? "active relevant" : ""}
+          onClick={() => { setSessionView("relevant"); setSelectedKey(null); }}
+        >
+          Relevant
+        </button>
+        <button
+          type="button"
+          className={sessionView === "irrelevant" ? "active irrelevant" : ""}
+          onClick={() => { setSessionView("irrelevant"); setSelectedKey(null); }}
+        >
+          Irrelevant
+        </button>
+        <a href="/reviews">Review Ledger ↗</a>
       </div>
 
       {selected ? (
@@ -440,7 +485,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             </p>
           ) : null}
 
-          <div className="triageActions">
+          {sessionView === "queue" ? <div className="triageActions">
               <button
                 type="button"
                 className="irrelevant"
@@ -457,7 +502,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               >
                 Relevant →
               </button>
-          </div>
+          </div> : null}
 
           {saveError ? <p className="triageError">{saveError}</p> : null}
         </div>
