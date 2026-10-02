@@ -17,8 +17,13 @@ jobs:
         id: source
         shell: bash
         run: |
-          if [[ "${{ github.event.workflow_run.event }}" == "schedule" ]]; then
+          source_event="${{ github.event.workflow_run.event }}"
+          source_title="${{ github.event.workflow_run.display_title }}"
+          if [[ "$source_event" == "schedule" ]]; then
             echo "scheduled=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$source_event" == "push" && "$source_title" == *"[pipe-test]"* ]]; then
+            echo "scheduled=true" >> "$GITHUB_OUTPUT"
+            echo "[event] explicit [pipe-test] push accepted for end-to-end validation"
           else
             echo "scheduled=false" >> "$GITHUB_OUTPUT"
             echo "[event] non-scheduled collector run; no MCP Event"
