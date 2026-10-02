@@ -7,7 +7,6 @@ import {
   useState
 } from "react";
 import { useRouter } from "next/navigation";
-import { useRouter } from "next/navigation";
 import type { DeidentifiedReviewRow } from "../lib/reviewLedger";
 import { REVIEW_CATEGORIES } from "../lib/reviewCategories";
 
@@ -49,10 +48,6 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
   const [saveMessage, setSaveMessage] = useState("");
   const [drag, setDrag] = useState<DragState | null>(null);
   const [undo, setUndo] = useState<UndoState | null>(null);
-
-  useEffect(() => {
-    setItems(rows);
-  }, [rows]);
 
   useEffect(() => {
     setItems(rows);
