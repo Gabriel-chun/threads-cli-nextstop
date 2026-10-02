@@ -35,7 +35,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
 
   const visible = useMemo(
     () => items.filter((row) => filter === "all" || row.label === filter),
-    [rows, filter]
+    [items, filter]
   );
 
 
