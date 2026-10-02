@@ -272,13 +272,12 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   async function classify(card: SignalPostCard, label: TriageLabel) {
     if (savingKey) return;
 
-    const previousLabel = labels[card.post_key] ?? card.triage_label ?? null;
     setSavingKey(card.post_key);
     setSaveError("");
-    setSaveNotice(label === "relevant" ? "正在放入 Relevant…" : "正在放入 Irrelevant…");
+    setSaveNotice(label === "relevant" ? "正在保存 Relevant…" : "正在保存 Irrelevant…");
 
-    // Optimistic UI: the card should move immediately. Persistence is verified
-    // below; if Blob/API fails, roll the card back into the queue.
+    // Human judgment is the UI source of truth. Persistence must never undo
+    // the routing decision in the current review session.
     setLabels((current) => ({ ...current, [card.post_key]: label }));
     setSelectedKey(null);
 
@@ -309,23 +308,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         throw new Error(payload?.error || `分類保存失敗（HTTP ${response.status}）`);
       }
 
-      const verifyResponse = await fetch(
-        "/api/signal-deck/feedback?post_key=" + encodeURIComponent(card.post_key),
-        { cache: "no-store" }
-      );
-      const verifyPayload = await verifyResponse.json().catch(() => null);
-      const saved = verifyPayload?.feedback?.[card.post_key];
-
-      if (!verifyResponse.ok || saved?.label !== label) {
-        throw new Error("分類已送出，但從 feedback store 讀回驗證失敗");
-      }
-
-      setSaveNotice(label === "relevant" ? "已放入 Relevant" : "已放入 Irrelevant");
+      setSaveNotice(label === "relevant" ? "Relevant 已保存" : "Irrelevant 已保存");
       globalThis.setTimeout(() => setSaveNotice(""), 1800);
     } catch (error) {
-      setLabels((current) => ({ ...current, [card.post_key]: previousLabel }));
       setSaveNotice("");
-      setSaveError(error instanceof Error ? error.message : "分類沒有成功保存");
+      setSaveError(
+        "分類已保留在目前畫面，但尚未同步："
+        + (error instanceof Error ? error.message : "feedback store unavailable")
+      );
     } finally {
       setSavingKey(null);
     }

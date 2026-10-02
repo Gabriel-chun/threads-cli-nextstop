@@ -6,6 +6,7 @@ import {
   useMemo,
   useState
 } from "react";
+import { useRouter } from "next/navigation";
 import type { DeidentifiedReviewRow } from "../lib/reviewLedger";
 import { REVIEW_CATEGORIES } from "../lib/reviewCategories";
 
@@ -40,6 +41,7 @@ function fmtDate(value?: string | null) {
 }
 
 export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
+  const router = useRouter();
   const [filter, setFilter] = useState<Filter>("all");
   const [items, setItems] = useState(rows);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -48,10 +50,29 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
   const [undo, setUndo] = useState<UndoState | null>(null);
 
   useEffect(() => {
+    setItems(rows);
+  }, [rows]);
+
+  useEffect(() => {
     if (!undo) return;
     const timer = window.setTimeout(() => setUndo(null), 5000);
     return () => window.clearTimeout(timer);
   }, [undo]);
+
+  useEffect(() => {
+    const refresh = () => router.refresh();
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+
+    refresh();
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, [router]);
 
   const counts = useMemo(
     () => ({
