@@ -419,7 +419,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <span>只表示目前每日批次的推估進度</span>
           <div className="reviewProgressActions">
             <button type="button" className="syncNotionButton" disabled={syncingNotion || pendingReviews.length===0} onClick={()=>void syncPendingToNotion()}>
-              {syncingNotion ? "同步中…" : pendingReviews.length ? `同步到 Notion · 待同步 ${pendingReviews.length}` : "Notion 已同步"}
+              {syncingNotion ? "↻ 同步中…" : pendingReviews.length ? `↻ 同步到 Notion · 待同步 ${pendingReviews.length}` : "✓ Notion 已同步"}
             </button>
             <a href="/reviews">查看 Review Ledger ↗</a>
           </div>

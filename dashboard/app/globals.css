@@ -1423,6 +1423,39 @@ footer {
   background: var(--accent);
 }
 
+.reviewProgressActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.syncNotionButton {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.syncNotionButton:hover:not(:disabled),
+.reviewProgressFoot a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.syncNotionButton:disabled {
+  color: var(--quiet);
+  cursor: default;
+}
+
 .reviewProgressFoot a {
   color: var(--accent);
   font-weight: 650;
