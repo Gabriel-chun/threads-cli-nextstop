@@ -1642,6 +1642,108 @@ footer {
   color: var(--accent);
 }
 
+
+.reviewLabelCorrection {
+  margin-top: 5px !important;
+  color: var(--accent) !important;
+  font-weight: 650;
+}
+
+.reviewSwipeCell {
+  position: relative;
+  overflow: hidden;
+  min-height: 52px;
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.reviewSwipeHint {
+  position: absolute;
+  inset-block: 0;
+  display: flex;
+  width: 96px;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: .02em;
+  opacity: .45;
+  pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease;
+}
+
+.reviewSwipeHint.active {
+  opacity: 1;
+}
+
+.reviewSwipeHintLeft {
+  right: 9px;
+  justify-content: flex-end;
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.reviewSwipeHintRight {
+  left: 9px;
+  justify-content: flex-start;
+  color: var(--success);
+  transform: translateX(-4px);
+}
+
+.reviewSwipeSurface {
+  position: relative;
+  z-index: 1;
+  min-height: 52px;
+  padding: 7px 8px;
+  background: var(--surface);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  transition: transform .16s ease;
+}
+
+.reviewSwipeSurface.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.reviewSwipeHelp {
+  margin-top: 6px !important;
+  opacity: .7;
+}
+
+.reviewUndoToast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--ink);
+  color: white;
+  box-shadow: 0 12px 32px rgba(46, 39, 33, .16);
+  font-size: 11px;
+}
+
+.reviewUndoToast button {
+  padding: 5px 8px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 7px;
+  background: transparent;
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reviewUndoToast button:disabled {
+  cursor: wait;
+  opacity: .55;
+}
+
 .reviewExcerpt {
   margin: 0;
   font-size: 11px;
@@ -1701,6 +1803,15 @@ footer {
   .reviewDownloadButton {
     width: 100%;
   }
+
+
+  .reviewUndoToast {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    justify-content: space-between;
+  }
+
 }
 
 .srOnly {
