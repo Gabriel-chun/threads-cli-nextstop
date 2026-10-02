@@ -79,7 +79,7 @@ export async function putSignalDeckFeedback(
       existing?.original_category || existing?.category || input.category,
     category_source: existing?.category_source || "system",
     category_updated_at: existing?.category_updated_at || null,
-    reviewed_at: existing?.reviewed_at || new Date().toISOString()
+    reviewed_at: new Date().toISOString()
   };
   await putJson(feedbackPath(input.post_key), record);
   return record;
