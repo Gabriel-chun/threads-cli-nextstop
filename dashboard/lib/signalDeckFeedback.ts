@@ -11,6 +11,8 @@ export type SignalDeckFeedback = {
   snapshot_id: string;
   window: "1d" | "3d" | "5d";
   label: TriageLabel;
+  original_label?: TriageLabel | null;
+  label_updated_at?: string | null;
   category: string;
   original_category?: string | null;
   category_source?: "system" | "human_override";
@@ -75,6 +77,9 @@ export async function putSignalDeckFeedback(
     ...existing,
     ...input,
     id: "fb_" + safeKey(input.post_key),
+    original_label:
+      existing?.original_label || existing?.label || input.label,
+    label_updated_at: existing?.label_updated_at || null,
     original_category:
       existing?.original_category || existing?.category || input.category,
     category_source: existing?.category_source || "system",
@@ -83,6 +88,24 @@ export async function putSignalDeckFeedback(
   };
   await putJson(feedbackPath(input.post_key), record);
   return record;
+}
+
+export async function updateSignalDeckLabel(
+  postKey: string,
+  label: TriageLabel
+): Promise<SignalDeckFeedback> {
+  const pathname = feedbackPath(postKey);
+  const existing = await readJson<SignalDeckFeedback>(pathname);
+  if (!existing) throw new Error("Review feedback not found.");
+
+  const updated: SignalDeckFeedback = {
+    ...existing,
+    label,
+    original_label: existing.original_label || existing.label,
+    label_updated_at: new Date().toISOString()
+  };
+  await putJson(pathname, updated);
+  return updated;
 }
 
 export async function updateSignalDeckCategory(
