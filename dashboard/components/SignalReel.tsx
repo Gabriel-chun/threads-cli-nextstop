@@ -60,7 +60,7 @@ function PostCard({
   onPointerCancel: () => void;
   onOpen: () => void;
 }) {
-  const {t,formatDate}=useI18n();
+  const {t,formatDate,dataLabel}=useI18n();
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const visualDx = Math.max(-150, Math.min(150, dx));
@@ -79,7 +79,7 @@ function PostCard({
       role="button"
       tabIndex={interactive ? 0 : -1}
       aria-expanded={selected}
-      aria-label={`${card.category}，${card.summary}`}
+      aria-label={`${dataLabel(card.category)}，${card.summary}`}
       onPointerDown={(event) => onPointerDown(event, card)}
       onPointerMove={onPointerMove}
       onPointerUp={(event) => onPointerUp(event, card)}
@@ -92,7 +92,7 @@ function PostCard({
       }}
     >
       <div className="reelCardTop">
-        <span className={`reelKind ${card.kind}`}>{card.category}</span>
+        <span className={`reelKind ${card.kind}`}>{dataLabel(card.category)}</span>
         <span className="reelStatus">
           <i />
           {card.triage_label === "relevant"
@@ -106,7 +106,7 @@ function PostCard({
       <p className="postCardText">{card.summary}</p>
 
       <div className="postCardMeta">
-        <span>@{card.username || "unknown"}</span>
+        <span>@{card.username || t("deck.unknownAuthor")}</span>
         <span>{formatDate(card.posted_at)}</span>
       </div>
 
@@ -504,11 +504,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         {drag ? (
           <>
             <div className={`swipeZone swipeZoneLeft ${dragDx < -SWIPE_THRESHOLD ? "active" : ""}`}>
-              <strong>Irrelevant</strong>
+              <strong>{t("deck.irrelevant")}</strong>
               <span>{t("deck.dropLeft")}</span>
             </div>
             <div className={`swipeZone swipeZoneRight ${dragDx > SWIPE_THRESHOLD ? "active" : ""}`}>
-              <strong>Relevant</strong>
+              <strong>{t("deck.relevant")}</strong>
               <span>{t("deck.dropRight")}</span>
             </div>
           </>
