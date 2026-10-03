@@ -30,6 +30,8 @@ jobs:
         run: npx tsx --test lib/reviewArchive.test.ts
       - name: Test Review Ledger de-identification
         run: npx tsx --test lib/reviewLedger.test.ts
+      - name: Test mutation security boundary
+        run: npx tsx --test lib/writeSecurity.test.ts
       - name: Build
         run: npm run build
       - name: Runtime MCP discovery regression
