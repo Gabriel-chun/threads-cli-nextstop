@@ -60,10 +60,13 @@ const track = plainText(props["Track"]).trim();
 const configKey = plainText(props["Config Key"]).trim();
 const queriesText = plainText(props["Queries"]);
 
-const queries = queriesText
+const configuredQueries = queriesText
   .split(/\r?\n/)
   .map((x) => x.trim())
   .filter((x) => x && !x.startsWith("#"));
+
+const BASE_RECALL_QUERIES = ["演唱會", "演唱会", "concert"];
+const queries = [...new Set([...configuredQueries, ...BASE_RECALL_QUERIES])];
 
 if (!queries.length) {
   throw new Error(`Enabled track "${track || configKey}" has no queries`);
@@ -78,7 +81,7 @@ const collectorMode = plainText(props["Collector Mode"]).trim() || "browser";
 await writeFile(OUTPUT_QUERY_FILE, queries.join("\n") + "\n", "utf8");
 
 console.log(
-  `[config] track=${track || "(untitled)"} key=${configKey || "(none)"} queries=${queries.length} window_hours=${windowHours} min_score=${minScore} collector_mode=${collectorMode}`
+  `[config] track=${track || "(untitled)"} key=${configKey || "(none)"} configured_queries=${configuredQueries.length} total_queries=${queries.length} base_recall=${BASE_RECALL_QUERIES.join(",")} window_hours=${windowHours} min_score=${minScore} collector_mode=${collectorMode}`
 );
 
 if (process.env.GITHUB_ENV) {

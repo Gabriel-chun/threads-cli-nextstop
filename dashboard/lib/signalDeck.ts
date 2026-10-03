@@ -12,6 +12,13 @@ export type SignalPostCard = {
   score: number;
   base_score: number;
   feature_tags: string[];
+  actionability_score?: number;
+  actionability_band?: "high" | "medium" | "low";
+  language_context?: "zh_hant" | "zh_hans" | "hk_zh" | "english" | "mixed";
+  language_tokens?: string[];
+  need_nodes?: string[];
+  need_terms?: string[];
+  need_edges?: string[];
   username?: string | null;
   text: string;
   summary: string;
@@ -47,7 +54,7 @@ export type SignalDeckWindow = {
 };
 
 export type SignalDeck = {
-  schema_version: "signal-deck-v0.3";
+  schema_version: "signal-deck-v0.3" | "signal-deck-v0.4";
   card_granularity: "post";
   generated_at: string;
   refresh_policy: "daily";
@@ -112,7 +119,7 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
 
   if (!res.ok) {
     return {
-      schema_version: "signal-deck-v0.3",
+      schema_version: "signal-deck-v0.4",
       card_granularity: "post",
       generated_at: "",
       refresh_policy: "daily",
@@ -133,7 +140,7 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
       .map((card) => ({
         ...card,
         ranking_delta: 0,
-        score: Number(card.base_score ?? card.score),
+        score: Number(card.score ?? card.base_score),
         triage_label: card.triage_label || null,
         triage_reviewed_at: card.triage_reviewed_at || null
       }))

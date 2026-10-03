@@ -41,7 +41,7 @@ class SignalDeckV03Tests(unittest.TestCase):
         ]
 
         deck = build_deck(posts, now)
-        self.assertEqual(deck["schema_version"], "signal-deck-v0.3")
+        self.assertEqual(deck["schema_version"], "signal-deck-v0.4")
         self.assertEqual(deck["card_granularity"], "post")
 
         one_day = deck["windows"]["1d"]
@@ -130,6 +130,87 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(one_day["card_count"], 55)
         self.assertEqual(one_day["default_review_limit"], 40)
         self.assertEqual(one_day["extend_step"], 10)
+
+    def test_need_network_ranks_actionable_mobility_above_generic_question(self):
+        now = datetime(2026, 10, 3, 2, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "generic",
+                "text": "第一次看演唱會，想問大家覺得值得去嗎？",
+                "username": "generic",
+                "permalink": "https://www.threads.com/@generic/post/generic",
+                "timestamp": "2026-10-03T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+            {
+                "id": "mobility",
+                "text": "Concert ends at 10:30. Can I catch the last metro, or should I stay near the venue?",
+                "username": "traveler",
+                "permalink": "https://www.threads.com/@traveler/post/mobility",
+                "timestamp": "2026-10-03T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+        ]
+
+        deck = build_deck(posts, now)
+        cards = deck["windows"]["1d"]["cards"]
+        self.assertEqual(cards[0]["post_id"], "mobility")
+        self.assertEqual(cards[0]["language_context"], "english")
+        self.assertIn("mobility", cards[0]["need_nodes"])
+        self.assertIn("stay", cards[0]["need_nodes"])
+        self.assertIn("mobility->venue_outside", cards[0]["need_edges"])
+        self.assertEqual(cards[0]["actionability_band"], "high")
+        self.assertGreater(cards[0]["score"], cards[1]["score"])
+
+    def test_language_context_is_context_not_a_filter(self):
+        now = datetime(2026, 10, 3, 2, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "hk",
+                "text": "聽日去睇演唱會，散場後港鐵仲有冇車返酒店？",
+                "username": "hk",
+                "permalink": "https://www.threads.com/@hk/post/hk",
+                "timestamp": "2026-10-03T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+            {
+                "id": "hans",
+                "text": "第一次去看演唱会，散场以后地铁来得及吗？酒店住哪里比较方便？",
+                "username": "hans",
+                "permalink": "https://www.threads.com/@hans/post/hans",
+                "timestamp": "2026-10-03T01:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+        ]
+        cards = {card["post_id"]: card for card in build_deck(posts, now)["windows"]["1d"]["cards"]}
+        self.assertEqual(cards["hk"]["language_context"], "hk_zh")
+        self.assertEqual(cards["hans"]["language_context"], "zh_hans")
+        self.assertTrue(cards["hk"]["need_nodes"])
+        self.assertTrue(cards["hans"]["need_nodes"])
+
+    def test_generic_fandom_is_kept_but_moved_to_low_actionability(self):
+        now = datetime(2026, 10, 3, 2, 0, tzinfo=timezone.utc)
+        posts = [{
+            "id": "fan-only",
+            "text": "演唱會真的太感動了，今天還在回味，下一場一定還要去！",
+            "username": "fan",
+            "permalink": "https://www.threads.com/@fan/post/fan-only",
+            "timestamp": "2026-10-03T01:00:00Z",
+            "signal_counted": True,
+            "clean_exclusion_reason": "",
+            "relevance_score": 60,
+        }]
+        card = build_deck(posts, now)["windows"]["1d"]["cards"][0]
+        self.assertEqual(card["actionability_band"], "low")
+        self.assertEqual(card["need_nodes"], [])
 
 if __name__ == "__main__":
     unittest.main()

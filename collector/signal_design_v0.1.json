@@ -1,0 +1,117 @@
+{
+  "version": "signal-design-v0.1",
+  "updated_at": "2026-10-03",
+  "seed_review_dataset": {
+    "total": 159,
+    "relevant": 26,
+    "irrelevant": 133,
+    "relevant_rate_pct": 16.4
+  },
+  "principles": {
+    "preserve_broad_recall": true,
+    "hard_filter_review_noise": false,
+    "language_is_context_not_relevance": true,
+    "rank_by_need_network": true,
+    "keep_low_actionability_in_reserve_pool": true
+  },
+  "base_recall_queries": [
+    "演唱會",
+    "演唱会",
+    "concert"
+  ],
+  "language_contexts": [
+    "zh_hant",
+    "zh_hans",
+    "hk_zh",
+    "english",
+    "mixed"
+  ],
+  "need_nodes": {
+    "wear_support": {
+      "weight": 2,
+      "seed_terms": [
+        "穿搭",
+        "應援",
+        "周邊"
+      ]
+    },
+    "food": {
+      "weight": 4,
+      "seed_terms": [
+        "餐廳",
+        "宵夜",
+        "吃什麼"
+      ]
+    },
+    "stay": {
+      "weight": 9,
+      "seed_terms": [
+        "住宿",
+        "飯店",
+        "住哪裡"
+      ]
+    },
+    "mobility": {
+      "weight": 9,
+      "seed_terms": [
+        "高鐵",
+        "捷運",
+        "接駁"
+      ]
+    },
+    "venue_inside": {
+      "weight": 6,
+      "seed_terms": [
+        "入場",
+        "寄物",
+        "座位"
+      ]
+    },
+    "venue_outside": {
+      "weight": 8,
+      "seed_terms": [
+        "散場",
+        "動線",
+        "回程"
+      ]
+    },
+    "trip_extension": {
+      "weight": 4,
+      "seed_terms": [
+        "景點",
+        "逛街",
+        "旅遊"
+      ]
+    }
+  },
+  "ranking": {
+    "question_intent_bonus": 2,
+    "action_marker_bonus": 2,
+    "first_timer_bonus_only_with_need_node": 1,
+    "edge_bonus_per_pair": 2,
+    "edge_bonus_cap": 6,
+    "penalties": {
+      "long_fandom_story": -5,
+      "fan_narrative": -7,
+      "dialogue_narrative": -4,
+      "cp_fandom_language": -6,
+      "political_noise": -10,
+      "generic_other_without_need_node": -4,
+      "vip_without_need_node": -3,
+      "merch_without_need_node": -2,
+      "ticketing_without_need_node": -1
+    }
+  },
+  "seed_observations": {
+    "strong_positive": [
+      "交通／散場 6/6 Relevant",
+      "住宿／落腳 1/1 Relevant"
+    ],
+    "low_precision": [
+      "其他演出內容 9/90 Relevant",
+      "票務／入場摩擦 5/28 Relevant",
+      "VIP／互動福利 3/14 Relevant",
+      "周邊／現場商品 2/12 Relevant"
+    ]
+  }
+}

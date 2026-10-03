@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import re
+from itertools import combinations
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -69,14 +70,15 @@ CATEGORY_RULES = [
 ]
 
 QUESTION = re.compile(
-    r"請問|请问|想問|想问|有人有.*經驗|有人有.*经验|怎麼|怎么|如何|為什麼|为什么|有沒有人|有没有人",
+    r"請問|请问|想問|想问|有人有.*經驗|有人有.*经验|怎麼|怎么|如何|為什麼|为什么|有沒有人|有没有人"
+    r"|\bhow\b|\bwhere\b|\bcan\s+i\b|\bshould\s+i\b|\bis\s+there\b|\bwhat\b",
     re.I,
 )
 
 FEATURE_PATTERNS = {
     "question_intent": QUESTION,
     "first_timer": re.compile(r"第一次|小白|完全沒有概念|完全没有概念", re.I),
-    "transport_need": re.compile(r"接駁|接驳|捷運|地鐵|地铁|高鐵|高铁|火車|火车|公車|公交|計程車|出租车|uber|散場|散场|末班|機場|机场|航班|趕場|赶场|行李|車票|车票", re.I),
+    "transport_need": re.compile(r"接駁|接驳|捷運|地鐵|地铁|高鐵|高铁|火車|火车|公車|公交|計程車|出租车|uber|散場|散场|末班|機場|机场|航班|趕場|赶场|行李|車票|车票|shuttle|metro|subway|train|bus|taxi|airport|flight|last\s+(?:train|metro)|get\s+back|return\s+trip", re.I),
     "ticketing_need": re.compile(r"購票|购票|門票|门票|實名制|实名制|抽選|公售|退票|入場|入场|手環|手环|票務|票务", re.I),
     "vip_benefit": re.compile(r"VIP|合照|拍立得|簽名|签名|福利|meet\s*&?\s*greet|hi[- ]?bye|soundcheck|彩排|擊掌|击掌|歡送|欢送", re.I),
     "merch_need": re.compile(r"周邊|周边|場販|场贩|手燈|手灯|代購|代购|缺貨|缺货|merch|goods|物販", re.I),
@@ -86,6 +88,135 @@ FEATURE_PATTERNS = {
     "cp_fandom_language": re.compile(r"\bCP\b|同人|磕|嗑|夢女|梦女|ship|配對|配对", re.I),
     "political_noise": re.compile(r"市長|市长|政見|政见|參選|参选|唯一支持|政治", re.I),
 }
+
+LANGUAGE_HINTS = {
+    "hk_zh": re.compile(r"港鐵|紅館|睇|唔|冇|咁|喺|嘅|啲|邊個|聽日|撳|嗰|俾|返|仲|今鋪", re.I),
+    "zh_hans": re.compile(r"演唱会|高铁|地铁|门票|周边|散场|场馆|酒店|怎么|哪里|买票|入场|应援"),
+    "zh_hant": re.compile(r"演唱會|高鐵|捷運|門票|周邊|散場|場館|飯店|怎麼|哪裡|買票|入場|應援"),
+    "english": re.compile(r"\bconcert\b|\blive\s+show\b|\bmetro\b|\bsubway\b|\bhotel\b|\bshuttle\b|\bvenue\b|\btrain\b|\bbus\b", re.I),
+}
+
+NEED_NODE_RULES = [
+    ("wear_support", re.compile(r"穿搭|應援|应援|周邊|周边|手燈|手灯|dress\s*code|outfit|merch|goods|lightstick", re.I)),
+    ("food", re.compile(r"餐廳|餐厅|宵夜|吃什麼|吃什么|美食|restaurant|food|dinner|late[- ]?night", re.I)),
+    ("stay", re.compile(r"住宿|飯店|酒店|民宿|住哪|住哪裡|住哪里|hotel|hostel|accommodation|check[- ]?in|stay\s+(?:near|at|in)", re.I)),
+    ("mobility", re.compile(r"高鐵|高铁|捷運|地鐵|地铁|港鐵|火車|火车|公車|公交|接駁|接驳|計程車|出租车|機場|机场|航班|metro|subway|mtr|train|bus|shuttle|uber|taxi|airport|flight", re.I)),
+    ("venue_inside", re.compile(r"入場|入场|寄物|寄存|置物|座位|安檢|安检|入口|視線|视线|實名|实名|本人確認|locker|seat|security\s*check|entrance|gate|line\s+of\s+sight", re.I)),
+    ("venue_outside", re.compile(r"散場|散场|回程|末班|動線|动线|離場|离场|怎麼回|怎么回|after\s+(?:the\s+)?concert|after\s+(?:the\s+)?show|get\s+back|return\s+trip|last\s+(?:train|metro|bus)", re.I)),
+    ("trip_extension", re.compile(r"景點|景点|逛街|旅遊|旅游|行程|附近|周邊行程|周边行程|sightseeing|itinerary|day\s+trip|shopping|what\s+to\s+do\s+nearby", re.I)),
+]
+
+NEED_NODE_WEIGHTS = {
+    "wear_support": 2.0,
+    "food": 4.0,
+    "stay": 9.0,
+    "mobility": 9.0,
+    "venue_inside": 6.0,
+    "venue_outside": 8.0,
+    "trip_extension": 4.0,
+}
+
+ACTION_MARKERS = re.compile(
+    r"推薦|推荐|附近|來得及|来得及|幾點|几点|多久|怎麼去|怎么去|怎麼回|怎么回|要不要|可不可以"
+    r"|\brecommend\b|\bnearby\b|\bhow\s+to\b|\bhow\s+do\s+i\b|\bcan\s+i\b|\bshould\s+i\b|\bwhat\s+time\b|\bmake\s+it\b",
+    re.I,
+)
+
+
+def detect_language_context(text: str) -> tuple[str, list[str]]:
+    matches = {
+        name: [m.group(0) for m in pattern.finditer(text)]
+        for name, pattern in LANGUAGE_HINTS.items()
+    }
+    hk_hits = len(matches["hk_zh"])
+    hans_hits = len(matches["zh_hans"])
+    hant_hits = len(matches["zh_hant"])
+    english_words = re.findall(r"\b[A-Za-z][A-Za-z'-]{2,}\b", text)
+    has_cjk = bool(re.search(r"[\u3400-\u9fff]", text))
+
+    if hk_hits >= 2:
+        context = "hk_zh"
+    elif has_cjk and len(english_words) >= 4:
+        context = "mixed"
+    elif has_cjk:
+        context = "zh_hans" if hans_hits > hant_hits else "zh_hant"
+    elif len(english_words) >= 3:
+        context = "english"
+    else:
+        context = "mixed"
+
+    tokens = []
+    for values in matches.values():
+        for value in values:
+            if value not in tokens:
+                tokens.append(value)
+    return context, tokens[:8]
+
+
+def extract_need_network(text: str) -> tuple[list[str], list[str], list[str]]:
+    nodes: list[str] = []
+    terms: list[str] = []
+    for node, pattern in NEED_NODE_RULES:
+        matches = [m.group(0) for m in pattern.finditer(text)]
+        if not matches:
+            continue
+        nodes.append(node)
+        for value in matches:
+            if value not in terms:
+                terms.append(value)
+
+    edges = [f"{a}->{b}" for a, b in combinations(nodes, 2)]
+    return nodes, terms[:12], edges[:12]
+
+
+def actionability_score(
+    text: str,
+    category: str,
+    features: set[str],
+    need_nodes: list[str],
+    need_edges: list[str],
+) -> float:
+    score = sum(NEED_NODE_WEIGHTS.get(node, 0.0) for node in need_nodes)
+    score += min(6.0, len(need_edges) * 2.0)
+
+    if QUESTION.search(text):
+        score += 2.0
+    if ACTION_MARKERS.search(text):
+        score += 2.0
+    if "first_timer" in features and need_nodes:
+        score += 1.0
+
+    if "long_fandom_story" in features:
+        score -= 5.0
+    if "fan_narrative" in features:
+        score -= 7.0
+    if "dialogue_narrative" in features:
+        score -= 4.0
+    if "cp_fandom_language" in features:
+        score -= 6.0
+    if "political_noise" in features:
+        score -= 10.0
+
+    if not need_nodes:
+        if "ticketing_need" in features:
+            score -= 1.0
+        if "vip_benefit" in features:
+            score -= 3.0
+        if "merch_need" in features:
+            score -= 2.0
+        if category == "其他演出內容":
+            score -= 4.0
+
+    return round(score, 3)
+
+
+def actionability_band(score: float) -> str:
+    if score >= 12:
+        return "high"
+    if score >= 5:
+        return "medium"
+    return "low"
+
 
 NARRATIVE_MARKERS = re.compile(
     r"溫柔|温柔|耳邊|耳边|眼神|身體|身体|碎髮|碎发|拉著|拉着|靠向|撥著|拨着|笑笑|輕輕|轻轻|不自覺|不自觉|低聲|低声|盯著|盯着|抱住|摟著|搂着|肩膀|靠近",
@@ -193,9 +324,7 @@ def base_score(post: dict[str, Any], text: str, ts: datetime, now: datetime) -> 
     source = float(post.get("relevance_score") or 0)
     age_hours = max(0.0, (now - ts).total_seconds() / 3600)
     recency = max(0.0, 12.0 - age_hours / 4.0)
-    intent = 6.0 if QUESTION.search(text) else 0.0
-    first_timer = 3.0 if FEATURE_PATTERNS["first_timer"].search(text) else 0.0
-    return round(source + recency + intent + first_timer, 3)
+    return round(source + recency, 3)
 
 
 def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dict[str, Any]:
@@ -206,8 +335,13 @@ def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dic
 
     post_key = stable_post_key(post)
     category, kind = categorize(text)
-    features = sorted(extract_features(text))
-    score = base_score(post, text, ts, now)
+    feature_set = extract_features(text)
+    features = sorted(feature_set)
+    language_context, language_tokens = detect_language_context(text)
+    need_nodes, need_terms, need_edges = extract_need_network(text)
+    base = base_score(post, text, ts, now)
+    action_score = actionability_score(text, category, feature_set, need_nodes, need_edges)
+    score = round(base + action_score, 3)
     snapshot_id = f"deck_{now.date().isoformat()}_{window_key}_{post_key.removeprefix('post_')}"
 
     return {
@@ -219,7 +353,14 @@ def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dic
         "kind": kind,
         "status": status_for(ts, now),
         "score": score,
-        "base_score": score,
+        "base_score": base,
+        "actionability_score": action_score,
+        "actionability_band": actionability_band(action_score),
+        "language_context": language_context,
+        "language_tokens": language_tokens,
+        "need_nodes": need_nodes,
+        "need_terms": need_terms,
+        "need_edges": need_edges,
         "feature_tags": features,
         "username": post.get("username"),
         "text": text,
@@ -270,7 +411,7 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
         }
 
     return {
-        "schema_version": "signal-deck-v0.3",
+        "schema_version": "signal-deck-v0.4",
         "card_granularity": "post",
         "generated_at": now.isoformat().replace("+00:00", "Z"),
         "refresh_policy": "daily",
