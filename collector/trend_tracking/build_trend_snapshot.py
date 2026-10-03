@@ -214,9 +214,25 @@ def aggregate_links(evidence,previous,now):
     order={"persistent":0,"repeated":1,"expanding":2,"new":3,"dormant":4}
     return sorted(links,key=lambda x:(order.get(x["state"],9),x["source_label"],x["target_label"]))
 
+EVENT_CONTEXT_TERMS=["演唱會","演唱会","concert","world tour","asia tour","tour","ライブ","live show"]
+
+def has_event_context(text,named):
+    lower=soft(text)
+    return bool(named.get("artists") or named.get("event") or named.get("venues") or any(term in lower for term in EVENT_CONTEXT_TERMS))
+
 def build_snapshot(raw,plan,artists,venues,events,axes,previous,run_stamp,now_dt=None):
     now_dt=now_dt or datetime.now(timezone.utc); now=now_dt.isoformat().replace("+00:00","Z")
-    clean=dedupe(raw); qmap={q["query"]:q for q in plan.get("queries",[])}
+    window_start=now_dt-timedelta(hours=8)
+    qmap={q["query"]:q for q in plan.get("queries",[])}
+    clean=[]
+    for row in dedupe(raw):
+        posted=parse_ts(row.get("timestamp"))
+        if not posted or posted < window_start or posted > now_dt:
+            continue
+        named=resolve(str(row.get("text") or ""),artists,venues,events)
+        if not has_event_context(str(row.get("text") or ""),named):
+            continue
+        clean.append(row)
     sample_id="sample:"+run_stamp; evidence=[]; entities={}; lang_counts=defaultdict(int)
     for row in clean:
         query=str(row.get("query") or "").strip(); q=qmap.get(query,{})
@@ -254,7 +270,7 @@ def build_snapshot(raw,plan,artists,venues,events,axes,previous,run_stamp,now_dt
         ann=ev["annotation"]
         if ann.get("event") and ann.get("mobility") and ann.get("timing") and ann.get("stay"):
             chains.append({"evidence_id":ev["evidence_id"],"chain":[ann["event"]["id"],ann["timing"][0]["id"],ann["mobility"][0]["id"],ann["stay"][0]["id"]]})
-    sample={"sample_id":sample_id,"run_stamp":run_stamp,"window_start":(now_dt-timedelta(hours=8)).isoformat().replace("+00:00","Z"),"window_end":now,"sampling_strategy":"need_led_observation","query_family":sorted({q.get("family") for q in plan.get("queries",[]) if q.get("family")}),"language_context":sorted({q.get("language_context") for q in plan.get("queries",[]) if q.get("language_context")}),"queries_executed":[q.get("query") for q in plan.get("queries",[]) if q.get("query")],"raw_count":len(raw),"clean_count":len(clean),"generated_at":now}
+    sample={"sample_id":sample_id,"run_stamp":run_stamp,"window_start":(now_dt-timedelta(hours=8)).isoformat().replace("+00:00","Z"),"window_end":now,"sampling_strategy":"need_led_observation","event_context_filter":"concert_or_resolved_entity","query_family":sorted({q.get("family") for q in plan.get("queries",[]) if q.get("family")}),"language_context":sorted({q.get("language_context") for q in plan.get("queries",[]) if q.get("language_context")}),"queries_executed":[q.get("query") for q in plan.get("queries",[]) if q.get("query")],"raw_count":len(raw),"clean_count":len(clean),"generated_at":now}
     current_event_links=[l for l in links if l["source_type"]=="event" and l["state"]!="dormant"]
     legacy_edges=[]
     for l in current_event_links:
