@@ -22,8 +22,8 @@ export default async function ReviewsPage() {
 
     <section className="metrics reviewMetrics">
       <article><span><T k="reviews.metric.reviewed" /></span><strong>{rows.length}</strong><small>Notion review state</small></article>
-      <article><span><T k="reviews.metric.relevant" /></span><strong>{relevant}</strong><small>human selected</small></article>
-      <article><span><T k="reviews.metric.irrelevant" /></span><strong>{irrelevant}</strong><small>human excluded</small></article>
+      <article><span><T k="reviews.metric.relevant" /></span><strong>{relevant}</strong><small><T k="common.humanSelected" /></small></article>
+      <article><span><T k="reviews.metric.irrelevant" /></span><strong>{irrelevant}</strong><small><T k="common.humanExcluded" /></small></article>
       <article className="accent"><span><T k="reviews.metric.archive" /></span><strong>00:00</strong><small><T k="reviews.metric.archiveHelp" /></small></article>
     </section>
 
@@ -42,6 +42,6 @@ export default async function ReviewsPage() {
       <ReviewLedger rows={rows} />
     </section>
 
-    <footer><span>Next Stop Live · Human Review Ledger</span><span>De-identified · evidence provenance preserved</span></footer>
+    <footer><span>Next Stop Live · Human Review Ledger</span><span><T k="reviews.footer" /></span></footer>
   </main>;
 }
