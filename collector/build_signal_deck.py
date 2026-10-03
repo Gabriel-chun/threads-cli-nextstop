@@ -137,6 +137,14 @@ ACTION_MARKERS = re.compile(
 )
 
 
+ENGLISH_CONTEXT = re.compile(
+    r"\b(?:the|a|an|is|are|was|were|to|from|at|in|on|for|with|after|before|near|"
+    r"how|where|what|when|can|could|should|would|need|want|stay|hotel|hostel|"
+    r"train|metro|subway|bus|shuttle|venue|concert|ticket|tickets|show)\b",
+    re.I,
+)
+
+
 def detect_language_context(text: str) -> tuple[str, list[str]]:
     matches = {
         name: [m.group(0) for m in pattern.finditer(text)]
@@ -146,7 +154,9 @@ def detect_language_context(text: str) -> tuple[str, list[str]]:
     hans_hits = len(matches["zh_hans"])
     hant_hits = len(matches["zh_hant"])
     english_words = re.findall(r"\b[A-Za-z][A-Za-z'-]{2,}\b", text)
+    english_context_hits = len(ENGLISH_CONTEXT.findall(text))
     has_cjk = bool(re.search(r"[\u3400-\u9fff]", text))
+    has_latin = bool(english_words)
 
     if hk_hits >= 2:
         context = "hk_zh"
@@ -154,8 +164,10 @@ def detect_language_context(text: str) -> tuple[str, list[str]]:
         context = "mixed"
     elif has_cjk:
         context = "zh_hans" if hans_hits > hant_hits else "zh_hant"
-    elif len(english_words) >= 3:
+    elif has_latin and english_context_hits >= 3:
         context = "english"
+    elif has_latin:
+        context = "other_latin"
     else:
         context = "mixed"
 
@@ -212,6 +224,10 @@ def actionability_score(
     if "political_noise" in features:
         score -= 10.0
 
+    language_context, _ = detect_language_context(text)
+    if language_context == "other_latin":
+        score -= 8.0
+
     if not need_nodes:
         if "ticketing_need" in features:
             score -= 1.0
@@ -244,7 +260,8 @@ PRESERVE_TICKET_FRICTION = re.compile(
 )
 
 RESALE = re.compile(
-    r"讓票|让票|出票|售票|原價讓|原价让|原價出|原价出|多搶到|多抢到|搶多了|抢多了|多搶一張|多抢一张|轉讓|转让|降價賣|降价卖|降售|#售|pm\s*帶價|pm\s*带价|帶價|带价|可拆|票.*私訊|票.*私信|私訊.*票|私信.*票|求售|現場給票|现场给票",
+    r"讓票|让票|出票|售票|原價讓|原价让|原價出|原价出|多搶到|多抢到|搶多了|抢多了|多搶一張|多抢一张|轉讓|转让|降價賣|降价卖|降售|#售|pm\s*帶價|pm\s*带价|帶價|带价|可拆|票.*私訊|票.*私信|私訊.*票|私信.*票|求售|現場給票|现场给票"
+    r"|\bWTS\b|\bselling\s+(?:my\s+)?(?:concert\s+)?tickets?\b|\btickets?\s+for\s+sale\b|\bDM\s+me\s+for\s+tickets?\b",
     re.I,
 )
 
