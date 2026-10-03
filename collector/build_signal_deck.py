@@ -116,6 +116,20 @@ NEED_NODE_WEIGHTS = {
     "trip_extension": 4.0,
 }
 
+# Seeded from 159 human reviews on 2026-10-03.
+# These are ranking priors, not hard filters.
+CATEGORY_REVIEW_PRIOR = {
+    "交通／散場": 6.0,          # 6 / 6 Relevant
+    "住宿／落腳": 6.0,          # 1 / 1 Relevant, low sample -> capped
+    "其他演出內容": -4.0,       # 9 / 90 Relevant
+    "票務／入場摩擦": -3.0,     # 5 / 28 Relevant
+    "VIP／互動福利": -4.0,      # 3 / 14 Relevant
+    "周邊／現場商品": -4.0,     # 2 / 12 Relevant
+    "場館／現場體驗": -5.0,     # 0 / 6 Relevant
+    "拍攝／現場規則": -4.0,     # 0 / 1 Relevant
+    "陪同／Solo Attendance": -4.0, # 0 / 1 Relevant
+}
+
 ACTION_MARKERS = re.compile(
     r"推薦|推荐|附近|來得及|来得及|幾點|几点|多久|怎麼去|怎么去|怎麼回|怎么回|要不要|可不可以"
     r"|\brecommend\b|\bnearby\b|\bhow\s+to\b|\bhow\s+do\s+i\b|\bcan\s+i\b|\bshould\s+i\b|\bwhat\s+time\b|\bmake\s+it\b",
@@ -176,7 +190,8 @@ def actionability_score(
     need_nodes: list[str],
     need_edges: list[str],
 ) -> float:
-    score = sum(NEED_NODE_WEIGHTS.get(node, 0.0) for node in need_nodes)
+    score = CATEGORY_REVIEW_PRIOR.get(category, 0.0)
+    score += sum(NEED_NODE_WEIGHTS.get(node, 0.0) for node in need_nodes)
     score += min(6.0, len(need_edges) * 2.0)
 
     if QUESTION.search(text):
