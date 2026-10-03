@@ -81,7 +81,7 @@ function labelWidth(label: string) {
 
 export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   const {t}=useI18n();
-  const [view, setView] = useState<ViewMode>("table");
+  const [view, setView] = useState<ViewMode>("network");
   const [selected, setSelected] = useState<string | null>(null);
   const [positions, setPositions] = useState<Map<string, Point>>(new Map());
   const [drag, setDrag] = useState<DragState | null>(null);
@@ -216,10 +216,10 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   }
 
   const tableView = (
-    <div className="networkBoard">
+    <div className="networkBoard quietNetworkBoard">
       <div className="networkColumns">
         {LAYERS.map((layer) => (
-          <section className="networkColumn" key={layer}>
+          <section className="networkColumn quietNetworkColumn" key={layer}>
             <div className="networkColumnHead">
               <span>{layerTitle(layer,t)}</span>
               <small>{grouped[layer].length}</small>
@@ -250,19 +250,19 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
           </section>
         ))}
       </div>
-      <ConnectionPanel
+      {selectedNode ? <ConnectionPanel
         selectedNode={selectedNode}
         edges={activeEdges}
         nodeMap={nodeMap}
         onClear={() => setSelected(null)}
         t={t}
-      />
+      /> : null}
     </div>
   );
 
   const networkView = (
-    <div className="networkGraphLayout">
-      <div className="networkGraphCanvas">
+    <div className={`networkGraphLayout quietGraphLayout ${selectedNode ? "hasSelection" : ""}`}>
+      <div className="networkGraphCanvas quietGraphCanvas">
         <svg
           ref={svgRef}
           viewBox="0 0 1100 650"
@@ -304,7 +304,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
               const dim = Boolean(
                 selected && edge.source !== selected && edge.target !== selected
               );
-              const width = 1 + (edge.weight / maxWeight) * 5;
+              const width = 1 + (edge.weight / maxWeight) * 4;
 
               return (
                 <line
@@ -383,27 +383,20 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
         </svg>
       </div>
 
-      <ConnectionPanel
+      {selectedNode ? <ConnectionPanel
         selectedNode={selectedNode}
         edges={activeEdges}
         nodeMap={nodeMap}
         onClear={() => setSelected(null)}
         t={t}
-      />
+      /> : null}
     </div>
   );
 
   return (
-    <div>
-      <div className="networkViewToolbar">
-        <div className="networkViewTabs">
-          <button
-            type="button"
-            className={view === "table" ? "active" : ""}
-            onClick={() => setView("table")}
-          >
-            {t("network.table")}
-          </button>
+    <div className="quietNetworkView">
+      <div className="networkViewToolbar quietToolbar">
+        <div className="networkViewTabs quietTabs">
           <button
             type="button"
             className={view === "network" ? "active" : ""}
@@ -411,15 +404,20 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
           >
             {t("network.graph")}
           </button>
+          <button
+            type="button"
+            className={view === "table" ? "active" : ""}
+            onClick={() => setView("table")}
+          >
+            {t("network.table")}
+          </button>
         </div>
 
-        <div className="networkToolbarActions">
+        <div className="networkToolbarActions quietToolbarActions">
           <span>
             {selectedNode
               ? t("network.focused",{label:selectedNode.label})
-              : view === "network"
-                ? t("network.dragHelp")
-                : t("network.clickHelp")}
+              : t("network.clickHelp")}
           </span>
           {view === "network" ? (
             <button type="button" onClick={resetLayout}>
@@ -448,7 +446,7 @@ function ConnectionPanel({
   t: (key:string,values?:Record<string,string|number>)=>string;
 }) {
   return (
-    <aside className="networkEdgesPanel">
+    <aside className="networkEdgesPanel quietConnectionPanel">
       <div className="networkEdgesHead">
         <div>
           <span>
@@ -464,7 +462,7 @@ function ConnectionPanel({
         </div>
         {selectedNode ? (
           <button type="button" onClick={onClear}>
-            {t("common.clear")}
+            {t("common.close")}
           </button>
         ) : null}
       </div>
