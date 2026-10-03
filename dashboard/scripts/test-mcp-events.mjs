@@ -12,7 +12,8 @@ async function rpc(id,method,params={}){
       "Content-Type":"application/json",
       "Accept":"application/json, text/event-stream",
       "MCP-Protocol-Version":"2026-07-28",
-      "Mcp-Method":method
+      "Mcp-Method":method,
+      ...(params?.name ? {"Mcp-Name":params.name} : {})
     },
     body:JSON.stringify({jsonrpc:"2.0",id,method,params:{...params,_meta:meta}})
   });
