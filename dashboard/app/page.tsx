@@ -2,7 +2,7 @@ import { snapshot, compact, loadTrendHistory } from "../lib/signals";
 import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
-import { LocaleDate, T } from "../components/I18nProvider";
+import { DataLabel, LocaleDate, T } from "../components/I18nProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -23,14 +23,14 @@ export default async function Page() {
     <main className="signalWorkspace">
       <header className="workspaceHeader">
         <div>
-          <p className="eyebrow">NEXT STOP LIVE · SIGNAL DESK</p>
+          <p className="eyebrow"><T k="signal.eyebrow" /></p>
           <h1><T k="signal.title" /></h1>
           <p className="lead"><T k="signal.lead" /></p>
         </div>
         <div className={`health ${data.health.healthy ? "ok" : "warn"}`}>
           <span className="dot" />
           <div>
-            <strong>{data.health.healthy ? <T k="signal.collectorHealthy" /> : `Collector ${data.health.status}`}</strong>
+            <strong>{data.health.healthy ? <T k="signal.collectorHealthy" /> : <T k={"signal.health."+data.health.status} />}</strong>
             <small><LocaleDate value={data.health.updatedAt} /></small>
           </div>
         </div>
@@ -54,8 +54,8 @@ export default async function Page() {
             <p className="trendValue">{latestTrend ? `${latestTrend.new3h} / ${latestTrend.new12h}` : "—"}</p>
           </div>
           <TrendChart data={history} series={[
-            { key: "new3h", label: "Rolling 3h", className: "trendA" },
-            { key: "new12h", label: "Rolling 12h", className: "trendB" }
+            { key: "new3h", labelKey: "signal.chart.rolling3h", className: "trendA" },
+            { key: "new12h", labelKey: "signal.chart.rolling12h", className: "trendB" }
           ]} />
         </div>
 
@@ -65,8 +65,8 @@ export default async function Page() {
             <p className="trendValue">{latestTrend ? `${latestTrend.cleanRatePct}%` : "—"}</p>
           </div>
           <TrendChart data={history} series={[
-            { key: "cleanSignals", label: "Clean", className: "trendA" },
-            { key: "excludedTransactions", label: "Resale excluded", className: "trendC" }
+            { key: "cleanSignals", labelKey: "signal.chart.clean", className: "trendA" },
+            { key: "excludedTransactions", labelKey: "signal.chart.resaleExcluded", className: "trendC" }
           ]} />
         </div>
       </section>
@@ -80,7 +80,7 @@ export default async function Page() {
           <div className="bars">
             {top.map((item) => (
               <div className="barRow" key={item.category}>
-                <div className="barLabel"><span>{item.category}</span><em>{item.kind}</em></div>
+                <div className="barLabel"><span><DataLabel value={item.category} /></span><em><T k={"signal.kind."+item.kind} /></em></div>
                 <div className="barTrack"><div className={`barFill ${item.kind}`} style={{ width: `${Math.max(10, (item.count / Math.max(1, top[0]?.count || 1)) * 100)}%` }} /></div>
                 <strong>{item.count}</strong>
               </div>

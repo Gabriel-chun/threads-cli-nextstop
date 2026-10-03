@@ -15,14 +15,14 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
   return <main className="networkWorkspace">
     <header className="workspaceHeader">
       <div>
-        <p className="eyebrow">NEXT STOP LIVE · KEYWORD NETWORK</p>
+        <p className="eyebrow"><T k="network.eyebrow" /></p>
         <h1><T k="network.title" /></h1>
         <p className="lead"><T k="network.lead" /></p>
       </div>
     </header>
     <div className="workspaceRule" />
 
-    {availableDates.length?<nav className="networkDateStrip" aria-label="Keyword Network snapshot dates">
+    {availableDates.length?<nav className="networkDateStrip" aria-labelledby="networkSnapshotDatesLabel"><span id="networkSnapshotDatesLabel" className="srOnly"><T k="network.snapshotDatesAria" /></span>
       {availableDates.map(date=><a key={date} href={"/network?date="+date} className={date===selectedDate?"active":""}>
         <strong>{date.slice(5).replace("-","/")}</strong>
         <small>{index?.snapshots.find(item=>item.network_date===date)?.source_card_count||0} <T k="common.cards" /></small>
@@ -43,6 +43,6 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
       </section>
     </>}
 
-    <footer><span>Next Stop Live · Keyword Network</span><span><T k="network.footer" /></span></footer>
+    <footer><span>Next Stop Live · <T k="network.footerTitle" /></span><span><T k="network.footer" /></span></footer>
   </main>;
 }

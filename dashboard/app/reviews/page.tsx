@@ -12,7 +12,7 @@ export default async function ReviewsPage() {
   return <main className="reviewsWorkspace">
     <header className="workspaceHeader">
       <div>
-        <p className="eyebrow">NEXT STOP LIVE · REVIEW LEDGER</p>
+        <p className="eyebrow"><T k="reviews.eyebrow" /></p>
         <h1><T k="reviews.title" /></h1>
         <p className="lead"><T k="reviews.lead" /></p>
       </div>
@@ -21,7 +21,7 @@ export default async function ReviewsPage() {
     <div className="workspaceRule" />
 
     <section className="metrics reviewMetrics">
-      <article><span><T k="reviews.metric.reviewed" /></span><strong>{rows.length}</strong><small>Notion review state</small></article>
+      <article><span><T k="reviews.metric.reviewed" /></span><strong>{rows.length}</strong><small><T k="reviews.notionState" /></small></article>
       <article><span><T k="reviews.metric.relevant" /></span><strong>{relevant}</strong><small><T k="common.humanSelected" /></small></article>
       <article><span><T k="reviews.metric.irrelevant" /></span><strong>{irrelevant}</strong><small><T k="common.humanExcluded" /></small></article>
       <article className="accent"><span><T k="reviews.metric.archive" /></span><strong>00:00</strong><small><T k="reviews.metric.archiveHelp" /></small></article>
@@ -35,13 +35,13 @@ export default async function ReviewsPage() {
           <p className="muted"><T k="reviews.ledgerHelp" /></p>
         </div>
         <div className="reviewLedgerActions">
-          <div className="reviewArchiveStatus" aria-label="Review archive sync status"><strong><T k="reviews.liveSave" /></strong><small><T k="reviews.archiveAtMidnight" /></small></div>
+          <div className="reviewArchiveStatus" aria-labelledby="reviewArchiveStatusLabel"><span id="reviewArchiveStatusLabel" className="srOnly"><T k="reviews.archiveStatusAria" /></span><strong><T k="reviews.liveSave" /></strong><small><T k="reviews.archiveAtMidnight" /></small></div>
           <a className="downloadButton reviewDownloadButton" href="/api/download/reviews/latest"><span>🗂️</span><div><strong><T k="reviews.download" /></strong><small><T k="reviews.downloadHelp" /></small></div></a>
         </div>
       </div>
       <ReviewLedger rows={rows} />
     </section>
 
-    <footer><span>Next Stop Live · Human Review Ledger</span><span><T k="reviews.footer" /></span></footer>
+    <footer><span>Next Stop Live · <T k="reviews.footerTitle" /></span><span><T k="reviews.footer" /></span></footer>
   </main>;
 }

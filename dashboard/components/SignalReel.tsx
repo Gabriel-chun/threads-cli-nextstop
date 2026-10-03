@@ -60,7 +60,7 @@ function PostCard({
   onPointerCancel: () => void;
   onOpen: () => void;
 }) {
-  const {t,formatDate}=useI18n();
+  const {t,formatDate,dataLabel}=useI18n();
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const visualDx = Math.max(-150, Math.min(150, dx));
@@ -79,7 +79,7 @@ function PostCard({
       role="button"
       tabIndex={interactive ? 0 : -1}
       aria-expanded={selected}
-      aria-label={`${card.category}，${card.summary}`}
+      aria-label={`${dataLabel(card.category)}，${card.summary}`}
       onPointerDown={(event) => onPointerDown(event, card)}
       onPointerMove={onPointerMove}
       onPointerUp={(event) => onPointerUp(event, card)}
@@ -92,7 +92,7 @@ function PostCard({
       }}
     >
       <div className="reelCardTop">
-        <span className={`reelKind ${card.kind}`}>{card.category}</span>
+        <span className={`reelKind ${card.kind}`}>{dataLabel(card.category)}</span>
         <span className="reelStatus">
           <i />
           {card.triage_label === "relevant"
@@ -106,7 +106,7 @@ function PostCard({
       <p className="postCardText">{card.summary}</p>
 
       <div className="postCardMeta">
-        <span>@{card.username || "unknown"}</span>
+        <span>@{card.username || t("deck.unknownAuthor")}</span>
         <span>{formatDate(card.posted_at)}</span>
       </div>
 
@@ -504,11 +504,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         {drag ? (
           <>
             <div className={`swipeZone swipeZoneLeft ${dragDx < -SWIPE_THRESHOLD ? "active" : ""}`}>
-              <strong>Irrelevant</strong>
+              <strong>{t("deck.irrelevant")}</strong>
               <span>{t("deck.dropLeft")}</span>
             </div>
             <div className={`swipeZone swipeZoneRight ${dragDx > SWIPE_THRESHOLD ? "active" : ""}`}>
-              <strong>Relevant</strong>
+              <strong>{t("deck.relevant")}</strong>
               <span>{t("deck.dropRight")}</span>
             </div>
           </>
@@ -570,14 +570,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           className={reviewView === "relevant" ? "active relevant" : ""}
           onClick={() => { setReviewView("relevant"); setSelectedKey(null); }}
         >
-          Relevant
+          {t("deck.relevant")}
         </button>
         <button
           type="button"
           className={reviewView === "irrelevant" ? "active irrelevant" : ""}
           onClick={() => { setReviewView("irrelevant"); setSelectedKey(null); }}
         >
-          Irrelevant
+          {t("deck.irrelevant")}
         </button>
       </div>
 
@@ -586,7 +586,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <div className="postPreviewMeta">
             <div>
               <p className="kicker">{t("deck.postPreview")}</p>
-              <h3>{selected.category}</h3>
+              <h3>{dataLabel(selected.category)}</h3>
               <p>@{selected.username || t("deck.unknownAuthor")} · {formatDate(selected.posted_at)}</p>
             </div>
             {selected.permalink ? (
@@ -616,7 +616,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 disabled={false}
                 onClick={() => void classify(selected, "irrelevant")}
               >
-                ← Irrelevant
+                ← {t("deck.irrelevant")}
               </button>
               <button
                 type="button"
@@ -624,7 +624,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 disabled={false}
                 onClick={() => void classify(selected, "relevant")}
               >
-                Relevant →
+                {t("deck.relevant")} →
               </button>
             </div>
           ) : null}
@@ -642,7 +642,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <span>{t("deck.relevantSummary")}</span>
           {relevantClusters.map((cluster) => (
             <div key={cluster.category}>
-              <strong>{cluster.category}</strong>
+              <strong>{dataLabel(cluster.category)}</strong>
               <em>{cluster.count}</em>
               {cluster.features.length ? <small>{cluster.features.join(" · ")}</small> : null}
             </div>
