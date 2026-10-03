@@ -570,14 +570,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           className={reviewView === "relevant" ? "active relevant" : ""}
           onClick={() => { setReviewView("relevant"); setSelectedKey(null); }}
         >
-          Relevant
+          {t("deck.relevant")}
         </button>
         <button
           type="button"
           className={reviewView === "irrelevant" ? "active irrelevant" : ""}
           onClick={() => { setReviewView("irrelevant"); setSelectedKey(null); }}
         >
-          Irrelevant
+          {t("deck.irrelevant")}
         </button>
       </div>
 
@@ -586,7 +586,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <div className="postPreviewMeta">
             <div>
               <p className="kicker">{t("deck.postPreview")}</p>
-              <h3>{selected.category}</h3>
+              <h3>{dataLabel(selected.category)}</h3>
               <p>@{selected.username || t("deck.unknownAuthor")} · {formatDate(selected.posted_at)}</p>
             </div>
             {selected.permalink ? (
@@ -616,7 +616,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 disabled={false}
                 onClick={() => void classify(selected, "irrelevant")}
               >
-                ← Irrelevant
+                ← {t("deck.irrelevant")}
               </button>
               <button
                 type="button"
@@ -624,7 +624,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 disabled={false}
                 onClick={() => void classify(selected, "relevant")}
               >
-                Relevant →
+                {t("deck.relevant")} →
               </button>
             </div>
           ) : null}
@@ -642,7 +642,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <span>{t("deck.relevantSummary")}</span>
           {relevantClusters.map((cluster) => (
             <div key={cluster.category}>
-              <strong>{cluster.category}</strong>
+              <strong>{dataLabel(cluster.category)}</strong>
               <em>{cluster.count}</em>
               {cluster.features.length ? <small>{cluster.features.join(" · ")}</small> : null}
             </div>
