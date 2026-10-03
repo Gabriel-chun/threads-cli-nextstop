@@ -5,6 +5,8 @@ from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 
+from collector.build_signal_deck import detect_language_context
+
 def norm(text):
     text=unicodedata.normalize("NFKC",str(text or "")).lower()
     text=re.sub(r"https?://\S+"," ",text)
