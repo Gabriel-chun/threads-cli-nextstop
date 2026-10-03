@@ -25,14 +25,14 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
     {availableDates.length?<nav className="networkDateStrip" aria-label="Keyword Network snapshot dates">
       {availableDates.map(date=><a key={date} href={"/network?date="+date} className={date===selectedDate?"active":""}>
         <strong>{date.slice(5).replace("-","/")}</strong>
-        <small>{index?.snapshots.find(item=>item.network_date===date)?.source_card_count||0} cards</small>
+        <small>{index?.snapshots.find(item=>item.network_date===date)?.source_card_count||0} <T k="common.cards" /></small>
       </a>)}
     </nav>:null}
 
     {!data?<section className="panel"><p className="muted"><T k="network.notGenerated" /></p></section>:<>
       <section className="metrics">
         <article><span><T k="network.metric.date" /></span><strong>{data.network_date.slice(5)}</strong><small>Asia/Taipei</small></article>
-        <article><span><T k="network.metric.sourceCards" /></span><strong>{data.source_card_count}</strong><small>1d classified candidates</small></article>
+        <article><span><T k="network.metric.sourceCards" /></span><strong>{data.source_card_count}</strong><small>1d <T k="common.classifiedCandidates" /></small></article>
         <article><span><T k="network.metric.nodes" /></span><strong>{data.nodes.filter(node=>node.count>0).length}</strong><small><T k="network.metric.activeNodes" /></small></article>
         <article className="accent"><span><T k="network.metric.edges" /></span><strong>{data.edges.length}</strong><small><T k="network.metric.dailyCooccurrence" /></small></article>
       </section>
@@ -43,6 +43,6 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
       </section>
     </>}
 
-    <footer><span>Next Stop Live · Keyword Network</span><span>00:00 Asia/Taipei · GitHub archive</span></footer>
+    <footer><span>Next Stop Live · Keyword Network</span><span><T k="network.footer" /></span></footer>
   </main>;
 }
