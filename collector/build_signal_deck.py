@@ -416,6 +416,9 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
         ts = post_time(post)
         if not text or not ts or is_transaction(text):
             continue
+        language_context, _ = detect_language_context(text)
+        if language_context == "other_latin":
+            continue
         prepared.append(post)
 
     windows: dict[str, Any] = {}
