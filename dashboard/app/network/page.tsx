@@ -15,7 +15,7 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
   return <main className="networkWorkspace">
     <header className="workspaceHeader">
       <div>
-        <p className="eyebrow">NEXT STOP LIVE · KEYWORD NETWORK</p>
+        <p className="eyebrow"><T k="network.eyebrow" /></p>
         <h1><T k="network.title" /></h1>
         <p className="lead"><T k="network.lead" /></p>
       </div>
@@ -43,6 +43,6 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
       </section>
     </>}
 
-    <footer><span>Next Stop Live · Keyword Network</span><span><T k="network.footer" /></span></footer>
+    <footer><span>Next Stop Live · <T k="network.footerTitle" /></span><span><T k="network.footer" /></span></footer>
   </main>;
 }
