@@ -223,7 +223,10 @@ def build_snapshot(raw,plan,artists,venues,events,axes,previous,run_stamp,now_dt
         text=str(row.get("text") or ""); named=resolve(text,artists,venues,events); needs,keywords=matched_concepts(text,axes)
         evidence_id=stable_id("evidence:",sample_id,row.get("permalink") or row.get("id") or text[:160])
         author=str(row.get("username") or "").strip().lower()
-        ev={"evidence_id":evidence_id,"sample_id":sample_id,"observed_at":now,"posted_at":row.get("timestamp"),"source_url":str(row.get("permalink") or ""),"text":text,"language_context":q.get("language_context","mixed"),"author_hash":stable_id("author:",author),"query_family":q.get("family","unresolved"),"raw_query":query,"annotation":{**named,"mobility":needs["mobility"],"timing":needs["timing"],"stay":needs["stay"],"keywords":keywords}}
+        detected_language,_=detect_language_context(text)
+        language_map={"zh_hant":"zh-Hant","zh_hans":"zh-Hans","hk_zh":"HK Chinese","english":"English","mixed":"mixed"}
+        evidence_language=language_map.get(detected_language,detected_language or q.get("language_context","mixed"))
+        ev={"evidence_id":evidence_id,"sample_id":sample_id,"observed_at":now,"posted_at":row.get("timestamp"),"source_url":str(row.get("permalink") or ""),"text":text,"language_context":evidence_language,"sampling_language_context":q.get("language_context","mixed"),"author_hash":stable_id("author:",author or row.get("permalink") or row.get("id") or evidence_id),"query_family":q.get("family","unresolved"),"raw_query":query,"annotation":{**named,"mobility":needs["mobility"],"timing":needs["timing"],"stay":needs["stay"],"keywords":keywords}}
         evidence.append(ev); lang_counts[ev["language_context"]]+=1
         for a in named["artists"]: add_entity(entities,a["id"],"artist",a["label"],evidence_id)
         if named["event"]: add_entity(entities,named["event"]["id"],"event",named["event"]["label"],evidence_id)
