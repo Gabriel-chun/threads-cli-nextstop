@@ -2,7 +2,7 @@ import { snapshot, compact, loadTrendHistory } from "../lib/signals";
 import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
-import { LocaleDate, T } from "../components/I18nProvider";
+import { DataLabel, LocaleDate, T } from "../components/I18nProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -80,7 +80,7 @@ export default async function Page() {
           <div className="bars">
             {top.map((item) => (
               <div className="barRow" key={item.category}>
-                <div className="barLabel"><span>{item.category}</span><em><T k={"signal.kind."+item.kind} /></em></div>
+                <div className="barLabel"><span><DataLabel value={item.category} /></span><em><T k={"signal.kind."+item.kind} /></em></div>
                 <div className="barTrack"><div className={`barFill ${item.kind}`} style={{ width: `${Math.max(10, (item.count / Math.max(1, top[0]?.count || 1)) * 100)}%` }} /></div>
                 <strong>{item.count}</strong>
               </div>
