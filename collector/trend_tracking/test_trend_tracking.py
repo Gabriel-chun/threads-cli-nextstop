@@ -29,6 +29,13 @@ class TrendTrackingTests(unittest.TestCase):
         needs,_=matched_concepts("散場後高鐵來得及嗎？",AXES)
         self.assertEqual(needs["mobility"][0]["id"],"mobility:hsr"); self.assertTrue(needs["timing"])
 
+    def test_evidence_language_comes_from_source_text(self):
+        plan={"query_count":1,"queries":[{"query":"concert train","family":"mobility_train_en","axis":"mobility","language_context":"English"}]}
+        raw=[{"id":"lang1","username":"a","text":"演唱會散場後高鐵來得及嗎？","permalink":"u-lang","timestamp":"2026-10-03T01:00:00Z","query":"concert train"}]
+        snapshot=build_snapshot(raw,plan,ARTISTS,VENUES,EVENTS,AXES,{},"2026-10-03_010000Z",datetime(2026,10,3,1,tzinfo=timezone.utc))
+        self.assertEqual(snapshot["evidence"][0]["language_context"],"zh-Hant")
+        self.assertEqual(snapshot["evidence"][0]["sampling_language_context"],"English")
+
     def test_cross_snapshot_state_and_dormant(self):
         plan={"query_count":1,"queries":[{"query":"高鐵 演唱會","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"}]}
         raw=[{"id":"1","username":"a","text":"10/31 藤井風高雄場高鐵來得及嗎","permalink":"u1","timestamp":"2026-10-03T01:00:00Z","query":"高鐵 演唱會"}]
