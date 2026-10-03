@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-import argparse, hashlib, json, re, unicodedata
+import argparse, hashlib, json, re, sys, unicodedata
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 from collector.build_signal_deck import detect_language_context
 
 def norm(text):
