@@ -1,5 +1,8 @@
 import { KeywordNetworkView } from "../../components/KeywordNetworkView";
-import { loadKeywordNetwork } from "../../lib/keywordNetwork";
+import {
+  loadKeywordNetwork,
+  loadKeywordNetworkIndex
+} from "../../lib/keywordNetwork";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +18,30 @@ function fmt(value?: string | null) {
   }).format(new Date(value));
 }
 
-export default async function NetworkPage() {
-  const data = await loadKeywordNetwork();
+function shortDate(value: string) {
+  const [, month, day] = value.split("-");
+  return `${month}/${day}`;
+}
+
+export default async function NetworkPage({
+  searchParams
+}: {
+  searchParams: Promise<{ date?: string }>;
+}) {
+  const params = await searchParams;
+  const index = await loadKeywordNetworkIndex();
+  const availableDates = index?.snapshots.map((item) => item.network_date) || [];
+  const requestedDate =
+    params.date && /^\d{4}-\d{2}-\d{2}$/.test(params.date)
+      ? params.date
+      : undefined;
+
+  const selectedDate =
+    requestedDate && availableDates.includes(requestedDate)
+      ? requestedDate
+      : availableDates[0];
+
+  const data = await loadKeywordNetwork(selectedDate);
 
   return (
     <main className="networkWorkspace">
@@ -25,14 +50,31 @@ export default async function NetworkPage() {
           <p className="eyebrow">NEXT STOP LIVE · KEYWORD NETWORK</p>
           <h1>Daily Keyword Network</h1>
           <p className="lead">
-            每天 00:00 Asia/Taipei 固定生成一張搜尋結構快照：
-            Base Recall → Language Context → Need Network → Top Keywords。
+            每天 00:00 Asia/Taipei 固定生成一张 Search / Need Network Snapshot；
+            可切换 Table 与 Network 视图，并追踪每天 node / link 的变化。
           </p>
         </div>
         <a className="backButton" href="/">← Signal Desk</a>
       </header>
 
       <div className="workspaceRule" />
+
+      {availableDates.length ? (
+        <nav className="networkDateStrip" aria-label="Keyword Network snapshot dates">
+          {availableDates.map((date) => (
+            <a
+              key={date}
+              href={"/network?date=" + date}
+              className={date === selectedDate ? "active" : ""}
+            >
+              <strong>{shortDate(date)}</strong>
+              <small>
+                {index?.snapshots.find((item) => item.network_date === date)?.source_card_count || 0} cards
+              </small>
+            </a>
+          ))}
+        </nav>
+      ) : null}
 
       {!data ? (
         <section className="panel">
@@ -80,7 +122,7 @@ export default async function NetworkPage() {
 
       <footer>
         <span>Next Stop Live · Keyword Network</span>
-        <span>00:00 daily · Collector fallback enabled</span>
+        <span>00:00 daily · historical snapshots retained</span>
       </footer>
     </main>
   );
