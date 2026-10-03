@@ -459,14 +459,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               className={windowKey === key ? "active" : ""}
               onClick={() => changeWindow(key)}
             >
-              {deck.windows[key].label}
+              {t("deck.window."+key)}
             </button>
           ))}
         </div>
       </div>
 
       <div className="signalDeckSub">
-        <span>{t("deck.reviewToday",{window:window.label})}</span>
+        <span>{t("deck.reviewToday",{window:t("deck.window."+windowKey)})}</span>
         <span>{t("deck.dailySnapshot",{date:formatDate(deck.generated_at)})}</span>
       </div>
 
