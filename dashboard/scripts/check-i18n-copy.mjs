@@ -8,7 +8,9 @@ const files=[
   "components/SignalReel.tsx",
   "components/ReviewLedger.tsx",
   "components/KeywordNetworkView.tsx",
-  "components/TrendObservationView.tsx"
+  "components/TrendObservationView.tsx",
+  "app/loading.tsx",
+  "app/error.tsx"
 ];
 
 const forbiddenRanking=["Trending / Watch Events","Active Trend","Trend Ranking","爆紅","熱門第一","暴增","趨勢霸榜"];
