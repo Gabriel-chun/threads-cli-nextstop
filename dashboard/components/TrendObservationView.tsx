@@ -130,7 +130,7 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
         <span>{t("trend.sampleCount")}</span><strong>{selectedLink.sample_count}</strong>
         <span>{t("trend.evidenceCount")}</span><strong>{selectedLink.evidence_count}</strong>
         <span>{t("trend.uniqueAuthors")}</span><strong>{selectedLink.unique_author_count}</strong>
-        <span>{t("trend.resolutionConfidence")}</span><strong>{selectedLink.resolution_confidence}</strong>
+        <span>{t("trend.resolutionConfidence")}</span><strong>{t("trend.confidence."+selectedLink.resolution_confidence)}</strong>
       </div>:null}
       {drawerEvidence.length?drawerEvidence.map(ev=><EvidenceCard key={ev.evidence_id} evidence={ev}/>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
       {selectedEvent?.source?<a className="downloadButton" href={selectedEvent.source} target="_blank" rel="noreferrer"><span>↗</span><div><strong>{t("common.openSource")}</strong></div></a>:null}
@@ -156,7 +156,7 @@ function EvidenceCard({evidence}:{evidence:TrendEvidence}){
       <span>{t("trend.resolvedArtist")}</span><strong>{artist}</strong>
       <span>{t("trend.resolvedEvent")}</span><strong>{event}</strong>
       <span>{t("trend.resolvedVenue")}</span><strong>{venue}</strong>
-      <span>{t("trend.resolutionConfidence")}</span><strong>{evidence.annotation.resolution_confidence}</strong>
+      <span>{t("trend.resolutionConfidence")}</span><strong>{t("trend.confidence."+evidence.annotation.resolution_confidence)}</strong>
     </div>
     {chips.length?<div className="trendChipList">{chips.map((chip,index)=><span key={chip+index}>{chip}</span>)}</div>:null}
     {evidence.source_url?<a href={evidence.source_url} target="_blank" rel="noreferrer">{t("common.openSource")}</a>:null}
