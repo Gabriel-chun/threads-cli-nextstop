@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import type { DeidentifiedReviewRow } from "../lib/reviewLedger";
 import { REVIEW_CATEGORIES } from "../lib/reviewCategories";
+import { useI18n } from "./I18nProvider";
 
 type Filter = "all" | "relevant" | "irrelevant";
 type ReviewLabel = "relevant" | "irrelevant";
@@ -28,19 +29,8 @@ type UndoState = {
 
 const SWIPE_THRESHOLD = 72;
 
-function fmtDate(value?: string | null) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("zh-TW", {
-    timeZone: "Asia/Taipei",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  }).format(new Date(value));
-}
-
 export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
+  const {t,formatDate}=useI18n();
   const router = useRouter();
   const [filter, setFilter] = useState<Filter>("all");
   const [items, setItems] = useState(rows);
@@ -116,7 +106,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
         body: JSON.stringify({ category })
       });
       const payload = await response.json();
-      if (!response.ok) throw new Error(payload?.error || "分類保存失敗");
+      if (!response.ok) throw new Error(payload?.error || t("reviews.categorySaveFailed"));
 
       setItems((current) =>
         current.map((item) =>
@@ -133,9 +123,9 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
             : item
         )
       );
-      setSaveMessage("已即時保存 · 將於 00:00 自動歸檔到 GitHub");
+      setSaveMessage(t("reviews.saved"));
     } catch (error) {
-      setSaveMessage(error instanceof Error ? error.message : "分類保存失敗");
+      setSaveMessage(error instanceof Error ? error.message : t("reviews.categorySaveFailed"));
     } finally {
       setSavingId(null);
     }
@@ -161,7 +151,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
         body: JSON.stringify({ label: nextLabel })
       });
       const payload = await response.json();
-      if (!response.ok) throw new Error(payload?.error || "Relevant / Irrelevant 修正失敗");
+      if (!response.ok) throw new Error(payload?.error || t("reviews.labelSaveFailed"));
 
       setItems((current) =>
         current.map((item) =>
@@ -187,10 +177,10 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
       } else {
         setUndo(null);
       }
-      setSaveMessage("已即時保存 · 將於 00:00 自動歸檔到 GitHub");
+      setSaveMessage(t("reviews.saved"));
     } catch (error) {
       setSaveMessage(
-        error instanceof Error ? error.message : "Relevant / Irrelevant 修正失敗"
+        error instanceof Error ? error.message : t("reviews.labelSaveFailed")
       );
     } finally {
       setSavingId(null);
@@ -262,16 +252,16 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
             className={filter === key ? "active" : ""}
             onClick={() => setFilter(key)}
           >
-            {key === "all" ? "全部" : key === "relevant" ? "Relevant" : "Irrelevant"}
+            {key === "all" ? t("reviews.filter.all") : key === "relevant" ? "Relevant" : "Irrelevant"}
             <span>{counts[key]}</span>
           </button>
         ))}
       </div>
 
       <div className="reviewPrivacyNote">
-        去識別化檢視：不顯示 username、post ID 或 post key；文字中的 @handle 會遮罩。原始 Threads 連結保留作 evidence provenance。
+        {t("reviews.privacy")}
         <span className="reviewSyncNote">
-          左滑 = Irrelevant、右滑 = Relevant；類型下拉框只調整 category。所有修正會即時保存，00:00 Asia/Taipei 才自動寫入 GitHub archive，並沿用 Notion 日結同步。
+          {t("reviews.syncNote")}
         </span>
         {saveMessage ? <strong className="reviewSaveMessage">{saveMessage}</strong> : null}
       </div>
@@ -280,12 +270,12 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
         <table className="reviewDataTable">
           <thead>
             <tr>
-              <th>分類</th>
-              <th>Signal</th>
-              <th>類型</th>
-              <th>去識別化內容</th>
-              <th>Review</th>
-              <th>來源</th>
+              <th>{t("reviews.header.label")}</th>
+              <th>{t("reviews.header.signal")}</th>
+              <th>{t("reviews.header.category")}</th>
+              <th>{t("reviews.header.content")}</th>
+              <th>{t("reviews.header.review")}</th>
+              <th>{t("reviews.header.source")}</th>
             </tr>
           </thead>
           <tbody>
@@ -301,13 +291,13 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                       {row.label === "relevant" ? "Relevant" : "Irrelevant"}
                     </span>
                     {row.original_label && row.original_label !== row.label ? (
-                      <small className="reviewLabelCorrection">人工修正</small>
+                      <small className="reviewLabelCorrection">{t("reviews.humanCorrection")}</small>
                     ) : null}
                   </td>
                   <td><code>{row.anonymous_id}</code></td>
                   <td>
                     <label className="reviewCategoryEditor">
-                      <span className="srOnly">調整類型</span>
+                      <span className="srOnly">{t("reviews.adjustCategory")}</span>
                       <select
                         value={row.category}
                         disabled={savingId === row.anonymous_id}
@@ -323,13 +313,13 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                     </label>
                     <small>
                       {row.window}
-                      {row.category_source === "human_override" ? " · 人工修正" : " · 系統預標"}
+                      {row.category_source === "human_override" ? " · "+t("reviews.humanCorrection") : " · "+t("reviews.systemPreset")}
                     </small>
                     {row.category_source === "human_override" &&
                     row.original_category &&
                     row.original_category !== row.category ? (
                       <small className="reviewOriginalCategory">
-                        原：{row.original_category}
+                        {t("reviews.original",{value:row.original_category})}
                       </small>
                     ) : null}
                   </td>
@@ -345,7 +335,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                         className={"reviewSwipeSurface " + (dragging ? "dragging" : "")}
                         style={{ transform: `translate3d(${visualDx}px, 0, 0)` }}
                         role="group"
-                        aria-label="左滑 Irrelevant，右滑 Relevant"
+                        aria-label={t("reviews.swipeAria")}
                         onPointerDown={(event) => pointerDown(event, row)}
                         onPointerMove={pointerMove}
                         onPointerUp={(event) => pointerUp(event, row)}
@@ -360,15 +350,15 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                           </div>
                         ) : null}
                         <small className="reviewSwipeHelp">
-                          左滑 Irrelevant · 右滑 Relevant
+                          {t("reviews.swipeHelp")}
                         </small>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <small>{fmtDate(row.reviewed_at)}</small>
+                    <small>{formatDate(row.reviewed_at)}</small>
                     {row.label_updated_at ? (
-                      <small>修正 {fmtDate(row.label_updated_at)}</small>
+                      <small>{t("reviews.correctedAt",{date:formatDate(row.label_updated_at)})}</small>
                     ) : null}
                   </td>
                   <td>
@@ -391,17 +381,17 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
           </tbody>
         </table>
         {!visible.length ? (
-          <div className="reviewEmpty">目前沒有這個分類的 review。</div>
+          <div className="reviewEmpty">{t("reviews.empty")}</div>
         ) : null}
       </div>
 
       {undo ? (
         <div className="reviewUndoToast" role="status" aria-live="polite">
           <span>
-            已改為 {undo.nextLabel === "relevant" ? "Relevant" : "Irrelevant"}
+            {t("reviews.changedTo",{label:undo.nextLabel === "relevant" ? "Relevant" : "Irrelevant"})}
           </span>
           <button type="button" disabled={Boolean(savingId)} onClick={() => void undoLabel()}>
-            Undo
+            {t("reviews.undo")}
           </button>
         </div>
       ) : null}
