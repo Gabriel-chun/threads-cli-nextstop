@@ -365,7 +365,10 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         const batch = queue.slice(offset, offset + batchSize);
         const response = await fetch("/api/signal-deck/sync-notion", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-NextStop-Write-Intent": "human-review"
+          },
           body: JSON.stringify({ rows: batch })
         });
         const payload = await response.json().catch(() => null);
