@@ -2096,3 +2096,231 @@ footer {
   .networkWorkspace { width: calc(100% - 20px); }
   .networkColumns { grid-template-columns: 1fr; }
 }
+
+
+/* Keyword Network node-link view */
+.networkDateStrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: -4px 0 16px;
+  padding: 4px 0 2px;
+  scrollbar-width: thin;
+}
+
+.networkDateStrip a {
+  min-width: 86px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.networkDateStrip a strong,
+.networkDateStrip a small {
+  display: block;
+}
+
+.networkDateStrip a strong {
+  font-size: 11px;
+}
+
+.networkDateStrip a small {
+  margin-top: 2px;
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.networkDateStrip a.active {
+  border-color: #C7A793;
+  background: var(--accent-soft);
+}
+
+.networkViewToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: -4px 0 14px;
+}
+
+.networkViewToolbar > span {
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.networkViewTabs {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+.networkViewTabs button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.networkViewTabs button.active {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.networkGraphLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(300px, .7fr);
+  gap: 18px;
+}
+
+.networkGraphCanvas {
+  min-width: 0;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(168, 67, 40, .025), transparent 26%),
+    var(--bg);
+}
+
+.networkGraphCanvas svg {
+  display: block;
+  width: 100%;
+  min-width: 920px;
+  height: auto;
+}
+
+.networkGraphGuides line {
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 3 8;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkGraphGuides text {
+  fill: var(--quiet);
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.networkGraphEdges line {
+  stroke: #B9ADA2;
+  opacity: .42;
+  transition: opacity .18s ease, stroke .18s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkGraphEdges line.active {
+  stroke: #A84328;
+  opacity: .72;
+}
+
+.networkGraphEdges line.dim {
+  opacity: .045;
+}
+
+.networkGraphNode {
+  cursor: pointer;
+  transition: opacity .18s ease;
+  outline: none;
+}
+
+.networkGraphNode circle {
+  fill: var(--surface);
+  stroke: #BEB3A8;
+  stroke-width: 1.3;
+  transition: transform .16s ease, fill .16s ease, stroke .16s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkGraphNode.recall circle {
+  fill: #F7E8DF;
+  stroke: var(--accent);
+}
+
+.networkGraphNode.language circle {
+  fill: #EEE9E1;
+  stroke: #8A6A59;
+}
+
+.networkGraphNode.need circle {
+  fill: #E8F0EB;
+  stroke: var(--success);
+}
+
+.networkGraphNode.keyword circle {
+  fill: #FFFDF9;
+  stroke: #B49A83;
+}
+
+.networkGraphNode:hover circle,
+.networkGraphNode.selected circle {
+  transform: scale(1.14);
+  stroke-width: 2;
+}
+
+.networkGraphNode.selected circle {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+}
+
+.networkGraphNode.dim {
+  opacity: .12;
+}
+
+.networkGraphNode text {
+  fill: var(--ink);
+  font-size: 10px;
+  font-weight: 650;
+  pointer-events: none;
+}
+
+.networkGraphNode .networkGraphNodeCount {
+  fill: var(--quiet);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.networkEdgesHead > div span,
+.networkEdgesHead > div small {
+  display: block;
+}
+
+.networkEdgesHead > div small {
+  margin-top: 2px;
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.networkNoConnections {
+  margin: 8px 0 0;
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+@media (max-width: 1000px) {
+  .networkGraphLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .networkViewToolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .networkDateStrip a {
+    min-width: 76px;
+  }
+}
