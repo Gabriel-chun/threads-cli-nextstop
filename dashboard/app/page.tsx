@@ -39,9 +39,9 @@ export default async function Page() {
       <div className="workspaceRule" />
 
       <section className="metrics">
-        <article><span><T k="signal.metric.master" /></span><strong>{data.masterCount}</strong><small>GitHub archive</small></article>
-        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.concertRaw}</strong><small>broad query</small></article>
-        <article><span><T k="signal.metric.clean" /></span><strong>{data.cleanCount}</strong><small>resale excluded</small></article>
+        <article><span><T k="signal.metric.master" /></span><strong>{data.masterCount}</strong><small><T k="signal.metric.masterHelp" /></small></article>
+        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.concertRaw}</strong><small><T k="signal.metric.rawHelp" /></small></article>
+        <article><span><T k="signal.metric.clean" /></span><strong>{data.cleanCount}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
         <article className="accent"><span><T k="signal.metric.actionable" /></span><strong>{data.actionable}</strong><small><T k="signal.metric.actionableHelp" /></small></article>
       </section>
 
@@ -91,9 +91,9 @@ export default async function Page() {
         <aside className="panel split">
           <p className="kicker"><T k="signal.pipeline" /></p>
           <h2><T k="signal.threeLayers" /></h2>
-          <div className="layer actionable"><span>A</span><div><strong>{data.actionable} Actionable</strong><small><T k="signal.actionableHelp2" /></small></div></div>
-          <div className="layer context"><span>B</span><div><strong>{data.context} Context</strong><small><T k="signal.contextHelp" /></small></div></div>
-          <div className="layer noise"><span>C</span><div><strong>{data.noise} Noise</strong><small><T k="signal.noiseHelp" /></small></div></div>
+          <div className="layer actionable"><span>A</span><div><strong>{data.actionable} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
+          <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
+          <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
         </aside>
       </section>
 
@@ -133,7 +133,7 @@ export default async function Page() {
         </aside>
       </section>
 
-      <footer><span>Next Stop Live · Data / Review / Signal</span><span><T k="common.updated" values={{date:""}} /> <LocaleDate value={data.generatedAt} /></span></footer>
+      <footer><span>Next Stop Live · <T k="signal.footer" /></span><span><T k="common.updated" values={{date:""}} /> <LocaleDate value={data.generatedAt} /></span></footer>
     </main>
   );
 }
