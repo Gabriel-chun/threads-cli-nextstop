@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { translate, type TranslationValues, type UiLocale } from "../lib/i18n";
+import { translate, translateDataLabel, type TranslationValues, type UiLocale } from "../lib/i18n";
 
 const STORAGE_KEY = "next-stop-live:ui-language:v1";
 type CountUnit = "sample"|"connection"|"evidence"|"author"|"query"|"card"|"entity";
@@ -13,6 +13,7 @@ type I18nContextValue = {
   formatShortDate: (value: string) => string;
   formatNumber: (value: number) => string;
   formatCount: (value: number, unit: CountUnit) => string;
+  dataLabel: (value:string) => string;
 };
 const I18nContext = createContext<I18nContextValue|null>(null);
 
@@ -32,6 +33,7 @@ export function I18nProvider({children}:{children:React.ReactNode}) {
     formatDate:(value)=>{ if(!value) return "—"; const d=new Date(value); return Number.isNaN(d.getTime())?String(value):makeDateFormatter(locale).format(d); },
     formatShortDate:(value)=>{ const d=new Date(value+"T00:00:00+08:00"); if(Number.isNaN(d.getTime())) return value; return locale==="zh-TW" ? new Intl.DateTimeFormat("zh-TW",{timeZone:"Asia/Taipei",month:"2-digit",day:"2-digit"}).format(d) : new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Taipei",month:"short",day:"numeric"}).format(d); },
     formatNumber:(value)=>new Intl.NumberFormat(locale==="zh-TW"?"zh-TW":"en-US").format(value),
+    dataLabel:(value)=>translateDataLabel(locale,value),
     formatCount:(value,unit)=>{
       const n=new Intl.NumberFormat(locale==="zh-TW"?"zh-TW":"en-US").format(value);
       if(locale==="zh-TW"){ const labels:Record<CountUnit,string>={sample:"個樣本",connection:"條連結",evidence:"則證據",author:"位作者",query:"個查詢",card:"張卡片",entity:"個實體"}; return n+" "+labels[unit]; }
