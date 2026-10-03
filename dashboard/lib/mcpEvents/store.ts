@@ -1,24 +1,26 @@
-import { env } from "cloudflare:workers";
 import type { EventState, SubscriptionRecord } from "./core";
 import { stableHash } from "./core";
 
 const ROOT = "mcp-events/v2";
-const kv = () => (env as any).MCP_EVENTS_KV as any;
+async function kv() {
+  const { env } = await import("cloudflare:workers");
+  return (env as any).MCP_EVENTS_KV as any;
+}
 
 async function readJson<T>(key: string): Promise<T | null> {
-  const value = await kv().get(key, "json");
+  const value = await (await kv()).get(key, "json");
   return (value as T | null) ?? null;
 }
 
 async function putJson(key: string, value: unknown): Promise<void> {
-  await kv().put(key, JSON.stringify(value));
+  await (await kv()).put(key, JSON.stringify(value));
 }
 
 async function listKeys(prefix: string): Promise<string[]> {
   const out: string[] = [];
   let cursor: string | undefined;
   do {
-    const page = await kv().list({ prefix, cursor, limit: 1000 });
+    const page = await (await kv()).list({ prefix, cursor, limit: 1000 });
     out.push(...page.keys.map((item: any) => item.name));
     cursor = page.list_complete ? undefined : page.cursor;
   } while (cursor);
@@ -46,7 +48,7 @@ export class EventStore {
     await putJson(subPath(record.id), record);
   }
   async deleteSubscription(id: string) {
-    await kv().delete(subPath(id));
+    await (await kv()).delete(subPath(id));
   }
   async listSubscriptions(): Promise<SubscriptionRecord[]> {
     const records = await Promise.all(
@@ -86,6 +88,6 @@ export class EventStore {
     return true;
   }
   async releaseEventLock(eventId: string) {
-    await kv().delete(lockPath(eventId));
+    await (await kv()).delete(lockPath(eventId));
   }
 }
