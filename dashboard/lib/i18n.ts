@@ -280,7 +280,9 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
     "trend.footerSystem": "連結觀察系統 V0.2",
     "trend.sampling.need_led_observation": "需求導向觀察",
     "trend.sampling.targeted_artist_need": "藝人導向定向觀察",
-    "trend.retrieval.need_first_context_gated": "需求優先＋事件脈絡篩選"
+    "trend.retrieval.need_first_context_gated": "需求優先＋事件脈絡篩選",
+    "common.dashboardNav": "Next Stop Live 儀表板導覽",
+    "reviews.filterAria": "審核分類篩選"
   },
   "en": {
     "nav.signalDesk": "Signal Desk",
@@ -560,7 +562,9 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
     "trend.footerSystem": "Link Observation System V0.2",
     "trend.sampling.need_led_observation": "Need-led observation",
     "trend.sampling.targeted_artist_need": "Artist-first targeted observation",
-    "trend.retrieval.need_first_context_gated": "Need-first + event-context gate"
+    "trend.retrieval.need_first_context_gated": "Need-first + event-context gate",
+    "common.dashboardNav": "Next Stop Live dashboard navigation",
+    "reviews.filterAria": "Review filter"
   }
 };
 
