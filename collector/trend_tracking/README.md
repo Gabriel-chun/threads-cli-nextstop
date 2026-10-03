@@ -37,3 +37,16 @@ Evidence text and source URLs are preserved in their original language. UI local
 - read-only MCP data surface;
 - GitHub remains source of truth;
 - Notion remains a human-readable/review/documentation layer.
+
+
+## Retrieval semantics
+
+The existing public Threads CLI intentionally treats multi-term search as a strict precision-oriented AND match. Trend Tracking V0.2 therefore keeps the research semantics separate from the retrieval term:
+
+- `semantic_query`: the intended observation, for example `高鐵 演唱會`.
+- `query`: the bounded need-first retrieval term sent to the existing CLI, for example `高鐵`.
+- post-retrieval context gate: the builder keeps a row only when the original post contains a concert/event-context term or resolves to a known Artist / Event / Venue.
+
+This is `need_first_context_gated` retrieval. It does **not** relax the shared CLI relevance scorer, crawler cadence, depth, safety boundary, or query budget.
+
+The first V0.2 run (`2026-10-03_065422Z`) executed 18 multi-term queries successfully but returned `raw=0`. A same-day normal Collector run using single-term `演唱會 / 演唱会 / concert` queries returned public results, so the diagnosis was query formulation rather than a CLI/security failure. The fix is limited to Trend Tracking retrieval formulation.
