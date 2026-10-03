@@ -50,3 +50,7 @@ The existing public Threads CLI intentionally treats multi-term search as a stri
 This is `need_first_context_gated` retrieval. It does **not** relax the shared CLI relevance scorer, crawler cadence, depth, safety boundary, or query budget.
 
 The first V0.2 run (`2026-10-03_065422Z`) executed 18 multi-term queries successfully but returned `raw=0`. A same-day normal Collector run using single-term `演唱會 / 演唱会 / concert` queries returned public results, so the diagnosis was query formulation rather than a CLI/security failure. The fix is limited to Trend Tracking retrieval formulation.
+
+
+### Context-gate precision note
+Generic words such as `演出`, `tour`, and `gig` are not accepted as standalone event-context evidence because they can describe film acting, travel, or unrelated work. The gate uses stronger concert/festival/fan-event wording or a resolved known Artist / Event / Venue instead.
