@@ -173,6 +173,7 @@ export default async function Page() {
             <li>get_collector_health</li>
             <li>get_trend_history</li>
             <li>get_signal_deck</li>
+            <li>get_keyword_network</li>
             <li>get_latest_download</li>
             <li>get_reviewed_cards_download</li>
           </ul>
@@ -188,6 +189,13 @@ export default async function Page() {
             <div>
               <strong>開啟 Review Ledger</strong>
               <small>去識別化檢視已分類 Relevant / Irrelevant</small>
+            </div>
+          </a>
+          <a className="downloadButton" href="/network">
+            <span>🕸️</span>
+            <div>
+              <strong>開啟 Keyword Network</strong>
+              <small>每日 00:00 的 Recall / Context / Need 視覺快照</small>
             </div>
           </a>
           <div className="sourceNote">
