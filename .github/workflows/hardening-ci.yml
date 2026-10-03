@@ -26,6 +26,16 @@ jobs:
           python3 -m unittest collector/test_observation.py
           python3 -m unittest collector/test_signal_deck.py
           python3 -m unittest collector/trend_tracking/test_trend_tracking.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Dashboard bilingual UI regression
+        working-directory: dashboard
+        run: |
+          npm install --no-audit --no-fund
+          npm run test:i18n
+          npm run check:i18n
+          npm run build:vinext
       - name: Verify conservative collector boundary
         shell: bash
         run: |
