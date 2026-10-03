@@ -67,7 +67,7 @@ def main():
 
     plan=json.loads(Path(args.query_plan).read_text(encoding="utf-8"))
     artists=json.loads(Path(args.artists).read_text(encoding="utf-8"))["artists"]
-    events={e["event_id"]:dict(e) for e in json.loads(Path(args.events).read_text(encoding="utf-8"))["events"]
+    events={e["event_id"]:dict(e) for e in json.loads(Path(args.events).read_text(encoding="utf-8"))["events"]}
     previous={}
     if args.previous and Path(args.previous).exists():
         try: previous=json.loads(Path(args.previous).read_text(encoding="utf-8"))
