@@ -12,7 +12,8 @@
     "hard_filter_review_noise": false,
     "language_is_context_not_relevance": true,
     "rank_by_need_network": true,
-    "keep_low_actionability_in_reserve_pool": true
+    "keep_low_actionability_in_reserve_pool": true,
+    "readable_language_work_surface": true
   },
   "base_recall_queries": [
     "演唱會",
@@ -24,7 +25,6 @@
     "zh_hans",
     "hk_zh",
     "english",
-    "other_latin",
     "mixed"
   ],
   "need_nodes": {
@@ -143,6 +143,6 @@
   },
   "language_notes": {
     "english": "Requires English context/function words; 'concert' alone is not enough.",
-    "other_latin": "Latin-script non-English or uncertain language context; retained in raw recall but heavily down-ranked unless later evidence supports it."
+    "other_latin": "Raw recall only. Excluded from Signal Deck and Keyword Network because the current review workflow is limited to Chinese/English-readable content."
   }
 }
