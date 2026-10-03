@@ -30,7 +30,7 @@ export default async function Page() {
           <span className="dot" />
           <div>
             <strong>{data.health.healthy ? <T k="signal.collectorHealthy" /> : <T k={"signal.health."+data.health.status} />}</strong>
-            <small><LocaleDate value={data.health.updatedAt} /></small>
+            <small><T k="signal.lastCollection" /> · <LocaleDate value={latestTrend?.runAt || null} /></small>
           </div>
         </div>
       </header>
@@ -40,6 +40,24 @@ export default async function Page() {
         <span><strong>{data.cleanCount}</strong> <T k="signal.metric.clean" /></span>
         <span><strong>{data.concertRaw}</strong> <T k="signal.metric.concertRaw" /></span>
       </div>
+
+      <section className="quietTrendStrip" aria-label="Signal trend">
+        <div className="quietTrendStripHead">
+          <div>
+            <span><T k="signal.velocity" /></span>
+            <strong>{latestTrend ? `3h ${latestTrend.new3h} · 12h ${latestTrend.new12h}` : "—"}</strong>
+          </div>
+          <small><T k="signal.chart.trendWindow" /></small>
+        </div>
+        <TrendChart
+          compact
+          data={history}
+          series={[
+            { key: "new3h", labelKey: "signal.chart.rolling3h", className: "trendA" },
+            { key: "new12h", labelKey: "signal.chart.rolling12h", className: "trendB" }
+          ]}
+        />
+      </section>
 
       <SignalReel deck={signalDeck} />
 
@@ -58,17 +76,6 @@ export default async function Page() {
           </section>
 
           <section className="trendGrid">
-            <div className="panel trendPanel">
-              <div className="panelHead">
-                <div><p className="kicker"><T k="signal.velocity" /></p><h2><T k="signal.cleanTrend" /></h2></div>
-                <p className="trendValue">{latestTrend ? `${latestTrend.new3h} / ${latestTrend.new12h}` : "—"}</p>
-              </div>
-              <TrendChart data={history} series={[
-                { key: "new3h", labelKey: "signal.chart.rolling3h", className: "trendA" },
-                { key: "new12h", labelKey: "signal.chart.rolling12h", className: "trendB" }
-              ]} />
-            </div>
-
             <div className="panel trendPanel">
               <div className="panelHead">
                 <div><p className="kicker"><T k="signal.pipelineQuality" /></p><h2><T k="signal.cleanResale" /></h2></div>
