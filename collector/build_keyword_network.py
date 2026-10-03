@@ -12,7 +12,7 @@ from build_signal_deck import NEED_NODE_RULES, build_deck, parse_dt
 
 TAIPEI = ZoneInfo("Asia/Taipei")
 RECALL_ORDER = ["演唱會", "演唱会", "concert"]
-LANGUAGE_ORDER = ["zh_hant", "zh_hans", "hk_zh", "english", "other_latin", "mixed"]
+LANGUAGE_ORDER = ["zh_hant", "zh_hans", "hk_zh", "english", "mixed"]
 NEED_LABELS = {
     "wear_support": "衣／應援／周邊",
     "food": "食",
