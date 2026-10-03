@@ -30,7 +30,7 @@ type UndoState = {
 const SWIPE_THRESHOLD = 72;
 
 export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
-  const {t,formatDate}=useI18n();
+  const {t,formatDate,dataLabel}=useI18n();
   const router = useRouter();
   const [filter, setFilter] = useState<Filter>("all");
   const [items, setItems] = useState(rows);
@@ -252,7 +252,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
             className={filter === key ? "active" : ""}
             onClick={() => setFilter(key)}
           >
-            {key === "all" ? t("reviews.filter.all") : key === "relevant" ? "Relevant" : "Irrelevant"}
+            {key === "all" ? t("reviews.filter.all") : key === "relevant" ? t("deck.relevant") : t("deck.irrelevant")}
             <span>{counts[key]}</span>
           </button>
         ))}
@@ -288,7 +288,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                 <tr key={row.anonymous_id}>
                   <td>
                     <span className={"reviewLabel " + row.label}>
-                      {row.label === "relevant" ? "Relevant" : "Irrelevant"}
+                      {row.label === "relevant" ? t("deck.relevant") : t("deck.irrelevant")}
                     </span>
                     {row.original_label && row.original_label !== row.label ? (
                       <small className="reviewLabelCorrection">{t("reviews.humanCorrection")}</small>
@@ -299,7 +299,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                     <label className="reviewCategoryEditor">
                       <span className="srOnly">{t("reviews.adjustCategory")}</span>
                       <select
-                        value={row.category}
+                        value={dataLabel(row.category)}
                         disabled={savingId === row.anonymous_id}
                         onChange={(event) => void updateCategory(row, event.target.value)}
                       >
@@ -307,7 +307,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                           <option value={row.category}>{row.category}</option>
                         ) : null}
                         {REVIEW_CATEGORIES.map((category) => (
-                          <option key={category} value={category}>{category}</option>
+                          <option key={dataLabel(category)} value={category}>{dataLabel(category)}</option>
                         ))}
                       </select>
                     </label>
@@ -388,7 +388,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
       {undo ? (
         <div className="reviewUndoToast" role="status" aria-live="polite">
           <span>
-            {t("reviews.changedTo",{label:undo.nextLabel === "relevant" ? "Relevant" : "Irrelevant"})}
+            {t("reviews.changedTo",{label:undo.nextLabel === "relevant" ? t("deck.relevant") : t("deck.irrelevant")})}
           </span>
           <button type="button" disabled={Boolean(savingId)} onClick={() => void undoLabel()}>
             {t("reviews.undo")}
