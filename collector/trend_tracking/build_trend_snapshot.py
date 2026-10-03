@@ -182,22 +182,30 @@ def aggregate_links(evidence,previous,now):
             state="persistent" if consecutive>=3 else "repeated"
             evidence_ids=list(dict.fromkeys(list(prev.get("evidence_ids",[]))+row["current_evidence_ids"]))
             author_hashes=list(dict.fromkeys(list(prev.get("author_hashes",[]))+row["current_author_hashes"]))
+            previous_support=list(prev.get("supporting_evidence",[]))
             sample_count=int(prev.get("sample_count",0))+1; first_seen=prev.get("first_seen") or now
         else:
             consecutive=1
             expanding=(row["source_type"] in {"artist","event","venue"} and row["source_id"] in prev_entity_ids) or (row["target_type"] in {"artist","event","venue"} and row["target_id"] in prev_entity_ids)
             state="expanding" if expanding else "new"
-            evidence_ids=row["current_evidence_ids"][:]; author_hashes=row["current_author_hashes"][:]; sample_count=1; first_seen=now
+            evidence_ids=row["current_evidence_ids"][:]; author_hashes=row["current_author_hashes"][:]; previous_support=[]; sample_count=1; first_seen=now
         links.append({
             **{k:row[k] for k in ["link_id","source_type","source_id","source_label","target_type","target_id","target_label","relation_type","resolution_confidence"]},
             "state":state,"first_seen":first_seen,"last_seen":now,"sample_count":sample_count,
             "evidence_count":len(evidence_ids),"current_evidence_count":len(row["current_evidence_ids"]),
             "unique_author_count":len(author_hashes),"evidence_ids":evidence_ids,"current_evidence_ids":row["current_evidence_ids"],
             "author_hashes":author_hashes,"consecutive_windows":consecutive,
+            "supporting_evidence":previous_support,
         })
+    evidence_by_id={e["evidence_id"]:e for e in evidence}
+    for link in links:
+        current_support=[evidence_by_id[eid] for eid in link.get("current_evidence_ids",[]) if eid in evidence_by_id]
+        merged={e.get("evidence_id"):e for e in link.get("supporting_evidence",[]) if e.get("evidence_id")}
+        for e in current_support: merged[e["evidence_id"]]=e
+        link["supporting_evidence"]=list(merged.values())[-20:]
     for lid,prev in prev_links.items():
         if lid not in current:
-            links.append({**prev,"state":"dormant","current_evidence_count":0,"current_evidence_ids":[],"consecutive_windows":0})
+            links.append({**prev,"state":"dormant","current_evidence_count":0,"current_evidence_ids":[],"consecutive_windows":0,"supporting_evidence":list(prev.get("supporting_evidence",[]))[-20:]})
     order={"persistent":0,"repeated":1,"expanding":2,"new":3,"dormant":4}
     return sorted(links,key=lambda x:(order.get(x["state"],9),x["source_label"],x["target_label"]))
 
