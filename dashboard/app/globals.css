@@ -2683,3 +2683,527 @@ footer {
   .dashboardGlobalBar { width: calc(100% - 20px); align-items: flex-start; padding: 8px 0; }
   .dashboardGlobalNav { max-width: calc(100% - 98px); }
 }
+
+
+/* Quiet UI v0.3 — one primary surface, lightweight controls, diagnostics on demand */
+.quietWorkspace {
+  width: min(1240px, calc(100% - 48px));
+}
+
+.quietWorkspaceHeader {
+  align-items: center;
+  padding: 18px 0 14px;
+  gap: 20px;
+}
+
+.quietWorkspaceHeader .eyebrow {
+  margin-bottom: 5px;
+  color: var(--quiet);
+  letter-spacing: .06em;
+}
+
+.quietWorkspaceHeader h1 {
+  font-size: clamp(26px, 3vw, 30px);
+}
+
+.quietHealth {
+  min-width: 0;
+  border: 0;
+  padding: 6px 0;
+  background: transparent;
+}
+
+.quietHealth .dot {
+  width: 6px;
+  height: 6px;
+}
+
+.quietStats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 18px;
+  color: var(--quiet);
+  font-size: 11px;
+}
+
+.quietStats span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.quietStats strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.quietMainSurface {
+  min-height: 460px;
+  margin-bottom: 14px;
+}
+
+.quietDetails {
+  margin: 14px 0 18px;
+  border-top: 1px solid var(--line);
+}
+
+.quietDetails > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  list-style: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quietDetails > summary::-webkit-details-marker { display: none; }
+
+.quietDetails > summary::after {
+  content: "+";
+  margin-left: auto;
+  color: var(--quiet);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.quietDetails[open] > summary::after { content: "−"; }
+
+.quietDetails > summary small {
+  margin-left: auto;
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.quietDetailsBody {
+  padding: 8px 0 4px;
+}
+
+.quietMetricCards {
+  opacity: .9;
+}
+
+.quietMetricCards article,
+.quietPanel {
+  background: transparent;
+  box-shadow: none;
+}
+
+.quietMetricCards article {
+  min-height: 84px;
+  border-color: rgba(221,213,202,.72);
+}
+
+.quietMetricCards strong {
+  font-size: 24px;
+}
+
+.quietPanel {
+  border-color: rgba(221,213,202,.72);
+}
+
+.quietEmpty {
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+
+/* Signal Deck: the card stack is the product; everything else goes quiet. */
+.quietWorkspace .signalDeckPanel {
+  padding: 4px 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.quietWorkspace .signalDeckHead {
+  align-items: center;
+}
+
+.quietWorkspace .signalDeckHead .kicker,
+.quietWorkspace .signalDeckHead .muted {
+  display: none;
+}
+
+.quietWorkspace .signalDeckHead h2 {
+  font-size: 16px;
+  font-weight: 620;
+}
+
+.quietWorkspace .windowTabs,
+.quietTabs {
+  padding: 2px;
+  border-color: rgba(221,213,202,.76);
+  background: transparent;
+}
+
+.quietWorkspace .windowTabs button,
+.quietTabs button {
+  padding: 5px 9px;
+  font-size: 10px;
+}
+
+.quietWorkspace .windowTabs button.active,
+.quietTabs button.active {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.quietWorkspace .signalDeckSub {
+  margin: 8px 0 0;
+  color: var(--quiet);
+}
+
+.quietWorkspace .signalDeckSub::after {
+  display: none;
+}
+
+.quietWorkspace .reviewProgress {
+  margin: 6px 0 0;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.quietWorkspace .reviewProgressHead {
+  opacity: .72;
+}
+
+.quietWorkspace .reviewProgressFoot > span {
+  display: none;
+}
+
+.quietWorkspace .reviewHpTrack {
+  height: 4px;
+  margin: 6px 0;
+  border: 0;
+  box-shadow: none;
+  background: rgba(221,213,202,.65);
+}
+
+.quietWorkspace .reviewHpRelevant {
+  background: #8A8279;
+}
+
+.quietWorkspace .signalRailWrap {
+  padding-top: 18px;
+  padding-bottom: 26px;
+}
+
+.quietWorkspace .signalStack {
+  min-height: 296px;
+}
+
+.quietWorkspace .signalStack .postCard {
+  box-shadow: 0 8px 26px rgba(70,57,45,.055);
+}
+
+.quietWorkspace .reelKind,
+.quietWorkspace .reelStatus {
+  color: var(--quiet);
+}
+
+.quietWorkspace .reelStatus i {
+  display: none;
+}
+
+.quietWorkspace .reviewLedger {
+  border-top: 0;
+  justify-content: center;
+  opacity: .78;
+}
+
+.quietWorkspace .postPreview {
+  border-color: rgba(221,213,202,.75);
+  background: transparent;
+}
+
+/* Trend Observation */
+.quietSelect {
+  min-height: 34px;
+  max-width: 280px;
+  padding: 6px 28px 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+}
+
+.trendTabs.quietTabs {
+  margin: 0 0 18px;
+  border-radius: 8px;
+}
+
+.trendQuietStats {
+  margin-bottom: 8px;
+}
+
+.quietPrimaryList {
+  border-top: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+
+.quietConnectionRow,
+.quietEventRow {
+  width: 100%;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 2px;
+  border: 0;
+  border-bottom: 1px solid rgba(221,213,202,.78);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.quietConnectionRow:hover,
+.quietEventRow:hover {
+  background: rgba(238,233,225,.28);
+}
+
+.quietConnectionNames {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quietConnectionNames strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.quietConnectionNames i {
+  color: var(--quiet);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.quietConnectionMeta {
+  flex: none;
+  color: var(--quiet);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.quietEventRow > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quietEventRow small {
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.trendQuietDetails {
+  margin-top: 6px;
+}
+
+.quietNeedRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.quietNeedRows span {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.quietNeedRows span:last-child { border-bottom: 0; }
+
+.quietNeedRows strong {
+  min-width: 24px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.quietDrawer {
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(70,57,45,.14);
+}
+
+.quietEvidenceCard {
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.quietTextLink {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--accent);
+  font-size: 11px;
+}
+
+/* Keyword Network */
+.quietDateStrip {
+  margin: -2px 0 12px;
+  gap: 4px;
+}
+
+.quietDateStrip a {
+  min-width: 0;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--quiet);
+}
+
+.quietDateStrip a strong {
+  font-size: 10px;
+  font-weight: 550;
+}
+
+.quietDateStrip a.active {
+  border: 0;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.quietNetworkView {
+  min-height: 520px;
+}
+
+.quietToolbar {
+  margin: 0 0 8px;
+}
+
+.quietToolbarActions {
+  opacity: .7;
+}
+
+.quietGraphLayout {
+  display: block;
+}
+
+.quietGraphLayout.hasSelection {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(270px, .62fr);
+  gap: 14px;
+}
+
+.quietGraphCanvas {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.quietGraphCanvas svg {
+  min-width: 860px;
+}
+
+.quietConnectionPanel {
+  align-self: stretch;
+  padding: 14px;
+  border-color: rgba(221,213,202,.72);
+  background: rgba(255,253,249,.62);
+}
+
+.quietNetworkBoard {
+  grid-template-columns: 1fr;
+}
+
+.quietNetworkBoard:has(.quietConnectionPanel) {
+  grid-template-columns: minmax(0,1.6fr) minmax(270px,.62fr);
+}
+
+.quietNetworkColumn {
+  background: transparent;
+  border-color: rgba(221,213,202,.7);
+}
+
+.quietWorkspace .networkGraphEdges line {
+  opacity: .22;
+  stroke: #AFA69E;
+}
+
+.quietWorkspace .networkGraphEdges line.active {
+  opacity: .46;
+  stroke: #8A8279;
+}
+
+.quietWorkspace .networkGraphNode circle {
+  stroke-width: 1;
+  filter: none;
+}
+
+.quietWorkspace .networkGraphLabel rect {
+  fill: rgba(246,243,238,.92);
+  stroke: rgba(221,213,202,.7);
+}
+
+.quietWorkspace .networkLaneBands rect {
+  fill: transparent;
+  stroke: rgba(221,213,202,.55);
+  stroke-dasharray: 2 10;
+}
+
+.quietWorkspace .networkLaneBands text {
+  fill: #9A928A;
+  font-size: 9px;
+  font-weight: 550;
+}
+
+@media (max-width: 1000px) {
+  .quietGraphLayout.hasSelection,
+  .quietNetworkBoard:has(.quietConnectionPanel) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .quietWorkspace {
+    width: min(100% - 24px, 1240px);
+  }
+
+  .quietWorkspaceHeader {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .quietWorkspace {
+    width: calc(100% - 20px);
+  }
+
+  .quietStats {
+    gap: 6px 12px;
+  }
+
+  .quietConnectionRow,
+  .quietEventRow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .quietConnectionMeta {
+    white-space: normal;
+  }
+
+  .quietSelect {
+    width: 100%;
+    max-width: none;
+  }
+}
