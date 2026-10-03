@@ -212,5 +212,22 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(card["actionability_band"], "low")
         self.assertEqual(card["need_nodes"], [])
 
+    def test_other_latin_is_not_misclassified_as_english(self):
+        now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
+        posts = [{
+            "id": "other-latin",
+            "text": "Esok siapa pergi concert wali band live di jb? Korang tema yang mana satu?",
+            "username": "other",
+            "permalink": "https://www.threads.com/@other/post/other",
+            "timestamp": "2026-10-03T02:00:00Z",
+            "signal_counted": True,
+            "clean_exclusion_reason": "",
+            "relevance_score": 60,
+        }]
+        card = build_deck(posts, now)["windows"]["1d"]["cards"][0]
+        self.assertEqual(card["language_context"], "other_latin")
+        self.assertEqual(card["actionability_band"], "low")
+
+
 if __name__ == "__main__":
     unittest.main()
