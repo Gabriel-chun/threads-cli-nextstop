@@ -24,8 +24,6 @@ export type Signal = RawPost & {
 
 const MASTER_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/master.json";
-const RUNS_URL =
-  "https://api.github.com/repos/Gabriel-chun/threads-cli-nextstop/actions/workflows/nextstop-collector.yml/runs?branch=main&per_page=5";
 const HISTORY_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/history.json";
 
@@ -166,24 +164,48 @@ export function clusterCounts(signals: Signal[]) {
   return [...counts.values()].sort((a, b) => b.count - a.count);
 }
 
+const COLLECTOR_HEALTH_MAX_AGE_MS = 4 * 60 * 60 * 1000;
+
 export async function collectorHealth() {
-  const res = await fetch(RUNS_URL, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      "User-Agent": "next-stop-live-dashboard"
-    },
+  const res = await fetch(HISTORY_URL, {
+    headers: { "User-Agent": "next-stop-live-dashboard-health" },
     next: { revalidate: 120 }
   });
-  if (!res.ok) throw new Error(`workflow fetch failed: ${res.status}`);
-  const data = await res.json();
-  const runs = data.workflow_runs || [];
-  const latest = runs[0];
+  if (!res.ok) throw new Error(`collector history fetch failed: ${res.status}`);
+
+  const rows = (await res.json()) as TrendRow[];
+  const latest = [...rows].reverse().find((row) => Boolean(row.run_at));
+
+  if (!latest?.run_at) {
+    return {
+      healthy: false,
+      status: "unknown",
+      runNumber: null,
+      updatedAt: null,
+      url: null
+    };
+  }
+
+  const updatedAt = latest.run_at;
+  const updatedMs = Date.parse(updatedAt);
+  const ageMs = Number.isFinite(updatedMs)
+    ? Math.max(0, Date.now() - updatedMs)
+    : Number.POSITIVE_INFINITY;
+  const fresh = ageMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
+  const succeeded = latest.status === "Success";
+
   return {
-    healthy: latest?.conclusion === "success",
-    status: latest?.conclusion || latest?.status || "unknown",
-    runNumber: latest?.run_number ?? null,
-    updatedAt: latest?.updated_at ?? null,
-    url: latest?.html_url ?? null
+    healthy: succeeded && fresh,
+    status: latest.status === "Failed"
+      ? "failure"
+      : succeeded && !fresh
+        ? "stale"
+        : succeeded
+          ? "success"
+          : "unknown",
+    runNumber: null,
+    updatedAt,
+    url: null
   };
 }
 
