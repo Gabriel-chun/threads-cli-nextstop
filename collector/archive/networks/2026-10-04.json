@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-03T16:18:06.018513Z",
+  "generated_at": "2026-10-03T18:57:43.889575Z",
   "network_date": "2026-10-04",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
   "source_master_count": 706,
-  "source_card_count": 58,
+  "source_card_count": 53,
   "layers": [
     "recall",
     "language",
@@ -17,7 +17,7 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 34
+      "count": 29
     },
     {
       "id": "recall:演唱会",
@@ -35,7 +35,7 @@
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 29
+      "count": 26
     },
     {
       "id": "lang:zh_hans",
@@ -47,7 +47,7 @@
       "id": "lang:hk_zh",
       "label": "hk_zh",
       "layer": "language",
-      "count": 4
+      "count": 2
     },
     {
       "id": "lang:english",
@@ -65,7 +65,7 @@
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 4
+      "count": 3
     },
     {
       "id": "need:food",
@@ -104,13 +104,6 @@
       "count": 0
     },
     {
-      "id": "kw:wear_support:周邊",
-      "label": "周邊",
-      "layer": "keyword",
-      "count": 2,
-      "need_node": "wear_support"
-    },
-    {
       "id": "kw:wear_support:手燈",
       "label": "手燈",
       "layer": "keyword",
@@ -120,6 +113,13 @@
     {
       "id": "kw:wear_support:LIGHTSTICK",
       "label": "LIGHTSTICK",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "wear_support"
+    },
+    {
+      "id": "kw:wear_support:MERCH",
+      "label": "MERCH",
       "layer": "keyword",
       "count": 1,
       "need_node": "wear_support"
@@ -157,7 +157,7 @@
     {
       "source": "recall:演唱會",
       "target": "lang:zh_hant",
-      "weight": 29
+      "weight": 26
     },
     {
       "source": "recall:演唱会",
@@ -170,19 +170,9 @@
       "weight": 11
     },
     {
-      "source": "recall:演唱會",
-      "target": "lang:hk_zh",
-      "weight": 4
-    },
-    {
       "source": "lang:zh_hant",
       "target": "need:venue_inside",
       "weight": 3
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:wear_support",
-      "weight": 2
     },
     {
       "source": "need:venue_inside",
@@ -190,8 +180,8 @@
       "weight": 2
     },
     {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:周邊",
+      "source": "recall:演唱會",
+      "target": "lang:hk_zh",
       "weight": 2
     },
     {
@@ -212,6 +202,11 @@
     {
       "source": "lang:zh_hans",
       "target": "need:stay",
+      "weight": 1
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:wear_support",
       "weight": 1
     },
     {
@@ -236,6 +231,11 @@
     },
     {
       "source": "need:wear_support",
+      "target": "kw:wear_support:MERCH",
+      "weight": 1
+    },
+    {
+      "source": "need:wear_support",
       "target": "kw:wear_support:手燈",
       "weight": 1
     },
@@ -253,15 +253,15 @@
   "top_keywords": {
     "wear_support": [
       {
-        "term": "周邊",
-        "count": 2
-      },
-      {
         "term": "手燈",
         "count": 1
       },
       {
         "term": "LIGHTSTICK",
+        "count": 1
+      },
+      {
+        "term": "MERCH",
         "count": 1
       }
     ],
