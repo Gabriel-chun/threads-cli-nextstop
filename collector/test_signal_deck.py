@@ -212,7 +212,7 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(card["actionability_band"], "low")
         self.assertEqual(card["need_nodes"], [])
 
-    def test_other_latin_is_not_misclassified_as_english(self):
+    def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
             "id": "other-latin",
@@ -224,9 +224,9 @@ class SignalDeckV03Tests(unittest.TestCase):
             "clean_exclusion_reason": "",
             "relevance_score": 60,
         }]
-        card = build_deck(posts, now)["windows"]["1d"]["cards"][0]
-        self.assertEqual(card["language_context"], "other_latin")
-        self.assertEqual(card["actionability_band"], "low")
+        deck = build_deck(posts, now)
+        self.assertEqual(deck["source_master_count"], 1)
+        self.assertEqual(deck["windows"]["1d"]["card_count"], 0)
 
 
 if __name__ == "__main__":
