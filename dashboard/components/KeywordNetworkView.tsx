@@ -6,6 +6,7 @@ import type {
   KeywordNetworkEdge,
   KeywordNetworkNode
 } from "../lib/keywordNetwork";
+import { useI18n } from "./I18nProvider";
 
 type ViewMode = "table" | "network";
 type Point = { x: number; y: number };
@@ -21,12 +22,9 @@ type DragState = {
 const LAYERS = ["recall", "language", "need", "keyword"] as const;
 type Layer = (typeof LAYERS)[number];
 
-const TITLES: Record<Layer, string> = {
-  recall: "Base Recall",
-  language: "Language Context",
-  need: "Need Network",
-  keyword: "Top Keywords"
-};
+function layerTitle(layer:Layer,t:(key:string,values?:Record<string,string|number>)=>string){
+  return t("network.layer."+layer);
+}
 
 const LANE_BOUNDS: Record<Layer, { left: number; right: number }> = {
   recall: { left: 45, right: 235 },
@@ -82,6 +80,7 @@ function labelWidth(label: string) {
 }
 
 export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
+  const {t}=useI18n();
   const [view, setView] = useState<ViewMode>("table");
   const [selected, setSelected] = useState<string | null>(null);
   const [positions, setPositions] = useState<Map<string, Point>>(new Map());
@@ -222,7 +221,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
         {LAYERS.map((layer) => (
           <section className="networkColumn" key={layer}>
             <div className="networkColumnHead">
-              <span>{TITLES[layer]}</span>
+              <span>{layerTitle(layer,t)}</span>
               <small>{grouped[layer].length}</small>
             </div>
             <div className="networkNodes">
@@ -256,6 +255,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
         edges={activeEdges}
         nodeMap={nodeMap}
         onClear={() => setSelected(null)}
+        t={t}
       />
     </div>
   );
@@ -266,7 +266,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
         <svg
           ref={svgRef}
           viewBox="0 0 1100 650"
-          aria-label="Daily Keyword Network graph"
+          aria-label={t("network.graph")}
           onPointerDown={(event) => {
             if (event.target === event.currentTarget) setSelected(null);
           }}
@@ -288,7 +288,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
                     y="27"
                     textAnchor="middle"
                   >
-                    {TITLES[layer]}
+                    {layerTitle(layer,t)}
                   </text>
                 </g>
               );
@@ -388,6 +388,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
         edges={activeEdges}
         nodeMap={nodeMap}
         onClear={() => setSelected(null)}
+        t={t}
       />
     </div>
   );
@@ -401,28 +402,28 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
             className={view === "table" ? "active" : ""}
             onClick={() => setView("table")}
           >
-            Table
+            {t("network.table")}
           </button>
           <button
             type="button"
             className={view === "network" ? "active" : ""}
             onClick={() => setView("network")}
           >
-            Network
+            {t("network.graph")}
           </button>
         </div>
 
         <div className="networkToolbarActions">
           <span>
             {selectedNode
-              ? "Focused · " + selectedNode.label
+              ? t("network.focused",{label:selectedNode.label})
               : view === "network"
-                ? "拖曳 node 可整理版面；node 不會離開自己的 lane"
-                : "點任一 node 聚焦"}
+                ? t("network.dragHelp")
+                : t("network.clickHelp")}
           </span>
           {view === "network" ? (
             <button type="button" onClick={resetLayout}>
-              Reset layout
+              {t("network.reset")}
             </button>
           ) : null}
         </div>
@@ -437,12 +438,14 @@ function ConnectionPanel({
   selectedNode,
   edges,
   nodeMap,
-  onClear
+  onClear,
+  t
 }: {
   selectedNode: KeywordNetworkNode | null;
   edges: KeywordNetworkEdge[];
   nodeMap: Map<string, KeywordNetworkNode>;
   onClear: () => void;
+  t: (key:string,values?:Record<string,string|number>)=>string;
 }) {
   return (
     <aside className="networkEdgesPanel">
@@ -450,18 +453,18 @@ function ConnectionPanel({
         <div>
           <span>
             {selectedNode
-              ? "Connections · " + selectedNode.label
-              : "Daily strongest connections"}
+              ? t("network.connectionsFor",{label:selectedNode.label})
+              : t("network.dailyStrongest")}
           </span>
           {selectedNode ? (
             <small>
-              {TITLES[selectedNode.layer]} · count {selectedNode.count}
+              {layerTitle(selectedNode.layer,t)} · {t("network.count",{count:selectedNode.count})}
             </small>
           ) : null}
         </div>
         {selectedNode ? (
           <button type="button" onClick={onClear}>
-            清除
+            {t("common.clear")}
           </button>
         ) : null}
       </div>
@@ -484,7 +487,7 @@ function ConnectionPanel({
           );
         })}
         {edges.length === 0 ? (
-          <p className="networkNoConnections">目前沒有直接連線。</p>
+          <p className="networkNoConnections">{t("network.noConnections")}</p>
         ) : null}
       </div>
     </aside>
