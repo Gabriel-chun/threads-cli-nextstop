@@ -11,14 +11,22 @@ type Series = {
   className: string;
 };
 
-export function TrendChart({ data, series }: { data: TrendPoint[]; series: Series[] }) {
+export function TrendChart({
+  data,
+  series,
+  compact = false
+}: {
+  data: TrendPoint[];
+  series: Series[];
+  compact?: boolean;
+}) {
   const {t,formatDate}=useI18n();
-  if (!data.length) return <div className="trendEmpty">{t("signal.chart.empty")}</div>;
+  if (!data.length) return <div className={compact ? "trendEmpty compact" : "trendEmpty"}>{t("signal.chart.empty")}</div>;
 
   const width = 680;
-  const height = 220;
+  const height = compact ? 104 : 220;
   const padX = 18;
-  const padY = 18;
+  const padY = compact ? 10 : 18;
   const values = data.flatMap((row) => series.map((item) => Number(row[item.key] || 0)));
   const max = Math.max(1, ...values);
   const x = (index: number) =>
@@ -29,14 +37,14 @@ export function TrendChart({ data, series }: { data: TrendPoint[]; series: Serie
   const labels = [data[0], data[Math.floor((data.length - 1) / 2)], data[data.length - 1]];
 
   return (
-    <div className="trendChart">
+    <div className={compact ? "trendChart compact" : "trendChart"}>
       <div className="trendLegend">
         {series.map((item) => (
           <span key={item.key}><i className={item.className} />{t(item.labelKey)}</span>
         ))}
       </div>
       <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={t("signal.chart.aria")}>
-        <line className="trendGridLine" x1={padX} x2={width - padX} y1={height / 2} y2={height / 2} />
+        {!compact ? <line className="trendGridLine" x1={padX} x2={width - padX} y1={height / 2} y2={height / 2} /> : null}
         <line className="trendGridLine" x1={padX} x2={width - padX} y1={height - padY} y2={height - padY} />
         {series.map((item) => {
           const points = data.map((row, index) => `${x(index)},${y(Number(row[item.key] || 0))}`).join(" ");
