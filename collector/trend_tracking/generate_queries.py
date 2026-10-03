@@ -7,30 +7,25 @@ ROOT = Path(__file__).resolve().parent
 CONFIG = ROOT / "config"
 
 QUERY_CATALOG = [
-    {"query":"高鐵 演唱會","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"火車 演唱會","family":"mobility_rail","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"捷運 演唱會","family":"mobility_metro","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"客運 演唱會","family":"mobility_bus","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"飛機 演唱會","family":"mobility_flight","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"機票 演唱會","family":"mobility_airfare","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"散場 高鐵","family":"mobility_after_show_hsr","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"演唱會 當天來回","family":"mobility_same_day_return","axis":"mobility","language_context":"zh-Hant"},
-    {"query":"concert train","family":"mobility_train_en","axis":"mobility","language_context":"English"},
-    {"query":"concert flight","family":"mobility_flight_en","axis":"mobility","language_context":"English"},
-    {"query":"演唱會 幾點結束","family":"timing_end_time","axis":"timing","language_context":"zh-Hant"},
-    {"query":"演唱會 散場","family":"timing_dispersal","axis":"timing","language_context":"zh-Hant"},
-    {"query":"演唱會 末班車","family":"timing_last_train","axis":"timing","language_context":"zh-Hant"},
-    {"query":"演唱會 來得及","family":"timing_feasibility","axis":"timing","language_context":"zh-Hant"},
-    {"query":"concert end time","family":"timing_end_time_en","axis":"timing","language_context":"English"},
-    {"query":"concert last train","family":"timing_last_train_en","axis":"timing","language_context":"English"},
-    {"query":"演唱會 住宿","family":"stay_lodging","axis":"stay","language_context":"zh-Hant"},
-    {"query":"演唱會 飯店","family":"stay_hotel","axis":"stay","language_context":"zh-Hant"},
-    {"query":"演唱會 過夜","family":"stay_overnight","axis":"stay","language_context":"zh-Hant"},
-    {"query":"演唱會 隔天回","family":"stay_next_day_return","axis":"stay","language_context":"zh-Hant"},
-    {"query":"concert hotel","family":"stay_hotel_en","axis":"stay","language_context":"English"},
-    {"query":"concert stay","family":"stay_stay_en","axis":"stay","language_context":"English"},
+    {"query":"高鐵","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"火車","family":"mobility_rail","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"捷運","family":"mobility_metro","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"客運","family":"mobility_bus","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"飛機","family":"mobility_flight","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"機票","family":"mobility_airfare","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"接駁","family":"mobility_shuttle","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"train","family":"mobility_train_en","axis":"mobility","language_context":"English"},
+    {"query":"flight","family":"mobility_flight_en","axis":"mobility","language_context":"English"},
+    {"query":"散場","family":"timing_dispersal","axis":"timing","language_context":"zh-Hant"},
+    {"query":"末班車","family":"timing_last_train","axis":"timing","language_context":"zh-Hant"},
+    {"query":"來得及","family":"timing_feasibility","axis":"timing","language_context":"zh-Hant"},
+    {"query":"幾點結束","family":"timing_end_time","axis":"timing","language_context":"zh-Hant"},
+    {"query":"last train","family":"timing_last_train_en","axis":"timing","language_context":"English"},
+    {"query":"住宿","family":"stay_lodging","axis":"stay","language_context":"zh-Hant"},
+    {"query":"飯店","family":"stay_hotel","axis":"stay","language_context":"zh-Hant"},
+    {"query":"過夜","family":"stay_overnight","axis":"stay","language_context":"zh-Hant"},
+    {"query":"隔天回","family":"stay_next_day_return","axis":"stay","language_context":"zh-Hant"},
 ]
-
 def load(name):
     return json.loads((CONFIG / name).read_text(encoding="utf-8"))
 
@@ -51,7 +46,7 @@ def build_plan(today: date, budget: int):
         rows.append({
             "query_id": f"q{index:02d}",
             **row,
-            "event_context": "upcoming_concert_window_90d",
+            "event_context": "concert_or_resolved_entity_post_filter",
             "upcoming_event_count": len(events),
         })
 

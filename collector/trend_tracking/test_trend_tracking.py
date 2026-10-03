@@ -15,6 +15,7 @@ class TrendTrackingTests(unittest.TestCase):
         self.assertLessEqual(plan["query_count"],18); self.assertGreater(plan["query_count"],0)
         self.assertEqual(len({q["query"] for q in plan["queries"]}),plan["query_count"])
         self.assertTrue(all("藤井風" not in q["query"] for q in plan["queries"]))
+        self.assertTrue(all("演唱會" not in q["query"] and "concert " not in q["query"] for q in plan["queries"]))
 
     def test_same_author_near_duplicate_is_suppressed(self):
         rows=[{"id":"1","username":"a","text":"藤井風 高鐵 怎麼回去","permalink":"u1","timestamp":"2026-10-03T01:00:00Z"},{"id":"2","username":"a","text":"藤井風高鐵怎麼回去！","permalink":"u2","timestamp":"2026-10-03T01:01:00Z"},{"id":"3","username":"b","text":"藤井風 高鐵 怎麼回去","permalink":"u3","timestamp":"2026-10-03T01:02:00Z"}]
@@ -35,6 +36,19 @@ class TrendTrackingTests(unittest.TestCase):
         snapshot=build_snapshot(raw,plan,ARTISTS,VENUES,EVENTS,AXES,{},"2026-10-03_010000Z",datetime(2026,10,3,1,tzinfo=timezone.utc))
         self.assertEqual(snapshot["evidence"][0]["language_context"],"zh-Hant")
         self.assertEqual(snapshot["evidence"][0]["sampling_language_context"],"English")
+
+    def test_sample_filters_to_event_context_and_eight_hour_boundary(self):
+        plan={"query_count":1,"queries":[{"query":"高鐵","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"}]}
+        raw=[
+            {"id":"keep","username":"a","text":"演唱會散場後高鐵來得及嗎","permalink":"u-keep","timestamp":"2026-10-03T05:00:00Z","query":"高鐵"},
+            {"id":"noise","username":"b","text":"今天搭高鐵去上班","permalink":"u-noise","timestamp":"2026-10-03T05:00:00Z","query":"高鐵"},
+            {"id":"old","username":"c","text":"演唱會散場後高鐵來得及嗎","permalink":"u-old","timestamp":"2026-10-02T20:00:00Z","query":"高鐵"}
+        ]
+        snapshot=build_snapshot(raw,plan,ARTISTS,VENUES,EVENTS,AXES,{},"2026-10-03_060000Z",datetime(2026,10,3,6,tzinfo=timezone.utc))
+        self.assertEqual(snapshot["sample"]["raw_count"],3)
+        self.assertEqual(snapshot["sample"]["clean_count"],1)
+        self.assertEqual(snapshot["evidence"][0]["source_url"],"u-keep")
+        self.assertEqual(snapshot["sample"]["event_context_filter"],"concert_or_resolved_entity")
 
     def test_cross_snapshot_state_and_dormant(self):
         plan={"query_count":1,"queries":[{"query":"高鐵 演唱會","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"}]}
