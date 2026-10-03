@@ -458,7 +458,7 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
 
 export function translate(locale: UiLocale, key: string, values: TranslationValues = {}): string {
   const template = dictionaries[locale][key] ?? dictionaries["zh-TW"][key] ?? key;
-  return template.replace(/\\{(\\w+)\\}/g, (_, name) => String(values[name] ?? "{"+name+"}"));
+  return template.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? "{"+name+"}"));
 }
 
 export function dictionaryKeys(locale: UiLocale): string[] { return Object.keys(dictionaries[locale]).sort(); }
