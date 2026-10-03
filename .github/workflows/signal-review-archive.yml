@@ -3,6 +3,11 @@ name: Daily Signal Review Archive
 on:
   schedule:
     - cron: "0 16 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/signal-review-archive.yml"
   workflow_dispatch:
     inputs:
       archive_date:
