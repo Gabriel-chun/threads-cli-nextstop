@@ -120,7 +120,7 @@ function PostCard({
 }
 
 export function SignalReel({ deck }: { deck: SignalDeck }) {
-  const {t,formatDate}=useI18n();
+  const {t,formatDate,dataLabel}=useI18n();
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
   const [reviewView, setReviewView] = useState<ReviewView>("queue");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
