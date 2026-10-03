@@ -126,8 +126,44 @@ def main() -> None:
 
     archive_dir = Path(args.archive_dir)
     archive_dir.mkdir(parents=True, exist_ok=True)
-    (archive_dir / (payload["network_date"] + ".json")).write_text(text, encoding="utf-8")
-    print("[keyword-network]", payload["network_date"], "cards", payload["source_card_count"], "nodes", len(payload["nodes"]), "edges", len(payload["edges"]))
+    archive_path = archive_dir / (payload["network_date"] + ".json")
+    archive_path.write_text(text, encoding="utf-8")
+
+    snapshots = []
+    for path in sorted(archive_dir.glob("????-??-??.json"), reverse=True):
+        try:
+            item = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if item.get("schema_version") != "keyword-network-v0.1":
+            continue
+        snapshots.append({
+            "network_date": item.get("network_date") or path.stem,
+            "generated_at": item.get("generated_at"),
+            "source_card_count": int(item.get("source_card_count") or 0),
+            "active_node_count": sum(1 for node in item.get("nodes") or [] if int(node.get("count") or 0) > 0),
+            "edge_count": len(item.get("edges") or []),
+        })
+
+    index_payload = {
+        "schema_version": "keyword-network-index-v0.1",
+        "updated_at": now.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "timezone": "Asia/Taipei",
+        "snapshots": snapshots,
+    }
+    (archive_dir / "index.json").write_text(
+        json.dumps(index_payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    print(
+        "[keyword-network]",
+        payload["network_date"],
+        "cards", payload["source_card_count"],
+        "nodes", len(payload["nodes"]),
+        "edges", len(payload["edges"]),
+        "history", len(snapshots),
+    )
 
 if __name__ == "__main__":
     main()
