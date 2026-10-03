@@ -71,9 +71,11 @@ jobs:
               emit(False, f"collector_{collector_conclusion or 'unknown'}")
               raise SystemExit
 
-          # Collector-completion fallback is only needed after the morning refresh window opens.
-          if now.hour < 8:
-              emit(False, "before_08_taipei")
+          # GitHub scheduled delivery is best-effort. Allow the first successful
+          # collector after 07:00 Taipei to build today's deck so the morning
+          # refresh does not depend on the 08:xx / 09:xx cron slots arriving.
+          if now.hour < 7:
+              emit(False, "before_07_taipei")
               raise SystemExit
 
           deck_path = Path("collector/archive/latest/signal_deck.json")
