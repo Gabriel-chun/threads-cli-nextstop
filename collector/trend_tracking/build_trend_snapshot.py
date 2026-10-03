@@ -136,8 +136,8 @@ def resolve(text,artists,venues,events):
     }
 
 DEFAULT_EVENT_CONTEXT_TERMS = [
-    "演唱會", "演唱会", "演出", "巡演", "音樂祭", "音乐节", "粉絲見面會", "粉丝见面会",
-    "concert", "tour", "festival", "fanmeeting", "fan meeting", "gig"
+    "演唱會", "演唱会", "巡演", "音樂祭", "音乐节", "粉絲見面會", "粉丝见面会",
+    "concert", "world tour", "festival", "fanmeeting", "fan meeting", "live show"
 ]
 
 def event_context_matches(text,named,terms=None):
