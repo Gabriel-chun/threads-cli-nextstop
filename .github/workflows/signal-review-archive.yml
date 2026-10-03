@@ -51,7 +51,7 @@ jobs:
         shell: bash
         env:
           EXPORT_TOKEN: ${{ secrets.NEXTSTOP_REVIEW_EXPORT_TOKEN }}
-          EXPORT_BASE_URL: "https://next-stop-live.vercel.app"
+          EXPORT_BASE_URL: "https://threads-cli-nextstop.gabrielchun336.workers.dev"
         run: |
           set -euo pipefail
           if [[ -z "${EXPORT_TOKEN:-}" ]]; then
