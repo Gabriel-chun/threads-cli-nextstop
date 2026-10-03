@@ -109,7 +109,10 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
     try {
       const response = await fetch("/api/reviews/category/" + row.anonymous_id, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-NextStop-Write-Intent": "human-review"
+        },
         body: JSON.stringify({ category })
       });
       const payload = await response.json();
@@ -151,7 +154,10 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
     try {
       const response = await fetch("/api/reviews/label/" + row.anonymous_id, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-NextStop-Write-Intent": "human-review"
+        },
         body: JSON.stringify({ label: nextLabel })
       });
       const payload = await response.json();
