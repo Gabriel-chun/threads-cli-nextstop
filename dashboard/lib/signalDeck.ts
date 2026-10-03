@@ -14,7 +14,7 @@ export type SignalPostCard = {
   feature_tags: string[];
   actionability_score?: number;
   actionability_band?: "high" | "medium" | "low";
-  language_context?: "zh_hant" | "zh_hans" | "hk_zh" | "english" | "mixed";
+  language_context?: "zh_hant" | "zh_hans" | "hk_zh" | "english" | "other_latin" | "mixed";
   language_tokens?: string[];
   need_nodes?: string[];
   need_terms?: string[];
