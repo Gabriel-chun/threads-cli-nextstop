@@ -1,0 +1,186 @@
+name: Next Stop Trend Tracking
+
+on:
+  schedule:
+    - cron: "0 0,8,16 * * *"
+      timezone: "Asia/Taipei"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "collector/trend_tracking/**"
+      - ".github/workflows/trend-tracking.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nextstop-trend-tracking
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: gate
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          if os.environ.get("GITHUB_EVENT_NAME") != "schedule":
+              should=True
+          else:
+              p=Path("collector/archive/trends/latest.json")
+              if not p.exists(): should=True
+              else:
+                  try:
+                      d=json.loads(p.read_text(encoding="utf-8"))
+                      t=datetime.fromisoformat(d["generated_at"].replace("Z","+00:00"))
+                      should=(datetime.now(timezone.utc)-t).total_seconds() >= 7*3600
+                  except Exception: should=True
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as f:
+              f.write("should_run="+("true" if should else "false")+"\n")
+          print("[trend-gate] should_run=",should)
+          PY
+
+  collect:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 30
+    outputs:
+      run_stamp: ${{ steps.stamp.outputs.run_stamp }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: stamp
+        run: |
+          run_stamp="$(date -u +'%Y-%m-%d_%H%M%SZ')"
+          echo "RUN_STAMP=$run_stamp" >> "$GITHUB_ENV"
+          echo "run_stamp=$run_stamp" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build existing Threads CLI
+        run: |
+          mkdir -p bin
+          go build -buildvcs=false -o bin/th ./cmd/th
+      - name: Regression-test existing signal pipeline and isolated Trend Tracking module
+        run: |
+          python3 -m unittest collector/test_clean_rules.py
+          python3 -m unittest collector/test_observation.py
+          python3 -m unittest collector/test_signal_deck.py
+          python3 -m unittest collector/trend_tracking/test_trend_tracking.py
+      - name: Generate bounded query plan
+        run: python3 collector/trend_tracking/generate_queries.py --budget 18
+      - name: Collect public Threads observations with existing CLI
+        env:
+          TH_BIN: ./bin/th
+          QUERY_FILE: collector/trend_tracking/output/queries.txt
+          RAW_DIR: collector/trend_tracking/raw
+          FAILED_FILE: collector/trend_tracking/output/failed_queries.txt
+          COLLECTOR_SEARCH_DEPTH: "2"
+          COLLECTOR_QUERY_ATTEMPTS: "1"
+          COLLECTOR_GOOGLE_FALLBACK: "false"
+          SLEEP_SECONDS: "8"
+        run: |
+          rm -rf collector/trend_tracking/raw
+          mkdir -p collector/trend_tracking/raw collector/trend_tracking/output
+          bash collector/collect.sh
+      - name: Refuse to advance archive when every trend query failed
+        shell: bash
+        run: |
+          set -euo pipefail
+          total="$(awk 'NF {n++} END {print n+0}' collector/trend_tracking/output/queries.txt)"
+          failed="$(awk 'NF {n++} END {print n+0}' collector/trend_tracking/output/failed_queries.txt)"
+          echo "[trend-quality] total=$total failed=$failed"
+          if [[ "$total" -gt 0 && "$failed" -ge "$total" ]]; then
+            echo "::error::All Trend Tracking queries failed; archive will not advance."
+            exit 1
+          fi
+      - name: Build Trend Snapshot
+        run: |
+          python3 collector/trend_tracking/build_trend_snapshot.py             --raw-dir collector/trend_tracking/raw             --query-plan collector/trend_tracking/output/query_plan.json             --events collector/trend_tracking/config/events.json             --previous collector/archive/trends/latest.json             --run-stamp "$RUN_STAMP"             --output collector/trend_tracking/output/trend_snapshot.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nextstop-trends-${{ env.RUN_STAMP }}
+          path: collector/trend_tracking/output/
+          retention-days: 30
+          if-no-files-found: error
+
+  archive:
+    needs: collect
+    if: needs.collect.result == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      archive_commit: ${{ steps.commit.outputs.archive_commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: nextstop-trends-${{ needs.collect.outputs.run_stamp }}
+          path: collector/trend_tracking/output
+      - id: commit
+        shell: bash
+        env:
+          RUN_STAMP: ${{ needs.collect.outputs.run_stamp }}
+        run: |
+          set -euo pipefail
+          day="${RUN_STAMP%%_*}"
+          mkdir -p "collector/archive/trends/$day"
+          cp collector/trend_tracking/output/trend_snapshot.json "collector/archive/trends/$day/$RUN_STAMP.json"
+          cp collector/trend_tracking/output/trend_snapshot.json collector/archive/trends/latest.json
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          root=Path("collector/archive/trends")
+          snaps=[]
+          for p in sorted(root.glob("????-??-??/*.json"), reverse=True):
+              try:
+                  d=json.loads(p.read_text(encoding="utf-8"))
+                  snaps.append({"run_stamp":d["run_stamp"],"generated_at":d["generated_at"],"path":str(p),"event_candidate_count":d["event_candidate_count"],"edge_count":d["active_edge_count"]})
+              except Exception: pass
+          (root/"index.json").write_text(json.dumps({"schema_version":"trend-index-v0.1","updated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"snapshots":snaps[:90]},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add collector/archive/trends/
+          if git diff --cached --quiet; then
+            echo "archive_commit=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "data: trend snapshot $RUN_STAMP"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "archive_commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  notion:
+    needs: [collect, archive]
+    if: needs.archive.result == 'success'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: nextstop-trends-${{ needs.collect.outputs.run_stamp }}
+          path: collector/trend_tracking/output
+      - name: Non-blocking Notion project sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_TREND_PAGE_ID: "3ee8daab-2313-8180-adb5-df08099cd393"
+          TREND_SNAPSHOT: collector/trend_tracking/output/trend_snapshot.json
+        run: node collector/trend_tracking/sync_notion.mjs

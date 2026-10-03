@@ -174,6 +174,7 @@ export default async function Page() {
             <li>get_trend_history</li>
             <li>get_signal_deck</li>
             <li>get_keyword_network</li>
+            <li>get_trend_radar</li>
             <li>get_latest_download</li>
             <li>get_reviewed_cards_download</li>
           </ul>
@@ -196,6 +197,13 @@ export default async function Page() {
             <div>
               <strong>開啟 Keyword Network</strong>
               <small>每日 00:00 的 Recall / Context / Need 視覺快照</small>
+            </div>
+          </a>
+          <a className="downloadButton" href="/trends">
+            <span>📡</span>
+            <div>
+              <strong>開啟 Trend Radar</strong>
+              <small>Artist / Event × Need Edge 趨勢觀察</small>
             </div>
           </a>
           <div className="sourceNote">

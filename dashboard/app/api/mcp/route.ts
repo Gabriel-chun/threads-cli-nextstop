@@ -6,6 +6,7 @@ import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 import { loadObservationBundle } from "../../../lib/observations";
 import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck";
 import { loadKeywordNetwork } from "../../../lib/keywordNetwork";
+import { loadTrendRadar } from "../../../lib/trendRadar";
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
@@ -199,6 +200,28 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_trend_radar",
+      {
+        title: "Get Trend Radar",
+        description: "Return the read-only Trend Tracking V0.1 snapshot: upcoming events, need edges, status and supporting public evidence.",
+        inputSchema: z.object({
+          date: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/).optional()
+        })
+      },
+      async ({ date }) => {
+        const radar = await loadTrendRadar(date);
+        return {
+          content: [{
+            type: "text",
+            text: radar
+              ? JSON.stringify(radar, null, 2)
+              : "Trend Radar snapshot unavailable."
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
       "get_reviewed_cards_download",
       {
         title: "Get reviewed cards JSON download",
@@ -243,7 +266,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.12.0"
+      version: "0.13.0"
     }
   }
 );
