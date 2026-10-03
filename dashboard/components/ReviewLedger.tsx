@@ -244,7 +244,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
 
   return (
     <>
-      <div className="reviewFilterBar" aria-label="Review filter">
+      <div className="reviewFilterBar" aria-label={t("reviews.filterAria")}>
         {(["all", "relevant", "irrelevant"] as Filter[]).map((key) => (
           <button
             key={key}
@@ -299,15 +299,15 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                     <label className="reviewCategoryEditor">
                       <span className="srOnly">{t("reviews.adjustCategory")}</span>
                       <select
-                        value={dataLabel(row.category)}
+                        value={row.category}
                         disabled={savingId === row.anonymous_id}
                         onChange={(event) => void updateCategory(row, event.target.value)}
                       >
                         {!REVIEW_CATEGORIES.includes(row.category as any) ? (
-                          <option value={row.category}>{row.category}</option>
+                          <option value={row.category}>{dataLabel(row.category)}</option>
                         ) : null}
                         {REVIEW_CATEGORIES.map((category) => (
-                          <option key={dataLabel(category)} value={category}>{dataLabel(category)}</option>
+                          <option key={category} value={category}>{dataLabel(category)}</option>
                         ))}
                       </select>
                     </label>
@@ -319,17 +319,17 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                     row.original_category &&
                     row.original_category !== row.category ? (
                       <small className="reviewOriginalCategory">
-                        {t("reviews.original",{value:row.original_category})}
+                        {t("reviews.original",{value:dataLabel(row.original_category)})}
                       </small>
                     ) : null}
                   </td>
                   <td>
                     <div className="reviewSwipeCell">
                       <div className={"reviewSwipeHint reviewSwipeHintLeft " + (dx <= -SWIPE_THRESHOLD ? "active" : "")}>
-                        Irrelevant
+                        {t("deck.irrelevant")}
                       </div>
                       <div className={"reviewSwipeHint reviewSwipeHintRight " + (dx >= SWIPE_THRESHOLD ? "active" : "")}>
-                        Relevant
+                        {t("deck.relevant")}
                       </div>
                       <div
                         className={"reviewSwipeSurface " + (dragging ? "dragging" : "")}
