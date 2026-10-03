@@ -3207,3 +3207,98 @@ footer {
     max-width: none;
   }
 }
+
+
+/* Quiet UI v0.31 — restore decision-useful trend without restoring dashboard weight */
+.quietTrendStrip {
+  margin: 2px 0 20px;
+  padding: 10px 0 6px;
+  border-top: 1px solid rgba(221,213,202,.72);
+  border-bottom: 1px solid rgba(221,213,202,.72);
+}
+
+.quietTrendStripHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 4px;
+}
+
+.quietTrendStripHead > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.quietTrendStripHead span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.quietTrendStripHead strong {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.quietTrendStripHead small {
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.trendChart.compact {
+  min-height: 0;
+}
+
+.trendChart.compact .trendLegend {
+  margin-bottom: 2px;
+  gap: 12px;
+  font-size: 9px;
+  opacity: .8;
+}
+
+.trendChart.compact svg {
+  height: 92px;
+}
+
+.trendChart.compact .trendGridLine {
+  opacity: .42;
+}
+
+.trendChart.compact .trendLine {
+  stroke-width: 1.5;
+}
+
+.trendChart.compact .trendAxis {
+  margin-top: 0;
+  font-size: 8px;
+  opacity: .72;
+}
+
+.trendEmpty.compact {
+  min-height: 84px;
+  font-size: 11px;
+}
+
+.quietWorkspace .health small {
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .quietTrendStripHead {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .quietTrendStripHead > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .trendChart.compact svg {
+    height: 82px;
+  }
+}
