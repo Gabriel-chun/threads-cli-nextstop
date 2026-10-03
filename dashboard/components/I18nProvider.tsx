@@ -47,3 +47,5 @@ export function useI18n(){ const value=useContext(I18nContext); if(!value) throw
 export function T({k,values}:{k:string;values?:TranslationValues}){ const {t}=useI18n(); return <>{t(k,values)}</>; }
 export function LocaleDate({value}:{value?:string|null}){ const {formatDate}=useI18n(); return <>{formatDate(value)}</>; }
 export function LocaleCount({value,unit}:{value:number;unit:CountUnit}){ const {formatCount}=useI18n(); return <>{formatCount(value,unit)}</>; }
+
+export function DataLabel({value}:{value:string}){ const {dataLabel}=useI18n(); return <>{dataLabel(value)}</>; }
