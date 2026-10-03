@@ -30,7 +30,8 @@ export default async function Page() {
           <span className="dot" />
           <div>
             <strong>{data.health.healthy ? <T k="signal.collectorHealthy" /> : <T k={"signal.health."+data.health.status} />}</strong>
-            <small><T k="signal.lastCollection" /> · <LocaleDate value={latestTrend?.runAt || null} /></small>
+            <small><T k="signal.lastCollection" /> · <LocaleDate value={data.health.updatedAt} /></small>
+            <small className="healthDefinition"><T k="signal.healthDefinition" /></small>
           </div>
         </div>
       </header>
@@ -57,6 +58,7 @@ export default async function Page() {
             { key: "new12h", labelKey: "signal.chart.rolling12h", className: "trendB" }
           ]}
         />
+        <p className="quietTrendExplainer"><T k="signal.chart.explainer" /></p>
       </section>
 
       <SignalReel deck={signalDeck} />
