@@ -108,7 +108,7 @@ jobs:
           fi
       - name: Build Trend Snapshot
         run: |
-          python3 collector/trend_tracking/build_trend_snapshot.py             --raw-dir collector/trend_tracking/raw             --query-plan collector/trend_tracking/output/query_plan.json             --events collector/trend_tracking/config/events.json             --previous collector/archive/trends/latest.json             --run-stamp "$RUN_STAMP"             --output collector/trend_tracking/output/trend_snapshot.json
+          python3 collector/trend_tracking/build_trend_snapshot.py             --raw-dir collector/trend_tracking/raw             --query-plan collector/trend_tracking/output/query_plan.json             --artists collector/trend_tracking/config/artists.json             --events collector/trend_tracking/config/events.json             --previous collector/archive/trends/latest.json             --run-stamp "$RUN_STAMP"             --output collector/trend_tracking/output/trend_snapshot.json
       - uses: actions/upload-artifact@v4
         with:
           name: nextstop-trends-${{ env.RUN_STAMP }}
