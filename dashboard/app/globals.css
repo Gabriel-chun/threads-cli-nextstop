@@ -2324,3 +2324,87 @@ footer {
     min-width: 76px;
   }
 }
+
+
+/* Keyword Network lane-based draggable layout */
+.networkLaneBands rect {
+  fill: rgba(238, 233, 225, .28);
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 4 8;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkLaneBands text {
+  fill: var(--quiet);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.networkGraphNode {
+  touch-action: none;
+  user-select: none;
+}
+
+.networkGraphNode.dragging {
+  cursor: grabbing;
+}
+
+.networkGraphNode:not(.dragging) {
+  cursor: grab;
+}
+
+.networkGraphLabel rect {
+  fill: rgba(255, 253, 249, .94);
+  stroke: rgba(221, 213, 202, .92);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.networkGraphNode.selected .networkGraphLabel rect {
+  fill: var(--accent-soft);
+  stroke: rgba(168, 67, 40, .35);
+}
+
+.networkGraphLabel text {
+  fill: var(--ink);
+}
+
+.networkGraphNode.dim .networkGraphLabel,
+.networkGraphNode.dim circle {
+  opacity: .12;
+}
+
+.networkToolbarActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.networkToolbarActions span {
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.networkToolbarActions button {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.networkToolbarActions button:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 1000px) {
+  .networkToolbarActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
