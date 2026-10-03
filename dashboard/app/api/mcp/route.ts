@@ -5,6 +5,7 @@ import { z } from "zod";
 import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 import { loadObservationBundle } from "../../../lib/observations";
 import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck";
+import { loadKeywordNetwork } from "../../../lib/keywordNetwork";
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
@@ -178,6 +179,26 @@ const handler = createMcpHandler(
     );
 
     server.registerTool(
+      "get_keyword_network",
+      {
+        title: "Get keyword network",
+        description: "Return the latest daily Recall → Language Context → Need Network → Keyword snapshot.",
+        inputSchema: z.object({})
+      },
+      async () => {
+        const network = await loadKeywordNetwork();
+        return {
+          content: [{
+            type: "text",
+            text: network
+              ? JSON.stringify(network, null, 2)
+              : "Keyword network snapshot unavailable."
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
       "get_reviewed_cards_download",
       {
         title: "Get reviewed cards JSON download",
@@ -222,7 +243,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.11.0"
+      version: "0.12.0"
     }
   }
 );
