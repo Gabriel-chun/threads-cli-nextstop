@@ -8,15 +8,18 @@ if(!token || !pageId){
   process.exit(0);
 }
 const data=JSON.parse(await readFile(snapshotPath,"utf8"));
-const summary=`Run ${data.run_stamp} · queries ${data.query_count} · raw ${data.raw_result_count} · clean ${data.clean_result_count} · edges ${data.active_edge_count} · observe/watch/active ${data.status_counts.observe}/${data.status_counts.watch}/${data.status_counts.active}`;
+const sample=data.sample||{};
+const states=data.link_states||{};
+const count=(key)=>states[key]?.count||0;
+const summary="Run "+data.run_stamp+" · strategy "+(sample.sampling_strategy||"unknown")+" · queries "+data.query_count+" · raw "+(sample.raw_count??data.raw_result_count)+" · clean "+(sample.clean_count??data.clean_result_count)+" · evidence "+(data.evidence||[]).length+" · links "+(data.links||[]).length+" · new/repeated/persistent/expanding/dormant "+count("new")+"/"+count("repeated")+"/"+count("persistent")+"/"+count("expanding")+"/"+count("dormant");
 const body={children:[
-  {object:"block",type:"heading_3",heading_3:{rich_text:[{type:"text",text:{content:`Trend Snapshot · ${data.generated_at.slice(0,10)}`}}]}},
+  {object:"block",type:"heading_3",heading_3:{rich_text:[{type:"text",text:{content:"Trend Observation · "+data.generated_at.slice(0,10)}}]}},
   {object:"block",type:"paragraph",paragraph:{rich_text:[{type:"text",text:{content:summary}}]}}
 ]};
-const res=await fetch(`https://api.notion.com/v1/blocks/${pageId}/children`,{
+const res=await fetch("https://api.notion.com/v1/blocks/"+pageId+"/children",{
   method:"PATCH",
-  headers:{Authorization:`Bearer ${token}`,"Notion-Version":"2025-09-03","Content-Type":"application/json"},
+  headers:{Authorization:"Bearer "+token,"Notion-Version":"2025-09-03","Content-Type":"application/json"},
   body:JSON.stringify(body)
 });
-if(!res.ok) throw new Error(`Notion sync failed: ${res.status} ${await res.text()}`);
+if(!res.ok) throw new Error("Notion sync failed: "+res.status+" "+await res.text());
 console.log("[trend-notion] synced",summary);

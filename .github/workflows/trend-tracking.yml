@@ -108,7 +108,16 @@ jobs:
           fi
       - name: Build Trend Snapshot
         run: |
-          python3 collector/trend_tracking/build_trend_snapshot.py             --raw-dir collector/trend_tracking/raw             --query-plan collector/trend_tracking/output/query_plan.json             --artists collector/trend_tracking/config/artists.json             --events collector/trend_tracking/config/events.json             --previous collector/archive/trends/latest.json             --run-stamp "$RUN_STAMP"             --output collector/trend_tracking/output/trend_snapshot.json
+          python3 collector/trend_tracking/build_trend_snapshot.py \
+            --raw-dir collector/trend_tracking/raw \
+            --query-plan collector/trend_tracking/output/query_plan.json \
+            --artists collector/trend_tracking/config/artists.json \
+            --events collector/trend_tracking/config/events.json \
+            --venues collector/trend_tracking/config/venues.json \
+            --needs collector/trend_tracking/config/needs.json \
+            --previous collector/archive/trends/latest.json \
+            --run-stamp "$RUN_STAMP" \
+            --output collector/trend_tracking/output/trend_snapshot.json
       - uses: actions/upload-artifact@v4
         with:
           name: nextstop-trends-${{ env.RUN_STAMP }}
@@ -149,9 +158,30 @@ jobs:
           for p in sorted(root.glob("????-??-??/*.json"), reverse=True):
               try:
                   d=json.loads(p.read_text(encoding="utf-8"))
-                  snaps.append({"run_stamp":d["run_stamp"],"generated_at":d["generated_at"],"path":str(p),"event_candidate_count":d["event_candidate_count"],"edge_count":d["active_edge_count"]})
+                  sample=d.get("sample") or {}
+                  strategy=sample.get("sampling_strategy")
+                  if not strategy and d.get("run_stamp")=="2026-10-03_055110Z":
+                      strategy="targeted_artist_need"
+                  snaps.append({
+                      "run_stamp":d["run_stamp"],
+                      "generated_at":d["generated_at"],
+                      "path":str(p),
+                      "schema_version":d.get("schema_version","trend-radar-v0.1"),
+                      "sampling_strategy":strategy or "targeted_artist_need",
+                      "raw_count":sample.get("raw_count",d.get("raw_result_count",0)),
+                      "clean_count":sample.get("clean_count",d.get("clean_result_count",0)),
+                      "evidence_count":len(d.get("evidence",d.get("supporting_evidence",[]))),
+                      "event_candidate_count":d.get("event_candidate_count",len(d.get("event_watch",d.get("events",[])))),
+                      "link_count":len(d.get("links",d.get("edges",[]))),
+                      "edge_count":d.get("active_edge_count",len(d.get("links",d.get("edges",[]))))
+                  })
               except Exception: pass
-          (root/"index.json").write_text(json.dumps({"schema_version":"trend-index-v0.1","updated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"snapshots":snaps[:90]},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          (root/"index.json").write_text(json.dumps({
+              "schema_version":"trend-index-v0.2",
+              "updated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),
+              "baseline":{"run_stamp":"2026-10-03_055110Z","sampling_strategy":"targeted_artist_need"},
+              "snapshots":snaps[:90]
+          },ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

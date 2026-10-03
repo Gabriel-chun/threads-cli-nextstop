@@ -17,6 +17,7 @@ import {
   nextUnreviewedKeys,
   remainingUnreviewedCount
 } from "../lib/reviewQuota";
+import { useI18n } from "./I18nProvider";
 
 type WindowKey = "1d" | "3d" | "5d";
 type ReviewView = "queue" | "relevant" | "irrelevant";
@@ -31,18 +32,6 @@ type DragState = {
 const SWIPE_THRESHOLD = 86;
 const LOCAL_REVIEW_KEY = "next-stop-live:signal-review-session:v1";
 type LocalReviewEntry = { row: SignalDeckFeedback; synced: boolean; updated_at: string };
-
-function fmtDate(value?: string | null) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("zh-TW", {
-    timeZone: "Asia/Taipei",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  }).format(new Date(value));
-}
 
 function PostCard({
   card,
@@ -71,6 +60,7 @@ function PostCard({
   onPointerCancel: () => void;
   onOpen: () => void;
 }) {
+  const {t,formatDate}=useI18n();
   const dragging = Boolean(drag && drag.postKey === card.post_key);
   const dx = drag && dragging ? drag.currentX - drag.startX : 0;
   const visualDx = Math.max(-150, Math.min(150, dx));
@@ -106,9 +96,9 @@ function PostCard({
         <span className="reelStatus">
           <i />
           {card.triage_label === "relevant"
-            ? "Relevant"
+            ? t("deck.relevant")
             : card.triage_label === "irrelevant"
-              ? "Irrelevant"
+              ? t("deck.irrelevant")
               : card.status}
         </span>
       </div>
@@ -117,14 +107,12 @@ function PostCard({
 
       <div className="postCardMeta">
         <span>@{card.username || "unknown"}</span>
-        <span>{fmtDate(card.posted_at)}</span>
+        <span>{formatDate(card.posted_at)}</span>
       </div>
 
       <div className="reelPeek">
         <small>
-          {reviewView === "queue"
-            ? "點一下看完整內容 · 左拖 Irrelevant · 右拖 Relevant"
-            : "點一下回看完整內容"}
+          {reviewView === "queue" ? t("deck.hintQueue") : t("deck.hintReview")}
         </small>
       </div>
     </div>
@@ -132,6 +120,7 @@ function PostCard({
 }
 
 export function SignalReel({ deck }: { deck: SignalDeck }) {
+  const {t,formatDate}=useI18n();
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
   const [reviewView, setReviewView] = useState<ReviewView>("queue");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -344,7 +333,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     };
     setLabels((current)=>({...current,[card.post_key]:label})); setSelectedKey(null); setSaveError("");
     const next={...localReviews,[card.post_key]:{row,synced:false,updated_at:now}}; saveLocalReviews(next);
-    setSaveNotice(label==="relevant"?"已放入 Relevant · 待同步":"已放入 Irrelevant · 待同步");
+    setSaveNotice(label==="relevant"?t("deck.savedRelevant"):t("deck.savedIrrelevant"));
     globalThis.setTimeout(()=>setSaveNotice(""),1800);
   }
 
@@ -358,7 +347,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
     setSyncingNotion(true);
     setSaveError("");
-    setSaveNotice(`正在同步 0 / ${queue.length} 筆到 Notion…`);
+    setSaveNotice(t("deck.syncProgress",{done:0,total:queue.length}));
 
     try {
       for (let offset = 0; offset < queue.length; offset += batchSize) {
@@ -374,7 +363,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         const payload = await response.json().catch(() => null);
 
         if (!response.ok) {
-          throw new Error(payload?.error || `Notion 同步失敗（HTTP ${response.status}）`);
+          throw new Error(payload?.error || t("deck.syncFailed")+" (HTTP "+response.status+")");
         }
 
         const synced = new Set<string>(payload?.synced_keys || []);
@@ -388,16 +377,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         saveLocalReviews(workingReviews);
         totalSynced += synced.size;
 
-        setSaveNotice(
-          `正在同步 ${Math.min(offset + batch.length, queue.length)} / ${queue.length} 筆到 Notion…`
-        );
+        setSaveNotice(t("deck.syncProgress",{done:Math.min(offset+batch.length,queue.length),total:queue.length}));
       }
 
-      setSaveNotice(`已同步 ${totalSynced} 筆到 Notion`);
+      setSaveNotice(t("deck.syncDone",{count:totalSynced}));
       globalThis.setTimeout(() => setSaveNotice(""), 2200);
     } catch (error) {
       setSaveNotice("");
-      setSaveError(error instanceof Error ? error.message : "Notion 同步失敗");
+      setSaveError(error instanceof Error ? error.message : t("deck.syncFailed"));
     } finally {
       setSyncingNotion(false);
     }
@@ -458,13 +445,13 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     <section className="signalDeckPanel">
       <div className="signalDeckHead">
         <div>
-          <p className="kicker">SIGNAL DECK · POST SWIPE</p>
-          <h2>近期貼文卡</h2>
+          <p className="kicker">{t("deck.kicker")}</p>
+          <h2>{t("deck.title")}</h2>
           <p className="muted">
-            一次只處理最上面一張。點開確認完整內容；右拖 Relevant、左拖 Irrelevant，下一張會自動補上。
+            {t("deck.lead")}
           </p>
         </div>
-        <div className="windowTabs" aria-label="Signal Deck 時間範圍">
+        <div className="windowTabs" aria-label={t("deck.rangeLabel")}>
           {(["1d", "3d", "5d"] as WindowKey[]).map((key) => (
             <button
               key={key}
@@ -472,37 +459,37 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               className={windowKey === key ? "active" : ""}
               onClick={() => changeWindow(key)}
             >
-              {deck.windows[key].label}
+              {t("deck.window."+key)}
             </button>
           ))}
         </div>
       </div>
 
       <div className="signalDeckSub">
-        <span>今日 Review · {window.label} 視窗</span>
-        <span>Daily snapshot · {fmtDate(deck.generated_at)}</span>
+        <span>{t("deck.reviewToday",{window:t("deck.window."+windowKey)})}</span>
+        <span>{t("deck.dailySnapshot",{date:formatDate(deck.generated_at)})}</span>
       </div>
 
-      <div className="reviewProgress" aria-label="今日 Review 進度">
+      <div className="reviewProgress" aria-label={t("deck.progress")}>
         <div className="reviewProgressHead">
           <div>
-            <span>今日進度</span>
-            <strong>約 {reviewedPct.toFixed(0)}%</strong>
+            <span>{t("deck.progress")}</span>
+            <strong>{t("deck.progressApprox",{pct:reviewedPct.toFixed(0)})}</strong>
           </div>
           <div className="reviewProgressLegend">
-            <span className="unreviewed">尚餘約 {(100 - reviewedPct).toFixed(0)}%</span>
+            <span className="unreviewed">{t("deck.remainingApprox",{pct:(100-reviewedPct).toFixed(0)})}</span>
           </div>
         </div>
-        <div className="reviewHpTrack" title={"今日進度約 " + reviewedPct.toFixed(0) + "%"}>
+        <div className="reviewHpTrack" title={t("deck.progressApprox",{pct:reviewedPct.toFixed(0)})}>
           <span className="reviewHpRelevant" style={{ width: reviewedPct + "%" }} />
         </div>
         <div className="reviewProgressFoot">
-          <span>只表示目前每日批次的推估進度</span>
+          <span>{t("deck.progressHelp")}</span>
           <div className="reviewProgressActions">
             <button type="button" className="syncNotionButton" disabled={syncingNotion || pendingReviews.length===0} onClick={()=>void syncPendingToNotion()}>
-              {syncingNotion ? "↻ 同步中…" : pendingReviews.length ? `↻ 同步到 Notion · 待同步 ${pendingReviews.length}` : "✓ Notion 已同步"}
+              {syncingNotion ? t("deck.syncing") : pendingReviews.length ? t("deck.syncPending",{count:pendingReviews.length}) : t("deck.synced")}
             </button>
-            <a href="/reviews">查看 Review Ledger ↗</a>
+            <a href="/reviews">{t("deck.openLedger")}</a>
           </div>
         </div>
       </div>
@@ -518,11 +505,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <>
             <div className={`swipeZone swipeZoneLeft ${dragDx < -SWIPE_THRESHOLD ? "active" : ""}`}>
               <strong>Irrelevant</strong>
-              <span>往左放</span>
+              <span>{t("deck.dropLeft")}</span>
             </div>
             <div className={`swipeZone swipeZoneRight ${dragDx > SWIPE_THRESHOLD ? "active" : ""}`}>
               <strong>Relevant</strong>
-              <span>往右放</span>
+              <span>{t("deck.dropRight")}</span>
             </div>
           </>
         ) : null}
@@ -555,27 +542,27 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <div className="signalDeckEmpty">
             {reviewView === "queue" ? (
               <>
-                <strong>今天這一批已經整理完了。</strong>
+                <strong>{t("deck.done")}</strong>
                 {remainingUnreviewed > 0 ? (
                   <button type="button" className="addTenButton" onClick={addTen}>
-                    有余力，再加 {Math.min(window.extend_step ?? 10, remainingUnreviewed)} 篇
+                    {t("deck.addMore",{count:Math.min(window.extend_step ?? 10,remainingUnreviewed)})}
                   </button>
                 ) : (
-                  <span>目前這個時間窗已全部整理完成。</span>
+                  <span>{t("deck.windowDone")}</span>
                 )}
               </>
             ) : (
-              `目前沒有 ${reviewView === "relevant" ? "Relevant" : "Irrelevant"} 貼文。`
+              t("deck.noneReview",{label:reviewView === "relevant" ? t("deck.relevant") : t("deck.irrelevant")})
             )}
           </div>
         )}
       </div>
 
       <div className="reviewLedger">
-        <span>分類紀錄</span>
+        <span>{t("deck.reviewLog")}</span>
         {reviewView !== "queue" ? (
           <button type="button" onClick={() => { setReviewView("queue"); setSelectedKey(null); }}>
-            ← 回待分類
+            {t("deck.backQueue")}
           </button>
         ) : null}
         <button
@@ -598,13 +585,13 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         <div className="postPreview">
           <div className="postPreviewMeta">
             <div>
-              <p className="kicker">POST PREVIEW</p>
+              <p className="kicker">{t("deck.postPreview")}</p>
               <h3>{selected.category}</h3>
-              <p>@{selected.username || "unknown"} · {fmtDate(selected.posted_at)}</p>
+              <p>@{selected.username || t("deck.unknownAuthor")} · {formatDate(selected.posted_at)}</p>
             </div>
             {selected.permalink ? (
               <a href={selected.permalink} target="_blank" rel="noreferrer">
-                Threads 原文 ↗
+                {t("deck.threadsOriginal")}
               </a>
             ) : null}
           </div>
@@ -646,13 +633,13 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         </div>
       ) : (
         <div className="evidenceHint">
-          點卡片看完整內容。桌面與觸控都可直接拖卡：左 = Irrelevant，右 = Relevant；按鈕只作為備用操作。
+          {t("deck.fullHint")}
         </div>
       )}
 
       {relevantClusters.length ? (
         <div className="relevantSummary">
-          <span>Relevant summary</span>
+          <span>{t("deck.relevantSummary")}</span>
           {relevantClusters.map((cluster) => (
             <div key={cluster.category}>
               <strong>{cluster.category}</strong>

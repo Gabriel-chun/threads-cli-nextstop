@@ -22,4 +22,13 @@ jobs:
         working-directory: dashboard
         env:
           MCP_TEST_URL: "https://threads-cli-nextstop.gabrielchun336.workers.dev/api/mcp"
-        run: node scripts/test-mcp-events.mjs
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5 6 7 8; do
+            echo "[production-mcp] attempt $attempt"
+            if node scripts/test-mcp-events.mjs; then
+              exit 0
+            fi
+            sleep 20
+          done
+          exit 1

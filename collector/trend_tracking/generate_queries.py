@@ -6,58 +6,65 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 CONFIG = ROOT / "config"
 
+QUERY_CATALOG = [
+    {"query":"高鐵 演唱會","family":"mobility_hsr","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"火車 演唱會","family":"mobility_rail","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"捷運 演唱會","family":"mobility_metro","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"客運 演唱會","family":"mobility_bus","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"飛機 演唱會","family":"mobility_flight","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"機票 演唱會","family":"mobility_airfare","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"散場 高鐵","family":"mobility_after_show_hsr","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"演唱會 當天來回","family":"mobility_same_day_return","axis":"mobility","language_context":"zh-Hant"},
+    {"query":"concert train","family":"mobility_train_en","axis":"mobility","language_context":"English"},
+    {"query":"concert flight","family":"mobility_flight_en","axis":"mobility","language_context":"English"},
+    {"query":"演唱會 幾點結束","family":"timing_end_time","axis":"timing","language_context":"zh-Hant"},
+    {"query":"演唱會 散場","family":"timing_dispersal","axis":"timing","language_context":"zh-Hant"},
+    {"query":"演唱會 末班車","family":"timing_last_train","axis":"timing","language_context":"zh-Hant"},
+    {"query":"演唱會 來得及","family":"timing_feasibility","axis":"timing","language_context":"zh-Hant"},
+    {"query":"concert end time","family":"timing_end_time_en","axis":"timing","language_context":"English"},
+    {"query":"concert last train","family":"timing_last_train_en","axis":"timing","language_context":"English"},
+    {"query":"演唱會 住宿","family":"stay_lodging","axis":"stay","language_context":"zh-Hant"},
+    {"query":"演唱會 飯店","family":"stay_hotel","axis":"stay","language_context":"zh-Hant"},
+    {"query":"演唱會 過夜","family":"stay_overnight","axis":"stay","language_context":"zh-Hant"},
+    {"query":"演唱會 隔天回","family":"stay_next_day_return","axis":"stay","language_context":"zh-Hant"},
+    {"query":"concert hotel","family":"stay_hotel_en","axis":"stay","language_context":"English"},
+    {"query":"concert stay","family":"stay_stay_en","axis":"stay","language_context":"English"},
+]
+
 def load(name):
     return json.loads((CONFIG / name).read_text(encoding="utf-8"))
 
 def build_plan(today: date, budget: int):
-    artists = {a["artist_id"]: a for a in load("artists.json")["artists"]}
-    needs = sorted(load("needs.json")["action_terms"], key=lambda x: -int(x["priority"]))
-    events = load("events.json")["events"]
-    grouped = {}
-    for event in events:
-        event_day = date.fromisoformat(event["event_date"])
-        days = (event_day - today).days
-        if days < -1 or days > 90:
+    events = []
+    for event in load("events.json")["events"]:
+        try:
+            days = (date.fromisoformat(event["event_date"]) - today).days
+        except Exception:
             continue
-        artist = artists[event["artist_id"]]
-        per_event = 5 if days <= 30 else 4 if days <= 60 else 3
-        for need in needs[:per_event]:
-            query = f"{artist['canonical_name']} {need['terms'][0]}"
-            key = (event["artist_id"], need["need_id"], query)
-            score = int(need["priority"]) + max(0, 90 - days) / 30
-            if key not in grouped:
-                grouped[key] = {
-                    "artist_id": event["artist_id"],
-                    "artist_name": artist["canonical_name"],
-                    "need_id": need["need_id"],
-                    "need_label": need["label"],
-                    "need_terms": need["terms"],
-                    "query": query,
-                    "priority": score,
-                    "aliases": artist["aliases"],
-                    "event_ids": [],
-                    "event_names": [],
-                    "event_dates": [],
-                    "venue_names": [],
-                    "cities": []
-                }
-            row = grouped[key]
-            row["priority"] = max(row["priority"], score)
-            row["event_ids"].append(event["event_id"])
-            row["event_names"].append(event["event_name"])
-            row["event_dates"].append(event["event_date"])
-            row["venue_names"].append(event["venue_name"])
-            row["cities"].append(event["city"])
-    rows = sorted(grouped.values(), key=lambda x: (-x["priority"], min(x["event_dates"]), x["artist_name"], x["need_label"]))
-    selected = rows[:budget]
+        if -1 <= days <= 90:
+            events.append(event)
+
+    bounded = max(1, min(int(budget), 40))
+    selected = QUERY_CATALOG[:bounded]
+    rows = []
+    for index, row in enumerate(selected, start=1):
+        rows.append({
+            "query_id": f"q{index:02d}",
+            **row,
+            "event_context": "upcoming_concert_window_90d",
+            "upcoming_event_count": len(events),
+        })
+
     return {
-        "schema_version": "trend-query-plan-v0.1",
+        "schema_version": "trend-query-plan-v0.2",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),
         "today": today.isoformat(),
-        "budget": budget,
-        "candidate_count": len(rows),
-        "query_count": len(selected),
-        "queries": selected
+        "sampling_strategy": "need_led_observation",
+        "budget": bounded,
+        "candidate_count": len(QUERY_CATALOG),
+        "query_count": len(rows),
+        "language_contexts_supported": ["zh-Hant","zh-Hans","HK Chinese","English","mixed"],
+        "queries": rows,
     }
 
 def main():
@@ -67,9 +74,9 @@ def main():
     p.add_argument("--output-dir", default=str(ROOT / "output"))
     args=p.parse_args()
     today=date.fromisoformat(args.date) if args.date else date.today()
-    plan=build_plan(today, max(1,min(args.budget,40)))
+    plan=build_plan(today,args.budget)
     out=Path(args.output_dir); out.mkdir(parents=True, exist_ok=True)
     (out/"query_plan.json").write_text(json.dumps(plan,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     (out/"queries.txt").write_text("\n".join(q["query"] for q in plan["queries"])+"\n",encoding="utf-8")
-    print(f"[trend-query] selected={plan['query_count']} candidates={plan['candidate_count']} budget={plan['budget']}")
+    print(f"[trend-query] strategy={plan['sampling_strategy']} selected={plan['query_count']} candidates={plan['candidate_count']} budget={plan['budget']}")
 if __name__=="__main__": main()

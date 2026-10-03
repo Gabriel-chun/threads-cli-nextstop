@@ -10,7 +10,9 @@
     "dev:vinext": "vite dev --port 3001",
     "build:vinext": "vite build && node scripts/check-client-secret-boundary.mjs",
     "start:vinext": "wrangler dev --config dist/server/wrangler.json",
-    "deploy:vinext": "node scripts/deploy-cloudflare.mjs"
+    "deploy:vinext": "node scripts/deploy-cloudflare.mjs",
+    "test:i18n": "tsx --test lib/i18n.test.ts",
+    "check:i18n": "node scripts/check-i18n-copy.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",

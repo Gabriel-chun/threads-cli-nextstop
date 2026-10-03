@@ -6,7 +6,7 @@ import { snapshot, compact, loadTrendHistory } from "../../../lib/signals";
 import { loadObservationBundle } from "../../../lib/observations";
 import { loadSignalDeck, selectSignalDeckWindow } from "../../../lib/signalDeck";
 import { loadKeywordNetwork } from "../../../lib/keywordNetwork";
-import { loadTrendRadar } from "../../../lib/trendRadar";
+import { isTrendObservation, loadTrendRadar } from "../../../lib/trendRadar";
 import { registerObservationEventHandlers } from "../../../lib/mcpEvents/server";
 
 const LATEST_DOWNLOAD_URL =
@@ -203,7 +203,7 @@ const handler = createMcpHandler(
       "get_trend_radar",
       {
         title: "Get Trend Radar",
-        description: "Return the read-only Trend Tracking V0.1 snapshot: upcoming events, need edges, status and supporting public evidence.",
+        description: "Return the read-only canonical Trend Tracking snapshot. V0.2 uses need-led public samples, evidence, links, cross-snapshot states, and Event Watch while retaining backward-compatible fields.",
         inputSchema: z.object({
           date: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/).optional()
         })
@@ -216,6 +216,129 @@ const handler = createMcpHandler(
             text: radar
               ? JSON.stringify(radar, null, 2)
               : "Trend Radar snapshot unavailable."
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
+      "get_trend_observation",
+      {
+        title: "Get trend observation",
+        description: "Return the read-only V0.2 public sample, language distribution, observed entities and current-vs-previous snapshot comparison.",
+        inputSchema: z.object({
+          snapshot: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}(?:_\\d{6}Z)?$/).optional()
+        })
+      },
+      async ({ snapshot }) => {
+        const data = await loadTrendRadar(snapshot);
+        if (!data || !isTrendObservation(data)) {
+          return { content: [{ type: "text", text: "Trend Observation V0.2 snapshot unavailable." }] };
+        }
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              schema_version: data.schema_version,
+              generated_at: data.generated_at,
+              run_stamp: data.run_stamp,
+              sample: data.sample,
+              language_distribution: data.language_distribution,
+              entities: data.entities,
+              comparison: data.comparison
+            }, null, 2)
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
+      "get_trend_connections",
+      {
+        title: "Get trend connections",
+        description: "Return canonical V0.2 links, cross-snapshot link states and observed link chains. No popularity score is produced.",
+        inputSchema: z.object({
+          snapshot: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}(?:_\\d{6}Z)?$/).optional(),
+          state: z.enum(["new","repeated","persistent","expanding","dormant"]).optional()
+        })
+      },
+      async ({ snapshot, state }) => {
+        const data = await loadTrendRadar(snapshot);
+        if (!data || !isTrendObservation(data)) {
+          return { content: [{ type: "text", text: "Trend Connections V0.2 snapshot unavailable." }] };
+        }
+        const links = state ? data.links.filter(link => link.state === state) : data.links;
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              schema_version: data.schema_version,
+              run_stamp: data.run_stamp,
+              count: links.length,
+              links,
+              link_states: data.link_states,
+              link_chains: data.link_chains
+            }, null, 2)
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
+      "get_event_watch",
+      {
+        title: "Get event watch",
+        description: "Return the read-only upcoming event registry with linked evidence, mobility, timing and stay observations.",
+        inputSchema: z.object({
+          snapshot: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}(?:_\\d{6}Z)?$/).optional()
+        })
+      },
+      async ({ snapshot }) => {
+        const data = await loadTrendRadar(snapshot);
+        if (!data || !isTrendObservation(data)) {
+          return { content: [{ type: "text", text: "Event Watch V0.2 snapshot unavailable." }] };
+        }
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              schema_version: data.schema_version,
+              run_stamp: data.run_stamp,
+              events: data.event_watch
+            }, null, 2)
+          }]
+        };
+      }
+    );
+
+    server.registerTool(
+      "get_trend_evidence",
+      {
+        title: "Get trend evidence",
+        description: "Return original-language evidence records from the canonical V0.2 snapshot. Evidence text is never translated by this tool.",
+        inputSchema: z.object({
+          snapshot: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}(?:_\\d{6}Z)?$/).optional(),
+          evidence_id: z.string().min(1).optional(),
+          limit: z.number().int().min(1).max(50).default(20)
+        })
+      },
+      async ({ snapshot, evidence_id, limit }) => {
+        const data = await loadTrendRadar(snapshot);
+        if (!data || !isTrendObservation(data)) {
+          return { content: [{ type: "text", text: "Trend Evidence V0.2 snapshot unavailable." }] };
+        }
+        const rows = evidence_id
+          ? data.evidence.filter(row => row.evidence_id === evidence_id)
+          : data.evidence.slice(0, limit);
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              schema_version: data.schema_version,
+              run_stamp: data.run_stamp,
+              count: rows.length,
+              evidence: rows
+            }, null, 2)
           }]
         };
       }
@@ -266,7 +389,7 @@ const handler = createMcpHandler(
     instructions: "For observation events, call get_observation_bundle(run_id). Deterministic facts are authoritative; derived annotations are not.",
     serverInfo: {
       name: "next-stop-live",
-      version: "0.13.0"
+      version: "0.14.0"
     }
   }
 );
