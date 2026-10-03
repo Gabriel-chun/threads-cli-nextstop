@@ -135,6 +135,17 @@ def resolve(text,artists,venues,events):
         "resolution_confidence":confidence,
     }
 
+DEFAULT_EVENT_CONTEXT_TERMS = [
+    "演唱會", "演唱会", "演出", "巡演", "音樂祭", "音乐节", "粉絲見面會", "粉丝见面会",
+    "concert", "tour", "festival", "fanmeeting", "fan meeting", "gig"
+]
+
+def event_context_matches(text,named,terms=None):
+    terms=terms or DEFAULT_EVENT_CONTEXT_TERMS
+    if any(has_term(text,term) for term in terms):
+        return True
+    return bool(named.get("artists") or named.get("event") or named.get("venues"))
+
 def add_entity(store,entity_id,entity_type,label,evidence_id):
     if not entity_id: return
     row=store.setdefault(entity_id,{"entity_id":entity_id,"entity_type":entity_type,"label":label,"evidence_ids":[]})
@@ -216,17 +227,26 @@ def aggregate_links(evidence,previous,now):
 
 def build_snapshot(raw,plan,artists,venues,events,axes,previous,run_stamp,now_dt=None):
     now_dt=now_dt or datetime.now(timezone.utc); now=now_dt.isoformat().replace("+00:00","Z")
-    clean=dedupe(raw); qmap={q["query"]:q for q in plan.get("queries",[])}
-    sample_id="sample:"+run_stamp; evidence=[]; entities={}; lang_counts=defaultdict(int)
-    for row in clean:
+    deduped=dedupe(raw); qmap={q["query"]:q for q in plan.get("queries",[])}
+    context_terms=plan.get("event_context_terms") or DEFAULT_EVENT_CONTEXT_TERMS
+    clean=[]
+    for row in deduped:
         query=str(row.get("query") or "").strip(); q=qmap.get(query,{})
-        text=str(row.get("text") or ""); named=resolve(text,artists,venues,events); needs,keywords=matched_concepts(text,axes)
+        text=str(row.get("text") or ""); named=resolve(text,artists,venues,events)
+        if not event_context_matches(text,named,context_terms):
+            continue
+        clean.append((row,q,text,named))
+
+    sample_id="sample:"+run_stamp; evidence=[]; entities={}; lang_counts=defaultdict(int)
+    for row,q,text,named in clean:
+        query=str(row.get("query") or "").strip()
+        needs,keywords=matched_concepts(text,axes)
         evidence_id=stable_id("evidence:",sample_id,row.get("permalink") or row.get("id") or text[:160])
         author=str(row.get("username") or "").strip().lower()
         detected_language,_=detect_language_context(text)
         language_map={"zh_hant":"zh-Hant","zh_hans":"zh-Hans","hk_zh":"HK Chinese","english":"English","mixed":"mixed"}
         evidence_language=language_map.get(detected_language,detected_language or q.get("language_context","mixed"))
-        ev={"evidence_id":evidence_id,"sample_id":sample_id,"observed_at":now,"posted_at":row.get("timestamp"),"source_url":str(row.get("permalink") or ""),"text":text,"language_context":evidence_language,"sampling_language_context":q.get("language_context","mixed"),"author_hash":stable_id("author:",author or row.get("permalink") or row.get("id") or evidence_id),"query_family":q.get("family","unresolved"),"raw_query":query,"annotation":{**named,"mobility":needs["mobility"],"timing":needs["timing"],"stay":needs["stay"],"keywords":keywords}}
+        ev={"evidence_id":evidence_id,"sample_id":sample_id,"observed_at":now,"posted_at":row.get("timestamp"),"source_url":str(row.get("permalink") or ""),"text":text,"language_context":evidence_language,"sampling_language_context":q.get("language_context","mixed"),"author_hash":stable_id("author:",author or row.get("permalink") or row.get("id") or evidence_id),"query_family":q.get("family","unresolved"),"raw_query":query,"semantic_query":q.get("semantic_query",query),"annotation":{**named,"mobility":needs["mobility"],"timing":needs["timing"],"stay":needs["stay"],"keywords":keywords}}
         evidence.append(ev); lang_counts[ev["language_context"]]+=1
         for a in named["artists"]: add_entity(entities,a["id"],"artist",a["label"],evidence_id)
         if named["event"]: add_entity(entities,named["event"]["id"],"event",named["event"]["label"],evidence_id)
@@ -254,7 +274,7 @@ def build_snapshot(raw,plan,artists,venues,events,axes,previous,run_stamp,now_dt
         ann=ev["annotation"]
         if ann.get("event") and ann.get("mobility") and ann.get("timing") and ann.get("stay"):
             chains.append({"evidence_id":ev["evidence_id"],"chain":[ann["event"]["id"],ann["timing"][0]["id"],ann["mobility"][0]["id"],ann["stay"][0]["id"]]})
-    sample={"sample_id":sample_id,"run_stamp":run_stamp,"window_start":(now_dt-timedelta(hours=8)).isoformat().replace("+00:00","Z"),"window_end":now,"sampling_strategy":"need_led_observation","query_family":sorted({q.get("family") for q in plan.get("queries",[]) if q.get("family")}),"language_context":sorted({q.get("language_context") for q in plan.get("queries",[]) if q.get("language_context")}),"queries_executed":[q.get("query") for q in plan.get("queries",[]) if q.get("query")],"raw_count":len(raw),"clean_count":len(clean),"generated_at":now}
+    sample={"sample_id":sample_id,"run_stamp":run_stamp,"window_start":(now_dt-timedelta(hours=8)).isoformat().replace("+00:00","Z"),"window_end":now,"sampling_strategy":"need_led_observation","retrieval_semantics":plan.get("retrieval_semantics","need_first_context_gated"),"query_family":sorted({q.get("family") for q in plan.get("queries",[]) if q.get("family")}),"language_context":sorted({q.get("language_context") for q in plan.get("queries",[]) if q.get("language_context")}),"queries_executed":[q.get("query") for q in plan.get("queries",[]) if q.get("query")],"semantic_queries":[q.get("semantic_query",q.get("query")) for q in plan.get("queries",[]) if q.get("query")],"event_context_terms":context_terms,"raw_count":len(raw),"deduped_count":len(deduped),"context_excluded_count":len(deduped)-len(clean),"clean_count":len(clean),"generated_at":now}
     current_event_links=[l for l in links if l["source_type"]=="event" and l["state"]!="dormant"]
     legacy_edges=[]
     for l in current_event_links:
