@@ -1,0 +1,103 @@
+name: Daily Keyword Network
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+      timezone: "Asia/Taipei"
+  workflow_run:
+    workflows:
+      - "Next Stop Threads Collector"
+    types:
+      - completed
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "collector/build_keyword_network.py"
+      - ".github/workflows/keyword-network.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nextstop-daily-keyword-network
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: gate
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          COLLECTOR_CONCLUSION: ${{ github.event.workflow_run.conclusion || '' }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          event = os.environ.get("EVENT", "")
+          conclusion = os.environ.get("COLLECTOR_CONCLUSION", "")
+          now = datetime.now(timezone.utc).astimezone(ZoneInfo("Asia/Taipei"))
+
+          if event in {"push", "workflow_dispatch", "schedule"}:
+              should = True
+          elif event == "workflow_run" and conclusion == "success":
+              path = Path("collector/archive/latest/keyword_network.json")
+              if not path.exists():
+                  should = True
+              else:
+                  try:
+                      payload = json.loads(path.read_text(encoding="utf-8"))
+                      should = payload.get("network_date") != now.date().isoformat()
+                  except Exception:
+                      should = True
+          else:
+              should = False
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write("should_run=" + ("true" if should else "false") + "\n")
+          print("[keyword-network gate]", event, "should_run=", should)
+          PY
+
+  build:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build keyword network
+        run: python3 collector/build_keyword_network.py
+      - name: Validate keyword network
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("collector/archive/latest/keyword_network.json").read_text(encoding="utf-8"))
+          assert data["schema_version"] == "keyword-network-v0.1"
+          assert data["network_date"]
+          assert data["nodes"]
+          print("[keyword-network]", data["network_date"], "nodes", len(data["nodes"]), "edges", len(data["edges"]))
+          PY
+      - name: Commit keyword network snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add collector/archive/latest/keyword_network.json collector/archive/networks/
+          if git diff --cached --quiet; then
+            echo "[keyword-network] no changes"
+            exit 0
+          fi
+          git commit -m "data: refresh daily keyword network"
+          git pull --rebase origin main
+          git push origin HEAD:main
