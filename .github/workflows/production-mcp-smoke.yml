@@ -1,0 +1,25 @@
+name: Production MCP Smoke
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "dashboard/scripts/test-mcp-events.mjs"
+      - ".github/workflows/production-mcp-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify deployed MCP and Trend Radar response
+        working-directory: dashboard
+        env:
+          MCP_TEST_URL: "https://threads-cli-nextstop.gabrielchun336.workers.dev/api/mcp"
+        run: node scripts/test-mcp-events.mjs

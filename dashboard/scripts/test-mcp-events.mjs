@@ -40,7 +40,20 @@ const names=(tools.result?.tools||[]).map(x=>x.name);
 for(const name of [
   "get_recent_signals","get_demand_clusters","get_signal_detail",
   "get_collector_health","get_trend_history","get_observation_bundle",
-  "get_signal_deck","get_latest_download","get_reviewed_cards_download"
+  "get_signal_deck","get_keyword_network","get_trend_radar",
+  "get_latest_download","get_reviewed_cards_download"
 ]) if(!names.includes(name)) throw new Error("missing tool "+name);
 
-console.log(JSON.stringify({protocol:"2026-07-28",event:events[0].name,tools:names.sort()}));
+const trend=await rpc(4,"tools/call",{name:"get_trend_radar",arguments:{}});
+const trendText=trend.result?.content?.find?.(x=>x.type==="text")?.text;
+if(!trendText) throw new Error("get_trend_radar returned no text content");
+const trendData=JSON.parse(trendText);
+if(trendData.schema_version!=="trend-radar-v0.1") throw new Error("unexpected trend schema: "+trendData.schema_version);
+if(!Array.isArray(trendData.events)) throw new Error("trend events missing");
+
+console.log(JSON.stringify({
+  protocol:"2026-07-28",
+  event:events[0].name,
+  tools:names.sort(),
+  trend:{schema:trendData.schema_version,run_stamp:trendData.run_stamp,events:trendData.event_candidate_count,edges:trendData.active_edge_count}
+}));
