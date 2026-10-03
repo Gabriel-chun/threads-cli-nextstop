@@ -22,7 +22,7 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
     </header>
     <div className="workspaceRule" />
 
-    {availableDates.length?<nav className="networkDateStrip" aria-label="Keyword Network snapshot dates">
+    {availableDates.length?<nav className="networkDateStrip" aria-labelledby="networkSnapshotDatesLabel"><span id="networkSnapshotDatesLabel" className="srOnly"><T k="network.snapshotDatesAria" /></span>
       {availableDates.map(date=><a key={date} href={"/network?date="+date} className={date===selectedDate?"active":""}>
         <strong>{date.slice(5).replace("-","/")}</strong>
         <small>{index?.snapshots.find(item=>item.network_date===date)?.source_card_count||0} <T k="common.cards" /></small>
