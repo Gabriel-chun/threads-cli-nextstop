@@ -13,7 +13,8 @@ test("critical global and trend terminology is present in both locales", () => {
     "trend.observedEntities","trend.observedNeeds","trend.newConnections","trend.repeatedConnections",
     "trend.persistentConnections","trend.expandingConnections","trend.dormantConnections",
     "trend.supportingEvidence","trend.observedAt","trend.postedAt","common.language","common.queryFamily",
-    "trend.resolvedArtist","trend.resolvedEvent","trend.resolutionConfidence","common.source"
+    "trend.resolvedArtist","trend.resolvedEvent","trend.resolutionConfidence","common.source",
+    "deck.window.1d","deck.window.3d","deck.window.5d","trend.confidence.high","trend.confidence.unresolved","common.error","common.retry"
   ];
   for(const locale of ["zh-TW","en"] as const){
     for(const key of required) assert.ok(dictionaries[locale][key], locale+" missing "+key);
