@@ -42,7 +42,7 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
 
   return <main className="networkWorkspace">
     <header className="workspaceHeader"><div>
-      <p className="eyebrow">NEXT STOP LIVE · LINK OBSERVATION SYSTEM V0.2</p>
+      <p className="eyebrow">{t("trend.eyebrow")}</p>
       <h1>{t("trend.title")}</h1>
       <p className="lead">{t("trend.lead")}</p>
     </div>
@@ -67,7 +67,7 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
     {data && view==="observation" ? <>
       <section className="metrics">
         <article><span>{t("trend.currentSample")}</span><strong>{data.run_stamp.slice(11,17)}</strong><small>{formatDate(data.generated_at)}</small></article>
-        <article><span>{t("trend.queriesExecuted")}</span><strong>{data.query_count}</strong><small>{sample?.sampling_strategy||t("trend.baselineStrategy")}</small></article>
+        <article><span>{t("trend.queriesExecuted")}</span><strong>{data.query_count}</strong><small>{sample?.sampling_strategy ? t("trend.sampling."+sample.sampling_strategy) : t("trend.baselineStrategy")}</small></article>
         <article><span>{t("trend.raw")}</span><strong>{sample?.raw_count??data.raw_result_count}</strong><small>{formatCount(sample?.raw_count??data.raw_result_count,"sample")}</small></article>
         <article className="accent"><span>{t("trend.clean")}</span><strong>{sample?.clean_count??data.clean_result_count}</strong><small>{formatCount(evidence.length,"evidence")}</small></article>
       </section>
@@ -136,7 +136,7 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
       {selectedEvent?.source?<a className="downloadButton" href={selectedEvent.source} target="_blank" rel="noreferrer"><span>↗</span><div><strong>{t("common.openSource")}</strong></div></a>:null}
     </aside>:null}
 
-    <footer><span>Next Stop Live · Link Observation System V0.2</span><span>{t("trend.readOnly")}</span></footer>
+    <footer><span>Next Stop Live · {t("trend.footerSystem")}</span><span>{t("trend.readOnly")}</span></footer>
   </main>;
 }
 
