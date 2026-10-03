@@ -1934,3 +1934,165 @@ footer {
     padding: 16px;
   }
 }
+
+
+/* Daily Keyword Network */
+.networkWorkspace {
+  width: min(1480px, calc(100% - 48px));
+}
+
+.networkPanel {
+  margin-bottom: 16px;
+}
+
+.networkBoard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(300px, .7fr);
+  gap: 18px;
+}
+
+.networkColumns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.networkColumn {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.networkColumnHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 2px 9px;
+  color: var(--quiet);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.networkNodes {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.networkNode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: opacity .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.networkNode span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.networkNode strong {
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.networkNode.recall { border-left: 3px solid var(--accent); }
+.networkNode.language { border-left: 3px solid #8A6A59; }
+.networkNode.need { border-left: 3px solid var(--success); }
+.networkNode.keyword { border-left: 3px solid #B49A83; }
+
+.networkNode:hover,
+.networkNode.selected {
+  transform: translateY(-1px);
+  border-color: #BFAEA1;
+  background: var(--accent-soft);
+}
+
+.networkNode.dim {
+  opacity: .28;
+}
+
+.networkEdgesPanel {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.networkEdgesHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.networkEdgesHead button {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.networkEdgeList {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.networkEdgeRow {
+  display: grid;
+  grid-template-columns: minmax(70px, 1fr) minmax(36px, .7fr) minmax(70px, 1fr) 26px;
+  gap: 7px;
+  align-items: center;
+  font-size: 10px;
+}
+
+.networkEdgeRow span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.networkEdgeRow i {
+  display: block;
+  height: 4px;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: .65;
+}
+
+.networkEdgeRow strong {
+  text-align: right;
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+@media (max-width: 1000px) {
+  .networkBoard { grid-template-columns: 1fr; }
+  .networkColumns { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .networkWorkspace { width: calc(100% - 20px); }
+  .networkColumns { grid-template-columns: 1fr; }
+}
