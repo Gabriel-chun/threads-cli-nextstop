@@ -44,6 +44,15 @@ class TrendTrackingTests(unittest.TestCase):
         self.assertEqual(snapshot["sample"]["context_excluded_count"],1)
         self.assertEqual(snapshot["evidence"][0]["semantic_query"],"高鐵 演唱會")
 
+    def test_context_gate_rejects_movie_performance_language(self):
+        plan={"query_count":1,"retrieval_semantics":"need_first_context_gated","event_context_terms":["演唱會","concert"],"queries":[{"query":"散場","semantic_query":"演唱會 散場","family":"timing_dispersal","axis":"timing","language_context":"zh-Hant"}]}
+        raw=[{"id":"movie","username":"a","text":"整場只有我跟另一個男的，散場後覺得導演劇本演員都是完美演出，這是今年最好看的電影","permalink":"u-movie","timestamp":"2026-10-03T01:00:00Z","query":"散場"}]
+        snapshot=build_snapshot(raw,plan,ARTISTS,VENUES,EVENTS,AXES,{},"2026-10-03_010000Z",datetime(2026,10,3,1,tzinfo=timezone.utc))
+        self.assertEqual(snapshot["sample"]["raw_count"],1)
+        self.assertEqual(snapshot["sample"]["clean_count"],0)
+        self.assertEqual(snapshot["sample"]["context_excluded_count"],1)
+        self.assertEqual(snapshot["evidence"],[])
+
     def test_evidence_language_comes_from_source_text(self):
         plan={"query_count":1,"retrieval_semantics":"need_first_context_gated","event_context_terms":["演唱會"],"queries":[{"query":"train","semantic_query":"concert train","family":"mobility_train_en","axis":"mobility","language_context":"English"}]}
         raw=[{"id":"lang1","username":"a","text":"演唱會散場後高鐵來得及嗎？","permalink":"u-lang","timestamp":"2026-10-03T01:00:00Z","query":"train"}]
