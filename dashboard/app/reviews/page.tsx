@@ -35,7 +35,7 @@ export default async function ReviewsPage() {
           <p className="muted"><T k="reviews.ledgerHelp" /></p>
         </div>
         <div className="reviewLedgerActions">
-          <div className="reviewArchiveStatus" aria-label="Review archive sync status"><strong><T k="reviews.liveSave" /></strong><small><T k="reviews.archiveAtMidnight" /></small></div>
+          <div className="reviewArchiveStatus" aria-labelledby="reviewArchiveStatusLabel"><span id="reviewArchiveStatusLabel" className="srOnly"><T k="reviews.archiveStatusAria" /></span><strong><T k="reviews.liveSave" /></strong><small><T k="reviews.archiveAtMidnight" /></small></div>
           <a className="downloadButton reviewDownloadButton" href="/api/download/reviews/latest"><span>🗂️</span><div><strong><T k="reviews.download" /></strong><small><T k="reviews.downloadHelp" /></small></div></a>
         </div>
       </div>
