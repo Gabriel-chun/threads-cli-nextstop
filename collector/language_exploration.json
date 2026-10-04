@@ -1,9 +1,15 @@
 {
-  "schema_version": "language-exploration-v0.1",
+  "schema_version": "language-exploration-v0.2",
   "baseline_policy": "unchanged",
   "baseline_queries": ["演唱會", "演唱会", "concert"],
   "review_policy": "exploration samples stay outside the Daily Signal Deck",
+  "comparison_policy": "compare target-language and need-node yield by track and query before promotion",
   "tracks": {
+    "zh_hant_need": {
+      "role": "control_exploration",
+      "target_language": "zh_hant",
+      "queries": ["演唱會 高鐵", "演唱會 飯店", "演唱會 散場"]
+    },
     "zh_hans_need": {
       "role": "exploration",
       "target_language": "zh_hans",

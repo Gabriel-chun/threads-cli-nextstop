@@ -51,3 +51,7 @@ jobs:
           ! grep -RIn "playwright-extra\|puppeteer-extra-plugin-stealth\|navigator.webdriver\|addInitScript" collector/trend_tracking
           ! grep -RIn "THREADS_SESSION\|THREADS_CSRF\|THREADS_TOKEN" collector/trend_tracking .github/workflows/trend-tracking.yml
           ! grep -RIn "COLLECTOR_GOOGLE_FALLBACK:.*true" .github/workflows/trend-tracking.yml
+          ! grep -RIn "playwright-extra\|puppeteer-extra-plugin-stealth\|navigator.webdriver\|addInitScript" .github/workflows/language-exploration.yml collector/summarize_language_exploration.py
+          ! grep -RIn "THREADS_SESSION\|THREADS_CSRF\|THREADS_TOKEN" .github/workflows/language-exploration.yml collector/language_exploration.json collector/summarize_language_exploration.py
+          ! grep -RIn "COLLECTOR_GOOGLE_FALLBACK:.*true" .github/workflows/language-exploration.yml
+          ! grep -RIn "NOTION_TOKEN\|NOTION_" .github/workflows/language-exploration.yml
