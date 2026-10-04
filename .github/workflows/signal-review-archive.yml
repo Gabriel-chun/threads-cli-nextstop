@@ -67,6 +67,10 @@ jobs:
 
           cp "${target}" collector/archive/reviews/latest.json
 
+      - name: Build positive relevance profile
+        run: |
+          python3 collector/build_relevance_profile.py             --reviews collector/archive/reviews             --output collector/archive/latest/relevance_profile.json
+
       - name: Validate archive
         shell: bash
         run: |
@@ -95,7 +99,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "collector/archive/reviews/${ARCHIVE_DATE}.json" collector/archive/reviews/latest.json
+          git add "collector/archive/reviews/${ARCHIVE_DATE}.json" collector/archive/reviews/latest.json collector/archive/latest/relevance_profile.json
 
           if git diff --cached --quiet; then
             echo "[review-archive] no changes"

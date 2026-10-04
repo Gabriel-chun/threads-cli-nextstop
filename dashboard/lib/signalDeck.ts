@@ -139,7 +139,7 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
     window.cards = window.cards
       .map((card) => ({
         ...card,
-        ranking_delta: 0,
+        ranking_delta: Number(card.ranking_delta ?? 0),
         score: Number(card.score ?? card.base_score),
         triage_label: card.triage_label || null,
         triage_reviewed_at: card.triage_reviewed_at || null
