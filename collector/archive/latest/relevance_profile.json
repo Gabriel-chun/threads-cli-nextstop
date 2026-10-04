@@ -1,36 +1,82 @@
 {
   "schema_version": "relevance-profile-v0.3",
-  "generated_at": "2026-10-04T04:00:00+08:00",
-  "source": "notion:signal-review",
-  "feedback_count": 233,
-  "relevant_count": 34,
-  "irrelevant_count": 199,
+  "generated_at": "2026-10-04T04:33:32.021034Z",
+  "source": "github:collector/archive/reviews",
   "learning_mode": "positive-ranking",
-  "note": "Seeded from current Signal Review Database aggregate stats. Weights are smoothed priors for ranking only, never hard filters.",
-  "category_stats": {
-    "交通／散場": {
-      "relevant": 9,
+  "feedback_count": 181,
+  "relevant_count": 30,
+  "irrelevant_count": 151,
+  "note": "Human review learning is a soft ranking signal only. Positive evidence receives full weight; negative evidence is attenuated at deck ranking time.",
+  "feature_stats": {
+    "accommodation_need": {
+      "relevant": 2,
+      "irrelevant": 2
+    },
+    "cp_fandom_language": {
+      "relevant": 0,
+      "irrelevant": 1
+    },
+    "dialogue_narrative": {
+      "relevant": 1,
       "irrelevant": 0
     },
-    "住宿／落腳": {
+    "first_timer": {
+      "relevant": 5,
+      "irrelevant": 18
+    },
+    "long_fandom_story": {
       "relevant": 3,
-      "irrelevant": 0
+      "irrelevant": 18
     },
+    "merch_need": {
+      "relevant": 5,
+      "irrelevant": 16
+    },
+    "question_intent": {
+      "relevant": 19,
+      "irrelevant": 39
+    },
+    "solo_attendance": {
+      "relevant": 2,
+      "irrelevant": 3
+    },
+    "ticketing_need": {
+      "relevant": 5,
+      "irrelevant": 27
+    },
+    "transport_need": {
+      "relevant": 12,
+      "irrelevant": 1
+    },
+    "venue_experience": {
+      "relevant": 4,
+      "irrelevant": 12
+    },
+    "vip_benefit": {
+      "relevant": 3,
+      "irrelevant": 15
+    }
+  },
+  "category_stats": {
     "VIP／互動福利": {
       "relevant": 3,
       "irrelevant": 12
     },
-    "周邊／現場商品": {
-      "relevant": 3,
-      "irrelevant": 14
+    "交通／散場": {
+      "relevant": 8,
+      "irrelevant": 0
     },
-    "票務／入場摩擦": {
-      "relevant": 5,
-      "irrelevant": 31
+    "住宿／落腳": {
+      "relevant": 2,
+      "irrelevant": 0
     },
     "其他演出內容": {
-      "relevant": 11,
-      "irrelevant": 133
+      "relevant": 10,
+      "irrelevant": 93
+    },
+    "周邊／現場商品": {
+      "relevant": 2,
+      "irrelevant": 12
     },
     "場館／現場體驗": {
       "relevant": 0,
@@ -38,86 +84,40 @@
     },
     "拍攝／現場規則": {
       "relevant": 0,
-      "irrelevant": 2
+      "irrelevant": 1
+    },
+    "票務／入場摩擦": {
+      "relevant": 5,
+      "irrelevant": 26
     },
     "陪同／Solo Attendance": {
       "relevant": 0,
       "irrelevant": 1
     }
   },
-  "feature_stats": {
-    "transport_need": {
-      "relevant": 13,
-      "irrelevant": 1
-    },
-    "accommodation_need": {
-      "relevant": 3,
-      "irrelevant": 2
-    },
-    "solo_attendance": {
-      "relevant": 2,
-      "irrelevant": 3
-    },
-    "question_intent": {
-      "relevant": 20,
-      "irrelevant": 51
-    },
-    "merch_need": {
-      "relevant": 6,
-      "irrelevant": 18
-    },
-    "dialogue_narrative": {
-      "relevant": 1,
-      "irrelevant": 3
-    },
-    "venue_experience": {
-      "relevant": 4,
-      "irrelevant": 13
-    },
-    "first_timer": {
-      "relevant": 5,
-      "irrelevant": 19
-    },
-    "vip_benefit": {
-      "relevant": 3,
-      "irrelevant": 15
-    },
-    "ticketing_need": {
-      "relevant": 5,
-      "irrelevant": 32
-    },
-    "long_fandom_story": {
-      "relevant": 3,
-      "irrelevant": 21
-    },
-    "cp_fandom_language": {
-      "relevant": 0,
-      "irrelevant": 2
-    }
+  "feature_weights": {
+    "accommodation_need": 0.0,
+    "cp_fandom_language": -0.133,
+    "dialogue_narrative": 0.133,
+    "first_timer": -4.16,
+    "long_fandom_story": -5.217,
+    "merch_need": -3.826,
+    "question_intent": -2.667,
+    "solo_attendance": -0.286,
+    "ticketing_need": -5.176,
+    "transport_need": 3.813,
+    "venue_experience": -2.844,
+    "vip_benefit": -4.32
   },
   "category_weights": {
-    "交通／散場": 1.473,
-    "住宿／落腳": 0.36,
     "VIP／互動福利": -1.588,
-    "周邊／現場商品": -1.968,
-    "票務／入場摩擦": -2.737,
-    "其他演出內容": -3.342,
+    "交通／散場": 1.28,
+    "住宿／落腳": 0.2,
+    "其他演出內容": -3.162,
+    "周邊／現場商品": -1.75,
     "場館／現場體驗": -0.9,
-    "拍攝／現場規則": -0.2,
+    "拍攝／現場規則": -0.067,
+    "票務／入場摩擦": -2.545,
     "陪同／Solo Attendance": -0.067
-  },
-  "feature_weights": {
-    "transport_need": 4.2,
-    "accommodation_need": 0.286,
-    "solo_attendance": -0.286,
-    "question_intent": -3.397,
-    "merch_need": -3.692,
-    "dialogue_narrative": -0.533,
-    "venue_experience": -3.221,
-    "first_timer": -4.308,
-    "vip_benefit": -4.32,
-    "ticketing_need": -5.538,
-    "long_fandom_story": -5.538,
-    "cp_fandom_language": -0.4
   }
 }
