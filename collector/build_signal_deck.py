@@ -15,6 +15,7 @@ MAX_CANDIDATES = 100
 DEFAULT_REVIEW_LIMIT = 40
 EXTEND_STEP = 10
 DISPLAY_LIMIT = 5
+PROFILE_DEFAULT = "collector/archive/latest/relevance_profile.json"
 
 CATEGORY_RULES = [
     (
@@ -249,6 +250,49 @@ def actionability_band(score: float) -> str:
     return "low"
 
 
+def load_relevance_profile(path: str | Path | None) -> dict[str, Any] | None:
+    if not path:
+        return None
+    profile_path = Path(path)
+    if not profile_path.exists():
+        return None
+    try:
+        payload = json.loads(profile_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    if not isinstance(payload.get("feature_weights"), dict):
+        return None
+    if not isinstance(payload.get("category_weights"), dict):
+        return None
+    return payload
+
+
+def learned_ranking_delta(
+    category: str,
+    features: set[str],
+    profile: dict[str, Any] | None,
+) -> float:
+    if not profile:
+        return 0.0
+
+    category_weights = profile.get("category_weights") or {}
+    feature_weights = profile.get("feature_weights") or {}
+
+    # Positive evidence is allowed to lift cards strongly. Negative evidence is
+    # deliberately attenuated so review learning remains a soft ranking signal,
+    # never a hidden exclusion rule.
+    raw = float(category_weights.get(category) or 0.0)
+    for feature in features:
+        raw += float(feature_weights.get(feature) or 0.0)
+
+    if raw < 0:
+        raw *= 0.25
+
+    return round(max(-4.0, min(8.0, raw)), 3)
+
+
 NARRATIVE_MARKERS = re.compile(
     r"溫柔|温柔|耳邊|耳边|眼神|身體|身体|碎髮|碎发|拉著|拉着|靠向|撥著|拨着|笑笑|輕輕|轻轻|不自覺|不自觉|低聲|低声|盯著|盯着|抱住|摟著|搂着|肩膀|靠近",
     re.I,
@@ -359,7 +403,12 @@ def base_score(post: dict[str, Any], text: str, ts: datetime, now: datetime) -> 
     return round(source + recency, 3)
 
 
-def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dict[str, Any]:
+def build_post_card(
+    post: dict[str, Any],
+    now: datetime,
+    window_key: str,
+    profile: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     text = str(post.get("text") or "")
     ts = post_time(post)
     if not ts:
@@ -373,7 +422,8 @@ def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dic
     need_nodes, need_terms, need_edges = extract_need_network(text)
     base = base_score(post, text, ts, now)
     action_score = actionability_score(text, category, feature_set, need_nodes, need_edges)
-    score = round(base + action_score, 3)
+    ranking_delta = learned_ranking_delta(category, feature_set, profile)
+    score = round(base + action_score + ranking_delta, 3)
     snapshot_id = f"deck_{now.date().isoformat()}_{window_key}_{post_key.removeprefix('post_')}"
 
     return {
@@ -388,6 +438,7 @@ def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dic
         "base_score": base,
         "actionability_score": action_score,
         "actionability_band": actionability_band(action_score),
+        "ranking_delta": ranking_delta,
         "language_context": language_context,
         "language_tokens": language_tokens,
         "need_nodes": need_nodes,
@@ -407,7 +458,11 @@ def build_post_card(post: dict[str, Any], now: datetime, window_key: str) -> dic
     }
 
 
-def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
+def build_deck(
+    posts: list[dict[str, Any]],
+    now: datetime,
+    profile: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     prepared: list[dict[str, Any]] = []
     for post in posts:
         if not is_clean_signal(post):
@@ -430,7 +485,7 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
             if (post_time(post) and start <= post_time(post) <= now)
         ]
 
-        cards = [build_post_card(post, now, key) for post in scoped]
+        cards = [build_post_card(post, now, key, profile) for post in scoped]
         cards.sort(key=lambda card: (-card["score"], card["post_key"]))
         cards = cards[:MAX_CANDIDATES]
 
@@ -452,6 +507,12 @@ def build_deck(posts: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
         "refresh_policy": "daily",
         "source": "collector/archive/latest/master.json",
         "source_master_count": len(posts),
+        "relevance_profile": {
+            "applied": bool(profile),
+            "schema_version": profile.get("schema_version") if profile else None,
+            "generated_at": profile.get("generated_at") if profile else None,
+            "feedback_count": profile.get("feedback_count", 0) if profile else 0,
+        },
         "windows": windows,
     }
 
@@ -461,6 +522,7 @@ def main() -> None:
     parser.add_argument("--master", default="collector/archive/latest/master.json")
     parser.add_argument("--output", default="collector/archive/latest/signal_deck.json")
     parser.add_argument("--now", default="")
+    parser.add_argument("--profile", default=PROFILE_DEFAULT)
     args = parser.parse_args()
 
     master_path = Path(args.master)
@@ -473,7 +535,8 @@ def main() -> None:
     if not now:
         raise SystemExit("--now must be ISO-8601")
 
-    deck = build_deck(posts, now)
+    profile = load_relevance_profile(args.profile)
+    deck = build_deck(posts, now, profile)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(deck, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
@@ -482,6 +545,8 @@ def main() -> None:
         "from",
         len(posts),
         "master rows",
+        "profile_feedback=",
+        deck["relevance_profile"]["feedback_count"],
     )
 
 
