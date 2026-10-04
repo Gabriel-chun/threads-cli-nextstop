@@ -1,0 +1,145 @@
+name: Language Need Exploration
+
+on:
+  schedule:
+    # 10:40 and 22:40 Asia/Taipei. Separate from the ~2h baseline collector.
+    - cron: "40 2,14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nextstop-language-exploration
+  cancel-in-progress: false
+
+jobs:
+  explore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build Threads CLI
+        run: |
+          mkdir -p bin
+          go build -buildvcs=false -o bin/th ./cmd/th
+
+      - name: Prepare controlled exploration queries
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          config = json.loads(Path("collector/language_exploration.json").read_text(encoding="utf-8"))
+          queries = []
+          for spec in config["tracks"].values():
+              queries.extend(spec.get("queries") or [])
+          queries = list(dict.fromkeys(queries))
+          Path("collector/runtime_language_exploration_queries.txt").write_text(
+              "\n".join(queries) + "\n",
+              encoding="utf-8",
+          )
+          print("[language-exploration] queries:", queries)
+          PY
+
+      - name: Restore isolated exploration master
+        shell: bash
+        run: |
+          mkdir -p collector/language_exploration/raw
+          mkdir -p collector/language_exploration/output
+          mkdir -p collector/language_exploration/state
+          if [[ -s collector/archive/language_exploration/master.jsonl ]]; then
+            cp collector/archive/language_exploration/master.jsonl collector/language_exploration/state/master.jsonl
+            echo "[language-exploration] restored isolated master"
+          else
+            echo "[language-exploration] starting isolated master"
+          fi
+
+      - name: Collect exploration samples
+        env:
+          QUERY_FILE: collector/runtime_language_exploration_queries.txt
+          RAW_DIR: collector/language_exploration/raw
+          FAILED_FILE: collector/language_exploration/failed_queries.txt
+          COLLECTOR_SEARCH_DEPTH: "3"
+          COLLECTOR_GOOGLE_FALLBACK: "false"
+          COLLECTOR_QUERY_ATTEMPTS: "2"
+        run: bash collector/collect.sh
+
+      - name: Fail if every exploration query failed
+        shell: bash
+        run: |
+          total="$(awk 'NF {count++} END {print count+0}' collector/runtime_language_exploration_queries.txt)"
+          failed="$(awk 'NF {count++} END {print count+0}' collector/language_exploration/failed_queries.txt)"
+          echo "[language-exploration] total=$total failed=$failed"
+          if [[ "$total" -gt 0 && "$failed" -ge "$total" ]]; then
+            echo "::error::All language exploration queries failed."
+            exit 1
+          fi
+
+      - name: Build isolated snapshot
+        id: snapshot
+        shell: bash
+        run: |
+          run_stamp="$(date -u +'%Y-%m-%d_%H%M%SZ')"
+          echo "RUN_STAMP=$run_stamp" >> "$GITHUB_ENV"
+          echo "run_stamp=$run_stamp" >> "$GITHUB_OUTPUT"
+          python3 collector/build_snapshot.py \
+            --raw-dir collector/language_exploration/raw \
+            --output-dir collector/language_exploration/output \
+            --state-dir collector/language_exploration/state \
+            --min-score 30 \
+            --since-hours 12 \
+            --collector-mode depth3 \
+            --run-stamp "$run_stamp"
+
+      - name: Summarize language and need-node yield
+        run: |
+          python3 collector/summarize_language_exploration.py \
+            --config collector/language_exploration.json \
+            --snapshot "collector/language_exploration/output/snapshot_${RUN_STAMP}.json" \
+            --run-stamp "$RUN_STAMP" \
+            --output collector/language_exploration/output/language_exploration.json
+          cat collector/language_exploration/output/language_exploration.json
+
+      - name: Upload exploration evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-exploration-${{ env.RUN_STAMP }}
+          path: |
+            collector/language_exploration/raw/
+            collector/language_exploration/output/
+            collector/language_exploration/failed_queries.txt
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Archive exploration summary separately
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p collector/archive/language_exploration/runs
+          cp collector/language_exploration/output/language_exploration.json \
+            "collector/archive/language_exploration/runs/${RUN_STAMP}.json"
+          cp collector/language_exploration/output/language_exploration.json \
+            collector/archive/language_exploration/latest.json
+          cp collector/language_exploration/output/master.jsonl \
+            collector/archive/language_exploration/master.jsonl
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add collector/archive/language_exploration/
+
+          if git diff --cached --quiet; then
+            echo "[language-exploration] no archive changes"
+            exit 0
+          fi
+
+          git commit -m "data: language exploration ${RUN_STAMP}"
+          git pull --rebase origin main
+          git push origin HEAD:main
