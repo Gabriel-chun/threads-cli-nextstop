@@ -2,8 +2,9 @@ name: Language Need Exploration
 
 on:
   schedule:
-    # 10:40 and 22:40 Asia/Taipei. Separate from the ~2h baseline collector.
-    - cron: "40 2,14 * * *"
+    # 10:40 Asia/Taipei. Eight exploration queries/day ~= 22% of ~36 baseline query-runs/day.
+    # Kept separate from the ~2h baseline collector so trend history remains comparable.
+    - cron: "40 2 * * *"
   workflow_dispatch:
 
 permissions:
