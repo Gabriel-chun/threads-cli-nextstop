@@ -3326,3 +3326,55 @@ footer {
     white-space: normal;
   }
 }
+
+
+/* Signal Deck demo mode — visual-only, never persisted */
+.demoModeButton {
+  border: 1px solid rgba(221,213,202,.9);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.demoModeButton:hover,
+.demoModeButton.active {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.demoModeNotice {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0 0;
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.demoModeNotice strong {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.demoDoneActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 560px) {
+  .demoModeNotice {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .demoDoneActions {
+    flex-wrap: wrap;
+  }
+}
