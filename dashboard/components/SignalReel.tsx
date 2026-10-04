@@ -244,15 +244,16 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const reviewLimit = cards.length;
 
-  const demoCards = useMemo(
+  const demoCards = useMemo<SignalPostCard[]>(
     () =>
-      demoKeys
-        .map((key) => windowCards.find((card) => card.post_key === key))
-        .filter((card): card is SignalPostCard => Boolean(card))
-        .map((card) => ({
+      demoKeys.flatMap((key) => {
+        const card = windowCards.find((item) => item.post_key === key);
+        if (!card) return [];
+        return [{
           ...card,
           triage_label: demoLabels[card.post_key] ?? null
-        })),
+        }];
+      }),
     [demoKeys, demoLabels, windowCards]
   );
 
