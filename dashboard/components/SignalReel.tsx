@@ -137,6 +137,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const [saveNotice, setSaveNotice] = useState("");
   const [localReviews, setLocalReviews] = useState<Record<string, LocalReviewEntry>>({});
   const [syncingNotion, setSyncingNotion] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
+  const [demoKeys, setDemoKeys] = useState<string[]>([]);
+  const [demoLabels, setDemoLabels] = useState<Record<string, TriageLabel | null>>({});
   const baseReviewLimits: Record<WindowKey, number> = {
     "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
     "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
@@ -241,26 +244,40 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   );
   const reviewLimit = cards.length;
 
+  const demoCards = useMemo(
+    () =>
+      demoKeys
+        .map((key) => windowCards.find((card) => card.post_key === key))
+        .filter((card): card is SignalPostCard => Boolean(card))
+        .map((card) => ({
+          ...card,
+          triage_label: demoLabels[card.post_key] ?? null
+        })),
+    [demoKeys, demoLabels, windowCards]
+  );
+
+  const activeCards = demoMode ? demoCards : cards;
+
   const counts = useMemo(
     () => ({
-      queue: cards.filter((card) => !card.triage_label).length,
-      relevant: cards.filter((card) => card.triage_label === "relevant").length,
-      irrelevant: cards.filter((card) => card.triage_label === "irrelevant").length
+      queue: activeCards.filter((card) => !card.triage_label).length,
+      relevant: activeCards.filter((card) => card.triage_label === "relevant").length,
+      irrelevant: activeCards.filter((card) => card.triage_label === "irrelevant").length
     }),
-    [cards]
+    [activeCards]
   );
 
   const visibleCards = useMemo(() => {
-    const filtered = cards.filter((card) => {
+    const filtered = activeCards.filter((card) => {
       if (reviewView === "queue") return !card.triage_label;
       return card.triage_label === reviewView;
     });
     return reviewView === "queue" ? filtered.slice(0, 3) : filtered.slice(0, 5);
-  }, [cards, reviewView]);
+  }, [activeCards, reviewView]);
 
   const selected = useMemo(
-    () => cards.find((card) => card.post_key === selectedKey) || null,
-    [cards, selectedKey]
+    () => activeCards.find((card) => card.post_key === selectedKey) || null,
+    [activeCards, selectedKey]
   );
 
   const relevantClusters = useMemo(() => {
@@ -298,6 +315,44 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     setDrag(null);
     setSaveError("");
     setSaveNotice("");
+    setDemoMode(false);
+    setDemoKeys([]);
+    setDemoLabels({});
+  }
+
+  function startDemo() {
+    const keys = windowCards.slice(0, 5).map((card) => card.post_key);
+    if (!keys.length) return;
+    setDemoKeys(keys);
+    setDemoLabels(Object.fromEntries(keys.map((key) => [key, null])));
+    setDemoMode(true);
+    setReviewView("queue");
+    setSelectedKey(null);
+    setDrag(null);
+    setSaveError("");
+    setSaveNotice("");
+  }
+
+  function resetDemo() {
+    if (!demoKeys.length) {
+      startDemo();
+      return;
+    }
+    setDemoLabels(Object.fromEntries(demoKeys.map((key) => [key, null])));
+    setReviewView("queue");
+    setSelectedKey(null);
+    setDrag(null);
+    setSaveNotice("");
+  }
+
+  function stopDemo() {
+    setDemoMode(false);
+    setDemoKeys([]);
+    setDemoLabels({});
+    setReviewView("queue");
+    setSelectedKey(null);
+    setDrag(null);
+    setSaveNotice("");
   }
 
   function addTen() {
@@ -319,6 +374,15 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   }
 
   function classify(card: SignalPostCard, label: TriageLabel) {
+    if (demoMode) {
+      setDemoLabels((current) => ({ ...current, [card.post_key]: label }));
+      setSelectedKey(null);
+      setSaveError("");
+      setSaveNotice(label === "relevant" ? t("deck.demoRelevant") : t("deck.demoIrrelevant"));
+      globalThis.setTimeout(() => setSaveNotice(""), 1200);
+      return;
+    }
+
     const now=new Date().toISOString();
     const prev=localReviews[card.post_key]?.row;
     const row:SignalDeckFeedback={
@@ -489,6 +553,17 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             <button type="button" className="syncNotionButton" disabled={syncingNotion || pendingReviews.length===0} onClick={()=>void syncPendingToNotion()}>
               {syncingNotion ? t("deck.syncing") : pendingReviews.length ? t("deck.syncPending",{count:pendingReviews.length}) : t("deck.synced")}
             </button>
+            {allCounts.unreviewed === 0 ? (
+              demoMode ? (
+                <button type="button" className="demoModeButton active" onClick={stopDemo}>
+                  {t("deck.demoStop")}
+                </button>
+              ) : (
+                <button type="button" className="demoModeButton" onClick={startDemo}>
+                  {t("deck.demoStart")}
+                </button>
+              )
+            ) : null}
             <a href="/reviews">{t("deck.openLedger")}</a>
           </div>
         </div>
@@ -497,6 +572,13 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       {(saveNotice || saveError) ? (
         <div className={saveError ? "triageError" : "reviewSaveMessage"} role="status" aria-live="polite">
           {saveError || saveNotice}
+        </div>
+      ) : null}
+
+      {demoMode ? (
+        <div className="demoModeNotice" role="status">
+          <strong>{t("deck.demoMode")}</strong>
+          <span>{t("deck.demoHelp")}</span>
         </div>
       ) : null}
 
@@ -541,16 +623,35 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
         ) : (
           <div className="signalDeckEmpty">
             {reviewView === "queue" ? (
-              <>
-                <strong>{t("deck.done")}</strong>
-                {remainingUnreviewed > 0 ? (
-                  <button type="button" className="addTenButton" onClick={addTen}>
-                    {t("deck.addMore",{count:Math.min(window.extend_step ?? 10,remainingUnreviewed)})}
-                  </button>
-                ) : (
-                  <span>{t("deck.windowDone")}</span>
-                )}
-              </>
+              demoMode ? (
+                <>
+                  <strong>{t("deck.demoDone")}</strong>
+                  <div className="demoDoneActions">
+                    <button type="button" className="addTenButton" onClick={resetDemo}>
+                      {t("deck.demoAgain")}
+                    </button>
+                    <button type="button" className="demoModeButton" onClick={stopDemo}>
+                      {t("deck.demoStop")}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <strong>{t("deck.done")}</strong>
+                  {remainingUnreviewed > 0 ? (
+                    <button type="button" className="addTenButton" onClick={addTen}>
+                      {t("deck.addMore",{count:Math.min(window.extend_step ?? 10,remainingUnreviewed)})}
+                    </button>
+                  ) : (
+                    <>
+                      <span>{t("deck.windowDone")}</span>
+                      <button type="button" className="demoModeButton" onClick={startDemo}>
+                        {t("deck.demoStart")}
+                      </button>
+                    </>
+                  )}
+                </>
+              )
             ) : (
               t("deck.noneReview",{label:reviewView === "relevant" ? t("deck.relevant") : t("deck.irrelevant")})
             )}
