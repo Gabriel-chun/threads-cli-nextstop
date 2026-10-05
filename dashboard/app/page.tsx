@@ -1,14 +1,14 @@
-import { snapshot, compact, loadTrendHistory } from "../lib/signals";
+import { compact, loadHomeObservation, loadTrendHistory } from "../lib/signals";
 import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
 import { DataLabel, LocaleDate, T } from "../components/I18nProvider";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function Page() {
   const [data, history, signalDeck] = await Promise.all([
-    snapshot(),
+    loadHomeObservation(),
     loadTrendHistory(36),
     loadSignalDeck()
   ]);
@@ -71,7 +71,7 @@ export default async function Page() {
 
         <div className="quietDetailsBody">
           <section className="metrics quietMetricCards">
-            <article><span><T k="signal.metric.master" /></span><strong>{data.masterCount}</strong><small><T k="signal.metric.masterHelp" /></small></article>
+            
             <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.concertRaw}</strong><small><T k="signal.metric.rawHelp" /></small></article>
             <article><span><T k="signal.metric.clean" /></span><strong>{data.cleanCount}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
             <article><span><T k="signal.metric.actionable" /></span><strong>{data.actionable}</strong><small><T k="signal.metric.actionableHelp" /></small></article>

@@ -26,6 +26,8 @@ const MASTER_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/master.json";
 const HISTORY_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/history.json";
+const OBSERVATION_URL =
+  "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/observation.json";
 
 const preserveTicketFriction =
   /Pia帳號|日本門號|本人確認|本確|護照|退票|客服|換票[？?]讓票[？?]退票|實名制|黃牛.*搶不到|買不到票|抽選|公售|現場再換票|愛心席|入場|手環|購票紀錄/i;
@@ -315,4 +317,108 @@ export async function loadTrendHistory(limit = 36, includeFailed = false): Promi
     }))
     .filter((row) => Boolean(row.runAt) && (includeFailed || row.status === "Success"))
     .slice(-Math.max(1, Math.min(84, limit)));
+}
+
+
+type ObservationBundle = {
+  run?: {
+    run_at?: string;
+  };
+  deterministic_facts?: {
+    current?: {
+      raw_rows?: number;
+      clean_signals?: number;
+    };
+  };
+  derived_annotations?: {
+    clusters?: Array<{
+      kind?: SignalKind;
+      category?: string;
+      count?: number;
+    }>;
+  };
+  evidence?: {
+    items?: Array<{
+      post_id?: string;
+      username?: string;
+      posted_at?: string;
+      permalink?: string;
+      excerpt?: string;
+      derived_annotation?: {
+        kind?: SignalKind;
+        category?: string;
+      };
+    }>;
+  };
+};
+
+export async function loadHomeObservation() {
+  const [observationRes, health] = await Promise.all([
+    fetch(OBSERVATION_URL, {
+      headers: { "User-Agent": "next-stop-live-dashboard-home" },
+      next: { revalidate: 300 }
+    }),
+    collectorHealth().catch(() => ({
+      healthy: false,
+      status: "unknown",
+      runNumber: null,
+      updatedAt: null,
+      url: null
+    }))
+  ]);
+
+  if (!observationRes.ok) {
+    return {
+      generatedAt: "",
+      concertRaw: 0,
+      cleanCount: 0,
+      actionable: 0,
+      context: 0,
+      noise: 0,
+      clusters: [] as Array<{ category: string; kind: SignalKind; count: number }>,
+      health,
+      signals: [] as Signal[]
+    };
+  }
+
+  const observation = (await observationRes.json()) as ObservationBundle;
+  const clusters = (observation.derived_annotations?.clusters || [])
+    .map((item) => ({
+      category: item.category || "未分類",
+      kind: item.kind || "noise",
+      count: Number(item.count || 0)
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const actionable = clusters
+    .filter((item) => item.kind === "actionable")
+    .reduce((sum, item) => sum + item.count, 0);
+  const context = clusters
+    .filter((item) => item.kind === "context")
+    .reduce((sum, item) => sum + item.count, 0);
+  const noise = clusters
+    .filter((item) => item.kind === "noise")
+    .reduce((sum, item) => sum + item.count, 0);
+
+  const signals: Signal[] = (observation.evidence?.items || []).map((item) => ({
+    id: item.post_id || item.permalink || "",
+    text: item.excerpt || "",
+    username: item.username || "",
+    permalink: item.permalink || "",
+    timestamp: item.posted_at,
+    category: item.derived_annotation?.category || "未分類",
+    kind: item.derived_annotation?.kind || "noise"
+  }));
+
+  return {
+    generatedAt: observation.run?.run_at || "",
+    concertRaw: Number(observation.deterministic_facts?.current?.raw_rows || 0),
+    cleanCount: Number(observation.deterministic_facts?.current?.clean_signals || 0),
+    actionable,
+    context,
+    noise,
+    clusters,
+    health,
+    signals
+  };
 }
