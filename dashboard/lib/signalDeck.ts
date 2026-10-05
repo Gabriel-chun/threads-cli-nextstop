@@ -114,7 +114,7 @@ function relevantClusters(cards: SignalPostCard[]): RelevantCluster[] {
 export async function loadSignalDeck(): Promise<SignalDeck> {
   const res = await fetch(SIGNAL_DECK_URL, {
     headers: { "User-Agent": "next-stop-live-signal-deck" },
-    cache: "no-store"
+    next: { revalidate: 300 }
   });
 
   if (!res.ok) {
