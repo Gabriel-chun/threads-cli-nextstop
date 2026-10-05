@@ -212,6 +212,84 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(card["actionability_band"], "low")
         self.assertEqual(card["need_nodes"], [])
 
+
+
+    def test_third_party_transport_mention_is_demoted_below_real_user_need(self):
+        now = datetime(2026, 10, 5, 3, 0, tzinfo=timezone.utc)
+        profile = {
+            "schema_version": "relevance-profile-v0.3",
+            "generated_at": "2026-10-05T00:00:00Z",
+            "feedback_count": 247,
+            "feature_weights": {"transport_need": 4.2},
+            "category_weights": {"交通／散場": 1.473},
+        }
+        posts = [
+            {
+                "id": "artist-flight",
+                "text": "演唱会结束后他坐红眼航班连夜回韩，公司为了节省成本让成员直接飞回去。",
+                "username": "fandom",
+                "permalink": "https://www.threads.com/@fandom/post/artist-flight",
+                "timestamp": "2026-10-05T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 68,
+            },
+            {
+                "id": "real-need",
+                "text": "演唱会散场后我怕赶不上高铁末班车，请问要怎么回台北？",
+                "username": "traveler",
+                "permalink": "https://www.threads.com/@traveler/post/real-need",
+                "timestamp": "2026-10-05T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 68,
+            },
+        ]
+
+        cards = build_deck(posts, now, profile)["windows"]["1d"]["cards"]
+        by_id = {card["post_id"]: card for card in cards}
+
+        self.assertEqual(cards[0]["post_id"], "real-need")
+        self.assertEqual(by_id["real-need"]["intent_band"], "high")
+        self.assertGreater(by_id["real-need"]["ranking_delta"], 5)
+        self.assertEqual(by_id["artist-flight"]["intent_band"], "low")
+        self.assertIn("third_party_logistics", by_id["artist-flight"]["intent_penalties"])
+        self.assertLess(by_id["artist-flight"]["ranking_delta"], 1)
+        self.assertGreater(by_id["real-need"]["score"], by_id["artist-flight"]["score"])
+
+    def test_staffing_post_is_kept_but_heavily_demoted(self):
+        now = datetime(2026, 10, 5, 3, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "staffing",
+                "text": "JOB DROP Concert crew needed near Bukit Jalil. Hiring ticket checking staff from 2PM to 11PM.",
+                "username": "jobs",
+                "permalink": "https://www.threads.com/@jobs/post/staffing",
+                "timestamp": "2026-10-05T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 75,
+            },
+            {
+                "id": "hotel",
+                "text": "Concert ends late. I need a hotel near the venue because I cannot catch the last train home.",
+                "username": "fan",
+                "permalink": "https://www.threads.com/@fan/post/hotel",
+                "timestamp": "2026-10-05T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 68,
+            },
+        ]
+
+        cards = build_deck(posts, now)["windows"]["1d"]["cards"]
+        by_id = {card["post_id"]: card for card in cards}
+
+        self.assertEqual(cards[0]["post_id"], "hotel")
+        self.assertIn("staffing_or_promo", by_id["staffing"]["intent_penalties"])
+        self.assertEqual(by_id["staffing"]["intent_band"], "low")
+        self.assertGreater(by_id["hotel"]["score"], by_id["staffing"]["score"])
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
