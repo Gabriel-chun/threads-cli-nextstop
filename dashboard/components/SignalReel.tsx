@@ -157,8 +157,8 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     const controller = new AbortController();
     const keys = [
       ...new Set(
-        Object.values(deckState.windows)
-          .flatMap((window) => window.cards.map((card) => card.post_key))
+        deckState.windows[windowKey].cards
+          .map((card) => card.post_key)
           .filter(Boolean)
       )
     ].slice(0, 200);
@@ -191,7 +191,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       .catch(() => {});
 
     return () => controller.abort();
-  }, [deckState]);
+  }, [deckState, windowKey]);
 
   useEffect(() => {
     try {
