@@ -329,6 +329,9 @@ type ObservationBundle = {
     current?: {
       raw_rows?: number;
       clean_signals?: number;
+      new_3h?: number;
+      new_12h?: number;
+      clean_rate_pct?: number;
     };
   };
   derived_annotations?: {
