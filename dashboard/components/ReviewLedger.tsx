@@ -11,8 +11,8 @@ import type { DeidentifiedReviewRow } from "../lib/reviewLedger";
 import { REVIEW_CATEGORIES } from "../lib/reviewCategories";
 import { useI18n } from "./I18nProvider";
 
-type Filter = "all" | "relevant" | "irrelevant";
-type ReviewLabel = "relevant" | "irrelevant";
+type Filter = "all" | "relevant" | "irrelevant" | "unsure";
+type ReviewLabel = "relevant" | "irrelevant" | "unsure";
 
 type DragState = {
   anonymousId: string;
@@ -81,7 +81,8 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
     () => ({
       all: items.length,
       relevant: items.filter((row) => row.label === "relevant").length,
-      irrelevant: items.filter((row) => row.label === "irrelevant").length
+      irrelevant: items.filter((row) => row.label === "irrelevant").length,
+      unsure: items.filter((row) => row.label === "unsure").length
     }),
     [items]
   );
@@ -245,14 +246,14 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
   return (
     <>
       <div className="reviewFilterBar" aria-label={t("reviews.filterAria")}>
-        {(["all", "relevant", "irrelevant"] as Filter[]).map((key) => (
+        {(["all", "relevant", "unsure", "irrelevant"] as Filter[]).map((key) => (
           <button
             key={key}
             type="button"
             className={filter === key ? "active" : ""}
             onClick={() => setFilter(key)}
           >
-            {key === "all" ? t("reviews.filter.all") : key === "relevant" ? t("deck.relevant") : t("deck.irrelevant")}
+            {key === "all" ? t("reviews.filter.all") : key === "relevant" ? t("deck.relevant") : key === "unsure" ? t("deck.unsure") : t("deck.irrelevant")}
             <span>{counts[key]}</span>
           </button>
         ))}
@@ -288,7 +289,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                 <tr key={row.anonymous_id}>
                   <td>
                     <span className={"reviewLabel " + row.label}>
-                      {row.label === "relevant" ? t("deck.relevant") : t("deck.irrelevant")}
+                      {row.label === "relevant" ? t("deck.relevant") : row.label === "unsure" ? t("deck.unsure") : t("deck.irrelevant")}
                     </span>
                     {row.original_label && row.original_label !== row.label ? (
                       <small className="reviewLabelCorrection">{t("reviews.humanCorrection")}</small>
@@ -388,7 +389,7 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
       {undo ? (
         <div className="reviewUndoToast" role="status" aria-live="polite">
           <span>
-            {t("reviews.changedTo",{label:undo.nextLabel === "relevant" ? t("deck.relevant") : t("deck.irrelevant")})}
+            {t("reviews.changedTo",{label:undo.nextLabel === "relevant" ? t("deck.relevant") : undo.nextLabel === "unsure" ? t("deck.unsure") : t("deck.irrelevant")})}
           </span>
           <button type="button" disabled={Boolean(savingId)} onClick={() => void undoLabel()}>
             {t("reviews.undo")}
