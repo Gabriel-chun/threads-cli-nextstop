@@ -1,5 +1,5 @@
 
-export type TriageLabel = "relevant" | "irrelevant";
+export type TriageLabel = "relevant" | "irrelevant" | "unsure";
 
 export type SignalPostCard = {
   id: string;
@@ -14,6 +14,7 @@ export type SignalPostCard = {
   feature_tags: string[];
   actionability_score?: number;
   actionability_band?: "high" | "medium" | "low";
+  candidate_confidence?: "high" | "medium" | "low";
   language_context?: "zh_hant" | "zh_hans" | "hk_zh" | "english" | "other_latin" | "mixed";
   language_tokens?: string[];
   need_nodes?: string[];
@@ -46,6 +47,11 @@ export type SignalDeckWindow = {
   days: number;
   signal_count: number;
   card_count: number;
+  eligible_count?: number;
+  high_confidence_count?: number;
+  medium_confidence_count?: number;
+  medium_sampled_count?: number;
+  low_confidence_count?: number;
   default_review_limit?: number;
   extend_step?: number;
   display_limit?: number;
@@ -65,6 +71,14 @@ export type SignalDeck = {
 
 const SIGNAL_DECK_URL =
   "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck.json";
+const SIGNAL_DECK_INDEX_URL =
+  "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck_index.json";
+
+const SIGNAL_DECK_WINDOW_URLS: Record<"1d" | "3d" | "5d", string> = {
+  "1d": "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck_1d.json",
+  "3d": "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck_3d.json",
+  "5d": "https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/signal_deck_5d.json"
+};
 
 const emptyWindow = (label: string, days: number): SignalDeckWindow => ({
   label,
@@ -135,21 +149,78 @@ export async function loadSignalDeck(): Promise<SignalDeck> {
 
   const deck = (await res.json()) as SignalDeck;
 
-  for (const window of Object.values(deck.windows)) {
-    window.cards = window.cards
-      .map((card) => ({
-        ...card,
-        ranking_delta: Number(card.ranking_delta ?? 0),
-        score: Number(card.score ?? card.base_score),
-        triage_label: card.triage_label || null,
-        triage_reviewed_at: card.triage_reviewed_at || null
-      }))
-      .sort((a, b) => b.score - a.score || a.post_key.localeCompare(b.post_key));
-
-    window.relevant_clusters = relevantClusters(window.cards);
+  for (const key of ["1d", "3d", "5d"] as const) {
+    deck.windows[key] = normalizeWindow(deck.windows[key]);
   }
 
   return deck;
+}
+
+
+function normalizeWindow(window: SignalDeckWindow): SignalDeckWindow {
+  const cards = (window.cards || [])
+    .map((card) => ({
+      ...card,
+      ranking_delta: Number(card.ranking_delta ?? 0),
+      score: Number(card.score ?? card.base_score),
+      triage_label: card.triage_label || null,
+      triage_reviewed_at: card.triage_reviewed_at || null
+    }))
+    .sort((a, b) => b.score - a.score || a.post_key.localeCompare(b.post_key));
+
+  return {
+    ...window,
+    cards,
+    relevant_clusters: relevantClusters(cards)
+  };
+}
+
+export async function loadSignalDeckIndex(): Promise<SignalDeck> {
+  const res = await fetch(SIGNAL_DECK_INDEX_URL, {
+    headers: { "User-Agent": "next-stop-live-signal-deck-index" },
+    next: { revalidate: 300 }
+  });
+  if (!res.ok) return loadSignalDeck();
+
+  const index = (await res.json()) as SignalDeck;
+  for (const key of ["1d", "3d", "5d"] as const) {
+    index.windows[key] = {
+      ...index.windows[key],
+      cards: []
+    };
+  }
+  return index;
+}
+
+export async function loadSignalDeckWindow(
+  key: "1d" | "3d" | "5d"
+): Promise<SignalDeckWindow> {
+  const res = await fetch(SIGNAL_DECK_WINDOW_URLS[key], {
+    headers: { "User-Agent": "next-stop-live-signal-deck-window" },
+    next: { revalidate: 300 }
+  });
+  if (!res.ok) {
+    const full = await loadSignalDeck();
+    return full.windows[key];
+  }
+  const payload = (await res.json()) as { window?: SignalDeckWindow };
+  return normalizeWindow(payload.window || emptyWindow(key === "1d" ? "1日" : key === "3d" ? "3日" : "5日", Number(key[0])));
+}
+
+export async function loadInitialSignalDeck(
+  key: "1d" | "3d" | "5d" = "3d"
+): Promise<SignalDeck> {
+  const [index, window] = await Promise.all([
+    loadSignalDeckIndex(),
+    loadSignalDeckWindow(key)
+  ]);
+  return {
+    ...index,
+    windows: {
+      ...index.windows,
+      [key]: window
+    }
+  };
 }
 
 export function selectSignalDeckWindow(
