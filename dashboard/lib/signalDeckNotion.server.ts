@@ -75,7 +75,7 @@ const multiSelectValues=(prop:any)=>prop?.type==="multi_select"?(prop.multi_sele
 function properties(row: SignalDeckFeedback) {
   return {
     "Post": title(`@${row.username || "unknown"} — ${clip(row.text_excerpt, 110)}`),
-    "Label": select(row.label === "relevant" ? "Relevant" : "Irrelevant"),
+    "Label": select(row.label === "relevant" ? "Relevant" : row.label === "irrelevant" ? "Irrelevant" : "Unsure"),
     "Category": richText(row.category),
     "Username": richText(row.username || ""),
     "Text": richText(row.text_excerpt),
@@ -96,7 +96,7 @@ function properties(row: SignalDeckFeedback) {
 function pageToFeedback(page:any):SignalDeckFeedback|null {
   const p=page?.properties||{}, post_key=plainText(p["Post Key"]);
   const ln=selectName(p["Label"]);
-  const label:TriageLabel|null=ln==="Relevant"?"relevant":ln==="Irrelevant"?"irrelevant":null;
+  const label:TriageLabel|null=ln==="Relevant"?"relevant":ln==="Irrelevant"?"irrelevant":ln==="Unsure"?"unsure":null;
   if(!post_key||!label) return null;
   const w=selectName(p["Window"]);
   const reviewed_at=dateValue(p["Reviewed At"])||String(page.last_edited_time||page.created_time||new Date().toISOString());
@@ -190,7 +190,7 @@ export async function updateSignalReviewLabelInNotion(postKey:string,label:Triag
   if(!page)throw new Error("Review feedback not found.");
   const updated=await notionRequest<any>(`/pages/${page.id}`,{
     method:"PATCH",
-    body:{properties:{"Label":select(label==="relevant"?"Relevant":"Irrelevant")}}
+    body:{properties:{"Label":select(label==="relevant"?"Relevant":label==="irrelevant"?"Irrelevant":"Unsure")}}
   });
   const row=pageToFeedback(updated);
   if(!row)throw new Error("Updated review could not be read.");
