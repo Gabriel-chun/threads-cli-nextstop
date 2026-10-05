@@ -323,11 +323,15 @@ export async function loadTrendHistory(limit = 36, includeFailed = false): Promi
 type ObservationBundle = {
   run?: {
     run_at?: string;
+    status?: string;
   };
   deterministic_facts?: {
     current?: {
       raw_rows?: number;
       clean_signals?: number;
+      new_3h?: number;
+      new_12h?: number;
+      clean_rate_pct?: number;
     };
   };
   derived_annotations?: {
@@ -353,19 +357,10 @@ type ObservationBundle = {
 };
 
 export async function loadHomeObservation() {
-  const [observationRes, health] = await Promise.all([
-    fetch(OBSERVATION_URL, {
-      headers: { "User-Agent": "next-stop-live-dashboard-home" },
-      next: { revalidate: 300 }
-    }),
-    collectorHealth().catch(() => ({
-      healthy: false,
-      status: "unknown",
-      runNumber: null,
-      updatedAt: null,
-      url: null
-    }))
-  ]);
+  const observationRes = await fetch(OBSERVATION_URL, {
+    headers: { "User-Agent": "next-stop-live-dashboard-home" },
+    next: { revalidate: 300 }
+  });
 
   if (!observationRes.ok) {
     return {
@@ -375,13 +370,42 @@ export async function loadHomeObservation() {
       actionable: 0,
       context: 0,
       noise: 0,
+      currentNew3h: 0,
+      currentNew12h: 0,
+      currentCleanRatePct: 0,
       clusters: [] as Array<{ category: string; kind: SignalKind; count: number }>,
-      health,
+      health: {
+        healthy: false,
+        status: "unknown",
+        runNumber: null,
+        updatedAt: null,
+        url: null
+      },
       signals: [] as Signal[]
     };
   }
 
   const observation = (await observationRes.json()) as ObservationBundle;
+  const runAt = observation.run?.run_at || null;
+  const runStatus = String(observation.run?.status || "").toLowerCase();
+  const runAgeMs = runAt && Number.isFinite(Date.parse(runAt))
+    ? Math.max(0, Date.now() - Date.parse(runAt))
+    : Number.POSITIVE_INFINITY;
+  const fresh = runAgeMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
+  const succeeded = runStatus === "success";
+  const health = {
+    healthy: succeeded && fresh,
+    status: runStatus === "failed"
+      ? "failure"
+      : succeeded && !fresh
+        ? "stale"
+        : succeeded
+          ? "success"
+          : "unknown",
+    runNumber: null,
+    updatedAt: runAt,
+    url: null
+  };
   const clusters = (observation.derived_annotations?.clusters || [])
     .map((item) => ({
       category: item.category || "未分類",
@@ -417,6 +441,9 @@ export async function loadHomeObservation() {
     actionable,
     context,
     noise,
+    currentNew3h: Number(observation.deterministic_facts?.current?.new_3h || 0),
+    currentNew12h: Number(observation.deterministic_facts?.current?.new_12h || 0),
+    currentCleanRatePct: Number(observation.deterministic_facts?.current?.clean_rate_pct || 0),
     clusters,
     health,
     signals
