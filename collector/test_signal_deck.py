@@ -302,7 +302,7 @@ class SignalDeckV03Tests(unittest.TestCase):
             },
             {
                 "id": "medium",
-                "text": "演唱會散場後捷運末班車來得及嗎？",
+                "text": "演唱會捷運怎麼樣？",
                 "username": "medium",
                 "permalink": "https://www.threads.com/@medium/post/medium",
                 "timestamp": "2026-10-05T02:00:00Z",
