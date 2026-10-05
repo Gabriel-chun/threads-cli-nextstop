@@ -9,6 +9,7 @@ export type DailyReviewArchive = {
   count: number;
   relevant_count: number;
   irrelevant_count: number;
+  unsure_count: number;
   rows: SignalDeckFeedback[];
 };
 
@@ -72,6 +73,7 @@ export function buildDailyReviewArchive(
     count: selected.length,
     relevant_count: selected.filter((row) => row.label === "relevant").length,
     irrelevant_count: selected.filter((row) => row.label === "irrelevant").length,
+    unsure_count: selected.filter((row) => row.label === "unsure").length,
     rows: selected
   };
 }
