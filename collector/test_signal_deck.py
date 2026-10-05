@@ -47,7 +47,7 @@ class SignalDeckV03Tests(unittest.TestCase):
         one_day = deck["windows"]["1d"]
         self.assertLessEqual(one_day["card_count"], 2)
         self.assertEqual(one_day["display_limit"], 5)
-        self.assertEqual(one_day["default_review_limit"], 2)
+        self.assertEqual(one_day["default_review_limit"], one_day["card_count"])
         self.assertEqual(one_day["extend_step"], 10)
         self.assertTrue({card["post_id"] for card in one_day["cards"]}.issubset({"a", "b"}))
         self.assertEqual(len({card["post_key"] for card in one_day["cards"]}), one_day["card_count"])
@@ -242,16 +242,15 @@ class SignalDeckV03Tests(unittest.TestCase):
             },
         ]
 
-        cards = build_deck(posts, now, profile)["windows"]["1d"]["cards"]
+        window = build_deck(posts, now, profile)["windows"]["1d"]
+        cards = window["cards"]
         by_id = {card["post_id"]: card for card in cards}
 
         self.assertEqual(cards[0]["post_id"], "real-need")
         self.assertEqual(by_id["real-need"]["intent_band"], "high")
         self.assertGreater(by_id["real-need"]["ranking_delta"], 5)
-        self.assertEqual(by_id["artist-flight"]["intent_band"], "low")
-        self.assertIn("third_party_logistics", by_id["artist-flight"]["intent_penalties"])
-        self.assertLess(by_id["artist-flight"]["ranking_delta"], 1)
-        self.assertGreater(by_id["real-need"]["score"], by_id["artist-flight"]["score"])
+        self.assertNotIn("artist-flight", by_id)
+        self.assertEqual(window["low_confidence_count"], 1)
 
     def test_staffing_post_is_kept_but_heavily_demoted(self):
         now = datetime(2026, 10, 5, 3, 0, tzinfo=timezone.utc)
@@ -278,13 +277,13 @@ class SignalDeckV03Tests(unittest.TestCase):
             },
         ]
 
-        cards = build_deck(posts, now)["windows"]["1d"]["cards"]
+        window = build_deck(posts, now)["windows"]["1d"]
+        cards = window["cards"]
         by_id = {card["post_id"]: card for card in cards}
 
         self.assertEqual(cards[0]["post_id"], "hotel")
-        self.assertIn("staffing_or_promo", by_id["staffing"]["intent_penalties"])
-        self.assertEqual(by_id["staffing"]["intent_band"], "low")
-        self.assertGreater(by_id["hotel"]["score"], by_id["staffing"]["score"])
+        self.assertNotIn("staffing", by_id)
+        self.assertEqual(window["low_confidence_count"], 1)
 
 
     def test_confidence_gate_keeps_high_samples_medium_and_excludes_low(self):
