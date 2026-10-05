@@ -4,7 +4,7 @@ import { SignalReel } from "../components/SignalReel";
 import { loadSignalDeck } from "../lib/signalDeck";
 import { DataLabel, LocaleDate, T } from "../components/I18nProvider";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const [data, history, signalDeck] = await Promise.all([
