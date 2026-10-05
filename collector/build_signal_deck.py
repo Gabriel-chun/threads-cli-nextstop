@@ -128,6 +128,36 @@ ACTION_MARKERS = re.compile(
 )
 
 
+USER_DECISION_MARKERS = re.compile(
+    r"我想|我要|我準備|我准备|我打算|我怕|我們想|我们想|我們要|我们要|想去|準備去|准备去|打算去"
+    r"|來不及|来不及|趕不上|赶不上|回不了|住哪|住哪裡|住哪里|怎麼去|怎么去|怎麼回|怎么回"
+    r"|推薦|推荐|請問|请问|想問|想问|有人知道|有沒有人知道|有没有人知道"
+    r"|\bi\s+(?:need|want|plan|am\s+going|will\s+go|have\s+to)\b"
+    r"|\bwe\s+(?:need|want|plan|are\s+going)\b"
+    r"|\bshould\s+i\b|\bcan\s+i\b|\bhow\s+(?:do\s+i|can\s+i|to)\b|\bwhere\s+(?:should|can)\b",
+    re.I,
+)
+
+LOGISTICS_CONTEXT_MARKERS = re.compile(
+    r"散場後|散场后|演唱會結束|演唱会结束|結束後|结束后|末班|回程|回家|回飯店|回酒店|附近"
+    r"|趕高鐵|赶高铁|趕火車|赶火车|趕捷運|赶地铁|入住|check[- ]?in"
+    r"|after\s+(?:the\s+)?(?:concert|show)|last\s+(?:train|metro|bus)|get\s+back|near\s+(?:the\s+)?venue",
+    re.I,
+)
+
+THIRD_PARTY_LOGISTICS_MARKERS = re.compile(
+    r"他|她|哥哥|姐姐|妹妹|成員|成员|隊友|队友|藝人|艺人|偶像|歌手|團員|团员|公司|經紀|经纪"
+    r"|回韓|回韩|回國|回国|返韓|返韩|婚禮|婚礼|航班回|飛回|飞回",
+    re.I,
+)
+
+STAFFING_OR_PROMO_MARKERS = re.compile(
+    r"job\s+drop|crew\s+needed|hiring|recruit(?:ing)?|part[- ]?time|staff\s+needed"
+    r"|招募|招聘|徵人|征人|工作人員招募|工作人员招募|兼職|兼职",
+    re.I,
+)
+
+
 ENGLISH_CONTEXT = re.compile(
     r"\b(?:the|a|an|is|are|was|were|to|from|at|in|on|for|with|after|before|near|"
     r"how|where|what|when|can|could|should|would|need|want|stay|hotel|hostel|"
@@ -186,21 +216,75 @@ def extract_need_network(text: str) -> tuple[list[str], list[str], list[str]]:
     return nodes, terms[:12], edges[:12]
 
 
+def intent_profile(
+    text: str,
+    need_nodes: list[str],
+) -> tuple[float, list[str], list[str]]:
+    score = 0.0
+    signals: list[str] = []
+    penalties: list[str] = []
+
+    if USER_DECISION_MARKERS.search(text):
+        score += 4.0
+        signals.append("user_decision")
+    if QUESTION.search(text) and need_nodes:
+        score += 2.0
+        signals.append("need_question")
+    if ACTION_MARKERS.search(text) and need_nodes:
+        score += 2.0
+        signals.append("action_marker")
+    if LOGISTICS_CONTEXT_MARKERS.search(text) and need_nodes:
+        score += 3.0
+        signals.append("logistics_context")
+
+    # A need keyword alone is weak evidence. This catches artist itineraries,
+    # fan narratives, staffing posts, and other mentions that are not the
+    # author's own planning problem.
+    if need_nodes and not signals:
+        score -= 4.0
+        penalties.append("keyword_only_need")
+
+    if need_nodes and THIRD_PARTY_LOGISTICS_MARKERS.search(text) and not USER_DECISION_MARKERS.search(text):
+        score -= 4.0
+        penalties.append("third_party_logistics")
+
+    if STAFFING_OR_PROMO_MARKERS.search(text):
+        score -= 8.0
+        penalties.append("staffing_or_promo")
+
+    return round(max(-10.0, min(10.0, score)), 3), signals, penalties
+
+
+def need_weight_multiplier(intent_score: float) -> float:
+    if intent_score >= 4:
+        return 1.0
+    if intent_score >= 1:
+        return 0.65
+    if intent_score > -4:
+        return 0.4
+    return 0.2
+
+
 def actionability_score(
     text: str,
     category: str,
     features: set[str],
     need_nodes: list[str],
     need_edges: list[str],
+    intent_score: float,
 ) -> float:
     score = CATEGORY_REVIEW_PRIOR.get(category, 0.0)
-    score += sum(NEED_NODE_WEIGHTS.get(node, 0.0) for node in need_nodes)
-    score += min(6.0, len(need_edges) * 2.0)
+    multiplier = need_weight_multiplier(intent_score)
+    score += sum(NEED_NODE_WEIGHTS.get(node, 0.0) for node in need_nodes) * multiplier
+    score += min(6.0, len(need_edges) * 2.0) * multiplier
+    score += intent_score
 
-    if QUESTION.search(text):
-        score += 2.0
-    if ACTION_MARKERS.search(text):
-        score += 2.0
+    # Questions only help when they are attached to an actual need. Generic
+    # fandom questions should not outrank planning/friction signals.
+    if QUESTION.search(text) and need_nodes:
+        score += 1.0
+    if ACTION_MARKERS.search(text) and need_nodes:
+        score += 1.0
     if "first_timer" in features and need_nodes:
         score += 1.0
 
@@ -227,7 +311,7 @@ def actionability_score(
         if "merch_need" in features:
             score -= 2.0
         if category == "其他演出內容":
-            score -= 4.0
+            score -= 7.0
 
     return round(score, 3)
 
@@ -263,6 +347,7 @@ def learned_ranking_delta(
     category: str,
     features: set[str],
     profile: dict[str, Any] | None,
+    intent_score: float,
 ) -> float:
     if not profile:
         return 0.0
@@ -270,15 +355,22 @@ def learned_ranking_delta(
     category_weights = profile.get("category_weights") or {}
     feature_weights = profile.get("feature_weights") or {}
 
-    # Positive evidence is allowed to lift cards strongly. Negative evidence is
-    # deliberately attenuated so review learning remains a soft ranking signal,
-    # never a hidden exclusion rule.
     raw = float(category_weights.get(category) or 0.0)
     for feature in features:
         raw += float(feature_weights.get(feature) or 0.0)
 
-    if raw < 0:
-        raw *= 0.25
+    if raw > 0:
+        # Positive human preference should reinforce confirmed user needs, not
+        # keyword-only mentions such as artist travel schedules.
+        if intent_score >= 4:
+            raw *= 1.15
+        elif intent_score >= 1:
+            raw *= 0.7
+        else:
+            raw *= 0.15
+    elif raw < 0:
+        # Negative learning remains soft: it demotes rather than deletes.
+        raw *= 0.35
 
     return round(max(-4.0, min(8.0, raw)), 3)
 
@@ -410,9 +502,17 @@ def build_post_card(
     features = sorted(feature_set)
     language_context, language_tokens = detect_language_context(text)
     need_nodes, need_terms, need_edges = extract_need_network(text)
+    intent_score, intent_signals, intent_penalties = intent_profile(text, need_nodes)
     base = base_score(post, text, ts, now)
-    action_score = actionability_score(text, category, feature_set, need_nodes, need_edges)
-    ranking_delta = learned_ranking_delta(category, feature_set, profile)
+    action_score = actionability_score(
+        text,
+        category,
+        feature_set,
+        need_nodes,
+        need_edges,
+        intent_score,
+    )
+    ranking_delta = learned_ranking_delta(category, feature_set, profile, intent_score)
     score = round(base + action_score + ranking_delta, 3)
     snapshot_id = f"deck_{now.date().isoformat()}_{window_key}_{post_key.removeprefix('post_')}"
 
@@ -429,6 +529,10 @@ def build_post_card(
         "actionability_score": action_score,
         "actionability_band": actionability_band(action_score),
         "ranking_delta": ranking_delta,
+        "intent_score": intent_score,
+        "intent_band": "high" if intent_score >= 4 else "medium" if intent_score >= 1 else "low",
+        "intent_signals": intent_signals,
+        "intent_penalties": intent_penalties,
         "language_context": language_context,
         "language_tokens": language_tokens,
         "need_nodes": need_nodes,
