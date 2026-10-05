@@ -99,7 +99,9 @@ function PostCard({
             ? t("deck.relevant")
             : card.triage_label === "irrelevant"
               ? t("deck.irrelevant")
-              : card.status}
+              : card.triage_label === "unsure"
+                ? t("deck.unsure")
+                : card.status}
         </span>
       </div>
 
@@ -121,13 +123,15 @@ function PostCard({
 
 export function SignalReel({ deck }: { deck: SignalDeck }) {
   const {t,formatDate,dataLabel}=useI18n();
+  const [deckState, setDeckState] = useState(deck);
   const [windowKey, setWindowKey] = useState<WindowKey>("3d");
+  const [loadingWindow, setLoadingWindow] = useState<WindowKey | null>(null);
   const [reviewView, setReviewView] = useState<ReviewView>("queue");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   const [labels, setLabels] = useState<Record<string, TriageLabel | null>>(
     Object.fromEntries(
-      Object.values(deck.windows)
+      Object.values(deckState.windows)
         .flatMap((window) => window.cards)
         .map((card) => [card.post_key, card.triage_label || null])
     )
@@ -141,9 +145,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
   const [demoKeys, setDemoKeys] = useState<string[]>([]);
   const [demoLabels, setDemoLabels] = useState<Record<string, TriageLabel | null>>({});
   const baseReviewLimits: Record<WindowKey, number> = {
-    "1d": deck.windows["1d"].default_review_limit ?? Math.min(40, deck.windows["1d"].card_count),
-    "3d": deck.windows["3d"].default_review_limit ?? Math.min(40, deck.windows["3d"].card_count),
-    "5d": deck.windows["5d"].default_review_limit ?? Math.min(40, deck.windows["5d"].card_count)
+    "1d": deckState.windows["1d"].default_review_limit ?? Math.min(40, deckState.windows["1d"].card_count),
+    "3d": deckState.windows["3d"].default_review_limit ?? Math.min(40, deckState.windows["3d"].card_count),
+    "5d": deckState.windows["5d"].default_review_limit ?? Math.min(40, deckState.windows["5d"].card_count)
   };
   const [extraReviewKeys, setExtraReviewKeys] = useState<Record<WindowKey, string[]>>({
     "1d": [], "3d": [], "5d": []
@@ -153,7 +157,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     const controller = new AbortController();
     const keys = [
       ...new Set(
-        Object.values(deck.windows)
+        Object.values(deckState.windows)
           .flatMap((window) => window.cards.map((card) => card.post_key))
           .filter(Boolean)
       )
@@ -179,7 +183,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           ...Object.fromEntries(
             Object.entries(payload.feedback).map(([key, value]: [string, any]) => [
               key,
-              value?.label === "relevant" || value?.label === "irrelevant" ? value.label : null
+              value?.label === "relevant" || value?.label === "irrelevant" || value?.label === "unsure" ? value.label : null
             ])
           )
         }));
@@ -187,7 +191,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       .catch(() => {});
 
     return () => controller.abort();
-  }, [deck]);
+  }, [deckState]);
 
   useEffect(() => {
     try {
@@ -205,7 +209,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
     globalThis.localStorage.setItem(LOCAL_REVIEW_KEY, JSON.stringify(next));
   }
 
-  const window = deck.windows[windowKey];
+  const window = deckState.windows[windowKey];
   const baseReviewLimit = Math.min(baseReviewLimits[windowKey], window.card_count);
 
   const windowCards = useMemo(
@@ -222,13 +226,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       total: windowCards.length,
       relevant: windowCards.filter((card) => card.triage_label === "relevant").length,
       irrelevant: windowCards.filter((card) => card.triage_label === "irrelevant").length,
+      unsure: windowCards.filter((card) => card.triage_label === "unsure").length,
       unreviewed: windowCards.filter((card) => !card.triage_label).length
     }),
     [windowCards]
   );
 
   const reviewedPct = allCounts.total
-    ? ((allCounts.relevant + allCounts.irrelevant) / allCounts.total) * 100
+    ? ((allCounts.relevant + allCounts.irrelevant + allCounts.unsure) / allCounts.total) * 100
     : 0;
   const relevantPct = allCounts.total ? (allCounts.relevant / allCounts.total) * 100 : 0;
   const irrelevantPct = allCounts.total ? (allCounts.irrelevant / allCounts.total) * 100 : 0;
@@ -309,7 +314,31 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
   const dragDx = drag ? drag.currentX - drag.startX : 0;
 
-  function changeWindow(next: WindowKey) {
+  async function changeWindow(next: WindowKey) {
+    if (next === windowKey || loadingWindow) return;
+
+    const current = deckState.windows[next];
+    if (!current.cards.length && current.card_count > 0) {
+      setLoadingWindow(next);
+      setSaveError("");
+      try {
+        const response = await fetch("/api/signal-deck/window/" + next, { cache: "force-cache" });
+        const payload = await response.json().catch(() => null);
+        if (!response.ok || !payload?.window) {
+          throw new Error(payload?.error || t("common.error"));
+        }
+        setDeckState((state) => ({
+          ...state,
+          windows: { ...state.windows, [next]: payload.window }
+        }));
+      } catch (error) {
+        setSaveError(error instanceof Error ? error.message : t("common.error"));
+        setLoadingWindow(null);
+        return;
+      }
+      setLoadingWindow(null);
+    }
+
     setWindowKey(next);
     setReviewView("queue");
     setSelectedKey(null);
@@ -394,11 +423,11 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       category_source:prev?.category_source||"system",category_updated_at:prev?.category_updated_at||null,
       username:card.username||null,posted_at:card.posted_at||null,query:card.query||card.source_queries?.join(" / ")||null,
       text_excerpt:card.text.slice(0,1200),feature_tags:card.feature_tags||[],base_score:card.base_score??card.score,
-      deck_generated_at:deck.generated_at,reviewed_at:prev?.reviewed_at||now
+      deck_generated_at:deckState.generated_at,reviewed_at:prev?.reviewed_at||now
     };
     setLabels((current)=>({...current,[card.post_key]:label})); setSelectedKey(null); setSaveError("");
     const next={...localReviews,[card.post_key]:{row,synced:false,updated_at:now}}; saveLocalReviews(next);
-    setSaveNotice(label==="relevant"?t("deck.savedRelevant"):t("deck.savedIrrelevant"));
+    setSaveNotice(label==="relevant"?t("deck.savedRelevant"):label==="unsure"?t("deck.savedUnsure"):t("deck.savedIrrelevant"));
     globalThis.setTimeout(()=>setSaveNotice(""),1800);
   }
 
@@ -522,9 +551,10 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
               key={key}
               type="button"
               className={windowKey === key ? "active" : ""}
-              onClick={() => changeWindow(key)}
+              disabled={Boolean(loadingWindow)}
+              onClick={() => void changeWindow(key)}
             >
-              {t("deck.window."+key)}
+              {loadingWindow === key ? t("common.loading") : t("deck.window."+key)}
             </button>
           ))}
         </div>
@@ -532,7 +562,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
 
       <div className="signalDeckSub">
         <span>{t("deck.reviewToday",{window:t("deck.window."+windowKey)})}</span>
-        <span>{t("deck.dailySnapshot",{date:formatDate(deck.generated_at)})}</span>
+        <span>{t("deck.dailySnapshot",{date:formatDate(deckState.generated_at)})}</span>
       </div>
 
       <div className="reviewProgress" aria-label={t("deck.progress")}>
@@ -719,6 +749,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
                 onClick={() => void classify(selected, "irrelevant")}
               >
                 ← {t("deck.irrelevant")}
+              </button>
+              <button
+                type="button"
+                className="unsure"
+                disabled={false}
+                onClick={() => void classify(selected, "unsure")}
+              >
+                {t("deck.unsure")}
               </button>
               <button
                 type="button"
