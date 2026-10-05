@@ -45,6 +45,7 @@ export async function GET() {
     count: rows.length,
     relevant_count: rows.filter((row: any) => row.label === "relevant").length,
     irrelevant_count: rows.filter((row: any) => row.label === "irrelevant").length,
+    unsure_count: rows.filter((row: any) => row.label === "unsure").length,
     rows
   };
 

@@ -8,6 +8,7 @@ export default async function ReviewsPage() {
   const rows=await loadDeidentifiedReviewRows();
   const relevant=rows.filter(row=>row.label==="relevant").length;
   const irrelevant=rows.filter(row=>row.label==="irrelevant").length;
+  const unsure=rows.filter(row=>row.label==="unsure").length;
 
   return <main className="reviewsWorkspace">
     <header className="workspaceHeader">
@@ -24,6 +25,7 @@ export default async function ReviewsPage() {
       <article><span><T k="reviews.metric.reviewed" /></span><strong>{rows.length}</strong><small><T k="reviews.notionState" /></small></article>
       <article><span><T k="reviews.metric.relevant" /></span><strong>{relevant}</strong><small><T k="common.humanSelected" /></small></article>
       <article><span><T k="reviews.metric.irrelevant" /></span><strong>{irrelevant}</strong><small><T k="common.humanExcluded" /></small></article>
+      <article><span><T k="reviews.metric.unsure" /></span><strong>{unsure}</strong><small><T k="reviews.unsureHelp" /></small></article>
       <article className="accent"><span><T k="reviews.metric.archive" /></span><strong>00:00</strong><small><T k="reviews.metric.archiveHelp" /></small></article>
     </section>
 

@@ -14,7 +14,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const schema = z.object({
-  label: z.enum(["relevant", "irrelevant"])
+  label: z.enum(["relevant", "irrelevant", "unsure"])
 }).strict();
 
 export async function OPTIONS() {

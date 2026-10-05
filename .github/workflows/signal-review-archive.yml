@@ -90,6 +90,7 @@ jobs:
               f"count={payload['count']}",
               f"relevant={payload['relevant_count']}",
               f"irrelevant={payload['irrelevant_count']}",
+              f"unsure={payload.get('unsure_count', 0)}",
           )
           PY
 

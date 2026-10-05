@@ -104,3 +104,24 @@ test("label edits are archived on the edit date even when review is older", () =
   assert.equal(archive.rows[0].original_label, "relevant");
   assert.equal(archive.rows[0].label_updated_at, "2026-10-02T01:20:00Z");
 });
+
+
+test("daily archive counts Unsure separately", () => {
+  const archive = buildDailyReviewArchive(
+    [
+      {
+        ...base,
+        id: "fb_unsure",
+        post_key: "post_unsure",
+        label: "unsure",
+        reviewed_at: "2026-10-01T12:00:00Z"
+      }
+    ],
+    "2026-10-01",
+    new Date("2026-10-01T16:01:00Z")
+  );
+  assert.equal(archive.count, 1);
+  assert.equal(archive.relevant_count, 0);
+  assert.equal(archive.irrelevant_count, 0);
+  assert.equal(archive.unsure_count, 1);
+});

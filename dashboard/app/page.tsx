@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { compact, loadHomeObservation, loadTrendHistory, type TrendPoint } from "../lib/signals";
 import { TrendChart } from "../components/TrendChart";
 import { SignalReel } from "../components/SignalReel";
-import { loadSignalDeck } from "../lib/signalDeck";
+import { loadInitialSignalDeck } from "../lib/signalDeck";
 import { DataLabel, LocaleDate, T } from "../components/I18nProvider";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +33,7 @@ async function TrendStrip({ historyPromise }: { historyPromise: Promise<TrendPoi
   );
 }
 
-async function SignalDeckStream({ deckPromise }: { deckPromise: ReturnType<typeof loadSignalDeck> }) {
+async function SignalDeckStream({ deckPromise }: { deckPromise: ReturnType<typeof loadInitialSignalDeck> }) {
   const signalDeck = await deckPromise;
   return <SignalReel deck={signalDeck} />;
 }
@@ -139,7 +139,7 @@ async function Diagnostics({
 
 export default async function Page() {
   const historyPromise = loadTrendHistory(36);
-  const deckPromise = loadSignalDeck();
+  const deckPromise = loadInitialSignalDeck("3d");
   const data = await loadHomeObservation();
 
   return (

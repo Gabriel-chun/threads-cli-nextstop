@@ -1,6 +1,6 @@
 export type ReviewQuotaCard = {
   post_key: string;
-  triage_label?: "relevant" | "irrelevant" | null;
+  triage_label?: "relevant" | "irrelevant" | "unsure" | null;
 };
 
 function clampedBaseLimit(cards: ReviewQuotaCard[], baseLimit: number) {

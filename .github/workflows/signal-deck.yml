@@ -133,7 +133,11 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add collector/archive/latest/signal_deck.json
+          git add collector/archive/latest/signal_deck.json \
+            collector/archive/latest/signal_deck_index.json \
+            collector/archive/latest/signal_deck_1d.json \
+            collector/archive/latest/signal_deck_3d.json \
+            collector/archive/latest/signal_deck_5d.json
           if git diff --cached --quiet; then
             echo "[signal-deck] no changes"
             exit 0
