@@ -47,3 +47,16 @@ test("weekly profile ignores feedback older than 90 days", () => {
   assert.equal(profile.feedback_count, 0);
   assert.equal(profile.feature_weights.old_feature, undefined);
 });
+
+
+test("Unsure feedback is preserved but excluded from relevance learning", () => {
+  const now = new Date("2026-10-05T00:25:00Z");
+  const profile = buildRelevanceProfile([
+    { ...base, id: "u1", post_key: "u1", label: "unsure" as const, feature_tags: ["transport_need"], reviewed_at: "2026-10-04T01:00:00Z" },
+    { ...base, id: "r1", post_key: "r1", label: "relevant" as const, feature_tags: ["transport_need"], reviewed_at: "2026-10-04T02:00:00Z" }
+  ], now);
+
+  assert.equal(profile.feedback_count, 1);
+  assert.equal(profile.relevant_count, 1);
+  assert.equal(profile.irrelevant_count, 0);
+});
