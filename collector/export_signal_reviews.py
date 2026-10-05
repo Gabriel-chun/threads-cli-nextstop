@@ -88,7 +88,12 @@ def page_to_row(page: dict) -> dict | None:
     props = page.get("properties") or {}
     post_key = plain_text(props.get("Post Key"))
     label_name = select_name(props.get("Label"))
-    label = "relevant" if label_name == "Relevant" else "irrelevant" if label_name == "Irrelevant" else ""
+    label = (
+        "relevant" if label_name == "Relevant"
+        else "irrelevant" if label_name == "Irrelevant"
+        else "unsure" if label_name == "Unsure"
+        else ""
+    )
     if not post_key or not label:
         return None
 
@@ -173,6 +178,7 @@ def main() -> None:
         "count": len(selected),
         "relevant_count": sum(1 for row in selected if row["label"] == "relevant"),
         "irrelevant_count": sum(1 for row in selected if row["label"] == "irrelevant"),
+        "unsure_count": sum(1 for row in selected if row["label"] == "unsure"),
         "rows": selected,
     }
 
@@ -185,6 +191,7 @@ def main() -> None:
         "count=" + str(payload["count"]),
         "relevant=" + str(payload["relevant_count"]),
         "irrelevant=" + str(payload["irrelevant_count"]),
+        "unsure=" + str(payload["unsure_count"]),
     )
 
 
