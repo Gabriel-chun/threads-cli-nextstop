@@ -49,9 +49,9 @@ export function deidentifyReviewRow(row: ReviewRecordLike): DeidentifiedReviewRo
   const anonymous_id = reviewAnonymousId(row);
   return {
     anonymous_id,
-    label: row.label === "relevant" ? "relevant" : "irrelevant",
+    label: row.label === "relevant" ? "relevant" : row.label === "unsure" ? "unsure" : "irrelevant",
     original_label:
-      row.original_label === "relevant" || row.original_label === "irrelevant"
+      row.original_label === "relevant" || row.original_label === "irrelevant" || row.original_label === "unsure"
         ? row.original_label
         : null,
     label_updated_at: row.label_updated_at ? String(row.label_updated_at) : null,
