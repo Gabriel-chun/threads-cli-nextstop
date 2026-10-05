@@ -234,6 +234,7 @@ export function selectSignalDeckWindow(
   const queue = defaultCards.filter((card) => !card.triage_label);
   const relevant = defaultCards.filter((card) => card.triage_label === "relevant");
   const irrelevant = defaultCards.filter((card) => card.triage_label === "irrelevant");
+  const unsure = defaultCards.filter((card) => card.triage_label === "unsure");
 
   return {
     schemaVersion: deck.schema_version,
@@ -251,7 +252,8 @@ export function selectSignalDeckWindow(
     reviewCounts: {
       unreviewed: queue.length,
       relevant: relevant.length,
-      irrelevant: irrelevant.length
+      irrelevant: irrelevant.length,
+      unsure: unsure.length
     },
     relevantClusters: selected.relevant_clusters || [],
     cards: queue.slice(0, Math.max(1, Math.min(5, limit)))
