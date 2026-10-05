@@ -408,7 +408,7 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
       setDemoLabels((current) => ({ ...current, [card.post_key]: label }));
       setSelectedKey(null);
       setSaveError("");
-      setSaveNotice(label === "relevant" ? t("deck.demoRelevant") : t("deck.demoIrrelevant"));
+      setSaveNotice(label === "relevant" ? t("deck.demoRelevant") : label === "unsure" ? t("deck.unsure") : t("deck.demoIrrelevant"));
       globalThis.setTimeout(() => setSaveNotice(""), 1200);
       return;
     }
@@ -731,6 +731,9 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
           <p className="postPreviewText">{selected.text}</p>
 
           <div className="featureTags">
+            {selected.candidate_confidence ? (
+              <span>confidence · {t("trend.confidence."+selected.candidate_confidence)}</span>
+            ) : null}
             {(selected.feature_tags || []).map((tag) => <span key={tag}>{tag}</span>)}
           </div>
 
