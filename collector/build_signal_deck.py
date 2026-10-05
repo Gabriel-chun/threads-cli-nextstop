@@ -15,6 +15,7 @@ MAX_CANDIDATES = 100
 DEFAULT_REVIEW_LIMIT = 40
 EXTEND_STEP = 10
 DISPLAY_LIMIT = 5
+MEDIUM_SAMPLE_LIMIT = 20
 PROFILE_DEFAULT = "collector/archive/latest/relevance_profile.json"
 
 CATEGORY_RULES = [
@@ -324,6 +325,14 @@ def actionability_band(score: float) -> str:
     return "low"
 
 
+def candidate_confidence(intent_score: float) -> str:
+    if intent_score >= 4:
+        return "high"
+    if intent_score >= 1:
+        return "medium"
+    return "low"
+
+
 def load_relevance_profile(path: str | Path | None) -> dict[str, Any] | None:
     if not path:
         return None
@@ -531,6 +540,7 @@ def build_post_card(
         "ranking_delta": ranking_delta,
         "intent_score": intent_score,
         "intent_band": "high" if intent_score >= 4 else "medium" if intent_score >= 1 else "low",
+        "candidate_confidence": candidate_confidence(intent_score),
         "intent_signals": intent_signals,
         "intent_penalties": intent_penalties,
         "language_context": language_context,
@@ -579,14 +589,26 @@ def build_deck(
             if (post_time(post) and start <= post_time(post) <= now)
         ]
 
-        cards = [build_post_card(post, now, key, profile) for post in scoped]
+        all_cards = [build_post_card(post, now, key, profile) for post in scoped]
+        all_cards.sort(key=lambda card: (-card["score"], card["post_key"]))
+
+        high_cards = [card for card in all_cards if card["candidate_confidence"] == "high"]
+        medium_cards = [card for card in all_cards if card["candidate_confidence"] == "medium"]
+        low_cards = [card for card in all_cards if card["candidate_confidence"] == "low"]
+
+        sampled_medium = medium_cards[:MEDIUM_SAMPLE_LIMIT]
+        cards = (high_cards + sampled_medium)[:MAX_CANDIDATES]
         cards.sort(key=lambda card: (-card["score"], card["post_key"]))
-        cards = cards[:MAX_CANDIDATES]
 
         windows[key] = {
             "label": f"{days}日",
             "days": days,
             "signal_count": len(scoped),
+            "eligible_count": len(high_cards) + len(medium_cards),
+            "high_confidence_count": len(high_cards),
+            "medium_confidence_count": len(medium_cards),
+            "medium_sampled_count": len(sampled_medium),
+            "low_confidence_count": len(low_cards),
             "card_count": len(cards),
             "default_review_limit": min(DEFAULT_REVIEW_LIMIT, len(cards)),
             "extend_step": EXTEND_STEP,
@@ -633,6 +655,36 @@ def main() -> None:
     deck = build_deck(posts, now, profile)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(deck, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    index_payload = {
+        key: value
+        for key, value in deck.items()
+        if key != "windows"
+    }
+    index_payload["windows"] = {
+        key: {field: value for field, value in window.items() if field != "cards"}
+        for key, window in deck["windows"].items()
+    }
+    index_path = output_path.with_name("signal_deck_index.json")
+    index_path.write_text(
+        json.dumps(index_payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    for key, window in deck["windows"].items():
+        window_payload = {
+            "schema_version": deck["schema_version"],
+            "generated_at": deck["generated_at"],
+            "refresh_policy": deck["refresh_policy"],
+            "window_key": key,
+            "window": window,
+        }
+        window_path = output_path.with_name(f"signal_deck_{key}.json")
+        window_path.write_text(
+            json.dumps(window_payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
     print(
         "[signal-deck] generated post-level deck",
         {key: value["card_count"] for key, value in deck["windows"].items()},
