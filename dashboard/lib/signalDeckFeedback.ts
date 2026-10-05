@@ -1,7 +1,7 @@
 import { get, list, put } from "@vercel/blob";
 import { createHash } from "node:crypto";
 
-export type TriageLabel = "relevant" | "irrelevant";
+export type TriageLabel = "relevant" | "irrelevant" | "unsure";
 
 export type SignalDeckFeedback = {
   id: string;
@@ -175,7 +175,11 @@ export function buildRelevanceProfile(
   now = new Date()
 ): RelevanceProfile {
   const cutoff = now.getTime() - 90 * 24 * 60 * 60 * 1000;
-  const recent = rows.filter((row) => Date.parse(row.reviewed_at) >= cutoff);
+  const recent = rows.filter(
+    (row) =>
+      Date.parse(row.reviewed_at) >= cutoff &&
+      (row.label === "relevant" || row.label === "irrelevant")
+  );
 
   const featureCounts = new Map<string, { relevant: number; irrelevant: number }>();
   const categoryCounts = new Map<string, { relevant: number; irrelevant: number }>();
