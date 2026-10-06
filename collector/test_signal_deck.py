@@ -329,6 +329,115 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertGreaterEqual(window["high_confidence_count"], 1)
         self.assertGreaterEqual(window["medium_confidence_count"], 1)
 
+
+    def test_target_fit_demotes_generic_concert_questions_but_keeps_operational_needs(self):
+        now = datetime(2026, 10, 6, 15, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "recommend",
+                "text": "D.O. 的演唱會推薦看嗎？突然想去但不知道演唱會氛圍如何。",
+                "username": "recommend",
+                "permalink": "https://www.threads.com/@recommend/post/recommend",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "lottery",
+                "text": "想問田馥甄演唱會是不是選全區抽中率比較高？大家會怎麼選？",
+                "username": "lottery",
+                "permalink": "https://www.threads.com/@lottery/post/lottery",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "recording",
+                "text": "請問演唱會用 S26 Ultra 錄影的設定怎麼調？防手震跟對焦要開什麼比較好？",
+                "username": "recording",
+                "permalink": "https://www.threads.com/@recording/post/recording",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "postprocess",
+                "text": "為什麼演唱會拍的影片上傳夸克再下載到相冊會變暗？是不是解碼問題？",
+                "username": "postprocess",
+                "permalink": "https://www.threads.com/@postprocess/post/postprocess",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        self.assertIn("recording", by_id)
+        self.assertEqual(by_id["recording"]["candidate_confidence"], "high")
+        self.assertIn("live_recording_setup", by_id["recording"]["target_fit_signals"])
+
+        self.assertNotIn("recommend", by_id)
+        self.assertNotIn("lottery", by_id)
+        self.assertNotIn("postprocess", by_id)
+        self.assertGreaterEqual(window["low_confidence_count"], 3)
+
+    def test_target_fit_keeps_core_next_stop_patterns(self):
+        now = datetime(2026, 10, 6, 15, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "mobility",
+                "text": "有人知道演唱會大概幾點結束嗎？因為要趕高鐵，在想要買幾點的票。",
+                "username": "mobility",
+                "permalink": "https://www.threads.com/@mobility/post/mobility",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 65,
+            },
+            {
+                "id": "stay",
+                "text": "有去曼谷看演唱會的人嗎？想找離 Impact 近的酒店，最好樓下有 711。",
+                "username": "stay",
+                "permalink": "https://www.threads.com/@stay/post/stay",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 65,
+            },
+            {
+                "id": "solo",
+                "text": "我在糾結要不要去香港看演唱會，但一個人去有點尷尬。",
+                "username": "solo",
+                "permalink": "https://www.threads.com/@solo/post/solo",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 65,
+            },
+            {
+                "id": "ticket-commitment",
+                "text": "求一張日本場門票，機票已經買好了但抽選落選，真的不知道下一步怎麼辦。",
+                "username": "ticket",
+                "permalink": "https://www.threads.com/@ticket/post/ticket",
+                "timestamp": "2026-10-06T14:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 65,
+            },
+        ]
+
+        cards = {card["post_id"]: card for card in build_deck(posts, now)["windows"]["1d"]["cards"]}
+        for post_id in ("mobility", "stay", "solo", "ticket-commitment"):
+            self.assertIn(post_id, cards)
+            self.assertIn(cards[post_id]["candidate_confidence"], {"high", "medium"})
+            self.assertGreaterEqual(cards[post_id]["target_fit_score"], 2)
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
