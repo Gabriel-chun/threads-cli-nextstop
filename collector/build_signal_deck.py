@@ -159,6 +159,40 @@ STAFFING_OR_PROMO_MARKERS = re.compile(
 )
 
 
+LIVE_RECORDING_SETUP_MARKERS = re.compile(
+    r"錄影|录像|錄像|錄製|录制|拍攝|拍摄|相機|相机|手機|手机|camera|video"
+    r"|防手震|防抖|對焦|对焦|fps|4k|8k|zoom|曝光|快門|快门|iso|camera\s*assistant",
+    re.I,
+)
+
+VENUE_OPERATION_MARKERS = re.compile(
+    r"寄物|寄存|置物|行李|入口|安檢|安检|接待處|接待处|再次進入|再次进入|離場|离场"
+    r"|locker|bag\s*(?:size|policy)|security\s*check|re[- ]?entry|entrance|gate",
+    re.I,
+)
+
+PARTICIPATION_PREP_MARKERS = re.compile(
+    r"手燈.*(?:連線|连线|中控)|(?:連線|连线|中控).*手燈|應援.*交換|应援.*交换"
+    r"|場T|场T|排隊|排队|幾點到|几点到|多久到|提早到|提前到",
+    re.I,
+)
+
+CROSS_CITY_ATTENDANCE_MARKERS = re.compile(
+    r"去香港|去澳門|去澳门|去台北|去臺北|去高雄|去日本|去韓國|去韩国|去曼谷|去深圳"
+    r"|跨城|外地|機票|机票|火車去|火车去|高鐵去|高铁去|飛去|飞去"
+    r"|travel\s+to|fly\s+to|train\s+to",
+    re.I,
+)
+
+GENERIC_CONCERT_DECISION_MARKERS = re.compile(
+    r"推薦看嗎|推荐看吗|值不值得看|值得去嗎|值得去吗|氛圍如何|氛围如何"
+    r"|抽中率|中籤率|中签率|選全區|选全区|standing\s+or\s+seat"
+    r"|有拍到|有没有拍到|有沒有拍到|找.*影片|徵.*影片|征.*影片"
+    r"|下載到相冊|下载到相册|網盤|网盘|解碼|解码",
+    re.I,
+)
+
+
 ENGLISH_CONTEXT = re.compile(
     r"\b(?:the|a|an|is|are|was|were|to|from|at|in|on|for|with|after|before|near|"
     r"how|where|what|when|can|could|should|would|need|want|stay|hotel|hostel|"
@@ -325,10 +359,68 @@ def actionability_band(score: float) -> str:
     return "low"
 
 
-def candidate_confidence(intent_score: float) -> str:
-    if intent_score >= 4:
+def target_fit_profile(
+    text: str,
+    features: set[str],
+    need_nodes: list[str],
+) -> tuple[float, list[str], list[str]]:
+    score = 0.0
+    signals: list[str] = []
+    penalties: list[str] = []
+    nodes = set(need_nodes)
+
+    if "mobility" in nodes:
+        score += 4.0
+        signals.append("mobility")
+    if "stay" in nodes:
+        score += 4.0
+        signals.append("stay")
+    if "venue_outside" in nodes:
+        score += 4.0
+        signals.append("venue_outside")
+    if "trip_extension" in nodes and LOGISTICS_CONTEXT_MARKERS.search(text):
+        score += 3.0
+        signals.append("post_event_nearby")
+    if "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text):
+        score += 3.0
+        signals.append("venue_operation")
+    if LIVE_RECORDING_SETUP_MARKERS.search(text) and QUESTION.search(text):
+        score += 4.0
+        signals.append("live_recording_setup")
+    if PARTICIPATION_PREP_MARKERS.search(text) and (QUESTION.search(text) or USER_DECISION_MARKERS.search(text)):
+        score += 3.0
+        signals.append("participation_prep")
+    if "solo_attendance" in features and (
+        CROSS_CITY_ATTENDANCE_MARKERS.search(text) or USER_DECISION_MARKERS.search(text)
+    ):
+        score += 3.0
+        signals.append("solo_or_cross_city")
+    if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and USER_DECISION_MARKERS.search(text):
+        score += 2.0
+        signals.append("cross_city_commitment")
+
+    if GENERIC_CONCERT_DECISION_MARKERS.search(text) and not signals:
+        score -= 4.0
+        penalties.append("generic_concert_question")
+    if "ticketing_need" in features and not (
+        CROSS_CITY_ATTENDANCE_MARKERS.search(text) or "venue_inside" in nodes
+    ):
+        score -= 2.0
+        penalties.append("ticketing_only")
+    if "merch_need" in features and not PARTICIPATION_PREP_MARKERS.search(text):
+        score -= 2.0
+        penalties.append("merch_only")
+    if "vip_benefit" in features and "trip_extension" not in nodes and not CROSS_CITY_ATTENDANCE_MARKERS.search(text):
+        score -= 2.0
+        penalties.append("vip_only")
+
+    return round(max(-10.0, min(12.0, score)), 3), signals, penalties
+
+
+def candidate_confidence(intent_score: float, target_fit_score: float) -> str:
+    if intent_score >= 4 and target_fit_score >= 4:
         return "high"
-    if intent_score >= 1:
+    if intent_score >= 1 and target_fit_score >= 2:
         return "medium"
     return "low"
 
@@ -512,6 +604,11 @@ def build_post_card(
     language_context, language_tokens = detect_language_context(text)
     need_nodes, need_terms, need_edges = extract_need_network(text)
     intent_score, intent_signals, intent_penalties = intent_profile(text, need_nodes)
+    target_fit_score, target_fit_signals, target_fit_penalties = target_fit_profile(
+        text,
+        feature_set,
+        need_nodes,
+    )
     base = base_score(post, text, ts, now)
     action_score = actionability_score(
         text,
@@ -540,7 +637,11 @@ def build_post_card(
         "ranking_delta": ranking_delta,
         "intent_score": intent_score,
         "intent_band": "high" if intent_score >= 4 else "medium" if intent_score >= 1 else "low",
-        "candidate_confidence": candidate_confidence(intent_score),
+        "candidate_confidence": candidate_confidence(intent_score, target_fit_score),
+        "target_fit_score": target_fit_score,
+        "target_fit_band": "high" if target_fit_score >= 4 else "medium" if target_fit_score >= 2 else "low",
+        "target_fit_signals": target_fit_signals,
+        "target_fit_penalties": target_fit_penalties,
         "intent_signals": intent_signals,
         "intent_penalties": intent_penalties,
         "language_context": language_context,
