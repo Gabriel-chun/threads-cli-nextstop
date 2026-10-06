@@ -1,10 +1,10 @@
 {
   "schema_version": "signal-deck-v0.4",
   "card_granularity": "post",
-  "generated_at": "2026-10-06T00:03:08.394711Z",
+  "generated_at": "2026-10-06T15:29:27.443561Z",
   "refresh_policy": "daily",
   "source": "collector/archive/latest/master.json",
-  "source_master_count": 951,
+  "source_master_count": 1005,
   "relevance_profile": {
     "applied": true,
     "schema_version": "relevance-profile-v0.3",
@@ -15,60 +15,68 @@
     "1d": {
       "label": "1日",
       "days": 1,
-      "signal_count": 61,
-      "eligible_count": 12,
-      "high_confidence_count": 11,
+      "signal_count": 35,
+      "eligible_count": 2,
+      "high_confidence_count": 1,
       "medium_confidence_count": 1,
       "medium_sampled_count": 1,
-      "low_confidence_count": 49,
-      "card_count": 12,
-      "default_review_limit": 12,
+      "low_confidence_count": 33,
+      "card_count": 2,
+      "default_review_limit": 2,
       "extend_step": 10,
       "display_limit": 5,
       "cards": [
         {
-          "id": "post_9d908b44e4f40806",
-          "post_key": "post_9d908b44e4f40806",
-          "snapshot_id": "deck_2026-10-06_1d_9d908b44e4f40806",
-          "post_id": "4001171083566979743",
-          "category": "VIP／互動福利",
+          "id": "post_816ba92dfec2b61e",
+          "post_key": "post_816ba92dfec2b61e",
+          "snapshot_id": "deck_2026-10-06_1d_816ba92dfec2b61e",
+          "post_id": "4001914170496727278",
+          "category": "交通／散場",
           "kind": "actionable",
-          "status": "今日",
-          "score": 80.383,
-          "base_score": 68.652,
-          "actionability_score": 14.0,
+          "status": "現在",
+          "score": 92.537,
+          "base_score": 70.944,
+          "actionability_score": 21.0,
           "actionability_band": "high",
-          "ranking_delta": -2.269,
-          "intent_score": 9.0,
+          "ranking_delta": 0.593,
+          "intent_score": 10.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
+            "need_question",
             "action_marker",
             "logistics_context"
           ],
           "intent_penalties": [],
           "language_context": "zh_hant",
           "language_tokens": [
-            "仲",
-            "演唱會"
+            "演唱會",
+            "高鐵"
           ],
           "need_nodes": [
-            "trip_extension"
+            "mobility"
           ],
           "need_terms": [
-            "附近"
+            "高鐵"
           ],
           "need_edges": [],
           "feature_tags": [
-            "vip_benefit"
+            "question_intent",
+            "transport_need"
           ],
-          "username": "lcu_0.0724",
-          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
-          "summary": "幹幹演唱會結束後我想說我家附近的711 應該會比較少人就提議朋友一起去那裡集合 到了一段時間發現盧廣仲來這間711！！ 真的超超超超超激動！！！！ 歐買尬我真的超佩服我自己的提議！！ 也超感謝我朋友有發現！！ 超級開心可以跟本人合照❤️😭",
-          "permalink": "https://www.threads.com/@lcu_0.0724/post/DeHA-bBkxqf",
-          "posted_at": "2026-10-05T10:39:44Z",
-          "media_type": "IMAGE",
+          "username": "otter.7097830",
+          "text": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？\n因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時\n\n如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "summary": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？ 因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時 如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "permalink": "https://www.threads.com/@otter.7097830/post/DeJp7wqDzju",
+          "posted_at": "2026-10-06T11:16:06Z",
+          "media_type": "TEXT_POST",
           "query": "演唱會",
           "source_queries": [
             "演唱會"
@@ -85,15 +93,21 @@
           "post_id": "4001347602201424615",
           "category": "其他演出內容",
           "kind": "context",
-          "status": "現在",
-          "score": 74.993,
-          "base_score": 70.114,
+          "status": "今日",
+          "score": 71.133,
+          "base_score": 66.254,
           "actionability_score": 7.6,
           "actionability_band": "medium",
           "ranking_delta": -2.721,
           "intent_score": 3.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "need_question",
             "action_marker",
@@ -131,569 +145,77 @@
             "threads_ssr"
           ],
           "source": "Threads"
-        },
-        {
-          "id": "post_2daa888af871843d",
-          "post_key": "post_2daa888af871843d",
-          "snapshot_id": "deck_2026-10-06_1d_2daa888af871843d",
-          "post_id": "4001402599399972684",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "現在",
-          "score": 64.848,
-          "base_score": 70.569,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "怎麼"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "21.yu.yu",
-          "text": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？\n大家會怎麼選呢▓▓",
-          "summary": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？ 大家會怎麼選呢▓▓",
-          "permalink": "https://www.threads.com/@21.yu.yu/post/DeH1na8j19M",
-          "posted_at": "2026-10-05T18:19:42Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_8972321a62fffa20",
-          "post_key": "post_8972321a62fffa20",
-          "snapshot_id": "deck_2026-10-06_1d_8972321a62fffa20",
-          "post_id": "4001328548728226731",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.235,
-          "base_score": 69.956,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "wnshyuin_",
-          "text": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、\n我們太激動沒錄到、、\n希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "summary": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、 我們太激動沒錄到、、 希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "permalink": "https://www.threads.com/@wnshyuin_/post/DeHkx14k0Or",
-          "posted_at": "2026-10-05T15:52:35Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_694a3b550e1eaed0",
-          "post_key": "post_694a3b550e1eaed0",
-          "snapshot_id": "deck_2026-10-06_1d_694a3b550e1eaed0",
-          "post_id": "4001148649181629748",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.225,
-          "base_score": 68.467,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "睇",
-            "唔",
-            "紅館",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "ricericeclub",
-          "text": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "summary": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "permalink": "https://www.threads.com/@ricericeclub/post/DeG739YAU00",
-          "posted_at": "2026-10-05T09:55:09Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_1b2f5ff00457091c",
-          "post_key": "post_1b2f5ff00457091c",
-          "snapshot_id": "deck_2026-10-06_1d_1b2f5ff00457091c",
-          "post_id": "4001066148414876232",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.542,
-          "base_score": 67.784,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "mmmochi111",
-          "text": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "summary": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "permalink": "https://www.threads.com/@mmmochi111/post/DeGpHajG-pI",
-          "posted_at": "2026-10-05T07:11:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_540f2310958a17a5",
-          "post_key": "post_540f2310958a17a5",
-          "snapshot_id": "deck_2026-10-06_1d_540f2310958a17a5",
-          "post_id": "4001242831666825336",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.525,
-          "base_score": 69.246,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "_eating.x",
-          "text": "D.O. 的演唱會推薦看嗎？\n只是音粉，會上月回顧前五的程度\n但是不會關注本人的活動\n突然想要看一下但不知道演唱會氛圍如何🥹",
-          "summary": "D.O. 的演唱會推薦看嗎？ 只是音粉，會上月回顧前五的程度 但是不會關注本人的活動 突然想要看一下但不知道演唱會氛圍如何🥹",
-          "permalink": "https://www.threads.com/@_eating.x/post/DeHRSfplEh4",
-          "posted_at": "2026-10-05T13:02:17Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_d59acb8fde82998c",
-          "post_key": "post_d59acb8fde82998c",
-          "snapshot_id": "deck_2026-10-06_1d_d59acb8fde82998c",
-          "post_id": "4001207910713659982",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.25,
-          "base_score": 68.971,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "sharonorahs_j",
-          "text": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "summary": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "permalink": "https://www.threads.com/@sharonorahs_j/post/DeHJWU-khJO",
-          "posted_at": "2026-10-05T11:56:10Z",
-          "media_type": "VIDEO",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_9fc1dfeaab356fde",
-          "post_key": "post_9fc1dfeaab356fde",
-          "snapshot_id": "deck_2026-10-06_1d_9fc1dfeaab356fde",
-          "post_id": "4001179676756889129",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.003,
-          "base_score": 68.724,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "怎么",
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "rabbit.7682952",
-          "text": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。\n但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。\n喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。\n三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在这装什么大爆料的人，只想说喜欢他就是最幸福的事。\n希望下一站想去见面的小女孩都能抢到票，追星本身就是一件开心的事，我永远活在这样的期待里，雀跃在每一个相信的瞬间。",
-          "summary": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。 但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。 喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。 三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在…",
-          "permalink": "https://www.threads.com/@rabbit.7682952/post/DeHC7eDm04p",
-          "posted_at": "2026-10-05T10:56:48Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_414aa4af1da1ed25",
-          "post_key": "post_414aa4af1da1ed25",
-          "snapshot_id": "deck_2026-10-06_1d_414aa4af1da1ed25",
-          "post_id": "4001057201175414298",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.989,
-          "base_score": 67.71,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "milovegd818",
-          "text": "請問有推薦錄影演唱會s26ultra的設定參數嗎？我都是用一般模式沒特別調 有開防手震 但覺得錄起來比s24ultra 還糊 臉無法對焦 還有下載camera assistant會比較好嗎🤔",
-          "summary": "請問有推薦錄影演唱會s26ultra的設定參數嗎？我都是用一般模式沒特別調 有開防手震 但覺得錄起來比s24ultra 還糊 臉無法對焦 還有下載camera assistant會比較好嗎🤔",
-          "permalink": "https://www.threads.com/@milovegd818/post/DeGnFNyFEYa",
-          "posted_at": "2026-10-05T06:53:28Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_ec7d603064aee3a4",
-          "post_key": "post_ec7d603064aee3a4",
-          "snapshot_id": "deck_2026-10-06_1d_ec7d603064aee3a4",
-          "post_id": "4001053926959049808",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.962,
-          "base_score": 67.683,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "tatibana123987",
-          "text": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "summary": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "permalink": "https://www.threads.com/@tatibana123987/post/DeGmVkbk2xQ",
-          "posted_at": "2026-10-05T06:46:57Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_011ef9d41adc0be9",
-          "post_key": "post_011ef9d41adc0be9",
-          "snapshot_id": "deck_2026-10-06_1d_011ef9d41adc0be9",
-          "post_id": "4001043230804726487",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.873,
-          "base_score": 67.594,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "did00940",
-          "text": "演唱會初心者\n\n請問優里演唱會\n\n➡️15:30開放 17:00開演\n      建議幾點到呢？\n\n➡️有限制包包大小嗎？ \n      進去會檢查？\n\n➡️喉糖、小糖果可以帶嗎？\n\n還有什麼需要帶或是注意的嗎？\n\n▓謝謝大家！",
-          "summary": "演唱會初心者 請問優里演唱會 ➡️15:30開放 17:00開演 建議幾點到呢？ ➡️有限制包包大小嗎？ 進去會檢查？ ➡️喉糖、小糖果可以帶嗎？ 還有什麼需要帶或是注意的嗎？ ▓謝謝大家！",
-          "permalink": "https://www.threads.com/@did00940/post/DeGj563GNLX",
-          "posted_at": "2026-10-05T06:25:42Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
         }
       ]
     },
     "3d": {
       "label": "3日",
       "days": 3,
-      "signal_count": 208,
-      "eligible_count": 31,
-      "high_confidence_count": 29,
-      "medium_confidence_count": 2,
-      "medium_sampled_count": 2,
-      "low_confidence_count": 177,
-      "card_count": 31,
-      "default_review_limit": 31,
+      "signal_count": 182,
+      "eligible_count": 9,
+      "high_confidence_count": 5,
+      "medium_confidence_count": 4,
+      "medium_sampled_count": 4,
+      "low_confidence_count": 173,
+      "card_count": 9,
+      "default_review_limit": 9,
       "extend_step": 10,
       "display_limit": 5,
       "cards": [
         {
-          "id": "post_9d908b44e4f40806",
-          "post_key": "post_9d908b44e4f40806",
-          "snapshot_id": "deck_2026-10-06_3d_9d908b44e4f40806",
-          "post_id": "4001171083566979743",
-          "category": "VIP／互動福利",
+          "id": "post_816ba92dfec2b61e",
+          "post_key": "post_816ba92dfec2b61e",
+          "snapshot_id": "deck_2026-10-06_3d_816ba92dfec2b61e",
+          "post_id": "4001914170496727278",
+          "category": "交通／散場",
           "kind": "actionable",
-          "status": "今日",
-          "score": 80.383,
-          "base_score": 68.652,
-          "actionability_score": 14.0,
+          "status": "現在",
+          "score": 92.537,
+          "base_score": 70.944,
+          "actionability_score": 21.0,
           "actionability_band": "high",
-          "ranking_delta": -2.269,
-          "intent_score": 9.0,
+          "ranking_delta": 0.593,
+          "intent_score": 10.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
+            "need_question",
             "action_marker",
             "logistics_context"
           ],
           "intent_penalties": [],
           "language_context": "zh_hant",
           "language_tokens": [
-            "仲",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "trip_extension"
-          ],
-          "need_terms": [
-            "附近"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "vip_benefit"
-          ],
-          "username": "lcu_0.0724",
-          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
-          "summary": "幹幹演唱會結束後我想說我家附近的711 應該會比較少人就提議朋友一起去那裡集合 到了一段時間發現盧廣仲來這間711！！ 真的超超超超超激動！！！！ 歐買尬我真的超佩服我自己的提議！！ 也超感謝我朋友有發現！！ 超級開心可以跟本人合照❤️😭",
-          "permalink": "https://www.threads.com/@lcu_0.0724/post/DeHA-bBkxqf",
-          "posted_at": "2026-10-05T10:39:44Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_6944ca4a3db30c2a",
-          "post_key": "post_6944ca4a3db30c2a",
-          "snapshot_id": "deck_2026-10-06_3d_6944ca4a3db30c2a",
-          "post_id": "3999853102128936478",
-          "category": "交通／散場",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 78.452,
-          "base_score": 60.0,
-          "actionability_score": 13.0,
-          "actionability_band": "high",
-          "ranking_delta": 5.452,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
+            "演唱會",
+            "高鐵"
           ],
           "need_nodes": [
             "mobility"
           ],
           "need_terms": [
-            "火车"
+            "高鐵"
           ],
           "need_edges": [],
           "feature_tags": [
+            "question_intent",
             "transport_need"
           ],
-          "username": "juhoon2006",
-          "text": "我准备坐18小时火车去深圳 \n看bts香港演唱会",
-          "summary": "我准备坐18小时火车去深圳 看bts香港演唱会",
-          "permalink": "https://www.threads.com/@juhoon2006/post/DeCVTRKI7Ye",
-          "posted_at": "2026-10-03T15:01:08Z",
+          "username": "otter.7097830",
+          "text": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？\n因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時\n\n如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "summary": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？ 因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時 如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "permalink": "https://www.threads.com/@otter.7097830/post/DeJp7wqDzju",
+          "posted_at": "2026-10-06T11:16:06Z",
           "media_type": "TEXT_POST",
-          "query": "演唱会",
+          "query": "演唱會",
           "source_queries": [
-            "演唱会"
+            "演唱會"
           ],
           "retrieval_sources": [
             "threads_ssr"
@@ -716,6 +238,12 @@
           "intent_score": 6.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "stay"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "action_marker"
@@ -752,21 +280,141 @@
           "source": "Threads"
         },
         {
+          "id": "post_9d908b44e4f40806",
+          "post_key": "post_9d908b44e4f40806",
+          "snapshot_id": "deck_2026-10-06_3d_9d908b44e4f40806",
+          "post_id": "4001171083566979743",
+          "category": "VIP／互動福利",
+          "kind": "actionable",
+          "status": "近期",
+          "score": 76.524,
+          "base_score": 64.793,
+          "actionability_score": 14.0,
+          "actionability_band": "high",
+          "ranking_delta": -2.269,
+          "intent_score": 9.0,
+          "intent_band": "high",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "user_decision",
+            "action_marker",
+            "logistics_context"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hant",
+          "language_tokens": [
+            "仲",
+            "演唱會"
+          ],
+          "need_nodes": [
+            "trip_extension"
+          ],
+          "need_terms": [
+            "附近"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "vip_benefit"
+          ],
+          "username": "lcu_0.0724",
+          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
+          "summary": "幹幹演唱會結束後我想說我家附近的711 應該會比較少人就提議朋友一起去那裡集合 到了一段時間發現盧廣仲來這間711！！ 真的超超超超超激動！！！！ 歐買尬我真的超佩服我自己的提議！！ 也超感謝我朋友有發現！！ 超級開心可以跟本人合照❤️😭",
+          "permalink": "https://www.threads.com/@lcu_0.0724/post/DeHA-bBkxqf",
+          "posted_at": "2026-10-05T10:39:44Z",
+          "media_type": "IMAGE",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
+          "id": "post_05cf2fb4c705cd2c",
+          "post_key": "post_05cf2fb4c705cd2c",
+          "snapshot_id": "deck_2026-10-06_3d_05cf2fb4c705cd2c",
+          "post_id": "4000265648223918487",
+          "category": "其他演出內容",
+          "kind": "context",
+          "status": "近期",
+          "score": 72.279,
+          "base_score": 60.0,
+          "actionability_score": 15.0,
+          "actionability_band": "high",
+          "ranking_delta": -2.721,
+          "intent_score": 5.0,
+          "intent_band": "high",
+          "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "stay"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "need_question",
+            "logistics_context"
+          ],
+          "intent_penalties": [],
+          "language_context": "english",
+          "language_tokens": [
+            "concert"
+          ],
+          "need_nodes": [
+            "stay"
+          ],
+          "need_terms": [
+            "checkin"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "question_intent"
+          ],
+          "username": "sacredheartseeker",
+          "text": "Just checking in with Monbebes! How was the first start on the Monsta X concert everyone? I would love to know. Have lots of fun Monbebes!▓",
+          "summary": "Just checking in with Monbebes! How was the first start on the Monsta X concert everyone? I would love to know. Have lots of fun Monbebes!▓",
+          "permalink": "https://www.threads.com/@sacredheartseeker/post/DeDzGmplZmX",
+          "posted_at": "2026-10-04T04:40:47Z",
+          "media_type": "TEXT_POST",
+          "query": "concert",
+          "source_queries": [
+            "concert"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
           "id": "post_3bd6d8b794fda58a",
           "post_key": "post_3bd6d8b794fda58a",
           "snapshot_id": "deck_2026-10-06_3d_3bd6d8b794fda58a",
           "post_id": "4001347602201424615",
           "category": "其他演出內容",
           "kind": "context",
-          "status": "現在",
-          "score": 74.993,
-          "base_score": 70.114,
+          "status": "今日",
+          "score": 71.133,
+          "base_score": 66.254,
           "actionability_score": 7.6,
           "actionability_band": "medium",
           "ranking_delta": -2.721,
           "intent_score": 3.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "need_question",
             "action_marker",
@@ -806,56 +454,6 @@
           "source": "Threads"
         },
         {
-          "id": "post_05cf2fb4c705cd2c",
-          "post_key": "post_05cf2fb4c705cd2c",
-          "snapshot_id": "deck_2026-10-06_3d_05cf2fb4c705cd2c",
-          "post_id": "4000265648223918487",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 73.436,
-          "base_score": 61.157,
-          "actionability_score": 15.0,
-          "actionability_band": "high",
-          "ranking_delta": -2.721,
-          "intent_score": 5.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "need_question",
-            "logistics_context"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [
-            "stay"
-          ],
-          "need_terms": [
-            "checkin"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "sacredheartseeker",
-          "text": "Just checking in with Monbebes! How was the first start on the Monsta X concert everyone? I would love to know. Have lots of fun Monbebes!▓",
-          "summary": "Just checking in with Monbebes! How was the first start on the Monsta X concert everyone? I would love to know. Have lots of fun Monbebes!▓",
-          "permalink": "https://www.threads.com/@sacredheartseeker/post/DeDzGmplZmX",
-          "posted_at": "2026-10-04T04:40:47Z",
-          "media_type": "TEXT_POST",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
           "id": "post_bbbb49a1c9b68afc",
           "post_key": "post_bbbb49a1c9b68afc",
           "snapshot_id": "deck_2026-10-06_3d_bbbb49a1c9b68afc",
@@ -863,15 +461,22 @@
           "category": "陪同／Solo Attendance",
           "kind": "actionable",
           "status": "近期",
-          "score": 69.541,
-          "base_score": 60.218,
-          "actionability_score": 10.0,
-          "actionability_band": "medium",
-          "ranking_delta": -0.677,
-          "intent_score": 5.0,
+          "score": 70.845,
+          "base_score": 60.0,
+          "actionability_score": 13.0,
+          "actionability_band": "high",
+          "ranking_delta": -2.155,
+          "intent_score": 7.0,
           "intent_band": "high",
-          "candidate_confidence": "high",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
+            "need_question",
             "action_marker",
             "logistics_context"
           ],
@@ -888,6 +493,7 @@
           ],
           "need_edges": [],
           "feature_tags": [
+            "question_intent",
             "solo_attendance"
           ],
           "username": "mmkkvvii22",
@@ -906,466 +512,107 @@
           "source": "Threads"
         },
         {
-          "id": "post_3c2e7f9b5e15bd1d",
-          "post_key": "post_3c2e7f9b5e15bd1d",
-          "snapshot_id": "deck_2026-10-06_3d_3c2e7f9b5e15bd1d",
-          "post_id": "3999638749344516291",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
+          "id": "post_c59d9628732c16e1",
+          "post_key": "post_c59d9628732c16e1",
+          "snapshot_id": "deck_2026-10-06_3d_c59d9628732c16e1",
+          "post_id": "4000532233832058754",
+          "category": "其他演出內容",
+          "kind": "context",
           "status": "近期",
-          "score": 69.0,
+          "score": 64.879,
           "base_score": 60.0,
-          "actionability_score": 13.0,
-          "actionability_band": "high",
-          "ranking_delta": -4.0,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "入場"
-          ],
-          "need_nodes": [
-            "venue_inside"
-          ],
-          "need_terms": [
-            "入場"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "yuenieee_",
-          "text": "請問有人想要看今晚的溫流演唱會嗎？\n主辦贈票原先說是一張但又多送了一張給我\n希望找個有緣人一起入場！(已在場外)",
-          "summary": "請問有人想要看今晚的溫流演唱會嗎？ 主辦贈票原先說是一張但又多送了一張給我 希望找個有緣人一起入場！(已在場外)",
-          "permalink": "https://www.threads.com/@yuenieee_/post/DeBkkBkkUjD",
-          "posted_at": "2026-10-03T07:55:15Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_215ea3a36ed73bcd",
-          "post_key": "post_215ea3a36ed73bcd",
-          "snapshot_id": "deck_2026-10-06_3d_215ea3a36ed73bcd",
-          "post_id": "3999656289487699992",
-          "category": "周邊／現場商品",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 65.298,
-          "base_score": 60.0,
-          "actionability_score": 9.0,
+          "actionability_score": 7.6,
           "actionability_band": "medium",
-          "ranking_delta": -3.702,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
+          "ranking_delta": -2.721,
+          "intent_score": 3.0,
+          "intent_band": "medium",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
           ],
-          "intent_penalties": [],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "need_question",
+            "action_marker",
+            "logistics_context"
+          ],
+          "intent_penalties": [
+            "third_party_logistics"
+          ],
           "language_context": "zh_hant",
           "language_tokens": [
             "演唱會"
           ],
           "need_nodes": [
-            "wear_support"
+            "trip_extension"
           ],
           "need_terms": [
-            "手燈"
+            "附近"
           ],
-          "need_edges": [],
-          "feature_tags": [
-            "merch_need",
-            "question_intent"
-          ],
-          "username": "ohitsmiko_",
-          "text": "想請問各位噗哩><\n手燈跟演唱會連線是正式才會開嗎～",
-          "summary": "想請問各位噗哩>< 手燈跟演唱會連線是正式才會開嗎～",
-          "permalink": "https://www.threads.com/@ohitsmiko_/post/DeBojRGkkAY",
-          "posted_at": "2026-10-03T08:30:06Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_16f44fa62c311cd0",
-          "post_key": "post_16f44fa62c311cd0",
-          "snapshot_id": "deck_2026-10-06_3d_16f44fa62c311cd0",
-          "post_id": "4000638565436512556",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 65.244,
-          "base_score": 64.244,
-          "actionability_score": 5.0,
-          "actionability_band": "medium",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "入場"
-          ],
-          "need_nodes": [
-            "venue_inside"
-          ],
-          "need_terms": [
-            "入場"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "long_fandom_story",
-            "ticketing_need"
-          ],
-          "username": "chupeiyi",
-          "text": "有關10/4的吉卜力動畫演唱會，其實我的期望值沒有拉得很高，但是基於都是原創歌手，所以還是買了下去，當初也是以為會很難搶票，但疏不知票好買之外，票房甚至慘到不行，我在3F放眼望去(2F我看不到)我猜應該沒有坐滿一半。\n\n說也奇怪，我看主辦單位廣告其實打滿兇的，但真的很多人根本不知道有這場演唱會，真的很邪門。\n\n下午一到台北小巨蛋門口，我真的滿頭問號懷疑人生，完全看不到任何活動旗幟和看板，唯一看到的只有入場的指示牌和入場時間，得以證明這邊有活動沒錯...說好的5點入場其實也沒有準時開放 (其實我覺得沒準時也沒差了...因為人數太少)；我原本想說可能外面沒看板就算了，裡面搞不好還有可以拍的，或是節目手冊可以看，結果我想太多了，各位觀眾：「什‧麼‧都‧沒‧有」，我頭一次參加演藝活動卻沒看到任何文宣的，真的很離譜。",
-          "summary": "有關10/4的吉卜力動畫演唱會，其實我的期望值沒有拉得很高，但是基於都是原創歌手，所以還是買了下去，當初也是以為會很難搶票，但疏不知票好買之外，票房甚至慘到不行，我在3F放眼望去(2F我看不到)我猜應該沒有坐滿一半。 說也奇怪，我看主辦單位廣告其實打滿兇的，但真的很多人根本不知道有這場演唱會，真的很邪門。 下午一到台北小巨蛋門口，我真的滿頭問號懷疑人生，完…",
-          "permalink": "https://www.threads.com/@chupeiyi/post/DeFH5Q3klks",
-          "posted_at": "2026-10-04T17:01:42Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_2daa888af871843d",
-          "post_key": "post_2daa888af871843d",
-          "snapshot_id": "deck_2026-10-06_3d_2daa888af871843d",
-          "post_id": "4001402599399972684",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "現在",
-          "score": 64.848,
-          "base_score": 70.569,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "怎麼"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
           "need_edges": [],
           "feature_tags": [
             "question_intent"
           ],
-          "username": "21.yu.yu",
-          "text": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？\n大家會怎麼選呢▓▓",
-          "summary": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？ 大家會怎麼選呢▓▓",
-          "permalink": "https://www.threads.com/@21.yu.yu/post/DeH1na8j19M",
-          "posted_at": "2026-10-05T18:19:42Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_8972321a62fffa20",
-          "post_key": "post_8972321a62fffa20",
-          "snapshot_id": "deck_2026-10-06_3d_8972321a62fffa20",
-          "post_id": "4001328548728226731",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.235,
-          "base_score": 69.956,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "wnshyuin_",
-          "text": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、\n我們太激動沒錄到、、\n希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "summary": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、 我們太激動沒錄到、、 希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "permalink": "https://www.threads.com/@wnshyuin_/post/DeHkx14k0Or",
-          "posted_at": "2026-10-05T15:52:35Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_694a3b550e1eaed0",
-          "post_key": "post_694a3b550e1eaed0",
-          "snapshot_id": "deck_2026-10-06_3d_694a3b550e1eaed0",
-          "post_id": "4001148649181629748",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.225,
-          "base_score": 68.467,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "睇",
-            "唔",
-            "紅館",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "ricericeclub",
-          "text": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "summary": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "permalink": "https://www.threads.com/@ricericeclub/post/DeG739YAU00",
-          "posted_at": "2026-10-05T09:55:09Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_1b2f5ff00457091c",
-          "post_key": "post_1b2f5ff00457091c",
-          "snapshot_id": "deck_2026-10-06_3d_1b2f5ff00457091c",
-          "post_id": "4001066148414876232",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.542,
-          "base_score": 67.784,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "mmmochi111",
-          "text": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "summary": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "permalink": "https://www.threads.com/@mmmochi111/post/DeGpHajG-pI",
-          "posted_at": "2026-10-05T07:11:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_540f2310958a17a5",
-          "post_key": "post_540f2310958a17a5",
-          "snapshot_id": "deck_2026-10-06_3d_540f2310958a17a5",
-          "post_id": "4001242831666825336",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.525,
-          "base_score": 69.246,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "_eating.x",
-          "text": "D.O. 的演唱會推薦看嗎？\n只是音粉，會上月回顧前五的程度\n但是不會關注本人的活動\n突然想要看一下但不知道演唱會氛圍如何🥹",
-          "summary": "D.O. 的演唱會推薦看嗎？ 只是音粉，會上月回顧前五的程度 但是不會關注本人的活動 突然想要看一下但不知道演唱會氛圍如何🥹",
-          "permalink": "https://www.threads.com/@_eating.x/post/DeHRSfplEh4",
-          "posted_at": "2026-10-05T13:02:17Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_d59acb8fde82998c",
-          "post_key": "post_d59acb8fde82998c",
-          "snapshot_id": "deck_2026-10-06_3d_d59acb8fde82998c",
-          "post_id": "4001207910713659982",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.25,
-          "base_score": 68.971,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "sharonorahs_j",
-          "text": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "summary": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "permalink": "https://www.threads.com/@sharonorahs_j/post/DeHJWU-khJO",
-          "posted_at": "2026-10-05T11:56:10Z",
-          "media_type": "VIDEO",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_9fc1dfeaab356fde",
-          "post_key": "post_9fc1dfeaab356fde",
-          "snapshot_id": "deck_2026-10-06_3d_9fc1dfeaab356fde",
-          "post_id": "4001179676756889129",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.003,
-          "base_score": 68.724,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "怎么",
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "rabbit.7682952",
-          "text": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。\n但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。\n喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。\n三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在这装什么大爆料的人，只想说喜欢他就是最幸福的事。\n希望下一站想去见面的小女孩都能抢到票，追星本身就是一件开心的事，我永远活在这样的期待里，雀跃在每一个相信的瞬间。",
-          "summary": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。 但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。 喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。 三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在…",
-          "permalink": "https://www.threads.com/@rabbit.7682952/post/DeHC7eDm04p",
-          "posted_at": "2026-10-05T10:56:48Z",
+          "username": "elimisnoa_drawing",
+          "text": "2026.10.4 吉卜力原唱歌手演唱會 參戰\n速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹\n-\n1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去\n2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴\n3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！\n4. 聽到島本很值得⋯還宣傳藥師少女🥹還真不知道旁白是她配的，麵包超人也是回憶殺嗚嗚嗚\n5. 老師們實在是都老了，但韻味也還在，就真的是聽情懷也很滿足⋯\n6.樂團不會到不行，但鋼琴不太行有夠硬也偏隨便，法國號也有小烙賽，都職業樂手了這種芭樂歌真的有很難嗎（\n但樂團的鍋還是決定丟給音控，到底在調什麼我還坐控台附近欸==\n7.其實我是衝著もののけ姫去的，但⋯米良老師⋯唉⋯我覺得知道自己不太行後就退休也是個專業，硬賺錢只會讓粉轉黑而已⋯後面致詞也看起來只想趕快下班⋯",
+          "summary": "2026.10.4 吉卜力原唱歌手演唱會 參戰 速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹 - 1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去 2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴 3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！ 4. 聽到…",
+          "permalink": "https://www.threads.com/@elimisnoa_drawing/post/DeEvt72D0-C",
+          "posted_at": "2026-10-04T13:30:27Z",
           "media_type": "CAROUSEL_ALBUM",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
+          "id": "post_e2496825ea64827c",
+          "post_key": "post_e2496825ea64827c",
+          "snapshot_id": "deck_2026-10-06_3d_e2496825ea64827c",
+          "post_id": "4000590356400544383",
+          "category": "陪同／Solo Attendance",
+          "kind": "actionable",
+          "status": "近期",
+          "score": 63.323,
+          "base_score": 60.0,
+          "actionability_score": 4.0,
+          "actionability_band": "low",
+          "ranking_delta": -0.677,
+          "intent_score": 4.0,
+          "intent_band": "high",
+          "candidate_confidence": "high",
+          "target_fit_score": 5.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "solo_or_cross_city",
+            "cross_city_commitment"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "user_decision"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hans",
+          "language_tokens": [
+            "演唱会"
+          ],
+          "need_nodes": [],
+          "need_terms": [],
+          "need_edges": [],
+          "feature_tags": [
+            "solo_attendance"
+          ],
+          "username": "mark_90001",
+          "text": "我在纠结要不要去看mla演唱会，可是我懒得去香港而且我感觉一个人好尴尬",
+          "summary": "我在纠结要不要去看mla演唱会，可是我懒得去香港而且我感觉一个人好尴尬",
+          "permalink": "https://www.threads.com/@mark_90001/post/DeE87utG5p_",
+          "posted_at": "2026-10-04T15:25:55Z",
+          "media_type": "TEXT_POST",
           "query": "演唱会",
           "source_queries": [
             "演唱会"
@@ -1382,15 +629,21 @@
           "post_id": "4001057201175414298",
           "category": "其他演出內容",
           "kind": "context",
-          "status": "今日",
-          "score": 61.989,
-          "base_score": 67.71,
+          "status": "近期",
+          "score": 58.129,
+          "base_score": 63.85,
           "actionability_score": -3.0,
           "actionability_band": "low",
           "ranking_delta": -2.721,
           "intent_score": 4.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "live_recording_setup"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision"
           ],
@@ -1419,664 +672,83 @@
             "threads_ssr"
           ],
           "source": "Threads"
-        },
-        {
-          "id": "post_ec7d603064aee3a4",
-          "post_key": "post_ec7d603064aee3a4",
-          "snapshot_id": "deck_2026-10-06_3d_ec7d603064aee3a4",
-          "post_id": "4001053926959049808",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.962,
-          "base_score": 67.683,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "tatibana123987",
-          "text": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "summary": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "permalink": "https://www.threads.com/@tatibana123987/post/DeGmVkbk2xQ",
-          "posted_at": "2026-10-05T06:46:57Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_011ef9d41adc0be9",
-          "post_key": "post_011ef9d41adc0be9",
-          "snapshot_id": "deck_2026-10-06_3d_011ef9d41adc0be9",
-          "post_id": "4001043230804726487",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.873,
-          "base_score": 67.594,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "did00940",
-          "text": "演唱會初心者\n\n請問優里演唱會\n\n➡️15:30開放 17:00開演\n      建議幾點到呢？\n\n➡️有限制包包大小嗎？ \n      進去會檢查？\n\n➡️喉糖、小糖果可以帶嗎？\n\n還有什麼需要帶或是注意的嗎？\n\n▓謝謝大家！",
-          "summary": "演唱會初心者 請問優里演唱會 ➡️15:30開放 17:00開演 建議幾點到呢？ ➡️有限制包包大小嗎？ 進去會檢查？ ➡️喉糖、小糖果可以帶嗎？ 還有什麼需要帶或是注意的嗎？ ▓謝謝大家！",
-          "permalink": "https://www.threads.com/@did00940/post/DeGj563GNLX",
-          "posted_at": "2026-10-05T06:25:42Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_c59d9628732c16e1",
-          "post_key": "post_c59d9628732c16e1",
-          "snapshot_id": "deck_2026-10-06_3d_c59d9628732c16e1",
-          "post_id": "4000532233832058754",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 59.745,
-          "base_score": 63.364,
-          "actionability_score": -0.4,
-          "actionability_band": "low",
-          "ranking_delta": -3.219,
-          "intent_score": 1.0,
-          "intent_band": "medium",
-          "candidate_confidence": "medium",
-          "intent_signals": [
-            "action_marker",
-            "logistics_context"
-          ],
-          "intent_penalties": [
-            "third_party_logistics"
-          ],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [
-            "trip_extension"
-          ],
-          "need_terms": [
-            "附近"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "long_fandom_story"
-          ],
-          "username": "elimisnoa_drawing",
-          "text": "2026.10.4 吉卜力原唱歌手演唱會 參戰\n速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹\n-\n1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去\n2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴\n3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！\n4. 聽到島本很值得⋯還宣傳藥師少女🥹還真不知道旁白是她配的，麵包超人也是回憶殺嗚嗚嗚\n5. 老師們實在是都老了，但韻味也還在，就真的是聽情懷也很滿足⋯\n6.樂團不會到不行，但鋼琴不太行有夠硬也偏隨便，法國號也有小烙賽，都職業樂手了這種芭樂歌真的有很難嗎（\n但樂團的鍋還是決定丟給音控，到底在調什麼我還坐控台附近欸==\n7.其實我是衝著もののけ姫去的，但⋯米良老師⋯唉⋯我覺得知道自己不太行後就退休也是個專業，硬賺錢只會讓粉轉黑而已⋯後面致詞也看起來只想趕快下班⋯",
-          "summary": "2026.10.4 吉卜力原唱歌手演唱會 參戰 速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹 - 1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去 2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴 3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！ 4. 聽到…",
-          "permalink": "https://www.threads.com/@elimisnoa_drawing/post/DeEvt72D0-C",
-          "posted_at": "2026-10-04T13:30:27Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_e02f59191f5092fd",
-          "post_key": "post_e02f59191f5092fd",
-          "snapshot_id": "deck_2026-10-06_3d_e02f59191f5092fd",
-          "post_id": "4000778605051099244",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 59.682,
-          "base_score": 65.403,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "lengendarycowboy4ever",
-          "text": "Did you enjoy my performance from my last concert , should I remain in the band or not ?\n\n#kevincostner\n#kevincostnerlegend",
-          "summary": "Did you enjoy my performance from my last concert , should I remain in the band or not ? #kevincostner #kevincostnerlegend",
-          "permalink": "https://www.threads.com/@lengendarycowboy4ever/post/DeFnvG7Dbhs",
-          "posted_at": "2026-10-04T21:39:56Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_106635a11034223b",
-          "post_key": "post_106635a11034223b",
-          "snapshot_id": "deck_2026-10-06_3d_106635a11034223b",
-          "post_id": "3999866059532418020",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 59.0,
-          "base_score": 60.0,
-          "actionability_score": 3.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "門票"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "kizuna322",
-          "text": "請問 Radiohead日本埼玉的演唱會門票可以退票嗎？\n不行的話 我抽到兩場不同天的\n讓一天給想看的人 資訊如下\n6/8（二） or 6/9 （三） 兩張\n皆為B區域（日幣15,000/張）",
-          "summary": "請問 Radiohead日本埼玉的演唱會門票可以退票嗎？ 不行的話 我抽到兩場不同天的 讓一天給想看的人 資訊如下 6/8（二） or 6/9 （三） 兩張 皆為B區域（日幣15,000/張）",
-          "permalink": "https://www.threads.com/@kizuna322/post/DeCYP0rkjvk",
-          "posted_at": "2026-10-03T15:26:52Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_f46336854d71590c",
-          "post_key": "post_f46336854d71590c",
-          "snapshot_id": "deck_2026-10-06_3d_f46336854d71590c",
-          "post_id": "4000315889760605489",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.852,
-          "base_score": 61.573,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "mrjohnwick167",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@mrjohnwick167/post/DeD-htuiBUx",
-          "posted_at": "2026-10-04T06:20:36Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_a9e3e3c414fae833",
-          "post_key": "post_a9e3e3c414fae833",
-          "snapshot_id": "deck_2026-10-06_3d_a9e3e3c414fae833",
-          "post_id": "4000207664914635347",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.956,
-          "base_score": 60.677,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "johnwickk.45757339",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@johnwickk.45757339/post/DeDl61fCBpT",
-          "posted_at": "2026-10-04T02:45:35Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_065de93e63dc85b7",
-          "post_key": "post_065de93e63dc85b7",
-          "snapshot_id": "deck_2026-10-06_3d_065de93e63dc85b7",
-          "post_id": "4000052658311834387",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "keanu65350",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@keanu65350/post/DeDCrMViKsT",
-          "posted_at": "2026-10-03T21:37:37Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_0c75ea7eec39aeaa",
-          "post_key": "post_0c75ea7eec39aeaa",
-          "snapshot_id": "deck_2026-10-06_3d_0c75ea7eec39aeaa",
-          "post_id": "3999770251083479729",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "j1407b2580",
-          "text": "但我还是想问atm的演唱会为啥这么短，还是我之前看的太长了",
-          "summary": "但我还是想问atm的演唱会为啥这么短，还是我之前看的太长了",
-          "permalink": "https://www.threads.com/@j1407b2580/post/DeCCdoHAXqx",
-          "posted_at": "2026-10-03T12:16:31Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_1865495ff584ec1d",
-          "post_key": "post_1865495ff584ec1d",
-          "snapshot_id": "deck_2026-10-06_3d_1865495ff584ec1d",
-          "post_id": "3999735921419450614",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "jack_simil",
-          "text": "自己智障死哭一個先\n請問有買線上演唱會的大家是幾點開始看\n我一直以為是台灣18:30準備19:00開始\n\n超級興奮提早下班趕回家準備\n結果好像結束了⋯⋯\n\n哭被自己智障死欸 好傷心 真的哭出來\n😭😭😭",
-          "summary": "自己智障死哭一個先 請問有買線上演唱會的大家是幾點開始看 我一直以為是台灣18:30準備19:00開始 超級興奮提早下班趕回家準備 結果好像結束了⋯⋯ 哭被自己智障死欸 好傷心 真的哭出來 😭😭😭",
-          "permalink": "https://www.threads.com/@jack_simil/post/DeB6qEHk3j2",
-          "posted_at": "2026-10-03T11:08:19Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_2ecc926aa619d371",
-          "post_key": "post_2ecc926aa619d371",
-          "snapshot_id": "deck_2026-10-06_3d_2ecc926aa619d371",
-          "post_id": "3999614740368924806",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会",
-            "怎么"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "zh_yin129",
-          "text": "有没有人知道韩国看演唱会怎么举报🐮🎫",
-          "summary": "有没有人知道韩国看演唱会怎么举报🐮🎫",
-          "permalink": "https://www.threads.com/@zh_yin129/post/DeBfGpeGyCG",
-          "posted_at": "2026-10-03T07:07:33Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_45617f447bf0c57a",
-          "post_key": "post_45617f447bf0c57a",
-          "snapshot_id": "deck_2026-10-06_3d_45617f447bf0c57a",
-          "post_id": "3999560259068358162",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "冇",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "karen00ma",
-          "text": "請問有冇人出香港The Weeknd演唱會飛x2?\n邊一日都得🙏🏻最好係standing\n感謝偉大的Thread▓▓",
-          "summary": "請問有冇人出香港The Weeknd演唱會飛x2? 邊一日都得🙏🏻最好係standing 感謝偉大的Thread▓▓",
-          "permalink": "https://www.threads.com/@karen00ma/post/DeBSt1zie4S",
-          "posted_at": "2026-10-03T05:19:18Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_56722bc4047247aa",
-          "post_key": "post_56722bc4047247aa",
-          "snapshot_id": "deck_2026-10-06_3d_56722bc4047247aa",
-          "post_id": "3999651486371503533",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "aavance0709",
-          "text": "想問各位\n登記田馥甄演唱會\n想跟朋友2人一起去的話\n要分別登記還是一起登記抽中機率比較大？\n預計是會6場都登記",
-          "summary": "想問各位 登記田馥甄演唱會 想跟朋友2人一起去的話 要分別登記還是一起登記抽中機率比較大？ 預計是會6場都登記",
-          "permalink": "https://www.threads.com/@aavance0709/post/DeBndX2iV2t",
-          "posted_at": "2026-10-03T08:20:33Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_89998248d4ca8074",
-          "post_key": "post_89998248d4ca8074",
-          "snapshot_id": "deck_2026-10-06_3d_89998248d4ca8074",
-          "post_id": "3999734367967052580",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "liliumcallosum",
-          "text": "想請問有沒有大大可以好心分享歌單\n剛剛聽完演唱會超興奮\n但是有些歌不是這麼熟 不知道歌名\n拜託了 感謝🥹",
-          "summary": "想請問有沒有大大可以好心分享歌單 剛剛聽完演唱會超興奮 但是有些歌不是這麼熟 不知道歌名 拜託了 感謝🥹",
-          "permalink": "https://www.threads.com/@liliumcallosum/post/DeB6TdWmQMk",
-          "posted_at": "2026-10-03T11:05:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
         }
       ]
     },
     "5d": {
       "label": "5日",
       "days": 5,
-      "signal_count": 323,
-      "eligible_count": 64,
-      "high_confidence_count": 55,
-      "medium_confidence_count": 9,
-      "medium_sampled_count": 9,
-      "low_confidence_count": 259,
-      "card_count": 64,
-      "default_review_limit": 40,
+      "signal_count": 299,
+      "eligible_count": 20,
+      "high_confidence_count": 9,
+      "medium_confidence_count": 11,
+      "medium_sampled_count": 11,
+      "low_confidence_count": 279,
+      "card_count": 20,
+      "default_review_limit": 20,
       "extend_step": 10,
       "display_limit": 5,
       "cards": [
+        {
+          "id": "post_816ba92dfec2b61e",
+          "post_key": "post_816ba92dfec2b61e",
+          "snapshot_id": "deck_2026-10-06_5d_816ba92dfec2b61e",
+          "post_id": "4001914170496727278",
+          "category": "交通／散場",
+          "kind": "actionable",
+          "status": "現在",
+          "score": 92.537,
+          "base_score": 70.944,
+          "actionability_score": 21.0,
+          "actionability_band": "high",
+          "ranking_delta": 0.593,
+          "intent_score": 10.0,
+          "intent_band": "high",
+          "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "user_decision",
+            "need_question",
+            "action_marker",
+            "logistics_context"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hant",
+          "language_tokens": [
+            "演唱會",
+            "高鐵"
+          ],
+          "need_nodes": [
+            "mobility"
+          ],
+          "need_terms": [
+            "高鐵"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "question_intent",
+            "transport_need"
+          ],
+          "username": "otter.7097830",
+          "text": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？\n因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時\n\n如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "summary": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？ 因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時 如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "permalink": "https://www.threads.com/@otter.7097830/post/DeJp7wqDzju",
+          "posted_at": "2026-10-06T11:16:06Z",
+          "media_type": "TEXT_POST",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
         {
           "id": "post_a06da3542abe9637",
           "post_key": "post_a06da3542abe9637",
@@ -2093,6 +765,13 @@
           "intent_score": 9.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 8.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility",
+            "venue_outside"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "need_question",
@@ -2136,109 +815,6 @@
           "source": "Threads"
         },
         {
-          "id": "post_bd8033c49ac183e2",
-          "post_key": "post_bd8033c49ac183e2",
-          "snapshot_id": "deck_2026-10-06_5d_bd8033c49ac183e2",
-          "post_id": "3999066405040519077",
-          "category": "交通／散場",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 81.452,
-          "base_score": 60.0,
-          "actionability_score": 16.0,
-          "actionability_band": "high",
-          "ranking_delta": 5.452,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "action_marker"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "高鐵"
-          ],
-          "need_nodes": [
-            "mobility"
-          ],
-          "need_terms": [
-            "高鐵"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "transport_need"
-          ],
-          "username": "23_nichaaa",
-          "text": "有人知道傳說對決演唱會是到幾點結束嗎？怕趕不上高鐵回不了家..",
-          "summary": "有人知道傳說對決演唱會是到幾點結束嗎？怕趕不上高鐵回不了家..",
-          "permalink": "https://www.threads.com/@23_nichaaa/post/Dd_ibUZo3el",
-          "posted_at": "2026-10-02T12:58:06Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_9d908b44e4f40806",
-          "post_key": "post_9d908b44e4f40806",
-          "snapshot_id": "deck_2026-10-06_5d_9d908b44e4f40806",
-          "post_id": "4001171083566979743",
-          "category": "VIP／互動福利",
-          "kind": "actionable",
-          "status": "今日",
-          "score": 80.383,
-          "base_score": 68.652,
-          "actionability_score": 14.0,
-          "actionability_band": "high",
-          "ranking_delta": -2.269,
-          "intent_score": 9.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "action_marker",
-            "logistics_context"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "仲",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "trip_extension"
-          ],
-          "need_terms": [
-            "附近"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "vip_benefit"
-          ],
-          "username": "lcu_0.0724",
-          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
-          "summary": "幹幹演唱會結束後我想說我家附近的711 應該會比較少人就提議朋友一起去那裡集合 到了一段時間發現盧廣仲來這間711！！ 真的超超超超超激動！！！！ 歐買尬我真的超佩服我自己的提議！！ 也超感謝我朋友有發現！！ 超級開心可以跟本人合照❤️😭",
-          "permalink": "https://www.threads.com/@lcu_0.0724/post/DeHA-bBkxqf",
-          "posted_at": "2026-10-05T10:39:44Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
           "id": "post_82124642fa213cf2",
           "post_key": "post_82124642fa213cf2",
           "snapshot_id": "deck_2026-10-06_5d_82124642fa213cf2",
@@ -2254,6 +830,12 @@
           "intent_score": 8.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "need_question",
@@ -2292,10 +874,10 @@
           "source": "Threads"
         },
         {
-          "id": "post_f55901ff0812d6d6",
-          "post_key": "post_f55901ff0812d6d6",
-          "snapshot_id": "deck_2026-10-06_5d_f55901ff0812d6d6",
-          "post_id": "3998203468003361207",
+          "id": "post_bd8033c49ac183e2",
+          "post_key": "post_bd8033c49ac183e2",
+          "snapshot_id": "deck_2026-10-06_5d_bd8033c49ac183e2",
+          "post_id": "3999066405040519077",
           "category": "交通／散場",
           "kind": "actionable",
           "status": "近期",
@@ -2307,6 +889,12 @@
           "intent_score": 8.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "need_question",
@@ -2329,11 +917,11 @@
             "question_intent",
             "transport_need"
           ],
-          "username": "linesthree2023",
-          "text": "請問藤井風演唱會都是準時結束嗎～～\n有經驗的朋友當天都是訂幾點的高鐵呢 想說要不要訂最後一班",
-          "summary": "請問藤井風演唱會都是準時結束嗎～～ 有經驗的朋友當天都是訂幾點的高鐵呢 想說要不要訂最後一班",
-          "permalink": "https://www.threads.com/@linesthree2023/post/Dd8eN7qE0G3",
-          "posted_at": "2026-10-01T08:23:36Z",
+          "username": "23_nichaaa",
+          "text": "有人知道傳說對決演唱會是到幾點結束嗎？怕趕不上高鐵回不了家..",
+          "summary": "有人知道傳說對決演唱會是到幾點結束嗎？怕趕不上高鐵回不了家..",
+          "permalink": "https://www.threads.com/@23_nichaaa/post/Dd_ibUZo3el",
+          "posted_at": "2026-10-02T12:58:06Z",
           "media_type": "TEXT_POST",
           "query": "演唱會",
           "source_queries": [
@@ -2360,6 +948,13 @@
           "intent_score": 4.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 6.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "mobility",
+            "cross_city_commitment"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision"
           ],
@@ -2409,6 +1004,12 @@
           "intent_score": 6.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "stay"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "action_marker"
@@ -2445,33 +1046,37 @@
           "source": "Threads"
         },
         {
-          "id": "post_3bd6d8b794fda58a",
-          "post_key": "post_3bd6d8b794fda58a",
-          "snapshot_id": "deck_2026-10-06_5d_3bd6d8b794fda58a",
-          "post_id": "4001347602201424615",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "現在",
-          "score": 74.993,
-          "base_score": 70.114,
-          "actionability_score": 7.6,
-          "actionability_band": "medium",
-          "ranking_delta": -2.721,
-          "intent_score": 3.0,
-          "intent_band": "medium",
+          "id": "post_9d908b44e4f40806",
+          "post_key": "post_9d908b44e4f40806",
+          "snapshot_id": "deck_2026-10-06_5d_9d908b44e4f40806",
+          "post_id": "4001171083566979743",
+          "category": "VIP／互動福利",
+          "kind": "actionable",
+          "status": "近期",
+          "score": 76.524,
+          "base_score": 64.793,
+          "actionability_score": 14.0,
+          "actionability_band": "high",
+          "ranking_delta": -2.269,
+          "intent_score": 9.0,
+          "intent_band": "high",
           "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
-            "need_question",
+            "user_decision",
             "action_marker",
             "logistics_context"
           ],
-          "intent_penalties": [
-            "third_party_logistics"
-          ],
+          "intent_penalties": [],
           "language_context": "zh_hant",
           "language_tokens": [
-            "演唱會",
-            "怎麼"
+            "仲",
+            "演唱會"
           ],
           "need_nodes": [
             "trip_extension"
@@ -2481,14 +1086,14 @@
           ],
           "need_edges": [],
           "feature_tags": [
-            "question_intent"
+            "vip_benefit"
           ],
-          "username": "whatttf.__",
-          "text": "看演唱會可不可以有素質一點？開場嘉賓Grace Gachot還在唱的時候，竟然說出「她怎麼那麼多歌可以唱」這種話，到Grace說是最後一首的時候還說「Nice」是多不想聽？？歐美歌手的演唱會本來就是會請嘉賓，你不爽可以不用來聽沒關係。而且這本來是一個可以認識新歌手的好機會，就算你不想聽好了，但也沒必要講出來讓附近的都知道吧😊😊再來在等Henry出來時前，你在那邊擠，死命地想擠到前面造成別人的困擾，要前面一點就自己早點來排隊而不是在之後才一直擠的吧，晚到就乖乖站好很難嗎？都已經是成年人了，看演唱會麻煩有點品德",
-          "summary": "看演唱會可不可以有素質一點？開場嘉賓Grace Gachot還在唱的時候，竟然說出「她怎麼那麼多歌可以唱」這種話，到Grace說是最後一首的時候還說「Nice」是多不想聽？？歐美歌手的演唱會本來就是會請嘉賓，你不爽可以不用來聽沒關係。而且這本來是一個可以認識新歌手的好機會，就算你不想聽好了，但也沒必要講出來讓附近的都知道吧😊😊再來在等Henry出來時前，你…",
-          "permalink": "https://www.threads.com/@whatttf.__/post/DeHpHG0E7Ln",
-          "posted_at": "2026-10-05T16:30:26Z",
-          "media_type": "TEXT_POST",
+          "username": "lcu_0.0724",
+          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
+          "summary": "幹幹演唱會結束後我想說我家附近的711 應該會比較少人就提議朋友一起去那裡集合 到了一段時間發現盧廣仲來這間711！！ 真的超超超超超激動！！！！ 歐買尬我真的超佩服我自己的提議！！ 也超感謝我朋友有發現！！ 超級開心可以跟本人合照❤️😭",
+          "permalink": "https://www.threads.com/@lcu_0.0724/post/DeHA-bBkxqf",
+          "posted_at": "2026-10-05T10:39:44Z",
+          "media_type": "IMAGE",
           "query": "演唱會",
           "source_queries": [
             "演唱會"
@@ -2513,7 +1118,15 @@
           "ranking_delta": -2.503,
           "intent_score": 6.0,
           "intent_band": "high",
-          "candidate_confidence": "high",
+          "candidate_confidence": "medium",
+          "target_fit_score": 2.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [
+            "vip_only"
+          ],
           "intent_signals": [
             "user_decision",
             "need_question"
@@ -2558,14 +1171,20 @@
           "category": "其他演出內容",
           "kind": "context",
           "status": "近期",
-          "score": 73.436,
-          "base_score": 61.157,
+          "score": 72.279,
+          "base_score": 60.0,
           "actionability_score": 15.0,
           "actionability_band": "high",
           "ranking_delta": -2.721,
           "intent_score": 5.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "stay"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "need_question",
             "logistics_context"
@@ -2601,6 +1220,66 @@
           "source": "Threads"
         },
         {
+          "id": "post_3bd6d8b794fda58a",
+          "post_key": "post_3bd6d8b794fda58a",
+          "snapshot_id": "deck_2026-10-06_5d_3bd6d8b794fda58a",
+          "post_id": "4001347602201424615",
+          "category": "其他演出內容",
+          "kind": "context",
+          "status": "今日",
+          "score": 71.133,
+          "base_score": 66.254,
+          "actionability_score": 7.6,
+          "actionability_band": "medium",
+          "ranking_delta": -2.721,
+          "intent_score": 3.0,
+          "intent_band": "medium",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "need_question",
+            "action_marker",
+            "logistics_context"
+          ],
+          "intent_penalties": [
+            "third_party_logistics"
+          ],
+          "language_context": "zh_hant",
+          "language_tokens": [
+            "演唱會",
+            "怎麼"
+          ],
+          "need_nodes": [
+            "trip_extension"
+          ],
+          "need_terms": [
+            "附近"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "question_intent"
+          ],
+          "username": "whatttf.__",
+          "text": "看演唱會可不可以有素質一點？開場嘉賓Grace Gachot還在唱的時候，竟然說出「她怎麼那麼多歌可以唱」這種話，到Grace說是最後一首的時候還說「Nice」是多不想聽？？歐美歌手的演唱會本來就是會請嘉賓，你不爽可以不用來聽沒關係。而且這本來是一個可以認識新歌手的好機會，就算你不想聽好了，但也沒必要講出來讓附近的都知道吧😊😊再來在等Henry出來時前，你在那邊擠，死命地想擠到前面造成別人的困擾，要前面一點就自己早點來排隊而不是在之後才一直擠的吧，晚到就乖乖站好很難嗎？都已經是成年人了，看演唱會麻煩有點品德",
+          "summary": "看演唱會可不可以有素質一點？開場嘉賓Grace Gachot還在唱的時候，竟然說出「她怎麼那麼多歌可以唱」這種話，到Grace說是最後一首的時候還說「Nice」是多不想聽？？歐美歌手的演唱會本來就是會請嘉賓，你不爽可以不用來聽沒關係。而且這本來是一個可以認識新歌手的好機會，就算你不想聽好了，但也沒必要講出來讓附近的都知道吧😊😊再來在等Henry出來時前，你…",
+          "permalink": "https://www.threads.com/@whatttf.__/post/DeHpHG0E7Ln",
+          "posted_at": "2026-10-05T16:30:26Z",
+          "media_type": "TEXT_POST",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
           "id": "post_bbbb49a1c9b68afc",
           "post_key": "post_bbbb49a1c9b68afc",
           "snapshot_id": "deck_2026-10-06_5d_bbbb49a1c9b68afc",
@@ -2608,15 +1287,22 @@
           "category": "陪同／Solo Attendance",
           "kind": "actionable",
           "status": "近期",
-          "score": 69.541,
-          "base_score": 60.218,
-          "actionability_score": 10.0,
-          "actionability_band": "medium",
-          "ranking_delta": -0.677,
-          "intent_score": 5.0,
+          "score": 70.845,
+          "base_score": 60.0,
+          "actionability_score": 13.0,
+          "actionability_band": "high",
+          "ranking_delta": -2.155,
+          "intent_score": 7.0,
           "intent_band": "high",
-          "candidate_confidence": "high",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
+            "need_question",
             "action_marker",
             "logistics_context"
           ],
@@ -2633,6 +1319,7 @@
           ],
           "need_edges": [],
           "feature_tags": [
+            "question_intent",
             "solo_attendance"
           ],
           "username": "mmkkvvii22",
@@ -2644,109 +1331,6 @@
           "query": "演唱会",
           "source_queries": [
             "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_3c2e7f9b5e15bd1d",
-          "post_key": "post_3c2e7f9b5e15bd1d",
-          "snapshot_id": "deck_2026-10-06_5d_3c2e7f9b5e15bd1d",
-          "post_id": "3999638749344516291",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 69.0,
-          "base_score": 60.0,
-          "actionability_score": 13.0,
-          "actionability_band": "high",
-          "ranking_delta": -4.0,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "入場"
-          ],
-          "need_nodes": [
-            "venue_inside"
-          ],
-          "need_terms": [
-            "入場"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "yuenieee_",
-          "text": "請問有人想要看今晚的溫流演唱會嗎？\n主辦贈票原先說是一張但又多送了一張給我\n希望找個有緣人一起入場！(已在場外)",
-          "summary": "請問有人想要看今晚的溫流演唱會嗎？ 主辦贈票原先說是一張但又多送了一張給我 希望找個有緣人一起入場！(已在場外)",
-          "permalink": "https://www.threads.com/@yuenieee_/post/DeBkkBkkUjD",
-          "posted_at": "2026-10-03T07:55:15Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_f0b5b08f27ab2384",
-          "post_key": "post_f0b5b08f27ab2384",
-          "snapshot_id": "deck_2026-10-06_5d_f0b5b08f27ab2384",
-          "post_id": "3999004610392674417",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 69.0,
-          "base_score": 60.0,
-          "actionability_score": 13.0,
-          "actionability_band": "high",
-          "ranking_delta": -4.0,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [
-            "venue_inside"
-          ],
-          "need_terms": [
-            "實名"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "tatsumi_xc",
-          "text": "想問各位，演唱會實名抽選如果每天登記抽中兩天的名額，繳費只領取其中一天的票，會有什麼影響嗎？",
-          "summary": "想問各位，演唱會實名抽選如果每天登記抽中兩天的名額，繳費只領取其中一天的票，會有什麼影響嗎？",
-          "permalink": "https://www.threads.com/@tatsumi_xc/post/Dd_UYFpmtBx",
-          "posted_at": "2026-10-02T10:55:20Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
           ],
           "retrieval_sources": [
             "threads_ssr"
@@ -2769,6 +1353,12 @@
           "intent_score": 3.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "venue_outside"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "need_question",
             "action_marker",
@@ -2807,55 +1397,6 @@
           "source": "Threads"
         },
         {
-          "id": "post_eb2ab690b6fc6aff",
-          "post_key": "post_eb2ab690b6fc6aff",
-          "snapshot_id": "deck_2026-10-06_5d_eb2ab690b6fc6aff",
-          "post_id": "3998819231634398103",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 66.758,
-          "base_score": 60.0,
-          "actionability_score": 8.0,
-          "actionability_band": "medium",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "睇",
-            "嗰",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "food"
-          ],
-          "need_terms": [
-            "美食"
-          ],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "aroma57b",
-          "text": "想睇下演唱會啫，我要join你個叮叮美食團把鬼咩🫣不加購 嗰粒掣永遠都係灰色😒",
-          "summary": "想睇下演唱會啫，我要join你個叮叮美食團把鬼咩🫣不加購 嗰粒掣永遠都係灰色😒",
-          "permalink": "https://www.threads.com/@aroma57b/post/Dd-qOeOkZuX",
-          "posted_at": "2026-10-02T04:47:01Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
           "id": "post_b8b8916b8f33910c",
           "post_key": "post_b8b8916b8f33910c",
           "snapshot_id": "deck_2026-10-06_5d_b8b8916b8f33910c",
@@ -2871,6 +1412,14 @@
           "intent_score": 2.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 2.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "mobility"
+          ],
+          "target_fit_penalties": [
+            "vip_only"
+          ],
           "intent_signals": [
             "need_question"
           ],
@@ -2908,118 +1457,6 @@
           "source": "Threads"
         },
         {
-          "id": "post_0eb3d2aa9cc99ce5",
-          "post_key": "post_0eb3d2aa9cc99ce5",
-          "snapshot_id": "deck_2026-10-06_5d_0eb3d2aa9cc99ce5",
-          "post_id": "3998688273098592286",
-          "category": "周邊／現場商品",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 66.0,
-          "base_score": 60.0,
-          "actionability_score": 10.0,
-          "actionability_band": "medium",
-          "ranking_delta": -4.0,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "咁",
-            "唔",
-            "仲",
-            "演唱會",
-            "應援",
-            "周邊"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "應援",
-            "周邊"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer",
-            "merch_need",
-            "question_intent",
-            "venue_experience"
-          ],
-          "username": "pearrr.111",
-          "text": "［Vaundy “HORO” Asia tour 2026 3/10 香港場］\n人生第一次去演唱會+第一次整無料！！！！\n前日見大家咁比心機整應援 先突然決定試下做postcard😂\n真係ddl fight到無得更ddl fight💀\n之後會print around 20份左右\n但問題係我應該好遲先到會場（around 5:15-5:25pm？）\n唔知仲可唔可以同大家交換🥲🥀\n想問演唱會完左之後可否係hall 外面/￼周邊區停留？\n期待見到大家！！到時會再update🧡",
-          "summary": "［Vaundy “HORO” Asia tour 2026 3/10 香港場］ 人生第一次去演唱會+第一次整無料！！！！ 前日見大家咁比心機整應援 先突然決定試下做postcard😂 真係ddl fight到無得更ddl fight💀 之後會print around 20份左右 但問題係我應該好遲先到會場（around 5:15-5:25pm？） 唔知仲可…",
-          "permalink": "https://www.threads.com/@pearrr.111/post/Dd-Mcxlj9Ae",
-          "posted_at": "2026-10-02T00:26:49Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_223eb50eafa7a204",
-          "post_key": "post_223eb50eafa7a204",
-          "snapshot_id": "deck_2026-10-06_5d_223eb50eafa7a204",
-          "post_id": "3999120931771616315",
-          "category": "場館／現場體驗",
-          "kind": "context",
-          "status": "近期",
-          "score": 66.0,
-          "base_score": 60.0,
-          "actionability_score": 10.0,
-          "actionability_band": "medium",
-          "ranking_delta": -4.0,
-          "intent_score": 6.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision",
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "應援",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "應援"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer",
-            "question_intent",
-            "venue_experience"
-          ],
-          "username": "_6yuanx",
-          "text": "第一次做應援\n可能會有點醜不要介意ㅠㅠ\n很怕沒有人想要ㅠㅠ\n\n傳說十週年演唱會／idle髮夾應援\n\n這次準備了一點點髮夾應援給大家～\n每個成員都有準備 一組是兩個髮夾！\n\n📌大小｜一長5cm\n📌數量｜每個成員10組\n\n領取須知\n以交換應援優先 不接受紙類應援 除非真的很喜歡～～\n現場領取需追蹤IG 可以提出想要的成員  若該成員款式已領完會告知！\n\n⚠️注意事項\n・不可代領\n・不可轉賣\n・不可重複領取\n・不可隨意丟棄\n・一人限領一份，數量有限送完為止\n\n📍地點和時間會在當天公布！\n\n有任何不足的地方都可以指出～\n有想問的也都可以提出來🤍",
-          "summary": "第一次做應援 可能會有點醜不要介意ㅠㅠ 很怕沒有人想要ㅠㅠ 傳說十週年演唱會／idle髮夾應援 這次準備了一點點髮夾應援給大家～ 每個成員都有準備 一組是兩個髮夾！ 📌大小｜一長5cm 📌數量｜每個成員10組 領取須知 以交換應援優先 不接受紙類應援 除非真的很喜歡～～ 現場領取需追蹤IG 可以提出想要的成員 若該成員款式已領完會告知！ ⚠️注意事項 ・不…",
-          "permalink": "https://www.threads.com/@_6yuanx/post/Dd_u0yYE4w7",
-          "posted_at": "2026-10-02T14:46:26Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
           "id": "post_215ea3a36ed73bcd",
           "post_key": "post_215ea3a36ed73bcd",
           "snapshot_id": "deck_2026-10-06_5d_215ea3a36ed73bcd",
@@ -3034,7 +1471,13 @@
           "ranking_delta": -3.702,
           "intent_score": 6.0,
           "intent_band": "high",
-          "candidate_confidence": "high",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "participation_prep"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision",
             "need_question"
@@ -3071,439 +1514,29 @@
           "source": "Threads"
         },
         {
-          "id": "post_16f44fa62c311cd0",
-          "post_key": "post_16f44fa62c311cd0",
-          "snapshot_id": "deck_2026-10-06_5d_16f44fa62c311cd0",
-          "post_id": "4000638565436512556",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
+          "id": "post_c59d9628732c16e1",
+          "post_key": "post_c59d9628732c16e1",
+          "snapshot_id": "deck_2026-10-06_5d_c59d9628732c16e1",
+          "post_id": "4000532233832058754",
+          "category": "其他演出內容",
+          "kind": "context",
           "status": "近期",
-          "score": 65.244,
-          "base_score": 64.244,
-          "actionability_score": 5.0,
-          "actionability_band": "medium",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "入場"
-          ],
-          "need_nodes": [
-            "venue_inside"
-          ],
-          "need_terms": [
-            "入場"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "long_fandom_story",
-            "ticketing_need"
-          ],
-          "username": "chupeiyi",
-          "text": "有關10/4的吉卜力動畫演唱會，其實我的期望值沒有拉得很高，但是基於都是原創歌手，所以還是買了下去，當初也是以為會很難搶票，但疏不知票好買之外，票房甚至慘到不行，我在3F放眼望去(2F我看不到)我猜應該沒有坐滿一半。\n\n說也奇怪，我看主辦單位廣告其實打滿兇的，但真的很多人根本不知道有這場演唱會，真的很邪門。\n\n下午一到台北小巨蛋門口，我真的滿頭問號懷疑人生，完全看不到任何活動旗幟和看板，唯一看到的只有入場的指示牌和入場時間，得以證明這邊有活動沒錯...說好的5點入場其實也沒有準時開放 (其實我覺得沒準時也沒差了...因為人數太少)；我原本想說可能外面沒看板就算了，裡面搞不好還有可以拍的，或是節目手冊可以看，結果我想太多了，各位觀眾：「什‧麼‧都‧沒‧有」，我頭一次參加演藝活動卻沒看到任何文宣的，真的很離譜。",
-          "summary": "有關10/4的吉卜力動畫演唱會，其實我的期望值沒有拉得很高，但是基於都是原創歌手，所以還是買了下去，當初也是以為會很難搶票，但疏不知票好買之外，票房甚至慘到不行，我在3F放眼望去(2F我看不到)我猜應該沒有坐滿一半。 說也奇怪，我看主辦單位廣告其實打滿兇的，但真的很多人根本不知道有這場演唱會，真的很邪門。 下午一到台北小巨蛋門口，我真的滿頭問號懷疑人生，完…",
-          "permalink": "https://www.threads.com/@chupeiyi/post/DeFH5Q3klks",
-          "posted_at": "2026-10-04T17:01:42Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_2daa888af871843d",
-          "post_key": "post_2daa888af871843d",
-          "snapshot_id": "deck_2026-10-06_5d_2daa888af871843d",
-          "post_id": "4001402599399972684",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "現在",
-          "score": 64.848,
-          "base_score": 70.569,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "怎麼"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "21.yu.yu",
-          "text": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？\n大家會怎麼選呢▓▓",
-          "summary": "想問問各位，田馥甄演唱會是不是選全區，抽中率比較高？ 大家會怎麼選呢▓▓",
-          "permalink": "https://www.threads.com/@21.yu.yu/post/DeH1na8j19M",
-          "posted_at": "2026-10-05T18:19:42Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_8972321a62fffa20",
-          "post_key": "post_8972321a62fffa20",
-          "snapshot_id": "deck_2026-10-06_5d_8972321a62fffa20",
-          "post_id": "4001328548728226731",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.235,
-          "base_score": 69.956,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "wnshyuin_",
-          "text": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、\n我們太激動沒錄到、、\n希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "summary": "想問一下今天有去Henry moodie演唱會10/5台北場的大家 最後一首歌（ten years time)時有拍到Henry對朝向舞台左斜方比愛心的影片嗎、、 我們太激動沒錄到、、 希望有後排的粉絲可以提供▓只要有影片都可以！😭",
-          "permalink": "https://www.threads.com/@wnshyuin_/post/DeHkx14k0Or",
-          "posted_at": "2026-10-05T15:52:35Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_694a3b550e1eaed0",
-          "post_key": "post_694a3b550e1eaed0",
-          "snapshot_id": "deck_2026-10-06_5d_694a3b550e1eaed0",
-          "post_id": "4001148649181629748",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 64.225,
-          "base_score": 68.467,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "睇",
-            "唔",
-            "紅館",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "ricericeclub",
-          "text": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "summary": "想去睇容祖兒演唱會，但啟德真係令人卻步，唔知等唔等到佢開紅館😖",
-          "permalink": "https://www.threads.com/@ricericeclub/post/DeG739YAU00",
-          "posted_at": "2026-10-05T09:55:09Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_da4460464f102d4c",
-          "post_key": "post_da4460464f102d4c",
-          "snapshot_id": "deck_2026-10-06_5d_da4460464f102d4c",
-          "post_id": "3999154542323432880",
-          "category": "周邊／現場商品",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 63.777,
+          "score": 64.879,
           "base_score": 60.0,
-          "actionability_score": 6.0,
+          "actionability_score": 7.6,
           "actionability_band": "medium",
-          "ranking_delta": -2.223,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "哪裡",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "手燈"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "merch_need"
-          ],
-          "username": "minmin_158_",
-          "text": "有人也是沒買到手燈的嗎🥺🥺\n\n真的超爛欸……\n都開快閃現貨了，結果現貨還不足🙂‍↔️\n想買都買不到😭\n\n現在最怕的就是不知道當天去排到底買不買得到🥲\n有人知道當天現場會不會有手燈嗎😭\n不想都到現場了，結果還是沒手燈啊啊啊🥹💔\n\n還是哪裡可以買到手燈\n演唱會前能收到更好!!拜託了▓",
-          "summary": "有人也是沒買到手燈的嗎🥺🥺 真的超爛欸…… 都開快閃現貨了，結果現貨還不足🙂‍↔️ 想買都買不到😭 現在最怕的就是不知道當天去排到底買不買得到🥲 有人知道當天現場會不會有手燈嗎😭 不想都到現場了，結果還是沒手燈啊啊啊🥹💔 還是哪裡可以買到手燈 演唱會前能收到更好!!拜託了▓",
-          "permalink": "https://www.threads.com/@minmin_158_/post/Dd_2d4pE_2w",
-          "posted_at": "2026-10-02T15:53:13Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_1b2f5ff00457091c",
-          "post_key": "post_1b2f5ff00457091c",
-          "snapshot_id": "deck_2026-10-06_5d_1b2f5ff00457091c",
-          "post_id": "4001066148414876232",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.542,
-          "base_score": 67.784,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "mmmochi111",
-          "text": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "summary": "jasper演唱会卖得好是会给搭子分红吗，不然我想不到陈普明这么支持的原因",
-          "permalink": "https://www.threads.com/@mmmochi111/post/DeGpHajG-pI",
-          "posted_at": "2026-10-05T07:11:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_540f2310958a17a5",
-          "post_key": "post_540f2310958a17a5",
-          "snapshot_id": "deck_2026-10-06_5d_540f2310958a17a5",
-          "post_id": "4001242831666825336",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.525,
-          "base_score": 69.246,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
           "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "_eating.x",
-          "text": "D.O. 的演唱會推薦看嗎？\n只是音粉，會上月回顧前五的程度\n但是不會關注本人的活動\n突然想要看一下但不知道演唱會氛圍如何🥹",
-          "summary": "D.O. 的演唱會推薦看嗎？ 只是音粉，會上月回顧前五的程度 但是不會關注本人的活動 突然想要看一下但不知道演唱會氛圍如何🥹",
-          "permalink": "https://www.threads.com/@_eating.x/post/DeHRSfplEh4",
-          "posted_at": "2026-10-05T13:02:17Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_d59acb8fde82998c",
-          "post_key": "post_d59acb8fde82998c",
-          "snapshot_id": "deck_2026-10-06_5d_d59acb8fde82998c",
-          "post_id": "4001207910713659982",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.25,
-          "base_score": 68.971,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "sharonorahs_j",
-          "text": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "summary": "我草我要急哭了为什么我把演唱会拍的视频上传夸克再重新下载到相册会出现发暗的情况，甚至有的片段还黑屏了，我原来拍的视频绝对不是这样😭。在xhs检索了一下是夸克视频开了超级解码的问题，我把超级解码关了在夸克网盘上看视频正常了但是下载到相册里还是原问题。",
-          "permalink": "https://www.threads.com/@sharonorahs_j/post/DeHJWU-khJO",
-          "posted_at": "2026-10-05T11:56:10Z",
-          "media_type": "VIDEO",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_9fc1dfeaab356fde",
-          "post_key": "post_9fc1dfeaab356fde",
-          "snapshot_id": "deck_2026-10-06_5d_9fc1dfeaab356fde",
-          "post_id": "4001179676756889129",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 63.003,
-          "base_score": 68.724,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "怎么",
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "rabbit.7682952",
-          "text": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。\n但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。\n喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。\n三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在这装什么大爆料的人，只想说喜欢他就是最幸福的事。\n希望下一站想去见面的小女孩都能抢到票，追星本身就是一件开心的事，我永远活在这样的期待里，雀跃在每一个相信的瞬间。",
-          "summary": "喜欢俊凯很多很多年了……身边的朋友和他也都合作好多次了。每次听到朋友聊俊凯都很幸福。 但凡了解过合作过的没有不夸的，做粉丝的怎么能不开心呢。一开始确实都不知道这个软件，要不是我品牌方朋友给我发来你在上面大造谣我都懒得搭理你。 喜欢王俊凯特别幸福特别幸福，陪俊凯走过的这些年 ，每一步都算数 。 三月份朋友给我发你要演唱会的时候我就特別开心，放点截图出来，不在…",
-          "permalink": "https://www.threads.com/@rabbit.7682952/post/DeHC7eDm04p",
-          "posted_at": "2026-10-05T10:56:48Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_84aa505193d25005",
-          "post_key": "post_84aa505193d25005",
-          "snapshot_id": "deck_2026-10-06_5d_84aa505193d25005",
-          "post_id": "3998402833498562009",
-          "category": "VIP／互動福利",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 62.331,
-          "base_score": 60.0,
-          "actionability_score": 4.6,
-          "actionability_band": "low",
-          "ranking_delta": -2.269,
-          "intent_score": 1.0,
+          "intent_score": 3.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "post_event_nearby"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
+            "need_question",
             "action_marker",
             "logistics_context"
           ],
@@ -3522,13 +1555,176 @@
           ],
           "need_edges": [],
           "feature_tags": [
-            "vip_benefit"
+            "question_intent"
           ],
-          "username": "kappu7no",
-          "text": "昨天在狎鷗亭附近偶遇了洪知秀！！\n沒有戴口罩 然後超級帥瘋掉\n他迎面走過來 對到眼後我就主動跟他打招呼\n因為我們有帶小卡\n鼓起勇氣問了方不方便給簽名\n他露出小鹿一般的眼睛\n用超級抱歉的表情說抱歉😭🙏🏻\n我跟朋友馬上說完全沒關係！！\n在九月的最後一天能遇到Joshua真的太幸福了\n希望fan party和演唱會能順利見到面🦌🍀💕",
-          "summary": "昨天在狎鷗亭附近偶遇了洪知秀！！ 沒有戴口罩 然後超級帥瘋掉 他迎面走過來 對到眼後我就主動跟他打招呼 因為我們有帶小卡 鼓起勇氣問了方不方便給簽名 他露出小鹿一般的眼睛 用超級抱歉的表情說抱歉😭🙏🏻 我跟朋友馬上說完全沒關係！！ 在九月的最後一天能遇到Joshua真的太幸福了 希望fan party和演唱會能順利見到面🦌🍀💕",
-          "permalink": "https://www.threads.com/@kappu7no/post/Dd9LjFPmN3Z",
-          "posted_at": "2026-10-01T14:59:42Z",
+          "username": "elimisnoa_drawing",
+          "text": "2026.10.4 吉卜力原唱歌手演唱會 參戰\n速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹\n-\n1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去\n2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴\n3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！\n4. 聽到島本很值得⋯還宣傳藥師少女🥹還真不知道旁白是她配的，麵包超人也是回憶殺嗚嗚嗚\n5. 老師們實在是都老了，但韻味也還在，就真的是聽情懷也很滿足⋯\n6.樂團不會到不行，但鋼琴不太行有夠硬也偏隨便，法國號也有小烙賽，都職業樂手了這種芭樂歌真的有很難嗎（\n但樂團的鍋還是決定丟給音控，到底在調什麼我還坐控台附近欸==\n7.其實我是衝著もののけ姫去的，但⋯米良老師⋯唉⋯我覺得知道自己不太行後就退休也是個專業，硬賺錢只會讓粉轉黑而已⋯後面致詞也看起來只想趕快下班⋯",
+          "summary": "2026.10.4 吉卜力原唱歌手演唱會 參戰 速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹 - 1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去 2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴 3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！ 4. 聽到…",
+          "permalink": "https://www.threads.com/@elimisnoa_drawing/post/DeEvt72D0-C",
+          "posted_at": "2026-10-04T13:30:27Z",
+          "media_type": "CAROUSEL_ALBUM",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
+          "id": "post_d73a0acbd1bc9f04",
+          "post_key": "post_d73a0acbd1bc9f04",
+          "snapshot_id": "deck_2026-10-06_5d_d73a0acbd1bc9f04",
+          "post_id": "3998974031785310687",
+          "category": "其他演出內容",
+          "kind": "context",
+          "status": "近期",
+          "score": 64.179,
+          "base_score": 60.0,
+          "actionability_score": 6.9,
+          "actionability_band": "medium",
+          "ranking_delta": -2.721,
+          "intent_score": 2.0,
+          "intent_band": "medium",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "venue_operation"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "need_question"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hant",
+          "language_tokens": [
+            "演唱會"
+          ],
+          "need_nodes": [
+            "venue_inside"
+          ],
+          "need_terms": [
+            "安檢"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "question_intent"
+          ],
+          "username": "_owo69",
+          "text": "明天會帶這個包包去演唱會💖\n不知道包包裝滿娃的話過得了安檢盒嗎\n會不會太澎了(*´Д｀*)",
+          "summary": "明天會帶這個包包去演唱會💖 不知道包包裝滿娃的話過得了安檢盒嗎 會不會太澎了(*´Д｀*)",
+          "permalink": "https://www.threads.com/@_owo69/post/Dd_NbHGkznf",
+          "posted_at": "2026-10-02T09:54:35Z",
+          "media_type": "IMAGE",
+          "query": "演唱會",
+          "source_queries": [
+            "演唱會"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
+          "id": "post_e2496825ea64827c",
+          "post_key": "post_e2496825ea64827c",
+          "snapshot_id": "deck_2026-10-06_5d_e2496825ea64827c",
+          "post_id": "4000590356400544383",
+          "category": "陪同／Solo Attendance",
+          "kind": "actionable",
+          "status": "近期",
+          "score": 63.323,
+          "base_score": 60.0,
+          "actionability_score": 4.0,
+          "actionability_band": "low",
+          "ranking_delta": -0.677,
+          "intent_score": 4.0,
+          "intent_band": "high",
+          "candidate_confidence": "high",
+          "target_fit_score": 5.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "solo_or_cross_city",
+            "cross_city_commitment"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "user_decision"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hans",
+          "language_tokens": [
+            "演唱会"
+          ],
+          "need_nodes": [],
+          "need_terms": [],
+          "need_edges": [],
+          "feature_tags": [
+            "solo_attendance"
+          ],
+          "username": "mark_90001",
+          "text": "我在纠结要不要去看mla演唱会，可是我懒得去香港而且我感觉一个人好尴尬",
+          "summary": "我在纠结要不要去看mla演唱会，可是我懒得去香港而且我感觉一个人好尴尬",
+          "permalink": "https://www.threads.com/@mark_90001/post/DeE87utG5p_",
+          "posted_at": "2026-10-04T15:25:55Z",
+          "media_type": "TEXT_POST",
+          "query": "演唱会",
+          "source_queries": [
+            "演唱会"
+          ],
+          "retrieval_sources": [
+            "threads_ssr"
+          ],
+          "source": "Threads"
+        },
+        {
+          "id": "post_b829b709eae66b74",
+          "post_key": "post_b829b709eae66b74",
+          "snapshot_id": "deck_2026-10-06_5d_b829b709eae66b74",
+          "post_id": "3998666115454847373",
+          "category": "周邊／現場商品",
+          "kind": "actionable",
+          "status": "近期",
+          "score": 60.598,
+          "base_score": 60.0,
+          "actionability_score": 4.3,
+          "actionability_band": "low",
+          "ranking_delta": -3.702,
+          "intent_score": 2.0,
+          "intent_band": "medium",
+          "candidate_confidence": "medium",
+          "target_fit_score": 3.0,
+          "target_fit_band": "medium",
+          "target_fit_signals": [
+            "participation_prep"
+          ],
+          "target_fit_penalties": [],
+          "intent_signals": [
+            "need_question"
+          ],
+          "intent_penalties": [],
+          "language_context": "zh_hant",
+          "language_tokens": [
+            "演唱會"
+          ],
+          "need_nodes": [
+            "wear_support"
+          ],
+          "need_terms": [
+            "手燈"
+          ],
+          "need_edges": [],
+          "feature_tags": [
+            "merch_need",
+            "question_intent"
+          ],
+          "username": "__qwer.721",
+          "text": "演唱會是進場後連手燈嗎😵‍💫中控\n怕到時候很慌張",
+          "summary": "演唱會是進場後連手燈嗎😵‍💫中控 怕到時候很慌張",
+          "permalink": "https://www.threads.com/@__qwer.721/post/Dd-HaVrE8mN",
+          "posted_at": "2026-10-01T23:42:48Z",
           "media_type": "TEXT_POST",
           "query": "演唱會",
           "source_queries": [
@@ -3546,15 +1742,21 @@
           "post_id": "4001057201175414298",
           "category": "其他演出內容",
           "kind": "context",
-          "status": "今日",
-          "score": 61.989,
-          "base_score": 67.71,
+          "status": "近期",
+          "score": 58.129,
+          "base_score": 63.85,
           "actionability_score": -3.0,
           "actionability_band": "low",
           "ranking_delta": -2.721,
           "intent_score": 4.0,
           "intent_band": "high",
           "candidate_confidence": "high",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "live_recording_setup"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
             "user_decision"
           ],
@@ -3585,1550 +1787,29 @@
           "source": "Threads"
         },
         {
-          "id": "post_ec7d603064aee3a4",
-          "post_key": "post_ec7d603064aee3a4",
-          "snapshot_id": "deck_2026-10-06_5d_ec7d603064aee3a4",
-          "post_id": "4001053926959049808",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.962,
-          "base_score": 67.683,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "tatibana123987",
-          "text": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "summary": "炎亚纶汪东城复合了真的假的？有没有人能回答我？如果炎亚纶觉得我造谣能不能告我一下？正好我想去台湾看演唱会。",
-          "permalink": "https://www.threads.com/@tatibana123987/post/DeGmVkbk2xQ",
-          "posted_at": "2026-10-05T06:46:57Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_011ef9d41adc0be9",
-          "post_key": "post_011ef9d41adc0be9",
-          "snapshot_id": "deck_2026-10-06_5d_011ef9d41adc0be9",
-          "post_id": "4001043230804726487",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "今日",
-          "score": 61.873,
-          "base_score": 67.594,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "did00940",
-          "text": "演唱會初心者\n\n請問優里演唱會\n\n➡️15:30開放 17:00開演\n      建議幾點到呢？\n\n➡️有限制包包大小嗎？ \n      進去會檢查？\n\n➡️喉糖、小糖果可以帶嗎？\n\n還有什麼需要帶或是注意的嗎？\n\n▓謝謝大家！",
-          "summary": "演唱會初心者 請問優里演唱會 ➡️15:30開放 17:00開演 建議幾點到呢？ ➡️有限制包包大小嗎？ 進去會檢查？ ➡️喉糖、小糖果可以帶嗎？ 還有什麼需要帶或是注意的嗎？ ▓謝謝大家！",
-          "permalink": "https://www.threads.com/@did00940/post/DeGj563GNLX",
-          "posted_at": "2026-10-05T06:25:42Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_74a6ecb5dcafff2e",
-          "post_key": "post_74a6ecb5dcafff2e",
-          "snapshot_id": "deck_2026-10-06_5d_74a6ecb5dcafff2e",
-          "post_id": "3998247826299771840",
+          "id": "post_9b9166bf96cf8b9c",
+          "post_key": "post_9b9166bf96cf8b9c",
+          "snapshot_id": "deck_2026-10-06_5d_9b9166bf96cf8b9c",
+          "post_id": "3999860084897393841",
           "category": "其他演出內容",
           "kind": "context",
           "status": "近期",
-          "score": 61.579,
+          "score": 54.758,
           "base_score": 60.0,
-          "actionability_score": 4.3,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 2.0,
-          "intent_band": "medium",
-          "candidate_confidence": "medium",
-          "intent_signals": [
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "怎麼",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "dresscode"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "kyi.017",
-          "text": "洪知秀起床發現怎麼演唱會dresscode變成hot pink 了🤣",
-          "summary": "洪知秀起床發現怎麼演唱會dresscode變成hot pink 了🤣",
-          "permalink": "https://www.threads.com/@kyi.017/post/Dd8oTbik1vA",
-          "posted_at": "2026-10-01T09:51:44Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_be7a32e4f9b484c4",
-          "post_key": "post_be7a32e4f9b484c4",
-          "snapshot_id": "deck_2026-10-06_5d_be7a32e4f9b484c4",
-          "post_id": "3998803226414351488",
-          "category": "周邊／現場商品",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 60.598,
-          "base_score": 60.0,
-          "actionability_score": 4.3,
-          "actionability_band": "low",
-          "ranking_delta": -3.702,
-          "intent_score": 2.0,
-          "intent_band": "medium",
-          "candidate_confidence": "medium",
-          "intent_signals": [
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "周邊",
-            "演唱會"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "周邊"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "merch_need",
-            "question_intent"
-          ],
-          "username": "efuuuu1121",
-          "text": "為什麼現在大家都要預約買周邊？不是演唱會現場就可以買嗎？",
-          "summary": "為什麼現在大家都要預約買周邊？不是演唱會現場就可以買嗎？",
-          "permalink": "https://www.threads.com/@efuuuu1121/post/Dd-mlkNHQSA",
-          "posted_at": "2026-10-02T04:15:13Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_fec7ada26e484b0b",
-          "post_key": "post_fec7ada26e484b0b",
-          "snapshot_id": "deck_2026-10-06_5d_fec7ada26e484b0b",
-          "post_id": "3998101650594311478",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 60.3,
-          "base_score": 60.0,
-          "actionability_score": 4.3,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 2.0,
-          "intent_band": "medium",
-          "candidate_confidence": "medium",
-          "intent_signals": [
-            "need_question"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "周邊"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "周邊"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "merch_need",
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "7992_smile",
-          "text": "🩷代購JX 韓場CORE演唱會周邊💚\n\n📍因為只會去排10／9號一天，周邊品項也有限購，所以有需要的再麻煩盡快喊單，因為不知道現場備貨量如何，所以不接受因為哪一個品項沒買到而棄單喔🥲\n\n✨️下單範例：號碼品項X數量\n‼️請直接私訊我ig或Threads私訊喊單，喊單後如怕沒看到您的訊息，可以在留言區告知一下，交易需匯全款+60元超商運費，不需二補，回台後會馬上寄出😀\n\n3️⃣隨機小卡(2張入)💰180\n4️⃣明信片組(6張入)💰400\n5️⃣鐵盒＋貼紙組（貼紙10張）💰430\n6️⃣胸章組(4個入)💰350\n7️⃣連帽拉鍊外套（有小卡)💰2680\n8️⃣T-Shirts (有小卡)💰1350\n9️⃣棒球帽💰1180\n🔟拖鞋💰880\n1️⃣1️⃣襪子組（2雙入)💰650\n1️⃣2️⃣手環(有小卡)💰980\n1️⃣3️⃣防水提袋💰530\n1️⃣4️⃣JX壓克力立牌組💰680\n1️⃣5️⃣壓克力鑰匙圈💰660\n1️⃣6️⃣迷你模型鑰匙圈💰560\n#金俊秀金在中",
-          "summary": "🩷代購JX 韓場CORE演唱會周邊💚 📍因為只會去排10／9號一天，周邊品項也有限購，所以有需要的再麻煩盡快喊單，因為不知道現場備貨量如何，所以不接受因為哪一個品項沒買到而棄單喔🥲 ✨️下單範例：號碼品項X數量 ‼️請直接私訊我ig或Threads私訊喊單，喊單後如怕沒看到您的訊息，可以在留言區告知一下，交易需匯全款+60元超商運費，不需二補，回台後會馬上…",
-          "permalink": "https://www.threads.com/@7992_smile/post/Dd8HESzk602",
-          "posted_at": "2026-10-01T05:01:19Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_c59d9628732c16e1",
-          "post_key": "post_c59d9628732c16e1",
-          "snapshot_id": "deck_2026-10-06_5d_c59d9628732c16e1",
-          "post_id": "4000532233832058754",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 59.745,
-          "base_score": 63.364,
-          "actionability_score": -0.4,
-          "actionability_band": "low",
-          "ranking_delta": -3.219,
-          "intent_score": 1.0,
-          "intent_band": "medium",
-          "candidate_confidence": "medium",
-          "intent_signals": [
-            "action_marker",
-            "logistics_context"
-          ],
-          "intent_penalties": [
-            "third_party_logistics"
-          ],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [
-            "trip_extension"
-          ],
-          "need_terms": [
-            "附近"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "long_fandom_story"
-          ],
-          "username": "elimisnoa_drawing",
-          "text": "2026.10.4 吉卜力原唱歌手演唱會 參戰\n速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹\n-\n1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去\n2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴\n3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！\n4. 聽到島本很值得⋯還宣傳藥師少女🥹還真不知道旁白是她配的，麵包超人也是回憶殺嗚嗚嗚\n5. 老師們實在是都老了，但韻味也還在，就真的是聽情懷也很滿足⋯\n6.樂團不會到不行，但鋼琴不太行有夠硬也偏隨便，法國號也有小烙賽，都職業樂手了這種芭樂歌真的有很難嗎（\n但樂團的鍋還是決定丟給音控，到底在調什麼我還坐控台附近欸==\n7.其實我是衝著もののけ姫去的，但⋯米良老師⋯唉⋯我覺得知道自己不太行後就退休也是個專業，硬賺錢只會讓粉轉黑而已⋯後面致詞也看起來只想趕快下班⋯",
-          "summary": "2026.10.4 吉卜力原唱歌手演唱會 參戰 速記一下，雖然網路上罵聲一片但對苦悶菸酒生還是有回血作用🥹 - 1. 用什麼AI醜圖啊版權經費不夠嗎，拜託下去 2. 音控實在是不太行，大爆音聽到耳朵很痛，而且不是把低音調厚就可以假裝自己是完整編制樂團好嗎🫴 3. 新生代今尾老師我蠻喜歡的！聲音很可愛也很乾淨，高音不美聲但以唱流行歌我覺得還可以！ 4. 聽到…",
-          "permalink": "https://www.threads.com/@elimisnoa_drawing/post/DeEvt72D0-C",
-          "posted_at": "2026-10-04T13:30:27Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_e02f59191f5092fd",
-          "post_key": "post_e02f59191f5092fd",
-          "snapshot_id": "deck_2026-10-06_5d_e02f59191f5092fd",
-          "post_id": "4000778605051099244",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 59.682,
-          "base_score": 65.403,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "lengendarycowboy4ever",
-          "text": "Did you enjoy my performance from my last concert , should I remain in the band or not ?\n\n#kevincostner\n#kevincostnerlegend",
-          "summary": "Did you enjoy my performance from my last concert , should I remain in the band or not ? #kevincostner #kevincostnerlegend",
-          "permalink": "https://www.threads.com/@lengendarycowboy4ever/post/DeFnvG7Dbhs",
-          "posted_at": "2026-10-04T21:39:56Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_106635a11034223b",
-          "post_key": "post_106635a11034223b",
-          "snapshot_id": "deck_2026-10-06_5d_106635a11034223b",
-          "post_id": "3999866059532418020",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 59.0,
-          "base_score": 60.0,
-          "actionability_score": 3.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "門票"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "kizuna322",
-          "text": "請問 Radiohead日本埼玉的演唱會門票可以退票嗎？\n不行的話 我抽到兩場不同天的\n讓一天給想看的人 資訊如下\n6/8（二） or 6/9 （三） 兩張\n皆為B區域（日幣15,000/張）",
-          "summary": "請問 Radiohead日本埼玉的演唱會門票可以退票嗎？ 不行的話 我抽到兩場不同天的 讓一天給想看的人 資訊如下 6/8（二） or 6/9 （三） 兩張 皆為B區域（日幣15,000/張）",
-          "permalink": "https://www.threads.com/@kizuna322/post/DeCYP0rkjvk",
-          "posted_at": "2026-10-03T15:26:52Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_5751e082fa6c3b09",
-          "post_key": "post_5751e082fa6c3b09",
-          "snapshot_id": "deck_2026-10-06_5d_5751e082fa6c3b09",
-          "post_id": "3998450397787027351",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 59.0,
-          "base_score": 60.0,
-          "actionability_score": 3.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "門票"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "use_for_ask",
-          "text": "悠遊付\n請問您現在是打算讓生活繳費也像搶演唱會門票一樣無限循環嗎\n我已經等了三十多分鐘了",
-          "summary": "悠遊付 請問您現在是打算讓生活繳費也像搶演唱會門票一樣無限循環嗎 我已經等了三十多分鐘了",
-          "permalink": "https://www.threads.com/@use_for_ask/post/Dd9WXO8HXeX",
-          "posted_at": "2026-10-01T16:34:12Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_c3b699429e2536e8",
-          "post_key": "post_c3b699429e2536e8",
-          "snapshot_id": "deck_2026-10-06_5d_c3b699429e2536e8",
-          "post_id": "3998787757761814785",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 59.0,
-          "base_score": 60.0,
-          "actionability_score": 3.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer",
-            "question_intent",
-            "ticketing_need"
-          ],
-          "username": "ehsjsbjq",
-          "text": "想問抽中日巡演唱會要如何升P\n第一次抽選 沒有經驗 求指導😭🙏🏻",
-          "summary": "想問抽中日巡演唱會要如何升P 第一次抽選 沒有經驗 求指導😭🙏🏻",
-          "permalink": "https://www.threads.com/@ehsjsbjq/post/Dd-jEd5kuEB",
-          "posted_at": "2026-10-02T03:44:29Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_82bf07a9fd73a6d5",
-          "post_key": "post_82bf07a9fd73a6d5",
-          "snapshot_id": "deck_2026-10-06_5d_82bf07a9fd73a6d5",
-          "post_id": "3998345649952095693",
-          "category": "VIP／互動福利",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 57.0,
-          "base_score": 60.0,
-          "actionability_score": 1.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer",
-            "question_intent",
-            "vip_benefit"
-          ],
-          "username": "manwai16",
-          "text": "想問一句明天的演唱會會有人想要不是Vip區的票嗎?因為自己搶票的時候先搶了不是Vip區的，但再刷刷到Vip區的，又是第一次買不知道應如何做。如果有人想要我可以轉给她／他喔~因為想大家都看到FEniX🙇‍♀️🙇‍♀️",
-          "summary": "想問一句明天的演唱會會有人想要不是Vip區的票嗎?因為自己搶票的時候先搶了不是Vip區的，但再刷刷到Vip區的，又是第一次買不知道應如何做。如果有人想要我可以轉给她／他喔~因為想大家都看到FEniX🙇‍♀️🙇‍♀️",
-          "permalink": "https://www.threads.com/@manwai16/post/Dd8-i86n33N",
-          "posted_at": "2026-10-01T13:06:06Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_b06447b2627a64b1",
-          "post_key": "post_b06447b2627a64b1",
-          "snapshot_id": "deck_2026-10-06_5d_b06447b2627a64b1",
-          "post_id": "3998358154538941684",
-          "category": "VIP／互動福利",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 57.0,
-          "base_score": 60.0,
-          "actionability_score": 1.0,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer",
-            "question_intent",
-            "vip_benefit"
-          ],
-          "username": "chia.cc1",
-          "text": "想問一下各位monstiez 如果想搶台北場的vip區有比較推薦A.E.C哪一區嗎\n第一次聽她們演唱會，沒有什麼經驗想聽聽大家意見",
-          "summary": "想問一下各位monstiez 如果想搶台北場的vip區有比較推薦A.E.C哪一區嗎 第一次聽她們演唱會，沒有什麼經驗想聽聽大家意見",
-          "permalink": "https://www.threads.com/@chia.cc1/post/Dd9BY6uFHz0",
-          "posted_at": "2026-10-01T13:30:56Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_f46336854d71590c",
-          "post_key": "post_f46336854d71590c",
-          "snapshot_id": "deck_2026-10-06_5d_f46336854d71590c",
-          "post_id": "4000315889760605489",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.852,
-          "base_score": 61.573,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "mrjohnwick167",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@mrjohnwick167/post/DeD-htuiBUx",
-          "posted_at": "2026-10-04T06:20:36Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_0773c7feeca4c712",
-          "post_key": "post_0773c7feeca4c712",
-          "snapshot_id": "deck_2026-10-06_5d_0773c7feeca4c712",
-          "post_id": "3998288927518567442",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.758,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
+          "actionability_score": -4.0,
           "actionability_band": "low",
           "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "zhimozhuang",
-          "text": "演唱會限定的商品要到5號才能寄喔….\n這樣到轉運倉再寄過來是不是來不及拿到飯匙了",
-          "summary": "演唱會限定的商品要到5號才能寄喔…. 這樣到轉運倉再寄過來是不是來不及拿到飯匙了",
-          "permalink": "https://www.threads.com/@zhimozhuang/post/Dd8xpiCHywS",
-          "posted_at": "2026-10-01T11:13:24Z",
-          "media_type": "IMAGE",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_48b5c6cec78d3ef5",
-          "post_key": "post_48b5c6cec78d3ef5",
-          "snapshot_id": "deck_2026-10-06_5d_48b5c6cec78d3ef5",
-          "post_id": "3998894792280978367",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.758,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "睇",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "thankstoeight",
-          "text": "我要睇田！馥！甄！演唱會\n求求賜我一場就足夠▓",
-          "summary": "我要睇田！馥！甄！演唱會 求求賜我一場就足夠▓",
-          "permalink": "https://www.threads.com/@thankstoeight/post/Dd-7aBkETO_",
-          "posted_at": "2026-10-02T07:17:08Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_8d892f63287b5402",
-          "post_key": "post_8d892f63287b5402",
-          "snapshot_id": "deck_2026-10-06_5d_8d892f63287b5402",
-          "post_id": "3999050158562056016",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.758,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "wn_ht_2013_2.0",
-          "text": "昨天看Sana的冰箱採訪\n看到她和俊昊聊到女舞者的話題\n\n立刻就想到\n這段張祐榮以前在演唱會上\n調侃哈踢們的經典往事😂\n真的超好笑有夠皮\n居然還叫我們要做好表情管理ㅋㅋㅋ\n\n後面也幫大家準備了\n個人覺得完全不輸\nBack 2U的Missing You\n各位小心血壓升高wwww",
-          "summary": "昨天看Sana的冰箱採訪 看到她和俊昊聊到女舞者的話題 立刻就想到 這段張祐榮以前在演唱會上 調侃哈踢們的經典往事😂 真的超好笑有夠皮 居然還叫我們要做好表情管理ㅋㅋㅋ 後面也幫大家準備了 個人覺得完全不輸 Back 2U的Missing You 各位小心血壓升高wwww",
-          "permalink": "https://www.threads.com/@wn_ht_2013_2.0/post/Dd_eu5sD5dQ",
-          "posted_at": "2026-10-02T12:28:22Z",
-          "media_type": "VIDEO",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_b78cfe50a21e6d6c",
-          "post_key": "post_b78cfe50a21e6d6c",
-          "snapshot_id": "deck_2026-10-06_5d_b78cfe50a21e6d6c",
-          "post_id": "3999091666879879211",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.758,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "iamking_0618",
-          "text": "雖然大部分的人根本不在意演唱會製作單位，但真的要說「製作單位是誰」就是有差啊啊啊，製作單位可以決定演唱會結束後能不能讓觀眾「一直都記得，不只是花錢聽歌」\n\n看到田馥甄新巡演找亞斯娛樂很欣慰，亞斯做的演唱會品質都很好😍\n\n田馥甄好眼光🤩（但我要去機率80%的簽唱會，演唱會好難😭）",
-          "summary": "雖然大部分的人根本不在意演唱會製作單位，但真的要說「製作單位是誰」就是有差啊啊啊，製作單位可以決定演唱會結束後能不能讓觀眾「一直都記得，不只是花錢聽歌」 看到田馥甄新巡演找亞斯娛樂很欣慰，亞斯做的演唱會品質都很好😍 田馥甄好眼光🤩（但我要去機率80%的簽唱會，演唱會好難😭）",
-          "permalink": "https://www.threads.com/@iamking_0618/post/Dd_oK7UmZgr",
-          "posted_at": "2026-10-02T13:48:18Z",
-          "media_type": "CAROUSEL_ALBUM",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_bd0821f3e3bbde43",
-          "post_key": "post_bd0821f3e3bbde43",
-          "snapshot_id": "deck_2026-10-06_5d_bd0821f3e3bbde43",
-          "post_id": "3998248209877263896",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 55.758,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -1.242,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [],
-          "username": "mandyyy._.1013",
-          "text": "啊啊啊啊啊啊啊啊啊\n防彈竟然在台灣演出有轉播嗎？！\n還是在我去演唱會的那天嗎！？\n11/21！\n我要瘋了啊啊啊啊啊！（​",
-          "summary": "啊啊啊啊啊啊啊啊啊 防彈竟然在台灣演出有轉播嗎？！ 還是在我去演唱會的那天嗎！？ 11/21！ 我要瘋了啊啊啊啊啊！（​",
-          "permalink": "https://www.threads.com/@mandyyy._.1013/post/Dd8oZAxk2YY",
-          "posted_at": "2026-10-01T09:52:30Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_a9e3e3c414fae833",
-          "post_key": "post_a9e3e3c414fae833",
-          "snapshot_id": "deck_2026-10-06_5d_a9e3e3c414fae833",
-          "post_id": "4000207664914635347",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.956,
-          "base_score": 60.677,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "johnwickk.45757339",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@johnwickk.45757339/post/DeDl61fCBpT",
-          "posted_at": "2026-10-04T02:45:35Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_065de93e63dc85b7",
-          "post_key": "post_065de93e63dc85b7",
-          "snapshot_id": "deck_2026-10-06_5d_065de93e63dc85b7",
-          "post_id": "4000052658311834387",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "english",
-          "language_tokens": [
-            "concert"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "keanu65350",
-          "text": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and making beautiful memories together. I want everything to be properly arranged so that we can enjoy the journey without unnecessary stress or confusion. Let’s make sure we have all the confirmed details about the concert, travel, and pickup before making our final plans. Most importantly, please take good care of yourself",
-          "summary": "My love, ❤️🥰 Yes, the plan is for you to travel with me, and I know how much this opportunity means to you. I understand how excited you are about sharing these experiences and ma…",
-          "permalink": "https://www.threads.com/@keanu65350/post/DeDCrMViKsT",
-          "posted_at": "2026-10-03T21:37:37Z",
-          "media_type": "IMAGE",
-          "query": "concert",
-          "source_queries": [
-            "concert"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_0c75ea7eec39aeaa",
-          "post_key": "post_0c75ea7eec39aeaa",
-          "snapshot_id": "deck_2026-10-06_5d_0c75ea7eec39aeaa",
-          "post_id": "3999770251083479729",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "j1407b2580",
-          "text": "但我还是想问atm的演唱会为啥这么短，还是我之前看的太长了",
-          "summary": "但我还是想问atm的演唱会为啥这么短，还是我之前看的太长了",
-          "permalink": "https://www.threads.com/@j1407b2580/post/DeCCdoHAXqx",
-          "posted_at": "2026-10-03T12:16:31Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_1865495ff584ec1d",
-          "post_key": "post_1865495ff584ec1d",
-          "snapshot_id": "deck_2026-10-06_5d_1865495ff584ec1d",
-          "post_id": "3999735921419450614",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "jack_simil",
-          "text": "自己智障死哭一個先\n請問有買線上演唱會的大家是幾點開始看\n我一直以為是台灣18:30準備19:00開始\n\n超級興奮提早下班趕回家準備\n結果好像結束了⋯⋯\n\n哭被自己智障死欸 好傷心 真的哭出來\n😭😭😭",
-          "summary": "自己智障死哭一個先 請問有買線上演唱會的大家是幾點開始看 我一直以為是台灣18:30準備19:00開始 超級興奮提早下班趕回家準備 結果好像結束了⋯⋯ 哭被自己智障死欸 好傷心 真的哭出來 😭😭😭",
-          "permalink": "https://www.threads.com/@jack_simil/post/DeB6qEHk3j2",
-          "posted_at": "2026-10-03T11:08:19Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_18ea441a24127458",
-          "post_key": "post_18ea441a24127458",
-          "snapshot_id": "deck_2026-10-06_5d_18ea441a24127458",
-          "post_id": "3998219139995194345",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "jhihling.liou",
-          "text": "我想請問一下如果沒有預約到場週，演唱會當天大巨蛋會有現場排隊的地方可以買嗎？",
-          "summary": "我想請問一下如果沒有預約到場週，演唱會當天大巨蛋會有現場排隊的地方可以買嗎？",
-          "permalink": "https://www.threads.com/@jhihling.liou/post/Dd8hx_VlNPp",
-          "posted_at": "2026-10-01T08:54:44Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_2482bf7ec6089241",
-          "post_key": "post_2482bf7ec6089241",
-          "snapshot_id": "deck_2026-10-06_5d_2482bf7ec6089241",
-          "post_id": "3998364407281182215",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "哪裡",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "a8808181",
-          "text": "想問哪裡還可以租借手機～\n10/9-10/11 BIGBANG演唱會\n想借S26U跟VIVO X300 Ultra￼🙏🙏🙏",
-          "summary": "想問哪裡還可以租借手機～ 10/9-10/11 BIGBANG演唱會 想借S26U跟VIVO X300 Ultra￼🙏🙏🙏",
-          "permalink": "https://www.threads.com/@a8808181/post/Dd9Cz6Cj2YH",
-          "posted_at": "2026-10-01T13:43:22Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_2ecc926aa619d371",
-          "post_key": "post_2ecc926aa619d371",
-          "snapshot_id": "deck_2026-10-06_5d_2ecc926aa619d371",
-          "post_id": "3999614740368924806",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会",
-            "怎么"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "zh_yin129",
-          "text": "有没有人知道韩国看演唱会怎么举报🐮🎫",
-          "summary": "有没有人知道韩国看演唱会怎么举报🐮🎫",
-          "permalink": "https://www.threads.com/@zh_yin129/post/DeBfGpeGyCG",
-          "posted_at": "2026-10-03T07:07:33Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_333800b55dd3a7ab",
-          "post_key": "post_333800b55dd3a7ab",
-          "snapshot_id": "deck_2026-10-06_5d_333800b55dd3a7ab",
-          "post_id": "3998480522804807675",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "哪裡",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "yan.elldy",
-          "text": "想問一下台北有哪裡可以買大尺碼女裝的⋯\n想要找篇韓式一點的風格 想穿去看演唱會\n我身高166/體重115⋯（已經有在開始減肥了；；\n身材是屬於全身都胖的那種⋯網路上找好多都踩雷⋯\n希望可以找到😭",
-          "summary": "想問一下台北有哪裡可以買大尺碼女裝的⋯ 想要找篇韓式一點的風格 想穿去看演唱會 我身高166/體重115⋯（已經有在開始減肥了；； 身材是屬於全身都胖的那種⋯網路上找好多都踩雷⋯ 希望可以找到😭",
-          "permalink": "https://www.threads.com/@yan.elldy/post/Dd9dNnDGUf7",
-          "posted_at": "2026-10-01T17:34:04Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_45617f447bf0c57a",
-          "post_key": "post_45617f447bf0c57a",
-          "snapshot_id": "deck_2026-10-06_5d_45617f447bf0c57a",
-          "post_id": "3999560259068358162",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "冇",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "karen00ma",
-          "text": "請問有冇人出香港The Weeknd演唱會飛x2?\n邊一日都得🙏🏻最好係standing\n感謝偉大的Thread▓▓",
-          "summary": "請問有冇人出香港The Weeknd演唱會飛x2? 邊一日都得🙏🏻最好係standing 感謝偉大的Thread▓▓",
-          "permalink": "https://www.threads.com/@karen00ma/post/DeBSt1zie4S",
-          "posted_at": "2026-10-03T05:19:18Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_56722bc4047247aa",
-          "post_key": "post_56722bc4047247aa",
-          "snapshot_id": "deck_2026-10-06_5d_56722bc4047247aa",
-          "post_id": "3999651486371503533",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "aavance0709",
-          "text": "想問各位\n登記田馥甄演唱會\n想跟朋友2人一起去的話\n要分別登記還是一起登記抽中機率比較大？\n預計是會6場都登記",
-          "summary": "想問各位 登記田馥甄演唱會 想跟朋友2人一起去的話 要分別登記還是一起登記抽中機率比較大？ 預計是會6場都登記",
-          "permalink": "https://www.threads.com/@aavance0709/post/DeBndX2iV2t",
-          "posted_at": "2026-10-03T08:20:33Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_89998248d4ca8074",
-          "post_key": "post_89998248d4ca8074",
-          "snapshot_id": "deck_2026-10-06_5d_89998248d4ca8074",
-          "post_id": "3999734367967052580",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "liliumcallosum",
-          "text": "想請問有沒有大大可以好心分享歌單\n剛剛聽完演唱會超興奮\n但是有些歌不是這麼熟 不知道歌名\n拜託了 感謝🥹",
-          "summary": "想請問有沒有大大可以好心分享歌單 剛剛聽完演唱會超興奮 但是有些歌不是這麼熟 不知道歌名 拜託了 感謝🥹",
-          "permalink": "https://www.threads.com/@liliumcallosum/post/DeB6TdWmQMk",
-          "posted_at": "2026-10-03T11:05:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_bd19405f3f586ff0",
-          "post_key": "post_bd19405f3f586ff0",
-          "snapshot_id": "deck_2026-10-06_5d_bd19405f3f586ff0",
-          "post_id": "3999223220511410045",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "hk_zh",
-          "language_tokens": [
-            "聽日",
-            "睇",
-            "嘅",
-            "唔",
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "hawk.0898",
-          "text": "想問大家\n聽日睇演唱會個袋嘅size可以係幾大？🥹\n因為之前睇ado hall10都帶過袋入去\n但今次唔知係咪同之前一樣",
-          "summary": "想問大家 聽日睇演唱會個袋嘅size可以係幾大？🥹 因為之前睇ado hall10都帶過袋入去 但今次唔知係咪同之前一樣",
-          "permalink": "https://www.threads.com/@hawk.0898/post/DeAGFSME4d9",
-          "posted_at": "2026-10-02T18:09:40Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_fd40e0cd8eefc336",
-          "post_key": "post_fd40e0cd8eefc336",
-          "snapshot_id": "deck_2026-10-06_5d_fd40e0cd8eefc336",
-          "post_id": "3999028568818624173",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.279,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.721,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "question_intent"
-          ],
-          "username": "puddingggg_0",
-          "text": "請問有沒有好心人的unext 帳號可以租給我😭一天就可以了 我真的好想看back number演唱會的記錄檔😭價錢都可以再討論▓▓▓",
-          "summary": "請問有沒有好心人的unext 帳號可以租給我😭一天就可以了 我真的好想看back number演唱會的記錄檔😭價錢都可以再討論▓▓▓",
-          "permalink": "https://www.threads.com/@puddingggg_0/post/Dd_Z0urEqat",
-          "posted_at": "2026-10-02T11:42:56Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_8a73bef6df1ce8c3",
-          "post_key": "post_8a73bef6df1ce8c3",
-          "snapshot_id": "deck_2026-10-06_5d_8a73bef6df1ce8c3",
-          "post_id": "3999119319011311276",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 54.25,
-          "base_score": 60.0,
-          "actionability_score": -3.0,
-          "actionability_band": "low",
-          "ranking_delta": -2.75,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hans",
-          "language_tokens": [
-            "演唱会"
-          ],
-          "need_nodes": [],
-          "need_terms": [],
-          "need_edges": [],
-          "feature_tags": [
-            "first_timer"
-          ],
-          "username": "ineedurollwithme",
-          "text": "我总觉得127香港场会有惊喜。因为我要去。我开玩笑的、🌚其实是因为感觉官号发了好几条预热还有采访还是老数第一次来香港开演唱会、应该？应该会有点小惊喜吧🫪不过没有也没关系 正常发挥足矣",
-          "summary": "我总觉得127香港场会有惊喜。因为我要去。我开玩笑的、🌚其实是因为感觉官号发了好几条预热还有采访还是老数第一次来香港开演唱会、应该？应该会有点小惊喜吧🫪不过没有也没关系 正常发挥足矣",
-          "permalink": "https://www.threads.com/@ineedurollwithme/post/Dd_udUYEj6s",
-          "posted_at": "2026-10-02T14:43:14Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱会",
-          "source_queries": [
-            "演唱会"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_7325dc0d73c88267",
-          "post_key": "post_7325dc0d73c88267",
-          "snapshot_id": "deck_2026-10-06_5d_7325dc0d73c88267",
-          "post_id": "3998003529935473835",
-          "category": "票務／入場摩擦",
-          "kind": "actionable",
-          "status": "近期",
-          "score": 51.3,
-          "base_score": 60.0,
-          "actionability_score": -4.7,
-          "actionability_band": "low",
-          "ranking_delta": -4.0,
           "intent_score": 3.0,
           "intent_band": "medium",
           "candidate_confidence": "medium",
+          "target_fit_score": 4.0,
+          "target_fit_band": "high",
+          "target_fit_signals": [
+            "trip_commitment"
+          ],
+          "target_fit_penalties": [],
           "intent_signals": [
-            "logistics_context"
-          ],
-          "intent_penalties": [],
-          "language_context": "zh_hant",
-          "language_tokens": [
-            "演唱會",
-            "門票"
-          ],
-          "need_nodes": [
-            "wear_support"
-          ],
-          "need_terms": [
-            "手燈"
-          ],
-          "need_edges": [],
-          "feature_tags": [
-            "dialogue_narrative",
-            "long_fandom_story",
-            "merch_need",
-            "ticketing_need"
-          ],
-          "username": "this.is_chien",
-          "text": "永豐銀行處長看到年輕人演唱會拿著發光的螢光棒\n還特地回家問追星女兒：「這個電子的螢光棒叫什麼？」\n\n才知道，原來叫「手燈」。\n\n從一支手燈、一張門票，到存錢飛韓國追星，永豐銀觀察，新世代在意的已經不只是「擁有什麼」，而是「體驗過什麼、參與過什麼」。\n\n這也讓銀行重新思考，信用卡不該只是一張卡，而是能不能走進消費者整段追星、演唱會、旅行的體驗裡。\n\n永豐推出「追星補助計畫」後，沒有額外投入宣傳預算，卻在Threads、X、LINE群組、Dcard自然擴散，累計約120萬次瀏覽。",
-          "summary": "永豐銀行處長看到年輕人演唱會拿著發光的螢光棒 還特地回家問追星女兒：「這個電子的螢光棒叫什麼？」 才知道，原來叫「手燈」。 從一支手燈、一張門票，到存錢飛韓國追星，永豐銀觀察，新世代在意的已經不只是「擁有什麼」，而是「體驗過什麼、參與過什麼」。 這也讓銀行重新思考，信用卡不該只是一張卡，而是能不能走進消費者整段追星、演唱會、旅行的體驗裡。 永豐推出「追星補…",
-          "permalink": "https://www.threads.com/@this.is_chien/post/Dd7wwc0j8yr",
-          "posted_at": "2026-10-01T01:46:22Z",
-          "media_type": "TEXT_POST",
-          "query": "演唱會",
-          "source_queries": [
-            "演唱會"
-          ],
-          "retrieval_sources": [
-            "threads_ssr"
-          ],
-          "source": "Threads"
-        },
-        {
-          "id": "post_f7816c2f471970b8",
-          "post_key": "post_f7816c2f471970b8",
-          "snapshot_id": "deck_2026-10-06_5d_f7816c2f471970b8",
-          "post_id": "3998057683300345768",
-          "category": "其他演出內容",
-          "kind": "context",
-          "status": "近期",
-          "score": 48.781,
-          "base_score": 60.0,
-          "actionability_score": -8.0,
-          "actionability_band": "low",
-          "ranking_delta": -3.219,
-          "intent_score": 4.0,
-          "intent_band": "high",
-          "candidate_confidence": "high",
-          "intent_signals": [
-            "user_decision"
+            "trip_commitment"
           ],
           "intent_penalties": [],
           "language_context": "zh_hant",
@@ -5138,14 +1819,12 @@
           "need_nodes": [],
           "need_terms": [],
           "need_edges": [],
-          "feature_tags": [
-            "long_fandom_story"
-          ],
-          "username": "moohk2154",
-          "text": "［自言自語亂入］見到會員方面激烈的討論……\n\n我是去年俊秀今年在中差了幾分鐘/小時沒續到會的人\n我已恨爆自己了\n亦痛失去首爾場的機會\n雖然抵死，但被某些標籤為非忠粉也只能😮‍💨\n人生總有一些忙到爆炸的時候\n我是連本命允浩日巡忘記抽票、忘記upgrade 的笨蛋\n但好像沒有不夠喜歡他？\n討論熱烈大家都想去就好，真心希望他們場場爆滿日後只有更多機會開更多的演唱會！ \n\n#2024年JX演唱會5場全勤\n#他們專輯每個版本都沒漏掉\n#JX橫濱見希望澳門也能見啊",
-          "summary": "［自言自語亂入］見到會員方面激烈的討論…… 我是去年俊秀今年在中差了幾分鐘/小時沒續到會的人 我已恨爆自己了 亦痛失去首爾場的機會 雖然抵死，但被某些標籤為非忠粉也只能😮‍💨 人生總有一些忙到爆炸的時候 我是連本命允浩日巡忘記抽票、忘記upgrade 的笨蛋 但好像沒有不夠喜歡他？ 討論熱烈大家都想去就好，真心希望他們場場爆滿日後只有更多機會開更多的演唱會…",
-          "permalink": "https://www.threads.com/@moohk2154/post/Dd79EfEo2eo",
-          "posted_at": "2026-10-01T03:33:57Z",
+          "feature_tags": [],
+          "username": "flowerliu",
+          "text": "求求 6/9  OR 6/10 Radiohead 演唱會日本場一張！\n以為靠吸引力法則穩中的，機票也買好了\n結果還是落選，真的好絕望",
+          "summary": "求求 6/9 OR 6/10 Radiohead 演唱會日本場一張！ 以為靠吸引力法則穩中的，機票也買好了 結果還是落選，真的好絕望",
+          "permalink": "https://www.threads.com/@flowerliu/post/DeCW44Xkqyx",
+          "posted_at": "2026-10-03T15:15:00Z",
           "media_type": "TEXT_POST",
           "query": "演唱會",
           "source_queries": [
