@@ -130,7 +130,7 @@ ACTION_MARKERS = re.compile(
 
 
 USER_DECISION_MARKERS = re.compile(
-    r"我想|我要|我準備|我准备|我打算|我怕|我們想|我们想|我們要|我们要|想去|準備去|准备去|打算去"
+    r"我想|我要|我準備|我准备|我打算|我怕|我在糾結|我在纠结|我猶豫|我犹豫|我懶得|我懒得|我們想|我们想|我們要|我们要|想去|準備去|准备去|打算去"
     r"|來不及|来不及|趕不上|赶不上|回不了|住哪|住哪裡|住哪里|怎麼去|怎么去|怎麼回|怎么回"
     r"|推薦|推荐|請問|请问|想問|想问|有人知道|有沒有人知道|有没有人知道"
     r"|\bi\s+(?:need|want|plan|am\s+going|will\s+go|have\s+to)\b"
@@ -274,6 +274,9 @@ def intent_profile(
     if USER_DECISION_MARKERS.search(text):
         score += 4.0
         signals.append("user_decision")
+    if TRIP_COMMITMENT_MARKERS.search(text):
+        score += 3.0
+        signals.append("trip_commitment")
     if QUESTION.search(text) and need_nodes:
         score += 2.0
         signals.append("need_question")
