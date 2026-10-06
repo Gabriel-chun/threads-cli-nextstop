@@ -196,6 +196,12 @@ CROSS_CITY_ATTENDANCE_MARKERS = re.compile(
     re.I,
 )
 
+POST_EVENT_NEARBY_MARKERS = re.compile(
+    r"(?:演唱會結束|演唱会结束|散場|散场|結束後|结束后).{0,90}(?:附近|711|7-11|餐廳|餐厅|宵夜|集合|逛|景點|景点|吃)"
+    r"|(?:附近|711|7-11|餐廳|餐厅|宵夜|集合|逛|景點|景点|吃).{0,90}(?:散場後|散场后|演唱會結束後|演唱会结束后)",
+    re.I,
+)
+
 GENERIC_CONCERT_DECISION_MARKERS = re.compile(
     r"推薦看嗎|推荐看吗|值不值得看|值得去嗎|值得去吗|氛圍如何|氛围如何"
     r"|抽中率|中籤率|中签率|選全區|选全区|standing\s+or\s+seat"
@@ -393,7 +399,7 @@ def target_fit_profile(
     if "venue_outside" in nodes:
         score += 4.0
         signals.append("venue_outside")
-    if "trip_extension" in nodes and LOGISTICS_CONTEXT_MARKERS.search(text):
+    if "trip_extension" in nodes and POST_EVENT_NEARBY_MARKERS.search(text):
         score += 3.0
         signals.append("post_event_nearby")
     if "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text):
