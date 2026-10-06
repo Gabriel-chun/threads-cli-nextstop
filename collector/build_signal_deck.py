@@ -73,7 +73,7 @@ CATEGORY_RULES = [
 
 QUESTION = re.compile(
     r"請問|请问|想問|想问|有人有.*經驗|有人有.*经验|怎麼|怎么|如何|為什麼|为什么|有沒有人|有没有人"
-    r"|\bhow\b|\bwhere\b|\bcan\s+i\b|\bshould\s+i\b|\bis\s+there\b|\bwhat\b",
+    r"|嗎|吗|？|\?|\bhow\b|\bwhere\b|\bcan\s+i\b|\bshould\s+i\b|\bis\s+there\b|\bwhat\b",
     re.I,
 )
 
@@ -173,7 +173,19 @@ VENUE_OPERATION_MARKERS = re.compile(
 
 PARTICIPATION_PREP_MARKERS = re.compile(
     r"手燈.*(?:連線|连线|中控)|(?:連線|连线|中控).*手燈|應援.*交換|应援.*交换"
-    r"|場T|场T|排隊|排队|幾點到|几点到|多久到|提早到|提前到",
+    r"|場T|场T|(?:排隊|排队).*(?:場T|场T|周邊|周边|物販|merch)",
+    re.I,
+)
+
+TRIP_COMMITMENT_MARKERS = re.compile(
+    r"機票.*(?:買|买|訂|订)|(?:買|买|訂|订).*機票|車票.*(?:買|买|訂|订)|车票.*(?:买|订)"
+    r"|飯店.*(?:訂|订)|酒店.*(?:訂|订)|hotel.*booked|flight.*booked|ticket.*booked",
+    re.I,
+)
+
+POST_PROCESSING_MARKERS = re.compile(
+    r"下載到相冊|下载到相册|下載到相簿|下载到相簿|網盤|网盘|夸克|解碼|解码"
+    r"|重新下載|重新下载|轉檔|转档|codec|cloud\s*storage",
     re.I,
 )
 
@@ -387,6 +399,9 @@ def target_fit_profile(
     if LIVE_RECORDING_SETUP_MARKERS.search(text) and QUESTION.search(text):
         score += 4.0
         signals.append("live_recording_setup")
+    if POST_PROCESSING_MARKERS.search(text):
+        score -= 7.0
+        penalties.append("post_processing_only")
     if PARTICIPATION_PREP_MARKERS.search(text) and (QUESTION.search(text) or USER_DECISION_MARKERS.search(text)):
         score += 3.0
         signals.append("participation_prep")
@@ -398,6 +413,9 @@ def target_fit_profile(
     if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and USER_DECISION_MARKERS.search(text):
         score += 2.0
         signals.append("cross_city_commitment")
+    if TRIP_COMMITMENT_MARKERS.search(text):
+        score += 4.0
+        signals.append("trip_commitment")
 
     if GENERIC_CONCERT_DECISION_MARKERS.search(text) and not signals:
         score -= 4.0
