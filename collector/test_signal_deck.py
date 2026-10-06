@@ -154,13 +154,14 @@ class SignalDeckV03Tests(unittest.TestCase):
 
         deck = build_deck(posts, now)
         cards = deck["windows"]["1d"]["cards"]
+        self.assertEqual(len(cards), 1)
         self.assertEqual(cards[0]["post_id"], "mobility")
         self.assertEqual(cards[0]["language_context"], "english")
         self.assertIn("mobility", cards[0]["need_nodes"])
         self.assertIn("stay", cards[0]["need_nodes"])
         self.assertIn("mobility->venue_outside", cards[0]["need_edges"])
         self.assertEqual(cards[0]["actionability_band"], "high")
-        self.assertGreater(cards[0]["score"], cards[1]["score"])
+        self.assertEqual(cards[0]["candidate_confidence"], "high")
 
     def test_language_context_is_context_not_a_filter(self):
         now = datetime(2026, 10, 3, 2, 0, tzinfo=timezone.utc)
