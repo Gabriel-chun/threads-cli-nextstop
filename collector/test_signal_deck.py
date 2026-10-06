@@ -439,6 +439,39 @@ class SignalDeckV03Tests(unittest.TestCase):
             self.assertIn(cards[post_id]["candidate_confidence"], {"high", "medium"})
             self.assertGreaterEqual(cards[post_id]["target_fit_score"], 2)
 
+
+    def test_nearby_word_alone_does_not_create_post_event_fit(self):
+        now = datetime(2026, 10, 6, 15, 40, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "complaint",
+                "text": "看演唱會麻煩有點素質，不想聽也不用講出來讓附近的人都知道。",
+                "username": "complaint",
+                "permalink": "https://www.threads.com/@complaint/post/complaint",
+                "timestamp": "2026-10-06T15:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "after-event",
+                "text": "演唱會結束後我想去附近的 711 跟朋友集合，再看看有沒有地方吃宵夜。",
+                "username": "after",
+                "permalink": "https://www.threads.com/@after/post/after",
+                "timestamp": "2026-10-06T15:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        self.assertNotIn("complaint", by_id)
+        self.assertIn("after-event", by_id)
+        self.assertIn("post_event_nearby", by_id["after-event"]["target_fit_signals"])
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
