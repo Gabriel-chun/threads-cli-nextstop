@@ -32,7 +32,7 @@ class RelevanceProfileTests(unittest.TestCase):
         self.assertGreater(profile["category_weights"]["交通／散場"], 0)
         self.assertLess(profile["category_weights"]["其他演出內容"], 0)
 
-    def test_positive_profile_reorders_without_filtering(self):
+    def test_positive_profile_boosts_target_fit_without_reintroducing_generic_questions(self):
         now = datetime(2026, 10, 4, 4, 0, tzinfo=timezone.utc)
         profile = {
             "schema_version": "relevance-profile-v0.3",
@@ -70,11 +70,13 @@ class RelevanceProfileTests(unittest.TestCase):
             },
         ]
 
-        cards = build_deck(posts, now, profile)["windows"]["1d"]["cards"]
-        self.assertEqual(len(cards), 2)
+        window = build_deck(posts, now, profile)["windows"]["1d"]
+        cards = window["cards"]
+        self.assertEqual(len(cards), 1)
         self.assertEqual(cards[0]["post_id"], "mobility")
         self.assertGreater(cards[0]["ranking_delta"], 0)
-        self.assertLess(cards[1]["ranking_delta"], 0)
+        self.assertEqual(cards[0]["candidate_confidence"], "high")
+        self.assertEqual(window["low_confidence_count"], 1)
 
 
 if __name__ == "__main__":
