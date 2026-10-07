@@ -543,6 +543,63 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertIn(by_id["eligibility"]["review_lane"], {"core", "discovery"})
         self.assertIn("participation_eligibility", by_id["eligibility"]["target_fit_signals"])
 
+
+    def test_experience_utility_path_keeps_product_and_setup_needs(self):
+        now = datetime(2026, 10, 7, 4, 30, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "phone",
+                "text": "演唱會錄影用哪支手機比較好？我最在意收音、變焦跟防手震。",
+                "username": "phone",
+                "permalink": "https://www.threads.com/@phone/post/phone",
+                "timestamp": "2026-10-07T04:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+            {
+                "id": "battery",
+                "text": "看演唱會錄影超耗電，想問大家會帶多大的行動電源？",
+                "username": "battery",
+                "permalink": "https://www.threads.com/@battery/post/battery",
+                "timestamp": "2026-10-07T04:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+        ]
+
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        for post_id in ("phone", "battery"):
+            self.assertIn(post_id, by_id)
+            self.assertEqual(by_id[post_id]["review_lane"], "adjacent")
+            self.assertIn("experience_utility", by_id[post_id]["target_fit_paths"])
+
+    def test_media_retrieval_stays_discovery_not_adjacent(self):
+        now = datetime(2026, 10, 7, 4, 30, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "clip",
+                "text": "有人拍到剛剛安可那段影片嗎？求影片！",
+                "username": "clip",
+                "permalink": "https://www.threads.com/@clip/post/clip",
+                "timestamp": "2026-10-07T04:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+        ]
+
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        self.assertIn("clip", by_id)
+        self.assertEqual(by_id["clip"]["review_lane"], "discovery")
+        self.assertEqual(by_id["clip"]["candidate_confidence"], "low")
+        self.assertIn("media_retrieval", by_id["clip"]["target_fit_signals"])
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
