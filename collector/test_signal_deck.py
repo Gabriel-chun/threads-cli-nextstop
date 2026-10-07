@@ -600,6 +600,25 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(by_id["clip"]["candidate_confidence"], "low")
         self.assertIn("media_retrieval", by_id["clip"]["target_fit_signals"])
 
+
+    def test_vip_only_trade_does_not_consume_discovery_slot(self):
+        now = datetime(2026, 10, 7, 5, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "vip-trade",
+                "text": "想請問有誰加購了粉絲福利不要的嗎？如果有的話能不能轉賣給我。",
+                "username": "vip",
+                "permalink": "https://www.threads.com/@vip/post/vip-trade",
+                "timestamp": "2026-10-07T04:40:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 60,
+            },
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        self.assertEqual(window["cards"], [])
+        self.assertEqual(window["discovery_count"], 0)
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
