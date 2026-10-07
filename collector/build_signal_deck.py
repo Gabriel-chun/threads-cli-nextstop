@@ -16,6 +16,7 @@ DEFAULT_REVIEW_LIMIT = 40
 EXTEND_STEP = 10
 DISPLAY_LIMIT = 5
 MEDIUM_SAMPLE_LIMIT = 20
+DISCOVERY_SAMPLE_LIMIT = 5
 PROFILE_DEFAULT = "collector/archive/latest/relevance_profile.json"
 
 CATEGORY_RULES = [
@@ -99,11 +100,11 @@ LANGUAGE_HINTS = {
 }
 
 NEED_NODE_RULES = [
-    ("wear_support", re.compile(r"穿搭|應援|应援|周邊|周边|手燈|手灯|dress\s*code|outfit|merch|goods|lightstick", re.I)),
+    ("wear_support", re.compile(r"穿搭|應援|应援|周邊|周边|手燈|手灯|長袖|长袖|短袖|外套|怎麼穿|怎么穿|穿什麼|穿什么|dress\s*code|outfit|merch|goods|lightstick", re.I)),
     ("food", re.compile(r"餐廳|餐厅|宵夜|吃什麼|吃什么|美食|restaurant|food|dinner|late[- ]?night", re.I)),
     ("stay", re.compile(r"住宿|飯店|酒店|民宿|住哪|住哪裡|住哪里|hotel|hostel|accommodation|check[- ]?in|stay\s+(?:near|at|in)", re.I)),
     ("mobility", re.compile(r"高鐵|高铁|捷運|地鐵|地铁|港鐵|火車|火车|公車|公交|接駁|接驳|計程車|出租车|機場|机场|航班|metro|subway|mtr|train|bus|shuttle|uber|taxi|airport|flight", re.I)),
-    ("venue_inside", re.compile(r"入場|入场|寄物|寄存|置物|座位|安檢|安检|入口|視線|视线|實名|实名|本人確認|locker|seat|security\s*check|entrance|gate|line\s+of\s+sight", re.I)),
+    ("venue_inside", re.compile(r"入場|入场|寄物|寄存|置物|座位|安檢|安检|入口|視線|视线|實名|实名|本人確認|手環|手环|證件|证件|驗證|验证|姓名|名字|locker|seat|security\s*check|entrance|gate|line\s+of\s+sight", re.I)),
     ("venue_outside", re.compile(r"散場|散场|回程|末班|動線|动线|離場|离场|怎麼回|怎么回|after\s+(?:the\s+)?concert|after\s+(?:the\s+)?show|get\s+back|return\s+trip|last\s+(?:train|metro|bus)", re.I)),
     ("trip_extension", re.compile(r"景點|景点|逛街|旅遊|旅游|行程|附近|周邊行程|周边行程|sightseeing|itinerary|day\s+trip|shopping|what\s+to\s+do\s+nearby", re.I)),
 ]
@@ -167,9 +168,62 @@ LIVE_RECORDING_SETUP_MARKERS = re.compile(
 
 VENUE_OPERATION_MARKERS = re.compile(
     r"寄物|寄存|置物|行李|入口|安檢|安检|接待處|接待处|再次進入|再次进入|離場|离场"
-    r"|locker|bag\s*(?:size|policy)|security\s*check|re[- ]?entry|entrance|gate",
+    r"|手環|手环|證件|证件|身分證|身份证|實名驗證|实名验证|查證件|查证件|領手環|领手环"
+    r"|名字對不上|名字对不上|姓名.*對不上|姓名.*对不上"
+    r"|locker|bag\s*(?:size|policy)|security\s*check|re[- ]?entry|entrance|gate|id\s*check",
     re.I,
 )
+
+ATTENDEE_PREP_MARKERS = re.compile(
+    r"長袖|长袖|短袖|外套|薄長袖|薄长袖|怎麼穿|怎么穿|穿什麼|穿什么|dress\s*code|what\s+to\s+wear",
+    re.I,
+)
+
+PARTICIPATION_ELIGIBILITY_MARKERS = re.compile(
+    r"外國人|外国人|海外.*(?:報名|报名|申請|申请)|能不能.*(?:報名|报名|申請|申请|參加|参加)"
+    r"|可不可以.*(?:報名|报名|申請|申请|參加|参加)|資格|资格|eligib(?:le|ility)|registration",
+    re.I,
+)
+
+
+EXPERIENCE_GEAR_MARKERS = re.compile(
+    r"手機推薦|手机推荐|哪支手機|哪支手机|什麼手機|什么手机|收音|變焦|变焦|幾倍\s*zoom|几倍\s*zoom"
+    r"|行動電源|行动电源|充電|充电|電量|电量|續航|续航|power\s*bank|battery|charger"
+    r"|望遠鏡|望远镜|binocular|相機推薦|相机推荐|camera\s*recommend",
+    re.I,
+)
+
+ATTENDEE_GEAR_MARKERS = re.compile(
+    r"包包|背包|小包|透明包|防水|雨衣|雨具|耳塞|耳塞推薦|耳塞推荐"
+    r"|bag|backpack|clear\s*bag|raincoat|earplug",
+    re.I,
+)
+
+MEDIA_RETRIEVAL_MARKERS = re.compile(
+    r"有人.*(?:拍到|錄到|录到)|有沒有.*影片|有没有.*影片|求.*影片|找.*影片|徵.*影片|征.*影片"
+    r"|anyone.*(?:film|record|capture)|looking\s+for.*(?:video|clip)",
+    re.I,
+)
+
+ATTENDANCE_LOGISTICS_SIGNALS = {
+    "mobility",
+    "stay",
+    "venue_outside",
+    "post_event_nearby",
+    "venue_operation",
+    "solo_or_cross_city",
+    "cross_city_commitment",
+    "trip_commitment",
+    "participation_eligibility",
+}
+
+EXPERIENCE_UTILITY_SIGNALS = {
+    "live_recording_setup",
+    "experience_gear",
+    "attendee_gear",
+    "attendee_prep",
+    "media_retrieval",
+}
 
 PARTICIPATION_PREP_MARKERS = re.compile(
     r"手燈.*(?:連線|连线|中控)|(?:連線|连线|中控).*手燈|應援.*交換|应援.*交换"
@@ -283,6 +337,18 @@ def intent_profile(
     if TRIP_COMMITMENT_MARKERS.search(text):
         score += 3.0
         signals.append("trip_commitment")
+    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("participation_eligibility")
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 4.0
+        signals.append("experience_gear_need")
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("attendee_gear_need")
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
+        score += 2.0
+        signals.append("media_request")
     if QUESTION.search(text) and need_nodes:
         score += 2.0
         signals.append("need_question")
@@ -403,11 +469,28 @@ def target_fit_profile(
         score += 3.0
         signals.append("post_event_nearby")
     if "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text):
-        score += 3.0
+        score += 4.0
         signals.append("venue_operation")
+    if "wear_support" in nodes and ATTENDEE_PREP_MARKERS.search(text) and (
+        QUESTION.search(text) or USER_DECISION_MARKERS.search(text)
+    ):
+        score += 2.0
+        signals.append("attendee_prep")
+    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("participation_eligibility")
     if LIVE_RECORDING_SETUP_MARKERS.search(text) and QUESTION.search(text):
         score += 4.0
         signals.append("live_recording_setup")
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 4.0
+        signals.append("experience_gear")
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("attendee_gear")
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
+        score += 1.0
+        signals.append("media_retrieval")
     if POST_PROCESSING_MARKERS.search(text):
         score -= 7.0
         penalties.append("post_processing_only")
@@ -450,6 +533,63 @@ def candidate_confidence(intent_score: float, target_fit_score: float) -> str:
     if intent_score >= 1 and target_fit_score >= 2:
         return "medium"
     return "low"
+
+
+def target_fit_paths(signals: list[str]) -> list[str]:
+    signal_set = set(signals)
+    paths: list[str] = []
+    if signal_set & ATTENDANCE_LOGISTICS_SIGNALS:
+        paths.append("attendance_logistics")
+    if signal_set & EXPERIENCE_UTILITY_SIGNALS:
+        paths.append("experience_utility")
+    return paths
+
+
+def review_lane_for_card(card: dict[str, Any]) -> str:
+    paths = set(card.get("target_fit_paths") or [])
+    if "attendance_logistics" in paths:
+        return "core"
+    if "experience_utility" in paths:
+        return "adjacent"
+    return "core"
+
+
+DISCOVERY_BLOCKING_PENALTIES = {
+    "generic_concert_question",
+    "post_processing_only",
+}
+
+
+def is_discovery_candidate(card: dict[str, Any]) -> bool:
+    if card.get("candidate_confidence") != "low":
+        return False
+    if float(card.get("intent_score") or 0) < 2:
+        return False
+
+    penalties = set(card.get("target_fit_penalties") or [])
+    intent_penalties = set(card.get("intent_penalties") or [])
+    if penalties & DISCOVERY_BLOCKING_PENALTIES:
+        if "media_retrieval" not in set(card.get("target_fit_signals") or []):
+            return False
+    if intent_penalties & {"staffing_or_promo", "third_party_logistics"}:
+        return False
+
+    features = set(card.get("feature_tags") or [])
+    meaningful_features = features - {
+        "question_intent",
+        "long_fandom_story",
+        "fan_narrative",
+        "dialogue_narrative",
+        "cp_fandom_language",
+        "political_noise",
+    }
+    meaningful_nodes = set(card.get("need_nodes") or []) - {"trip_extension"}
+
+    return bool(
+        meaningful_features
+        or meaningful_nodes
+        or "media_retrieval" in set(card.get("target_fit_signals") or [])
+    )
 
 
 def load_relevance_profile(path: str | Path | None) -> dict[str, Any] | None:
@@ -669,6 +809,7 @@ def build_post_card(
         "target_fit_band": "high" if target_fit_score >= 4 else "medium" if target_fit_score >= 2 else "low",
         "target_fit_signals": target_fit_signals,
         "target_fit_penalties": target_fit_penalties,
+        "target_fit_paths": target_fit_paths(target_fit_signals),
         "intent_signals": intent_signals,
         "intent_penalties": intent_penalties,
         "language_context": language_context,
@@ -725,14 +866,33 @@ def build_deck(
         low_cards = [card for card in all_cards if card["candidate_confidence"] == "low"]
 
         sampled_medium = medium_cards[:MEDIUM_SAMPLE_LIMIT]
-        cards = (high_cards + sampled_medium)[:MAX_CANDIDATES]
+        discovery_cards = [
+            card for card in low_cards
+            if is_discovery_candidate(card)
+        ][:DISCOVERY_SAMPLE_LIMIT]
+
+        for card in high_cards + sampled_medium:
+            card["review_lane"] = review_lane_for_card(card)
+        for card in discovery_cards:
+            card["review_lane"] = "discovery"
+
+        cards = (high_cards + sampled_medium + discovery_cards)[:MAX_CANDIDATES]
         cards.sort(key=lambda card: (-card["score"], card["post_key"]))
 
         windows[key] = {
             "label": f"{days}日",
             "days": days,
             "signal_count": len(scoped),
-            "eligible_count": len(high_cards) + len(medium_cards),
+            "core_eligible_count": sum(
+                1 for card in high_cards + sampled_medium
+                if card.get("review_lane") == "core"
+            ),
+            "adjacent_count": sum(
+                1 for card in high_cards + sampled_medium
+                if card.get("review_lane") == "adjacent"
+            ),
+            "discovery_count": len(discovery_cards),
+            "eligible_count": len(high_cards) + len(medium_cards) + len(discovery_cards),
             "high_confidence_count": len(high_cards),
             "medium_confidence_count": len(medium_cards),
             "medium_sampled_count": len(sampled_medium),
