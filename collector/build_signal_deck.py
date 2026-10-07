@@ -185,6 +185,46 @@ PARTICIPATION_ELIGIBILITY_MARKERS = re.compile(
     re.I,
 )
 
+
+EXPERIENCE_GEAR_MARKERS = re.compile(
+    r"手機推薦|手机推荐|哪支手機|哪支手机|什麼手機|什么手机|收音|變焦|变焦|幾倍\s*zoom|几倍\s*zoom"
+    r"|行動電源|行动电源|充電|充电|電量|电量|續航|续航|power\s*bank|battery|charger"
+    r"|望遠鏡|望远镜|binocular|相機推薦|相机推荐|camera\s*recommend",
+    re.I,
+)
+
+ATTENDEE_GEAR_MARKERS = re.compile(
+    r"包包|背包|小包|透明包|防水|雨衣|雨具|耳塞|耳塞推薦|耳塞推荐"
+    r"|bag|backpack|clear\s*bag|raincoat|earplug",
+    re.I,
+)
+
+MEDIA_RETRIEVAL_MARKERS = re.compile(
+    r"有人.*(?:拍到|錄到|录到)|有沒有.*影片|有没有.*影片|求.*影片|找.*影片|徵.*影片|征.*影片"
+    r"|anyone.*(?:film|record|capture)|looking\s+for.*(?:video|clip)",
+    re.I,
+)
+
+ATTENDANCE_LOGISTICS_SIGNALS = {
+    "mobility",
+    "stay",
+    "venue_outside",
+    "post_event_nearby",
+    "venue_operation",
+    "solo_or_cross_city",
+    "cross_city_commitment",
+    "trip_commitment",
+    "participation_eligibility",
+}
+
+EXPERIENCE_UTILITY_SIGNALS = {
+    "live_recording_setup",
+    "experience_gear",
+    "attendee_gear",
+    "attendee_prep",
+    "media_retrieval",
+}
+
 PARTICIPATION_PREP_MARKERS = re.compile(
     r"手燈.*(?:連線|连线|中控)|(?:連線|连线|中控).*手燈|應援.*交換|应援.*交换"
     r"|場T|场T|(?:排隊|排队).*(?:場T|场T|周邊|周边|物販|merch)",
@@ -297,6 +337,18 @@ def intent_profile(
     if TRIP_COMMITMENT_MARKERS.search(text):
         score += 3.0
         signals.append("trip_commitment")
+    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("participation_eligibility")
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 4.0
+        signals.append("experience_gear_need")
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("attendee_gear_need")
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
+        score += 2.0
+        signals.append("media_request")
     if QUESTION.search(text) and need_nodes:
         score += 2.0
         signals.append("need_question")
@@ -430,6 +482,15 @@ def target_fit_profile(
     if LIVE_RECORDING_SETUP_MARKERS.search(text) and QUESTION.search(text):
         score += 4.0
         signals.append("live_recording_setup")
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 4.0
+        signals.append("experience_gear")
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+        score += 3.0
+        signals.append("attendee_gear")
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
+        score += 1.0
+        signals.append("media_retrieval")
     if POST_PROCESSING_MARKERS.search(text):
         score -= 7.0
         penalties.append("post_processing_only")
@@ -474,6 +535,25 @@ def candidate_confidence(intent_score: float, target_fit_score: float) -> str:
     return "low"
 
 
+def target_fit_paths(signals: list[str]) -> list[str]:
+    signal_set = set(signals)
+    paths: list[str] = []
+    if signal_set & ATTENDANCE_LOGISTICS_SIGNALS:
+        paths.append("attendance_logistics")
+    if signal_set & EXPERIENCE_UTILITY_SIGNALS:
+        paths.append("experience_utility")
+    return paths
+
+
+def review_lane_for_card(card: dict[str, Any]) -> str:
+    paths = set(card.get("target_fit_paths") or [])
+    if "attendance_logistics" in paths:
+        return "core"
+    if "experience_utility" in paths:
+        return "adjacent"
+    return "core"
+
+
 DISCOVERY_BLOCKING_PENALTIES = {
     "generic_concert_question",
     "post_processing_only",
@@ -489,7 +569,8 @@ def is_discovery_candidate(card: dict[str, Any]) -> bool:
     penalties = set(card.get("target_fit_penalties") or [])
     intent_penalties = set(card.get("intent_penalties") or [])
     if penalties & DISCOVERY_BLOCKING_PENALTIES:
-        return False
+        if "media_retrieval" not in set(card.get("target_fit_signals") or []):
+            return False
     if intent_penalties & {"staffing_or_promo", "third_party_logistics"}:
         return False
 
@@ -504,7 +585,11 @@ def is_discovery_candidate(card: dict[str, Any]) -> bool:
     }
     meaningful_nodes = set(card.get("need_nodes") or []) - {"trip_extension"}
 
-    return bool(meaningful_features or meaningful_nodes)
+    return bool(
+        meaningful_features
+        or meaningful_nodes
+        or "media_retrieval" in set(card.get("target_fit_signals") or [])
+    )
 
 
 def load_relevance_profile(path: str | Path | None) -> dict[str, Any] | None:
@@ -724,6 +809,7 @@ def build_post_card(
         "target_fit_band": "high" if target_fit_score >= 4 else "medium" if target_fit_score >= 2 else "low",
         "target_fit_signals": target_fit_signals,
         "target_fit_penalties": target_fit_penalties,
+        "target_fit_paths": target_fit_paths(target_fit_signals),
         "intent_signals": intent_signals,
         "intent_penalties": intent_penalties,
         "language_context": language_context,
@@ -786,7 +872,7 @@ def build_deck(
         ][:DISCOVERY_SAMPLE_LIMIT]
 
         for card in high_cards + sampled_medium:
-            card["review_lane"] = "core"
+            card["review_lane"] = review_lane_for_card(card)
         for card in discovery_cards:
             card["review_lane"] = "discovery"
 
@@ -797,7 +883,14 @@ def build_deck(
             "label": f"{days}日",
             "days": days,
             "signal_count": len(scoped),
-            "core_eligible_count": len(high_cards) + len(medium_cards),
+            "core_eligible_count": sum(
+                1 for card in high_cards + sampled_medium
+                if card.get("review_lane") == "core"
+            ),
+            "adjacent_count": sum(
+                1 for card in high_cards + sampled_medium
+                if card.get("review_lane") == "adjacent"
+            ),
             "discovery_count": len(discovery_cards),
             "eligible_count": len(high_cards) + len(medium_cards) + len(discovery_cards),
             "high_confidence_count": len(high_cards),
