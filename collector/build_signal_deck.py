@@ -557,6 +557,8 @@ def review_lane_for_card(card: dict[str, Any]) -> str:
 DISCOVERY_BLOCKING_PENALTIES = {
     "generic_concert_question",
     "post_processing_only",
+    "vip_only",
+    "merch_only",
 }
 
 
