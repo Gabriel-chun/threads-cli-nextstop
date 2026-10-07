@@ -536,7 +536,7 @@ class SignalDeckV03Tests(unittest.TestCase):
         by_id = {card["post_id"]: card for card in window["cards"]}
 
         self.assertIn("wear", by_id)
-        self.assertIn(by_id["wear"]["review_lane"], {"core", "discovery"})
+        self.assertIn(by_id["wear"]["review_lane"], {"adjacent", "discovery"})
         self.assertIn("attendee_prep", by_id["wear"]["target_fit_signals"])
 
         self.assertIn("eligibility", by_id)
