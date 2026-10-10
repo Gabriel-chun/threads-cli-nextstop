@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-10T16:18:32.770161Z",
+  "generated_at": "2026-10-10T19:41:32.298702Z",
   "network_date": "2026-10-11",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 1559,
-  "source_card_count": 6,
+  "source_master_count": 1582,
+  "source_card_count": 7,
   "layers": [
     "recall",
     "language",
@@ -17,31 +17,31 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 4
+      "count": 5
     },
     {
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 1
+      "count": 2
     },
     {
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 1
+      "count": 0
     },
     {
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 3
+      "count": 4
     },
     {
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 1
+      "count": 2
     },
     {
       "id": "lang:hk_zh",
@@ -53,7 +53,7 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 1
+      "count": 0
     },
     {
       "id": "lang:mixed",
@@ -65,7 +65,7 @@
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:food",
@@ -77,7 +77,7 @@
       "id": "need:stay",
       "label": "住",
       "layer": "need",
-      "count": 1
+      "count": 2
     },
     {
       "id": "need:mobility",
@@ -104,15 +104,15 @@
       "count": 0
     },
     {
-      "id": "kw:wear_support:lightstick",
-      "label": "lightstick",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "wear_support"
-    },
-    {
       "id": "kw:stay:酒店",
       "label": "酒店",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "stay"
+    },
+    {
+      "id": "kw:stay:飯店",
+      "label": "飯店",
       "layer": "keyword",
       "count": 1,
       "need_node": "stay"
@@ -129,12 +129,12 @@
     {
       "source": "recall:演唱會",
       "target": "lang:zh_hant",
-      "weight": 3
+      "weight": 4
     },
     {
-      "source": "lang:english",
-      "target": "need:wear_support",
-      "weight": 1
+      "source": "recall:演唱会",
+      "target": "lang:zh_hans",
+      "weight": 2
     },
     {
       "source": "lang:hk_zh",
@@ -147,28 +147,23 @@
       "weight": 1
     },
     {
+      "source": "lang:zh_hant",
+      "target": "need:stay",
+      "weight": 1
+    },
+    {
       "source": "need:stay",
       "target": "kw:stay:酒店",
       "weight": 1
     },
     {
+      "source": "need:stay",
+      "target": "kw:stay:飯店",
+      "weight": 1
+    },
+    {
       "source": "need:venue_inside",
       "target": "kw:venue_inside:入场",
-      "weight": 1
-    },
-    {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:lightstick",
-      "weight": 1
-    },
-    {
-      "source": "recall:concert",
-      "target": "lang:english",
-      "weight": 1
-    },
-    {
-      "source": "recall:演唱会",
-      "target": "lang:zh_hans",
       "weight": 1
     },
     {
@@ -178,16 +173,15 @@
     }
   ],
   "top_keywords": {
-    "wear_support": [
-      {
-        "term": "lightstick",
-        "count": 1
-      }
-    ],
+    "wear_support": [],
     "food": [],
     "stay": [
       {
         "term": "酒店",
+        "count": 1
+      },
+      {
+        "term": "飯店",
         "count": 1
       }
     ],
