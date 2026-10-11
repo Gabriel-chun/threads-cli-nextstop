@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-11T16:48:29.805807Z",
+  "generated_at": "2026-10-11T19:53:42.402371Z",
   "network_date": "2026-10-12",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 1705,
-  "source_card_count": 6,
+  "source_master_count": 1726,
+  "source_card_count": 7,
   "layers": [
     "recall",
     "language",
@@ -17,7 +17,7 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 5
+      "count": 6
     },
     {
       "id": "recall:演唱会",
@@ -35,7 +35,7 @@
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 5
+      "count": 6
     },
     {
       "id": "lang:zh_hans",
@@ -65,7 +65,7 @@
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 1
+      "count": 2
     },
     {
       "id": "need:food",
@@ -111,6 +111,13 @@
       "need_node": "wear_support"
     },
     {
+      "id": "kw:wear_support:穿什麼",
+      "label": "穿什麼",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "wear_support"
+    },
+    {
       "id": "kw:stay:飯店",
       "label": "飯店",
       "layer": "keyword",
@@ -122,16 +129,16 @@
     {
       "source": "recall:演唱會",
       "target": "lang:zh_hant",
-      "weight": 5
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:stay",
-      "weight": 1
+      "weight": 6
     },
     {
       "source": "lang:zh_hant",
       "target": "need:wear_support",
+      "weight": 2
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:stay",
       "weight": 1
     },
     {
@@ -145,6 +152,11 @@
       "weight": 1
     },
     {
+      "source": "need:wear_support",
+      "target": "kw:wear_support:穿什麼",
+      "weight": 1
+    },
+    {
       "source": "recall:演唱会",
       "target": "lang:zh_hans",
       "weight": 1
@@ -154,6 +166,10 @@
     "wear_support": [
       {
         "term": "dress code",
+        "count": 1
+      },
+      {
+        "term": "穿什麼",
         "count": 1
       }
     ],
