@@ -619,6 +619,131 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(window["cards"], [])
         self.assertEqual(window["discovery_count"], 0)
 
+
+    def test_semantic_role_gate_blocks_incidental_hotel_and_giveaway_context(self):
+        now = datetime(2026, 10, 11, 1, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "rain-hotel",
+                "text": "我当时被雨淋懵了，都希望立刻宣布演唱会取消然后我打车回酒店。",
+                "username": "rain",
+                "permalink": "https://www.threads.com/@rain/post/rain-hotel",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "giveaway",
+                "text": "公司派咗幾張10號場嘅飛俾我，但嗰日要出差，連酒店都book埋，唔想浪費所以免費送畀真心想去的人。",
+                "username": "give",
+                "permalink": "https://www.threads.com/@give/post/giveaway",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "real-stay",
+                "text": "Inspire 真的很方便，預算夠一定要訂裡面的飯店，演唱會結束後五分鐘就能回房休息。",
+                "username": "stay",
+                "permalink": "https://www.threads.com/@stay/post/real-stay",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        self.assertNotIn("rain-hotel", by_id)
+        self.assertNotIn("giveaway", by_id)
+        self.assertIn("real-stay", by_id)
+        self.assertIn("stay", by_id["real-stay"]["target_fit_signals"])
+        self.assertEqual(by_id["real-stay"]["semantic_role"], "advisory_experience")
+
+    def test_semantic_role_gate_blocks_rhetorical_solo_and_rhetorical_entry(self):
+        now = datetime(2026, 10, 11, 1, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "rhetorical-solo",
+                "text": "你真觉得你走到今天全靠大姐姐一个人吗？下次演唱会开给她自己看，我绝对闭嘴。",
+                "username": "solo",
+                "permalink": "https://www.threads.com/@solo/post/rhetorical-solo",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "rhetorical-entry",
+                "text": "林忆莲演唱会不会跟唱70%以上曲目的别入场，我看完一场就成婆罗门了，前面的人能滚吗？",
+                "username": "entry",
+                "permalink": "https://www.threads.com/@entry/post/rhetorical-entry",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        self.assertEqual(window["cards"], [])
+        self.assertEqual(window["discovery_count"], 0)
+
+    def test_semantic_role_gate_distinguishes_named_benefit_from_recording_need(self):
+        now = datetime(2026, 10, 11, 1, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "benefit",
+                "text": "請問最後福利的 SEND OFF + VIDEO AUDIO MESSAGE 是什麼？每個人都可以嗎？",
+                "username": "benefit",
+                "permalink": "https://www.threads.com/@benefit/post/benefit",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "recording",
+                "text": "18 Pro 更新後演唱會錄影只要放大就超糊，請問相機要怎麼設定？一直顯示需要對焦。",
+                "username": "record",
+                "permalink": "https://www.threads.com/@record/post/recording",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+
+        self.assertNotIn("benefit", by_id)
+        self.assertIn("recording", by_id)
+        self.assertEqual(by_id["recording"]["semantic_role"], "self_need")
+        self.assertIn("live_recording_setup", by_id["recording"]["target_fit_signals"])
+        self.assertEqual(by_id["recording"]["review_lane"], "adjacent")
+
+    def test_semantic_role_gate_keeps_real_venue_procedure(self):
+        now = datetime(2026, 10, 11, 1, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "procedure",
+                "text": "演唱會結束後會整隊到D區待命，手環沒號碼，我觀察一排30個人最右邊是1號。",
+                "username": "proc",
+                "permalink": "https://www.threads.com/@proc/post/procedure",
+                "timestamp": "2026-10-11T00:20:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        by_id = {card["post_id"]: card for card in window["cards"]}
+        self.assertIn("procedure", by_id)
+        self.assertEqual(by_id["procedure"]["semantic_role"], "procedural_experience")
+        self.assertIn("venue_operation", by_id["procedure"]["target_fit_signals"])
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
