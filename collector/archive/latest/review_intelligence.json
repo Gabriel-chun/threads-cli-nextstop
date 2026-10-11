@@ -1,0 +1,399 @@
+{
+  "schema_version": "review-intelligence-v0.1",
+  "generated_at": "2026-10-11T13:31:03.633574Z",
+  "source": "github:collector/archive/reviews",
+  "review_counts": {
+    "total": 352,
+    "relevant": 41,
+    "irrelevant": 311
+  },
+  "positive_patterns": {
+    "self_need": {
+      "relevant": 22,
+      "irrelevant": 54
+    },
+    "time_constraint": {
+      "relevant": 12,
+      "irrelevant": 10
+    },
+    "booking_decision": {
+      "relevant": 8,
+      "irrelevant": 2
+    },
+    "actionable_friction": {
+      "relevant": 8,
+      "irrelevant": 37
+    }
+  },
+  "negative_patterns": {
+    "resale": {
+      "relevant": 1,
+      "irrelevant": 11
+    },
+    "fan_opinion": {
+      "relevant": 6,
+      "irrelevant": 31
+    },
+    "third_party_narrative": {
+      "relevant": 5,
+      "irrelevant": 33
+    },
+    "announcement": {
+      "relevant": 2,
+      "irrelevant": 7
+    }
+  },
+  "category_stats": {
+    "VIP／互動福利": {
+      "relevant": 4,
+      "irrelevant": 14
+    },
+    "交通／散場": {
+      "relevant": 10,
+      "irrelevant": 2
+    },
+    "住宿／落腳": {
+      "relevant": 4,
+      "irrelevant": 0
+    },
+    "其他演出內容": {
+      "relevant": 13,
+      "irrelevant": 216
+    },
+    "周邊／現場商品": {
+      "relevant": 3,
+      "irrelevant": 16
+    },
+    "場館／現場體驗": {
+      "relevant": 1,
+      "irrelevant": 12
+    },
+    "拍攝／現場規則": {
+      "relevant": 0,
+      "irrelevant": 2
+    },
+    "票務／入場摩擦": {
+      "relevant": 5,
+      "irrelevant": 41
+    },
+    "陪同／Solo Attendance": {
+      "relevant": 1,
+      "irrelevant": 8
+    }
+  },
+  "feature_stats": {
+    "accommodation_need": {
+      "relevant": 4,
+      "irrelevant": 2
+    },
+    "cp_fandom_language": {
+      "relevant": 0,
+      "irrelevant": 2
+    },
+    "dialogue_narrative": {
+      "relevant": 1,
+      "irrelevant": 3
+    },
+    "first_timer": {
+      "relevant": 5,
+      "irrelevant": 23
+    },
+    "long_fandom_story": {
+      "relevant": 4,
+      "irrelevant": 28
+    },
+    "merch_need": {
+      "relevant": 6,
+      "irrelevant": 20
+    },
+    "question_intent": {
+      "relevant": 24,
+      "irrelevant": 88
+    },
+    "solo_attendance": {
+      "relevant": 4,
+      "irrelevant": 12
+    },
+    "ticketing_need": {
+      "relevant": 5,
+      "irrelevant": 42
+    },
+    "transport_need": {
+      "relevant": 14,
+      "irrelevant": 3
+    },
+    "venue_experience": {
+      "relevant": 4,
+      "irrelevant": 20
+    },
+    "vip_benefit": {
+      "relevant": 4,
+      "irrelevant": 18
+    }
+  },
+  "demand_clusters": [
+    {
+      "cluster_id": "post_show_return",
+      "label_zh": "散場返程",
+      "label_en": "Post-show return",
+      "relevant_count": 17,
+      "irrelevant_count": 4,
+      "affiliate_fit": "ready",
+      "solution_map": [
+        "intercity_transport_booking",
+        "local_mobility_or_transfer",
+        "accommodation_booking"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_816ba92dfec2b61e",
+          "category": "交通／散場",
+          "text": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？\n因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時\n\n如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
+          "reviewed_at": "2026-10-07T03:02:00.000+00:00"
+        },
+        {
+          "post_key": "post_9b9166bf96cf8b9c",
+          "category": "其他演出內容",
+          "text": "求求 6/9  OR 6/10 Radiohead 演唱會日本場一張！\n以為靠吸引力法則穩中的，機票也買好了\n結果還是落選，真的好絕望",
+          "reviewed_at": "2026-10-04T03:53:00.000+00:00"
+        },
+        {
+          "post_key": "post_6944ca4a3db30c2a",
+          "category": "交通／散場",
+          "text": "我准备坐18小时火车去深圳 \n看bts香港演唱会",
+          "reviewed_at": "2026-10-03T23:39:00.000+00:00"
+        },
+        {
+          "post_key": "post_c7685f0d8607d2fd",
+          "category": "住宿／落腳",
+          "text": "《屬於我們的…》演唱會收官場\n北京場11/27-29\n.\n啊啊啊啊～這麼這麼剛好卡死▓\n各位bbg們 機票飯店訂起來了🙌🏻\n說好的排除萬難 走了走了！！！！",
+          "reviewed_at": "2026-10-03T03:02:00.000+00:00"
+        },
+        {
+          "post_key": "post_07bc68ff00140ab6",
+          "category": "交通／散場",
+          "text": "有人知道AxMxP演唱會大概幾點結束嗎？\n因為要趕高鐵 在想要買幾點的高鐵票🥺",
+          "reviewed_at": "2026-10-03T03:02:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "accommodation",
+      "label_zh": "住宿／落腳",
+      "label_en": "Stay / lodging",
+      "relevant_count": 5,
+      "irrelevant_count": 2,
+      "affiliate_fit": "ready",
+      "solution_map": [
+        "accommodation_booking",
+        "hotel_near_venue",
+        "flight_hotel_bundle"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_224c7fc24cf9528a",
+          "category": "住宿／落腳",
+          "text": "有没有去曼谷看Bigbang演唱会的脆蜜呀？你们演唱会结束怎么回酒店呢？感觉大晚上的没有公共交通了一个人也不敢打车🥲",
+          "reviewed_at": "2026-10-09T01:59:00.000+00:00"
+        },
+        {
+          "post_key": "post_e5b0ee6d15fb18a0",
+          "category": "住宿／落腳",
+          "text": "有没有去过曼谷追泰腐或者看过演唱会的宝宝呀\n蹲蹲曼谷不闹诡的酒店推荐🥺\n最好楼下有711 离impact近的就更好了",
+          "reviewed_at": "2026-10-03T23:39:00.000+00:00"
+        },
+        {
+          "post_key": "post_c7685f0d8607d2fd",
+          "category": "住宿／落腳",
+          "text": "《屬於我們的…》演唱會收官場\n北京場11/27-29\n.\n啊啊啊啊～這麼這麼剛好卡死▓\n各位bbg們 機票飯店訂起來了🙌🏻\n說好的排除萬難 走了走了！！！！",
+          "reviewed_at": "2026-10-03T03:02:00.000+00:00"
+        },
+        {
+          "post_key": "post_31244a3ff6af196f",
+          "category": "住宿／落腳",
+          "text": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 \n脆友幫選\n1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000）\n2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3）\n差別在於要不要住一晚跟價格的部分 想問各位的建議😣😣😣🙏🏻",
+          "reviewed_at": "2026-10-02T15:15:00.000+00:00"
+        },
+        {
+          "post_key": "post_7ab87b4d0dcf7c36",
+          "category": "其他演出內容",
+          "text": "10/31 要去看藤井風 剛才已經買去程的票\n不知道到底可不可以當天回板橋 ? \n真的沒去過這麼大規模的演唱會\n到底回程要訂當天回家還是訂間旅館隔天回家呢 ?\n沒去過高雄國家體育場好害怕 \n拜託有沒有人有這種高雄當天回台北的經驗\n記得2年前小巨蛋 我隔壁男生說他是高雄上來\n還有一個分享應緩物的女生也是高雄上來\n他們好像都當天回高雄了啊 ??",
+          "reviewed_at": "2026-10-02T06:21:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "merch_prep",
+      "label_zh": "手燈／應援／周邊",
+      "label_en": "Lightstick / fan goods",
+      "relevant_count": 7,
+      "irrelevant_count": 24,
+      "affiliate_fit": "adjacent",
+      "solution_map": [
+        "official_merch_or_lightstick",
+        "fan_goods"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_215ea3a36ed73bcd",
+          "category": "周邊／現場商品",
+          "text": "想請問各位噗哩><\n手燈跟演唱會連線是正式才會開嗎～",
+          "reviewed_at": "2026-10-04T01:16:00.000+00:00"
+        },
+        {
+          "post_key": "post_d1f343f60cce9241",
+          "category": "其他演出內容",
+          "text": "高雄演唱會發瘋樓蓋一下\n先說天啊大家怎麼這麼早排隊🫪\n11：00到會有場T嗎😭😭",
+          "reviewed_at": "2026-10-03T03:03:00.000+00:00"
+        },
+        {
+          "post_key": "post_a7cb5a03a7c6d576",
+          "category": "交通／散場",
+          "text": "我其實不反對城市美學，也不反對辦活動。\n\n漂亮的建築、精彩的演唱會，確實能讓城市看起來更有活力。\n\n但身邊很多已有小孩的同事們平常聊的，好像不是這些。\n\n大家更常聊的是：\n🚗 什麼時候塞車可以改善？\n🏫 孩子未來有沒有足夠的學校可以讀？\n🅿️ 停車位到底夠不夠？\n🚶 通勤和生活能不能更方便？\n\n看到東區市場改建案從原本約5.5億元增加到接近14億元，而且工程延宕多年，讓人不禁思考：竹北市民真正需要的，究竟是一座更有設計感的市場，還是一個更實用、更方便使用的市場？\n\n不少民眾提到，竹北其實已經有傳統市場，與其追求特殊造型或華麗規劃，不如把重點放在停車空間、動線規劃、採買便利性，以及周邊交通改善。\n\n同樣地，最近聽說中秋演唱會相關經費超過千萬元。藝文活動當然有它的價值，也能帶來歡樂，但如果交通、教育、停車等民生問題還沒有明顯改善，相信很多市民心裡都會有同樣的疑問：\n如果這些資源能多投入一點在大家每天都會遇到的問題上，是不是能讓生活品質提升得更有感？\n\n竹北這幾年發展很快，人口持續增加。我期待的不是最華麗的建設，而是最符合市民需求的建設。",
+          "reviewed_at": "2026-10-03T03:02:00.000+00:00"
+        },
+        {
+          "post_key": "post_b829b709eae66b74",
+          "category": "周邊／現場商品",
+          "text": "演唱會是進場後連手燈嗎😵‍💫中控\n怕到時候很慌張",
+          "reviewed_at": "2026-10-03T02:23:00.000+00:00"
+        },
+        {
+          "post_key": "post_0eb3d2aa9cc99ce5",
+          "category": "周邊／現場商品",
+          "text": "［Vaundy “HORO” Asia tour 2026 3/10 香港場］\n人生第一次去演唱會+第一次整無料！！！！\n前日見大家咁比心機整應援 先突然決定試下做postcard😂\n真係ddl fight到無得更ddl fight💀\n之後會print around 20份左右\n但問題係我應該好遲先到會場（around 5:15-5:25pm？）\n唔知仲可唔可以同大家交換🥲🥀\n想問演唱會完左之後可否係hall 外面/￼周邊區停留？\n期待見到大家！！到時會再update🧡",
+          "reviewed_at": "2026-10-03T01:55:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "post_event_experience",
+      "label_zh": "演前／演後周邊",
+      "label_en": "Pre / post-show nearby",
+      "relevant_count": 7,
+      "irrelevant_count": 9,
+      "affiliate_fit": "adjacent",
+      "solution_map": [
+        "local_experience_or_activity",
+        "restaurant_reservation"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_9d908b44e4f40806",
+          "category": "VIP／互動福利",
+          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
+          "reviewed_at": "2026-10-06T06:15:00.000+00:00"
+        },
+        {
+          "post_key": "post_e5b0ee6d15fb18a0",
+          "category": "住宿／落腳",
+          "text": "有没有去过曼谷追泰腐或者看过演唱会的宝宝呀\n蹲蹲曼谷不闹诡的酒店推荐🥺\n最好楼下有711 离impact近的就更好了",
+          "reviewed_at": "2026-10-03T23:39:00.000+00:00"
+        },
+        {
+          "post_key": "post_6a421c14039bc43f",
+          "category": "其他演出內容",
+          "text": "這趟來韓國最期待的就是麵首爾\n結果最失望的也是這家\n我甚至以搶演唱會等級在等開放日期預訂\n\n我們有七位，在catch table 只能訂包廂\n訂位時強制選鴨或豬肉等等的主菜\n我們先選了豬肉並付錢了\n\n到現場點餐時，\n卻跟我們說還要多點一份主菜\n現場菜單上也沒寫哪些是他們說要加點的主菜\n我們拿平板問一個女服務人員哪些是主菜\n問了被臭臉不耐煩，她指了菜單的某區\n我們選了那區的湯被說不行，\n於是我們多點了鮑魚，因為鴨要先預訂才有\n\n我問服務人員為什麼要多點一道，我們不是先在catchtable訂了嗎？ 還是網頁上哪裡有條款我們沒看到，她不知道回我什麼後來還翻我白眼，還沒開動前已經先令人不爽，但出國在外還是先忍忍，回來再分享評價給大家\n\n等食物上來前，我還是期待食物會很好吃\n這樣可以原諒服務人員的無禮\n\n但食物上來後，\n我真的覺得強力推薦好吃的網友才需要道歉\n網友推爆的生紫蘇油麵跟餃子\n吃了也認真無言\n真的必須逆風誠實寫出心得\n非常不好吃，可以不用來\n請把寶貴的時間跟機會留給下一間",
+          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
+        },
+        {
+          "post_key": "post_b8b8916b8f33910c",
+          "category": "VIP／互動福利",
+          "text": "各位噗哩好\n本拖延症患者在前一天才要來找有沒有人願意跟我在演唱會當天一起走走逛逛拍照什麼的，大概在早上10:30到高雄高鐵！\n然後我是橙208的（不素vip）\n因為我是男噗哩可能有人比較不放心，這裡是IG帳號zzzzx.j大家可以看一下🥹（大帳脆有追蹤這個帳號也可以檢查一下）\n希望能夠找到夥伴🤓👆",
+          "reviewed_at": "2026-10-03T01:55:00.000+00:00"
+        },
+        {
+          "post_key": "post_6235c78ecb61502b",
+          "category": "票務／入場摩擦",
+          "text": "🆗⋯夜深人靜來講個大阪鬼故事好了😍\n收了一張9/10大阪場002 🈚️升 p\n（不含粽卡，001會先選位，入場後再換位）\n票主告知，進場如有問題都可以討論解決辦法。\n到了9/8票主告知我001們要下去內場。\n如果場館內無法互通，會給其中一位002拿001的護照入場，再不然的話就走退款。\n從這邊，就和剛開始交易說的「入場後換位」不一樣了！\n很擔心如果拿001護照被本確的話該怎麼辦？\n明明雙方也還在討論期間，票主就突然沒有再回覆了。\n（當時時間晚了認為可能是去休息了）\n但當晚我想了很久，認為這跟一開始說的不太一樣，因票主前面有提到退款的部分，所以我就提議要退款。\n票主才突然秒回詢問：「9/9確定不能互通再退款可以嗎？」\n因為前面交易過程中，票主回覆都稍慢，我也擔心可能要到9/9演唱會結束後才能知道互不互通，到時也來不及再去收9/10的票，所以還是提議要退款。\n果真一直到9/9下午都遲遲沒有收到回覆，但卻看到票主在大帳十分活躍，更新大阪小日記、參與抽選、約朋友吃飯？\n票主自述很積極處理，我屬實感受不太到。\n就連最後也是直接不讀不回😆",
+          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "recording_gear",
+      "label_zh": "拍攝／手機",
+      "label_en": "Recording / phone",
+      "relevant_count": 2,
+      "irrelevant_count": 8,
+      "affiliate_fit": "adjacent",
+      "solution_map": [
+        "recording_device_or_accessory",
+        "power_bank_or_charger",
+        "camera_or_lens"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_414aa4af1da1ed25",
+          "category": "其他演出內容",
+          "text": "請問有推薦錄影演唱會s26ultra的設定參數嗎？我都是用一般模式沒特別調 有開防手震 但覺得錄起來比s24ultra 還糊 臉無法對焦 還有下載camera assistant會比較好嗎🤔",
+          "reviewed_at": "2026-10-06T06:16:00.000+00:00"
+        },
+        {
+          "post_key": "post_f7a69f4a42f77944",
+          "category": "VIP／互動福利",
+          "text": "演唱會參加過很多場\n泰國見面會是第一次參加🥹\n看現在還有票打算買7280\n雖然覺得貴.但福利超好(尤其跟韓團相比🤣)\n好多不懂只好上來發問\n\n想請問大概是要幾點到呢.完全沒有概念😭\n擊掌時要說什麼呢\n看到很多影片大家都會邊錄影邊跟他們說一句話\n歡送完大概是幾點呢.不知道車票該買幾點\n\n因為才剛開始在GMM買東西\n都沒有他們的周邊會不會很奇怪\n但San真的好可愛😍\n\n抱歉問題有點多\n但因為是一個人參加.好緊張",
+          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "venue_prep",
+      "label_zh": "現場準備",
+      "label_en": "Venue preparation",
+      "relevant_count": 2,
+      "irrelevant_count": 6,
+      "affiliate_fit": "adjacent",
+      "solution_map": [
+        "apparel_or_outerwear",
+        "concert_bag_or_clear_bag",
+        "rain_gear",
+        "earplugs"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_4e846592fa92b6af",
+          "category": "其他演出內容",
+          "text": "大家這禮拜進場看演唱會會穿長袖還是短袖帶外套還是薄長袖\n從南部上去看演唱會的人不知道要怎麼穿😭",
+          "reviewed_at": "2026-10-07T14:45:00.000+00:00"
+        },
+        {
+          "post_key": "post_3e80ace2a1c17242",
+          "category": "票務／入場摩擦",
+          "text": "演唱會小白求助🙏🙏\n\n我竟然抽中咗😭，但第一次睇演唱會，唔知到時安排會係點，想問問各大佬意見🧎\n\n諗住帶A3 file裝poster ,但主辦規則寫“不準攜帶任何超過38×30×20厘米以上的物品”，咁A3file俾唔俾入場🗿\n\n同埋有冇大佬知道喺活動接待處攞完海報之後仲去唔去到行李寄存？因為主辦話離開主場館之後不得再次進入，咁攞海報嘅接待處係喺驗票處出面定入面🙏\n\n因為都想像到成個場興奮起上嚟可能會比較混亂，張海報好似放寄存安全啲🥲",
+          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "ticket_entry",
+      "label_zh": "票務／入場流程",
+      "label_en": "Ticketing / entry process",
+      "relevant_count": 3,
+      "irrelevant_count": 27,
+      "affiliate_fit": "insight_only",
+      "solution_map": [],
+      "evidence": [
+        {
+          "post_key": "post_3e80ace2a1c17242",
+          "category": "票務／入場摩擦",
+          "text": "演唱會小白求助🙏🙏\n\n我竟然抽中咗😭，但第一次睇演唱會，唔知到時安排會係點，想問問各大佬意見🧎\n\n諗住帶A3 file裝poster ,但主辦規則寫“不準攜帶任何超過38×30×20厘米以上的物品”，咁A3file俾唔俾入場🗿\n\n同埋有冇大佬知道喺活動接待處攞完海報之後仲去唔去到行李寄存？因為主辦話離開主場館之後不得再次進入，咁攞海報嘅接待處係喺驗票處出面定入面🙏\n\n因為都想像到成個場興奮起上嚟可能會比較混亂，張海報好似放寄存安全啲🥲",
+          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
+        },
+        {
+          "post_key": "post_6235c78ecb61502b",
+          "category": "票務／入場摩擦",
+          "text": "🆗⋯夜深人靜來講個大阪鬼故事好了😍\n收了一張9/10大阪場002 🈚️升 p\n（不含粽卡，001會先選位，入場後再換位）\n票主告知，進場如有問題都可以討論解決辦法。\n到了9/8票主告知我001們要下去內場。\n如果場館內無法互通，會給其中一位002拿001的護照入場，再不然的話就走退款。\n從這邊，就和剛開始交易說的「入場後換位」不一樣了！\n很擔心如果拿001護照被本確的話該怎麼辦？\n明明雙方也還在討論期間，票主就突然沒有再回覆了。\n（當時時間晚了認為可能是去休息了）\n但當晚我想了很久，認為這跟一開始說的不太一樣，因票主前面有提到退款的部分，所以我就提議要退款。\n票主才突然秒回詢問：「9/9確定不能互通再退款可以嗎？」\n因為前面交易過程中，票主回覆都稍慢，我也擔心可能要到9/9演唱會結束後才能知道互不互通，到時也來不及再去收9/10的票，所以還是提議要退款。\n果真一直到9/9下午都遲遲沒有收到回覆，但卻看到票主在大帳十分活躍，更新大阪小日記、參與抽選、約朋友吃飯？\n票主自述很積極處理，我屬實感受不太到。\n就連最後也是直接不讀不回😆",
+          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
+        },
+        {
+          "post_key": "post_aee776861f940177",
+          "category": "票務／入場摩擦",
+          "text": "收YOASOBI台北大巨蛋1/10末場公關票（無需實名制）\n2張15萬，請私訊我！\n不要問為什麼不飛國外看，因為我國外場福岡、札幌都早買好票了，\n我是超級YOA’S，不想在自己國家缺席他們的演唱會，FC也都有買每年付款，\n好玩跟遠大要這樣讓鐵粉沒有票看，有錢也沒有票可以看，\n進去看的都路人粉，\n我前年已經沒抽到小巨蛋了，想說大巨蛋一定要看到，\n不可能大巨蛋也沒看到，拜託了誰成全我一下…\n好玩跟遠大連FC抽選都不開也是拉完了…",
+          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
+        }
+      ]
+    }
+  ],
+  "note": "Derived from the latest human label per post. Human labels remain unchanged; this file is an interpretation layer only."
+}
