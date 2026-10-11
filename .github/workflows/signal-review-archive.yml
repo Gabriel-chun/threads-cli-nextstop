@@ -52,6 +52,9 @@ jobs:
           print(f"[review-archive] target={target} Asia/Taipei")
           PY
 
+      - name: Test review derivation
+        run: python3 -m unittest collector.test_review_intelligence collector.test_relevance_profile collector.test_review_snapshot
+
       - name: Export daily reviews from Notion
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -63,18 +66,22 @@ jobs:
 
           python3 collector/export_signal_reviews.py \
             --date "${ARCHIVE_DATE}" \
-            --output "${target}"
+            --output "${target}" \
+            --snapshot-output "${RUNNER_TEMP}/nextstop-review-current.json"
 
           cp "${target}" collector/archive/reviews/latest.json
 
       - name: Build positive relevance profile
         run: |
-          python3 collector/build_relevance_profile.py             --reviews collector/archive/reviews             --output collector/archive/latest/relevance_profile.json
+          python3 collector/build_relevance_profile.py             --reviews collector/archive/reviews \
+            --snapshot "${RUNNER_TEMP}/nextstop-review-current.json" \
+            --output collector/archive/latest/relevance_profile.json
 
       - name: Build review intelligence
         run: |
           python3 collector/build_review_intelligence.py \
             --reviews collector/archive/reviews \
+            --snapshot "${RUNNER_TEMP}/nextstop-review-current.json" \
             --output collector/archive/latest/review_intelligence.json
 
       - name: Validate archive
