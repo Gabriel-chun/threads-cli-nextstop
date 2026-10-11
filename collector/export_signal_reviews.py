@@ -125,6 +125,7 @@ def page_to_row(page: dict) -> dict | None:
         "base_score": number_value(props.get("Base Score")),
         "deck_generated_at": reviewed_at,
         "reviewed_at": reviewed_at,
+        "notion_edited_at": str(page.get("last_edited_time") or ""),
     }
 
 
@@ -154,6 +155,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--snapshot-output", default="", help="Temporary current-state snapshot for nightly builds; do not commit.")
     parser.add_argument(
         "--data-source-id",
         default=os.environ.get("NOTION_SIGNAL_REVIEW_DATA_SOURCE_ID", "1c78f7c4-8325-4838-aa5b-64c6c1b88a22"),
@@ -166,6 +168,20 @@ def main() -> None:
 
     datetime.strptime(args.date, "%Y-%m-%d")
     rows = list_rows(args.data_source_id, token)
+    if args.snapshot_output:
+        # The dated archive is an audit trail, not the source of truth for edited labels.
+        # Keep this complete snapshot only in the runner temporary directory.
+        if not rows:
+            raise SystemExit("Notion current-state review query returned zero rows; refusing to reset the intelligence layer")
+        snapshot = Path(args.snapshot_output)
+        snapshot.parent.mkdir(parents=True, exist_ok=True)
+        snapshot.write_text(json.dumps({
+            "schema_version": "signal-review-current-v0.1",
+            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "source": "notion:signal-review",
+            "count": len(rows),
+            "rows": rows,
+        }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     selected = [row for row in rows if taipei_date(str(row.get("reviewed_at") or "")) == args.date]
     selected.sort(key=lambda row: str(row.get("reviewed_at") or ""))
 
