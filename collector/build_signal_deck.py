@@ -225,6 +225,48 @@ EXPERIENCE_UTILITY_SIGNALS = {
     "media_retrieval",
 }
 
+
+INTERCITY_TRANSPORT_MARKERS = re.compile(
+    r"高鐵|高铁|火車|火车|台鐵|台铁|機票|机票|航班|機場|机场|airport|flight"
+    r"|intercity|train\s+ticket|rail|shuttle|airport\s+transfer",
+    re.I,
+)
+
+PHONE_PRODUCT_MARKERS = re.compile(
+    r"手機推薦|手机推荐|哪支手機|哪支手机|什麼手機|什么手机|iphone|pixel|galaxy|s\d{2}|pro\s*max",
+    re.I,
+)
+
+POWER_PRODUCT_MARKERS = re.compile(
+    r"行動電源|行动电源|power\s*bank|充電器|充电器|charger|續航|续航|電量|电量",
+    re.I,
+)
+
+BINOCULAR_PRODUCT_MARKERS = re.compile(
+    r"望遠鏡|望远镜|binocular",
+    re.I,
+)
+
+CAMERA_PRODUCT_MARKERS = re.compile(
+    r"相機推薦|相机推荐|camera\s*recommend|鏡頭|镜头|lens",
+    re.I,
+)
+
+BAG_PRODUCT_MARKERS = re.compile(
+    r"包包|背包|小包|透明包|bag|backpack|clear\s*bag",
+    re.I,
+)
+
+RAIN_PRODUCT_MARKERS = re.compile(
+    r"防水|雨衣|雨具|raincoat|poncho|umbrella",
+    re.I,
+)
+
+EAR_PRODUCT_MARKERS = re.compile(
+    r"耳塞|earplug",
+    re.I,
+)
+
 PARTICIPATION_PREP_MARKERS = re.compile(
     r"手燈.*(?:連線|连线|中控)|(?:連線|连线|中控).*手燈|應援.*交換|应援.*交换"
     r"|場T|场T|(?:排隊|排队).*(?:場T|场T|周邊|周边|物販|merch)",
@@ -759,6 +801,124 @@ def target_fit_paths(signals: list[str]) -> list[str]:
     return paths
 
 
+
+def affiliate_solution_mapping(
+    text: str,
+    target_signals: list[str],
+    semantic_role: str,
+) -> tuple[str, float, list[dict[str, str]], list[str]]:
+    signals = set(target_signals)
+    solutions: list[dict[str, str]] = []
+    reasons: list[str] = []
+
+    def add_solution(
+        category: str,
+        kind: str,
+        strength: str,
+        source_signal: str,
+    ) -> None:
+        if not any(item["category"] == category for item in solutions):
+            solutions.append({
+                "category": category,
+                "kind": kind,
+                "strength": strength,
+                "source_signal": source_signal,
+            })
+
+    if semantic_role in {"third_party_mention", "named_benefit", "narrative_context"}:
+        return "none", 0.0, [], ["semantic_role_not_commercial_need"]
+
+    if "stay" in signals:
+        add_solution("accommodation_booking", "service", "direct", "stay")
+        reasons.append("bookable_stay_need")
+
+    if "mobility" in signals:
+        if INTERCITY_TRANSPORT_MARKERS.search(text):
+            add_solution("intercity_transport_booking", "service", "direct", "mobility")
+            reasons.append("bookable_intercity_mobility")
+        else:
+            add_solution("local_mobility_or_transfer", "service", "adjacent", "mobility")
+            reasons.append("local_mobility_planning")
+
+    if "venue_outside" in signals:
+        add_solution("local_transfer_or_transit_pass", "service", "adjacent", "venue_outside")
+        reasons.append("venue_access_or_return")
+
+    if "post_event_nearby" in signals:
+        add_solution("local_experience_or_activity", "service", "adjacent", "post_event_nearby")
+        reasons.append("post_event_extension")
+
+    if signals & {"cross_city_commitment", "trip_commitment", "solo_or_cross_city"}:
+        if INTERCITY_TRANSPORT_MARKERS.search(text):
+            add_solution("intercity_transport_booking", "service", "direct", "cross_city")
+        else:
+            add_solution("trip_planning_bundle", "service", "adjacent", "cross_city")
+        reasons.append("trip_commitment")
+
+    if "live_recording_setup" in signals:
+        add_solution("recording_device_or_accessory", "product", "adjacent", "live_recording_setup")
+        reasons.append("recording_friction")
+
+    if "experience_gear" in signals:
+        if PHONE_PRODUCT_MARKERS.search(text):
+            add_solution("smartphone", "product", "direct", "experience_gear")
+        if POWER_PRODUCT_MARKERS.search(text):
+            add_solution("power_bank_or_charger", "product", "direct", "experience_gear")
+        if BINOCULAR_PRODUCT_MARKERS.search(text):
+            add_solution("binoculars", "product", "direct", "experience_gear")
+        if CAMERA_PRODUCT_MARKERS.search(text):
+            add_solution("camera_or_lens", "product", "direct", "experience_gear")
+        if not any(item["source_signal"] == "experience_gear" for item in solutions):
+            add_solution("concert_recording_gear", "product", "adjacent", "experience_gear")
+        reasons.append("experience_product_need")
+
+    if "attendee_gear" in signals:
+        matched = False
+        if BAG_PRODUCT_MARKERS.search(text):
+            add_solution("concert_bag_or_clear_bag", "product", "direct", "attendee_gear")
+            matched = True
+        if RAIN_PRODUCT_MARKERS.search(text):
+            add_solution("rain_gear", "product", "direct", "attendee_gear")
+            matched = True
+        if EAR_PRODUCT_MARKERS.search(text):
+            add_solution("earplugs", "product", "direct", "attendee_gear")
+            matched = True
+        if not matched:
+            add_solution("attendee_gear", "product", "adjacent", "attendee_gear")
+        reasons.append("attendee_product_need")
+
+    if "attendee_prep" in signals:
+        add_solution("apparel_or_outerwear", "product", "adjacent", "attendee_prep")
+        reasons.append("attendee_preparation")
+
+    direct = any(item["strength"] == "direct" for item in solutions)
+    adjacent = any(item["strength"] == "adjacent" for item in solutions)
+
+    if direct:
+        return "ready", 4.0, solutions, reasons
+    if adjacent:
+        return "adjacent", 2.0, solutions, reasons
+
+    if signals & {
+        "venue_operation",
+        "participation_eligibility",
+        "media_retrieval",
+        "participation_prep",
+        "solo_or_cross_city",
+    }:
+        return "insight_only", 1.0, [], ["useful_need_without_direct_offer"]
+
+    return "none", 0.0, [], ["no_solution_mapping"]
+
+
+def affiliate_priority_delta(affiliate_fit: str) -> float:
+    if affiliate_fit == "ready":
+        return 2.0
+    if affiliate_fit == "adjacent":
+        return 1.0
+    return 0.0
+
+
 def review_lane_for_card(card: dict[str, Any]) -> str:
     paths = set(card.get("target_fit_paths") or [])
     if "attendance_logistics" in paths:
@@ -1005,6 +1165,11 @@ def build_post_card(
         need_nodes,
         semantic_role,
     )
+    affiliate_fit, affiliate_fit_score, solution_map, affiliate_fit_reasons = affiliate_solution_mapping(
+        text,
+        target_fit_signals,
+        semantic_role,
+    )
     base = base_score(post, text, ts, now)
     action_score = actionability_score(
         text,
@@ -1015,7 +1180,8 @@ def build_post_card(
         intent_score,
     )
     ranking_delta = learned_ranking_delta(category, feature_set, profile, intent_score)
-    score = round(base + action_score + ranking_delta, 3)
+    affiliate_delta = affiliate_priority_delta(affiliate_fit)
+    score = round(base + action_score + ranking_delta + affiliate_delta, 3)
     snapshot_id = f"deck_{now.date().isoformat()}_{window_key}_{post_key.removeprefix('post_')}"
 
     return {
@@ -1031,6 +1197,11 @@ def build_post_card(
         "actionability_score": action_score,
         "actionability_band": actionability_band(action_score),
         "ranking_delta": ranking_delta,
+        "affiliate_priority_delta": affiliate_delta,
+        "affiliate_fit": affiliate_fit,
+        "affiliate_fit_score": affiliate_fit_score,
+        "affiliate_fit_reasons": affiliate_fit_reasons,
+        "solution_map": solution_map,
         "intent_score": intent_score,
         "intent_band": "high" if intent_score >= 4 else "medium" if intent_score >= 1 else "low",
         "candidate_confidence": candidate_confidence(intent_score, target_fit_score),
@@ -1130,6 +1301,10 @@ def build_deck(
             "medium_sampled_count": len(sampled_medium),
             "low_confidence_count": len(low_cards),
             "card_count": len(cards),
+            "affiliate_ready_count": sum(1 for card in cards if card.get("affiliate_fit") == "ready"),
+            "affiliate_adjacent_count": sum(1 for card in cards if card.get("affiliate_fit") == "adjacent"),
+            "affiliate_insight_only_count": sum(1 for card in cards if card.get("affiliate_fit") == "insight_only"),
+            "affiliate_none_count": sum(1 for card in cards if card.get("affiliate_fit") == "none"),
             "default_review_limit": min(DEFAULT_REVIEW_LIMIT, len(cards)),
             "extend_step": EXTEND_STEP,
             "display_limit": DISPLAY_LIMIT,

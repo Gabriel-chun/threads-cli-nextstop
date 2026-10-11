@@ -15,6 +15,22 @@ export type SignalPostCard = {
   actionability_score?: number;
   actionability_band?: "high" | "medium" | "low";
   candidate_confidence?: "high" | "medium" | "low";
+  semantic_role?: string;
+  target_fit_score?: number;
+  target_fit_band?: "high" | "medium" | "low";
+  target_fit_signals?: string[];
+  target_fit_penalties?: string[];
+  target_fit_paths?: string[];
+  affiliate_fit?: "ready" | "adjacent" | "insight_only" | "none";
+  affiliate_fit_score?: number;
+  affiliate_fit_reasons?: string[];
+  affiliate_priority_delta?: number;
+  solution_map?: Array<{
+    category: string;
+    kind: "product" | "service";
+    strength: "direct" | "adjacent";
+    source_signal: string;
+  }>;
   language_context?: "zh_hant" | "zh_hans" | "hk_zh" | "english" | "other_latin" | "mixed";
   language_tokens?: string[];
   need_nodes?: string[];
@@ -52,6 +68,13 @@ export type SignalDeckWindow = {
   medium_confidence_count?: number;
   medium_sampled_count?: number;
   low_confidence_count?: number;
+  core_eligible_count?: number;
+  adjacent_count?: number;
+  discovery_count?: number;
+  affiliate_ready_count?: number;
+  affiliate_adjacent_count?: number;
+  affiliate_insight_only_count?: number;
+  affiliate_none_count?: number;
   default_review_limit?: number;
   extend_step?: number;
   display_limit?: number;
