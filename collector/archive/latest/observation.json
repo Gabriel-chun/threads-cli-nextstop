@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-11_001614Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-11_030110Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-11_001614Z",
-    "run_at": "2026-10-11T00:17:08.015248Z",
+    "run_stamp": "2026-10-11_030110Z",
+    "run_at": "2026-10-11T03:02:08.113216Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -17,35 +17,35 @@
     "provenance": "manual",
     "baseline_eligible": false,
     "workflow_event": "workflow_dispatch",
-    "github_run_id": "38097809750"
+    "github_run_id": "38106987313"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-11_001614Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-11_001614Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-11_001614Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-11_001614Z.txt",
-    "snapshot_fingerprint": "sha256:2696ac405a93a736229b31be17a9412ece72aa4100c85435c5d429fe5e0d1f00",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-11_030110Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-11_030110Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-11_030110Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-11_030110Z.txt",
+    "snapshot_fingerprint": "sha256:34ba600ea68a4586231b2b32e7f23a1e5cb976adb2d13bf17639fc4509f1e14b",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 98,
-      "snapshot_unique": 16,
-      "dedupe_unique": 16,
-      "clean_signals": 14,
-      "excluded_transactions": 2,
+      "raw_rows": 103,
+      "snapshot_unique": 23,
+      "dedupe_unique": 23,
+      "clean_signals": 22,
+      "excluded_transactions": 1,
       "suppressed_duplicates": 0,
-      "clean_rate_pct": 87.5,
-      "new_3h": 10,
-      "new_12h": 69,
-      "unique_authors": 14,
-      "author_diversity_ratio": 1.0,
-      "duplicate_adjusted_volume": 16
+      "clean_rate_pct": 95.7,
+      "new_3h": 15,
+      "new_12h": 63,
+      "unique_authors": 20,
+      "author_diversity_ratio": 0.9091,
+      "duplicate_adjusted_volume": 23
     },
     "previous_comparable_run": {
       "run_stamp": "2026-10-10_213332Z",
       "run_at": "2026-10-10T21:34:22.883582Z",
-      "elapsed_minutes": 162.8,
+      "elapsed_minutes": 327.8,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 26,
       "new_3h": 28,
@@ -63,11 +63,11 @@
     },
     "delta": {
       "overlap_available": true,
-      "new_signal_count": 4,
-      "retained_signal_count": 10,
-      "clean_signal_delta": -12,
-      "rolling_3h_delta": -18,
-      "rolling_12h_delta": -14
+      "new_signal_count": 16,
+      "retained_signal_count": 6,
+      "clean_signal_delta": -4,
+      "rolling_3h_delta": -13,
+      "rolling_12h_delta": -20
     },
     "baselines": {
       "24h": {
@@ -195,29 +195,35 @@
       {
         "kind": "noise",
         "category": "粉絲心得／現場紀錄",
-        "count": 11,
-        "unique_authors": 11,
+        "count": 16,
+        "unique_authors": 15,
         "post_ids": [
-          "4004900218458132564",
-          "4004918991155383070",
           "4004947572519041374",
           "4004953373309386992",
           "4004956193391022856",
+          "4004969359478850983",
           "4004999036604191200",
-          "4005020307152914687",
-          "4005043333680538638",
-          "4005048601877321376",
+          "4005011529422331379",
           "4005068446278876538",
-          "4005131508201510604"
+          "4005070146624493871",
+          "4005199657479559495",
+          "4005231397070646207",
+          "4005235547325027538",
+          "4005235447089286905",
+          "4005266629700880099",
+          "4005267989880347806",
+          "4005272833269664044",
+          "4005278784073722956"
         ]
       },
       {
         "kind": "context",
         "category": "演後社群／內容需求",
-        "count": 2,
-        "unique_authors": 2,
+        "count": 3,
+        "unique_authors": 3,
         "post_ids": [
           "4004930498103079340",
+          "4004954521096926864",
           "4004972583280300481"
         ]
       },
@@ -229,22 +235,190 @@
         "post_ids": [
           "4004976631009724642"
         ]
+      },
+      {
+        "kind": "context",
+        "category": "其他問題／需求",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4005261513959129711"
+        ]
+      },
+      {
+        "kind": "noise",
+        "category": "關鍵詞雜訊",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4005255568549714315"
+        ]
       }
     ]
   },
   "evidence": {
-    "total_clean_evidence": 14,
+    "total_clean_evidence": 22,
     "limit": 16,
-    "returned": 14,
+    "returned": 16,
     "items": [
       {
-        "post_id": "4005131508201510604",
-        "username": "talk.talktalkkk",
-        "posted_at": "2026-10-10T21:48:23Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@talk.talktalkkk/post/DeVFeL5E1bM",
+        "post_id": "4005278784073722956",
+        "username": "byeolnim._",
+        "posted_at": "2026-10-11T02:41:00Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@byeolnim._/post/DeVm9VPH2xM",
         "is_new_since_previous": true,
-        "excerpt": "有冇許志安fans可以入嚟講下,好想知佢呢排點解無啦啦會紅返又開紅館￼￼?仲要誇張到d飛賣晒,黃牛炒到成8千幾蚊\n其實鍾意佢嘅係咪都係70 80後?￼\n我係Gen Z ,我由小學到中學,男歌手都係聽張敬軒陳柏宇陳奕迅周杰倫￼側田,唱K都係離不開呢d,從來冇朋友會點許志安d歌￼￼,講真我對佢最有印象就係小學睇電視,牙刷尖尖尖個廣告￼￼,嗰陣時Facebook d人又惡搞￼10個鐘版本,之後中學到出嚟做嘢呢10幾年,我淨係聽過佢一首叫流淚行勝利道￼,同埋最爆就係佢的士偷食單嘢￼,印象中佢呢10幾年好似都冇乜拍過電視劇/電影￼￼,你叫我講佢是但一隻碟嘅名我都講唔出￼,唔係講笑,佢首昨遲人,都係佢今次宣傳￼演唱會,多人討論我先至聽￼,以前係從來冇聽過￼\n希望有fans入嚟可以解答吓我￼,希望理性討論,唔係引戰🙇‍♂️",
+        "excerpt": "101026 SAO CONCERT \n\nsáng cuối tuần khoắn khoẻ nha các chị ơi▓▓",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005272833269664044",
+        "username": "jasmine_hdang",
+        "posted_at": "2026-10-11T02:29:10Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@jasmine_hdang/post/DeVlmvHj4ks",
+        "is_new_since_previous": true,
+        "excerpt": "[261010] UPRIZE PN @ SAO CONCERT",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005267989880347806",
+        "username": "ohsuperkimi",
+        "posted_at": "2026-10-11T02:19:33Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@ohsuperkimi/post/DeVkgQXD5ye",
+        "is_new_since_previous": true,
+        "excerpt": "我这几天被家政笑死的原因,就是听到拼盘晚会,演唱会,综艺可以给两大姐任意挑,机会很多,毕竟性价比高。\n朋丫真信了这些鬼话那才叫惨了",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005266629700880099",
+        "username": "chengufujhg",
+        "posted_at": "2026-10-11T02:16:51Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@chengufujhg/post/DeVkMdmDAbj",
+        "is_new_since_previous": true,
+        "excerpt": "一睁眼不仅看到了演唱会开不动的退展 又迎来了拆家一起上hi6的退展 死芒果你到底想咋滴 换一天尚公主又咋了?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005261513959129711",
+        "username": "blueman0416",
+        "posted_at": "2026-10-11T02:06:41Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@blueman0416/post/DeVjCBME8Jv",
+        "is_new_since_previous": true,
+        "excerpt": "昨晚第一次去聽優里演唱會\n\n第一次優里talking完後\n\n他說要唱一首前一晚沒唱的\n\n有好心人可以跟我說那是哪一首嗎\n\n本想問隔壁歌迷但好像還是沒有這麼E\n\n先謝謝願意回答的好心人",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "其他問題／需求"
+        }
+      },
+      {
+        "post_id": "4005255568549714315",
+        "username": "ohsuperkimi",
+        "posted_at": "2026-10-11T01:54:52Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@ohsuperkimi/post/DeVhrgGD5mL",
+        "is_new_since_previous": true,
+        "excerpt": "大早上起来看到ys吹生日会人数我忍住我的素质,3000多人场里面有cpf自己心里没点逼数么,到现在生日会的饭拍有一个百万么?有时都不想把话说的太难听,还一万人数的馆随便开,我姐比老朋红多了,第一次开都只敢开livehouse试水,知不知道能开一万人的女明星到底有多少?真是愚蠢又无知。\n作为cpf肯定是希望演唱会顺利进行,试问你们各种拒绝蒸煮工作是每个人家里都是煤老板能给蒸煮提供工作? 反正我们是大不了不饭了,也没什么损失,又不是没有下一对cp让我们粉,试问你们自己如果能陪她一辈子再tm去教做人,去要求蒸煮拒绝工作",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "關鍵詞雜訊"
+        }
+      },
+      {
+        "post_id": "4005235447089286905",
+        "username": "itzquinn_1212",
+        "posted_at": "2026-10-11T01:17:48Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@itzquinn_1212/post/DeVdGshj075",
+        "is_new_since_previous": true,
+        "excerpt": "Nghệ sĩ t yêu là nghệ sĩ live set diễn gần 1 tiếng ở Genfest, live concert cá nhân 4 tiếng không hụt hơi.\nVà đây mới là intro và cái không khí t yêu\nChứ không phải người bị lỗi mic liên tục, đến bài cuối hụt hơi vì mấy bài đầu cố hát to khản cả giọng.\nT bay từ Bắc vào Nam không đòi set list dài, chỉ mong nó được tận hưởng hết 15p ngắn ngủi trên sân khấu c...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005235547325027538",
+        "username": "dn_js_1130",
+        "posted_at": "2026-10-11T01:15:05Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@dn_js_1130/post/DeVdIJ4E1TS",
+        "is_new_since_previous": true,
+        "excerpt": "急求!10月11日澳门DINO演唱会门票1张!\n\n座位不限,只接受纸质实体票(不接受电子票❌)。\n\n可以港币当面交易,或通过支付宝转账。\n\n请私信我座位信息和价格,谢谢!\n\n(我正在使用翻译软件,如有表达不准确的地方,还请见谅🙏)",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005231397070646207",
+        "username": "snowmancyc",
+        "posted_at": "2026-10-11T01:06:51Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@snowmancyc/post/DeVcLwpoyu_",
+        "is_new_since_previous": true,
+        "excerpt": "我不想在他們演唱會\n唱別人的歌 哈\nBang 3的喔喔喔喔喔\n還比較好\n\n上次龍在歐洲不是也說過\n類似的話",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005199657479559495",
+        "username": "sandralarue2020",
+        "posted_at": "2026-10-11T00:03:50Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@sandralarue2020/post/DeVU942ldlH",
+        "is_new_since_previous": true,
+        "excerpt": "Going to a matt rife concert  for my late bday  present  from my son. So excited  to go see it. Yahoo.. have a great weekend  all. Luv Sandra",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4005070146624493871",
+        "username": "irene_xnyi",
+        "posted_at": "2026-10-10T19:46:28Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@irene_xnyi/post/DeU3hQeExkv",
+        "is_new_since_previous": true,
+        "excerpt": "Là một người đã trải nghiệm Sao Concert 3, mình xin shout out cho các nghệ sĩ, ban nhạc Màu Nước và các bạn dancers ở Sao Concert về những phần trình diễn tuyệt vời. Và xin gửi lời cảm ơn đến các bạn staff dễ thương đã hỗ trợ khán giả tại khu vực concert. Tuy nhiên, mình thấy cách làm việc của ban tổ chức không đc chuyên nghiệp. Btc nên xem lại cách đăng ...",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -256,7 +430,7 @@
         "post_id": "4005068446278876538",
         "username": "hebaohuahuadan",
         "posted_at": "2026-10-10T19:43:05Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
         "permalink": "https://www.threads.com/@hebaohuahuadan/post/DeU3Ig5k_16",
         "is_new_since_previous": true,
         "excerpt": "我说白了不管有没有双人舞台月嫂xpp都应该去支持支持,对月嫂来说有solo看对xpp来说有同台看对8个女艺人来说有万人演唱会还能赚钱,而且如果办得好也能被各方资源重视,我真觉得这个演唱会百利无一害。现在都影视寒冬成啥了我头像都没工作,大家都是浪系的受众群体真应该托举一下涨涨全女综的商业价值多办点全女综全女演唱会",
@@ -268,10 +442,25 @@
         }
       },
       {
+        "post_id": "4005011529422331379",
+        "username": "cinnamon_cina_112",
+        "posted_at": "2026-10-10T17:50:00Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@cinnamon_cina_112/post/DeUqMQ8j93z",
+        "is_new_since_previous": true,
+        "excerpt": "今晚睇完許志安番屋企,一路好興奮好開心。番到屋企,輕輕哼左「戀愛中每一..」5個字,我老公就同我講,佢唔鍾意許志安,可唔可以唔好逼佢聽。\n演唱會,飛我自己買\n演唱會,我自己睇\n點解連我開心下都唔俾?\n每日認真工作,一個月都有over8萬\n生左個小朋友,我都好認真湊,所有功課考試都係我攪。\n但面對既,永遠係冷暴力,永遠係抱怨...\n安仔係演唱會到話,無論工作,家庭幾多野煩,都有佢既歌。但我無諗過,咁快就回歸現實...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
         "post_id": "4004999036604191200",
         "username": "ls_.ovo",
         "posted_at": "2026-10-10T17:25:11Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
         "permalink": "https://www.threads.com/@ls_.ovo/post/DeUnWeGkxHg",
         "is_new_since_previous": true,
         "excerpt": "全网征集陈粒出现在孙燕姿演唱会的照片 我朋友给我发了个视频说声音像但是我还是要看到照片才信。",
@@ -283,13 +472,13 @@
         }
       },
       {
-        "post_id": "4004900218458132564",
-        "username": "x.y_o3o_",
-        "posted_at": "2026-10-10T14:08:51Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@x.y_o3o_/post/DeUQ4eiFNBU",
+        "post_id": "4004969359478850983",
+        "username": "itzquinn_1212",
+        "posted_at": "2026-10-10T16:26:40Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@itzquinn_1212/post/DeUgmnID4Wn",
         "is_new_since_previous": true,
-        "excerpt": "有人有幫忙化妝的服務嗎?\n本人完全不會化妝  想要演唱會時能美美的去🥺\n看11/19跟11/22防彈的演唱會的!!\n\n希望是當天畫完就能馬上去演唱會🙏🏻🙏🏻\n地區:高雄",
+        "excerpt": "Hôm nay giỏi lắm🫳🫳🫳\nDay 2 concert gặp lại nhá",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -298,153 +487,18 @@
         }
       },
       {
-        "post_id": "4005048601877321376",
-        "username": "makbesarsg",
-        "posted_at": "2026-10-10T19:03:40Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@makbesarsg/post/DeUynvXEpag",
-        "is_new_since_previous": false,
-        "excerpt": "We read each and every post and comments that came across our algorithm.\n\nAfter GrandBite Expo last May we planned for another one, leaning more towards music concert. What we couldn’t do was to increase the price of vendors booths to accommodate to the concert part of it. Hence the ticket price. We thought it was a fair price, knowing how much other musi...",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4005043333680538638",
-        "username": "vip._.forever0818",
-        "posted_at": "2026-10-10T18:53:12Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@vip._.forever0818/post/DeUxbE-EyQO",
-        "is_new_since_previous": false,
-        "excerpt": "各位VIP有沒有覺得演唱會哪幾個橋段最值得錄影,因為我最主要想要享受那個當下,不想要一直錄,但不錄一些感覺回去會後悔\n(我是去高雄場的,最能保證的是有花車一定錄!)",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4005020307152914687",
-        "username": "ww___bnd",
-        "posted_at": "2026-10-10T18:07:27Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@ww___bnd/post/DeUsL_2E0j_",
-        "is_new_since_previous": false,
-        "excerpt": "Thực sự UPRIZE vừa diễn 1 đêm concert mà đến 90% line up là từ vũ trụ Say Hi, nên phía dưới chắc chắn đã có rất rất nhiều khán giả lần đầu biết đến tên các em. Hy vọng sau đêm nay, UPRIZE sẽ có thêm 1 tỷ fan mới nhé !!! Quá giỏi rồi ▓▓▓",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4004976631009724642",
-        "username": "bzyx_3828",
-        "posted_at": "2026-10-10T16:40:40Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@bzyx_3828/post/DeUiQbRE0ji",
-        "is_new_since_previous": false,
-        "excerpt": "接演唱会取消的你们真是有病",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "actionable",
-          "category": "取消／交通／行程風險"
-        }
-      },
-      {
-        "post_id": "4004972583280300481",
-        "username": "feiii.623",
-        "posted_at": "2026-10-10T16:32:38Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@feiii.623/post/DeUhVhhmdHB",
-        "is_new_since_previous": false,
-        "excerpt": "所以他到底是誰怎麼連bigbang 演唱會都有票🫪",
+        "post_id": "4004954521096926864",
+        "username": "alina882136",
+        "posted_at": "2026-10-10T15:56:44Z",
+        "first_seen_at": "2026-10-11T03:02:08.113216Z",
+        "permalink": "https://www.threads.com/@alina882136/post/DeUdOrzk7aQ",
+        "is_new_since_previous": true,
+        "excerpt": "人生第一次參加演唱會\n就是受邀參加公司VIP包廂觀賞\nBIG-BANG2026~2027 \nW O R L D T O U R演唱會\n果然歌迷們都非常的瘋狂\n同仁中有人也是他們的歌迷直接穿上專屬襯衫還有皇冠燈\n真的讓我這個老靈魂都長知識了🤣🤣🤣\n時間還沒到已經人滿為患了😎😎\n還好我們直接進場不用等真的太幸福了\n感謝公司主管用心全程參與照顧\n在遠雄真的太幸福❤️",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
           "kind": "context",
           "category": "演後社群／內容需求"
-        }
-      },
-      {
-        "post_id": "4004956193391022856",
-        "username": "ya.yikin",
-        "posted_at": "2026-10-10T16:00:04Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@ya.yikin/post/DeUdnBQEpMI",
-        "is_new_since_previous": false,
-        "excerpt": "都暻秀个人演唱会上会给粉丝饭撒吗?第一排有必要做饭撒牌吗?",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4004953373309386992",
-        "username": "mingrixiaoxianghua",
-        "posted_at": "2026-10-10T15:54:28Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@mingrixiaoxianghua/post/DeUc9-2G8Dw",
-        "is_new_since_previous": false,
-        "excerpt": "搞不懂环嫂在幸灾乐祸些什么,演唱会黄了你家姐姐solo舞台也没了啊,就这么爱看你家姐姐在家抠脚?",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4004947572519041374",
-        "username": "hqwq93__",
-        "posted_at": "2026-10-10T15:42:56Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@hqwq93__/post/DeUbpkcD3le",
-        "is_new_since_previous": false,
-        "excerpt": "一想到演唱会三天都可能是黄毛长头发就想把票全出了,不想去了拖粪。",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4004930498103079340",
-        "username": "tusijuan1125",
-        "posted_at": "2026-10-10T15:09:01Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@tusijuan1125/post/DeUXxGpj_Gs",
-        "is_new_since_previous": false,
-        "excerpt": "林忆莲演唱会能不能卡资历啊不会跟唱70%以上曲目的别入场,对不起看完一场我就成婆罗门了,舞曲串烧我都high翻了前面坐个老头一直扭头看我,能滚吗?",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "演後社群／內容需求"
-        }
-      },
-      {
-        "post_id": "4004918991155383070",
-        "username": "lierresuab",
-        "posted_at": "2026-10-10T14:46:09Z",
-        "first_seen_at": "2026-10-11T00:17:08.015248Z",
-        "permalink": "https://www.threads.com/@lierresuab/post/DeUVJp-CEse",
-        "is_new_since_previous": false,
-        "excerpt": "生日会那段时间我要暂时脱粉一下了 我受不了他开个人演唱会",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
         }
       }
     ]
@@ -466,7 +520,7 @@
     "baseline_sampling_quality_24h": "sparse",
     "baseline_sampling_quality_72h": "sparse",
     "baseline_sampling_quality_7d": "sparse",
-    "incompatible_history_sample_count": 13,
-    "baseline_ineligible_history_sample_count": 60
+    "incompatible_history_sample_count": 12,
+    "baseline_ineligible_history_sample_count": 61
   }
 }
