@@ -1,28 +1,28 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-10-11T13:31:03.633574Z",
+  "generated_at": "2026-10-11T19:46:36.330173Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 352,
-    "relevant": 41,
-    "irrelevant": 311
+    "total": 368,
+    "relevant": 48,
+    "irrelevant": 320
   },
   "positive_patterns": {
     "self_need": {
-      "relevant": 22,
-      "irrelevant": 54
+      "relevant": 25,
+      "irrelevant": 58
     },
     "time_constraint": {
-      "relevant": 12,
-      "irrelevant": 10
+      "relevant": 15,
+      "irrelevant": 11
     },
     "booking_decision": {
       "relevant": 8,
       "irrelevant": 2
     },
     "actionable_friction": {
-      "relevant": 8,
-      "irrelevant": 37
+      "relevant": 9,
+      "irrelevant": 39
     }
   },
   "negative_patterns": {
@@ -36,29 +36,29 @@
     },
     "third_party_narrative": {
       "relevant": 5,
-      "irrelevant": 33
+      "irrelevant": 34
     },
     "announcement": {
       "relevant": 2,
-      "irrelevant": 7
+      "irrelevant": 8
     }
   },
   "category_stats": {
     "VIP／互動福利": {
       "relevant": 4,
-      "irrelevant": 14
+      "irrelevant": 15
     },
     "交通／散場": {
       "relevant": 10,
       "irrelevant": 2
     },
     "住宿／落腳": {
-      "relevant": 4,
-      "irrelevant": 0
+      "relevant": 6,
+      "irrelevant": 1
     },
     "其他演出內容": {
-      "relevant": 13,
-      "irrelevant": 216
+      "relevant": 15,
+      "irrelevant": 217
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -66,25 +66,25 @@
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 12
+      "irrelevant": 13
     },
     "拍攝／現場規則": {
       "relevant": 0,
       "irrelevant": 2
     },
     "票務／入場摩擦": {
-      "relevant": 5,
-      "irrelevant": 41
+      "relevant": 7,
+      "irrelevant": 45
     },
     "陪同／Solo Attendance": {
-      "relevant": 1,
-      "irrelevant": 8
+      "relevant": 2,
+      "irrelevant": 9
     }
   },
   "feature_stats": {
     "accommodation_need": {
-      "relevant": 4,
-      "irrelevant": 2
+      "relevant": 6,
+      "irrelevant": 4
     },
     "cp_fandom_language": {
       "relevant": 0,
@@ -95,8 +95,8 @@
       "irrelevant": 3
     },
     "first_timer": {
-      "relevant": 5,
-      "irrelevant": 23
+      "relevant": 6,
+      "irrelevant": 24
     },
     "long_fandom_story": {
       "relevant": 4,
@@ -107,16 +107,16 @@
       "irrelevant": 20
     },
     "question_intent": {
-      "relevant": 24,
-      "irrelevant": 88
+      "relevant": 29,
+      "irrelevant": 95
     },
     "solo_attendance": {
       "relevant": 4,
-      "irrelevant": 12
+      "irrelevant": 13
     },
     "ticketing_need": {
-      "relevant": 5,
-      "irrelevant": 42
+      "relevant": 7,
+      "irrelevant": 46
     },
     "transport_need": {
       "relevant": 14,
@@ -124,11 +124,11 @@
     },
     "venue_experience": {
       "relevant": 4,
-      "irrelevant": 20
+      "irrelevant": 21
     },
     "vip_benefit": {
       "relevant": 4,
-      "irrelevant": 18
+      "irrelevant": 19
     }
   },
   "demand_clusters": [
@@ -181,8 +181,8 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 5,
-      "irrelevant_count": 2,
+      "relevant_count": 7,
+      "irrelevant_count": 4,
       "affiliate_fit": "ready",
       "solution_map": [
         "accommodation_booking",
@@ -190,6 +190,18 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_f20ce4ef3a9fb09f",
+          "category": "住宿／落腳",
+          "text": "雖然有人覺得很偏遠但Inspire 我真的一生推！\n冬暖夏涼做什麼事都不用在戶外 \n\n預算足夠請一定要訂裡面的飯店，演唱會結束後五分鐘我已經躺在床上真的非常優秀",
+          "reviewed_at": "2026-10-11T00:30:00.000+00:00"
+        },
+        {
+          "post_key": "post_3f584f5c07c8c3e3",
+          "category": "住宿／落腳",
+          "text": "我好奇8.28那天坐内场的女孩有真心希望演唱会准时开始的吗。我当时被雨淋懵了我都希望立刻宣布演唱会取消然后我打车回酒店",
+          "reviewed_at": "2026-10-11T00:30:00.000+00:00"
+        },
         {
           "post_key": "post_224c7fc24cf9528a",
           "category": "住宿／落腳",
@@ -207,18 +219,50 @@
           "category": "住宿／落腳",
           "text": "《屬於我們的…》演唱會收官場\n北京場11/27-29\n.\n啊啊啊啊～這麼這麼剛好卡死▓\n各位bbg們 機票飯店訂起來了🙌🏻\n說好的排除萬難 走了走了！！！！",
           "reviewed_at": "2026-10-03T03:02:00.000+00:00"
+        }
+      ]
+    },
+    {
+      "cluster_id": "post_event_experience",
+      "label_zh": "演前／演後周邊",
+      "label_en": "Pre / post-show nearby",
+      "relevant_count": 8,
+      "irrelevant_count": 10,
+      "affiliate_fit": "adjacent",
+      "solution_map": [
+        "local_experience_or_activity",
+        "restaurant_reservation"
+      ],
+      "evidence": [
+        {
+          "post_key": "post_ec9a911981f16810",
+          "category": "陪同／Solo Attendance",
+          "text": "第一次看演唱會\n請問廣大脆友 沒有要拍照買週邊的話，17:00開場16:15到小巨蛋會太晚嗎▓",
+          "reviewed_at": "2026-10-11T13:21:00.000+00:00"
         },
         {
-          "post_key": "post_31244a3ff6af196f",
+          "post_key": "post_9d908b44e4f40806",
+          "category": "VIP／互動福利",
+          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
+          "reviewed_at": "2026-10-06T06:15:00.000+00:00"
+        },
+        {
+          "post_key": "post_e5b0ee6d15fb18a0",
           "category": "住宿／落腳",
-          "text": "想問女生一個人自己去曼谷看演唱會真的安全嗎 因為真的找不到搭子所以只能自己去了 \n脆友幫選\n1.➡️星期五下午抵達廊曼（泰航或獅航）（找一間附近的住宿）星期六看演唱會結束搭摩托車去機場搭星期日凌晨飛機回來（機加酒不超過8000）\n2.➡️搭星期六一大早的飛機到曼谷（長榮）直接去場館然後一樣看完搭摩托車去機場（純機票一萬3）\n差別在於要不要住一晚跟價格的部分 想問各位的建議😣😣😣🙏🏻",
-          "reviewed_at": "2026-10-02T15:15:00.000+00:00"
+          "text": "有没有去过曼谷追泰腐或者看过演唱会的宝宝呀\n蹲蹲曼谷不闹诡的酒店推荐🥺\n最好楼下有711 离impact近的就更好了",
+          "reviewed_at": "2026-10-03T23:39:00.000+00:00"
         },
         {
-          "post_key": "post_7ab87b4d0dcf7c36",
+          "post_key": "post_6a421c14039bc43f",
           "category": "其他演出內容",
-          "text": "10/31 要去看藤井風 剛才已經買去程的票\n不知道到底可不可以當天回板橋 ? \n真的沒去過這麼大規模的演唱會\n到底回程要訂當天回家還是訂間旅館隔天回家呢 ?\n沒去過高雄國家體育場好害怕 \n拜託有沒有人有這種高雄當天回台北的經驗\n記得2年前小巨蛋 我隔壁男生說他是高雄上來\n還有一個分享應緩物的女生也是高雄上來\n他們好像都當天回高雄了啊 ??",
-          "reviewed_at": "2026-10-02T06:21:00.000+00:00"
+          "text": "這趟來韓國最期待的就是麵首爾\n結果最失望的也是這家\n我甚至以搶演唱會等級在等開放日期預訂\n\n我們有七位，在catch table 只能訂包廂\n訂位時強制選鴨或豬肉等等的主菜\n我們先選了豬肉並付錢了\n\n到現場點餐時，\n卻跟我們說還要多點一份主菜\n現場菜單上也沒寫哪些是他們說要加點的主菜\n我們拿平板問一個女服務人員哪些是主菜\n問了被臭臉不耐煩，她指了菜單的某區\n我們選了那區的湯被說不行，\n於是我們多點了鮑魚，因為鴨要先預訂才有\n\n我問服務人員為什麼要多點一道，我們不是先在catchtable訂了嗎？ 還是網頁上哪裡有條款我們沒看到，她不知道回我什麼後來還翻我白眼，還沒開動前已經先令人不爽，但出國在外還是先忍忍，回來再分享評價給大家\n\n等食物上來前，我還是期待食物會很好吃\n這樣可以原諒服務人員的無禮\n\n但食物上來後，\n我真的覺得強力推薦好吃的網友才需要道歉\n網友推爆的生紫蘇油麵跟餃子\n吃了也認真無言\n真的必須逆風誠實寫出心得\n非常不好吃，可以不用來\n請把寶貴的時間跟機會留給下一間",
+          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
+        },
+        {
+          "post_key": "post_b8b8916b8f33910c",
+          "category": "VIP／互動福利",
+          "text": "各位噗哩好\n本拖延症患者在前一天才要來找有沒有人願意跟我在演唱會當天一起走走逛逛拍照什麼的，大概在早上10:30到高雄高鐵！\n然後我是橙208的（不素vip）\n因為我是男噗哩可能有人比較不放心，這裡是IG帳號zzzzx.j大家可以看一下🥹（大帳脆有追蹤這個帳號也可以檢查一下）\n希望能夠找到夥伴🤓👆",
+          "reviewed_at": "2026-10-03T01:55:00.000+00:00"
         }
       ]
     },
@@ -227,7 +271,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 24,
+      "irrelevant_count": 25,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -267,54 +311,10 @@
       ]
     },
     {
-      "cluster_id": "post_event_experience",
-      "label_zh": "演前／演後周邊",
-      "label_en": "Pre / post-show nearby",
-      "relevant_count": 7,
-      "irrelevant_count": 9,
-      "affiliate_fit": "adjacent",
-      "solution_map": [
-        "local_experience_or_activity",
-        "restaurant_reservation"
-      ],
-      "evidence": [
-        {
-          "post_key": "post_9d908b44e4f40806",
-          "category": "VIP／互動福利",
-          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
-          "reviewed_at": "2026-10-06T06:15:00.000+00:00"
-        },
-        {
-          "post_key": "post_e5b0ee6d15fb18a0",
-          "category": "住宿／落腳",
-          "text": "有没有去过曼谷追泰腐或者看过演唱会的宝宝呀\n蹲蹲曼谷不闹诡的酒店推荐🥺\n最好楼下有711 离impact近的就更好了",
-          "reviewed_at": "2026-10-03T23:39:00.000+00:00"
-        },
-        {
-          "post_key": "post_6a421c14039bc43f",
-          "category": "其他演出內容",
-          "text": "這趟來韓國最期待的就是麵首爾\n結果最失望的也是這家\n我甚至以搶演唱會等級在等開放日期預訂\n\n我們有七位，在catch table 只能訂包廂\n訂位時強制選鴨或豬肉等等的主菜\n我們先選了豬肉並付錢了\n\n到現場點餐時，\n卻跟我們說還要多點一份主菜\n現場菜單上也沒寫哪些是他們說要加點的主菜\n我們拿平板問一個女服務人員哪些是主菜\n問了被臭臉不耐煩，她指了菜單的某區\n我們選了那區的湯被說不行，\n於是我們多點了鮑魚，因為鴨要先預訂才有\n\n我問服務人員為什麼要多點一道，我們不是先在catchtable訂了嗎？ 還是網頁上哪裡有條款我們沒看到，她不知道回我什麼後來還翻我白眼，還沒開動前已經先令人不爽，但出國在外還是先忍忍，回來再分享評價給大家\n\n等食物上來前，我還是期待食物會很好吃\n這樣可以原諒服務人員的無禮\n\n但食物上來後，\n我真的覺得強力推薦好吃的網友才需要道歉\n網友推爆的生紫蘇油麵跟餃子\n吃了也認真無言\n真的必須逆風誠實寫出心得\n非常不好吃，可以不用來\n請把寶貴的時間跟機會留給下一間",
-          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
-        },
-        {
-          "post_key": "post_b8b8916b8f33910c",
-          "category": "VIP／互動福利",
-          "text": "各位噗哩好\n本拖延症患者在前一天才要來找有沒有人願意跟我在演唱會當天一起走走逛逛拍照什麼的，大概在早上10:30到高雄高鐵！\n然後我是橙208的（不素vip）\n因為我是男噗哩可能有人比較不放心，這裡是IG帳號zzzzx.j大家可以看一下🥹（大帳脆有追蹤這個帳號也可以檢查一下）\n希望能夠找到夥伴🤓👆",
-          "reviewed_at": "2026-10-03T01:55:00.000+00:00"
-        },
-        {
-          "post_key": "post_6235c78ecb61502b",
-          "category": "票務／入場摩擦",
-          "text": "🆗⋯夜深人靜來講個大阪鬼故事好了😍\n收了一張9/10大阪場002 🈚️升 p\n（不含粽卡，001會先選位，入場後再換位）\n票主告知，進場如有問題都可以討論解決辦法。\n到了9/8票主告知我001們要下去內場。\n如果場館內無法互通，會給其中一位002拿001的護照入場，再不然的話就走退款。\n從這邊，就和剛開始交易說的「入場後換位」不一樣了！\n很擔心如果拿001護照被本確的話該怎麼辦？\n明明雙方也還在討論期間，票主就突然沒有再回覆了。\n（當時時間晚了認為可能是去休息了）\n但當晚我想了很久，認為這跟一開始說的不太一樣，因票主前面有提到退款的部分，所以我就提議要退款。\n票主才突然秒回詢問：「9/9確定不能互通再退款可以嗎？」\n因為前面交易過程中，票主回覆都稍慢，我也擔心可能要到9/9演唱會結束後才能知道互不互通，到時也來不及再去收9/10的票，所以還是提議要退款。\n果真一直到9/9下午都遲遲沒有收到回覆，但卻看到票主在大帳十分活躍，更新大阪小日記、參與抽選、約朋友吃飯？\n票主自述很積極處理，我屬實感受不太到。\n就連最後也是直接不讀不回😆",
-          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
-        }
-      ]
-    },
-    {
       "cluster_id": "recording_gear",
       "label_zh": "拍攝／手機",
       "label_en": "Recording / phone",
-      "relevant_count": 2,
+      "relevant_count": 3,
       "irrelevant_count": 8,
       "affiliate_fit": "adjacent",
       "solution_map": [
@@ -323,6 +323,12 @@
         "camera_or_lens"
       ],
       "evidence": [
+        {
+          "post_key": "post_610d31811c370492",
+          "category": "其他演出內容",
+          "text": "18pro 更新到27.1\n請問應該怎麼設定相機😩\n昨天去看演唱會 錄影只要放大就超糊⋯\n然後一直顯示需要對焦設定",
+          "reviewed_at": "2026-10-11T00:47:00.000+00:00"
+        },
         {
           "post_key": "post_414aa4af1da1ed25",
           "category": "其他演出內容",
@@ -341,7 +347,7 @@
       "cluster_id": "venue_prep",
       "label_zh": "現場準備",
       "label_en": "Venue preparation",
-      "relevant_count": 2,
+      "relevant_count": 3,
       "irrelevant_count": 6,
       "affiliate_fit": "adjacent",
       "solution_map": [
@@ -351,6 +357,12 @@
         "earplugs"
       ],
       "evidence": [
+        {
+          "post_key": "post_1fc44208b343df2e",
+          "category": "其他演出內容",
+          "text": "Who made up this dress code  for the usher & Chris brown concert in Houston ?",
+          "reviewed_at": "2026-10-11T00:47:00.000+00:00"
+        },
         {
           "post_key": "post_4e846592fa92b6af",
           "category": "其他演出內容",
@@ -369,11 +381,23 @@
       "cluster_id": "ticket_entry",
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
-      "relevant_count": 3,
-      "irrelevant_count": 27,
+      "relevant_count": 5,
+      "irrelevant_count": 30,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
+        {
+          "post_key": "post_094f7502bebc6e2e",
+          "category": "票務／入場摩擦",
+          "text": "明天就要看Bigbang 演唱會了\n前一天特別北上 發現身分證沒帶！！\n但是有健保卡，但上面只有小時候的照片（自己貼的）\n但有一張信用卡有我的名字英文拼音+照片\n請問這樣實名制可以過嗎🥹🥹🥹🥹",
+          "reviewed_at": "2026-10-11T00:36:00.000+00:00"
+        },
+        {
+          "post_key": "post_3e8d1d25ada35efb",
+          "category": "票務／入場摩擦",
+          "text": "不是，手環沒號碼。演唱會後\n結束後，會整隊到D區待命，\n我觀察一排30個人，最右邊是1號",
+          "reviewed_at": "2026-10-11T00:30:00.000+00:00"
+        },
         {
           "post_key": "post_3e80ace2a1c17242",
           "category": "票務／入場摩擦",
