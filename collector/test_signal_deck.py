@@ -771,6 +771,73 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(window["cards"], [])
         self.assertEqual(window["discovery_count"], 0)
 
+
+    def test_affiliate_fit_maps_stay_and_transport_to_direct_services(self):
+        now = datetime(2026, 10, 11, 3, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "stay-affiliate",
+                "text": "預算夠真的建議訂場館裡面的飯店，散場後五分鐘就能回房。",
+                "username": "stay",
+                "permalink": "https://www.threads.com/@stay/post/stay-affiliate",
+                "timestamp": "2026-10-11T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+            {
+                "id": "rail-affiliate",
+                "text": "演唱會結束大概幾點？我怕趕不上高鐵，想先買回程車票。",
+                "username": "rail",
+                "permalink": "https://www.threads.com/@rail/post/rail-affiliate",
+                "timestamp": "2026-10-11T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        cards = {card["post_id"]: card for card in build_deck(posts, now)["windows"]["1d"]["cards"]}
+        self.assertEqual(cards["stay-affiliate"]["affiliate_fit"], "ready")
+        self.assertIn("accommodation_booking", {item["category"] for item in cards["stay-affiliate"]["solution_map"]})
+        self.assertEqual(cards["rail-affiliate"]["affiliate_fit"], "ready")
+        self.assertIn("intercity_transport_booking", {item["category"] for item in cards["rail-affiliate"]["solution_map"]})
+
+    def test_affiliate_fit_maps_recording_friction_to_adjacent_product_solution(self):
+        now = datetime(2026, 10, 11, 3, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "recording-affiliate",
+                "text": "18 Pro 看演唱會錄影放大就很糊，請問相機跟對焦要怎麼設定？",
+                "username": "rec",
+                "permalink": "https://www.threads.com/@rec/post/recording-affiliate",
+                "timestamp": "2026-10-11T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        card = build_deck(posts, now)["windows"]["1d"]["cards"][0]
+        self.assertEqual(card["affiliate_fit"], "adjacent")
+        self.assertIn("recording_device_or_accessory", {item["category"] for item in card["solution_map"]})
+
+    def test_affiliate_fit_keeps_venue_procedure_as_insight_only(self):
+        now = datetime(2026, 10, 11, 3, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "procedure-insight",
+                "text": "演唱會結束後會整隊到D區待命，手環沒號碼，我觀察一排30個人最右邊是1號。",
+                "username": "proc",
+                "permalink": "https://www.threads.com/@proc/post/procedure-insight",
+                "timestamp": "2026-10-11T02:00:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            },
+        ]
+        card = build_deck(posts, now)["windows"]["1d"]["cards"][0]
+        self.assertEqual(card["affiliate_fit"], "insight_only")
+        self.assertEqual(card["solution_map"], [])
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{
