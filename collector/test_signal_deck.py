@@ -436,8 +436,16 @@ class SignalDeckV03Tests(unittest.TestCase):
         cards = {card["post_id"]: card for card in build_deck(posts, now)["windows"]["1d"]["cards"]}
         for post_id in ("mobility", "stay", "solo", "ticket-commitment"):
             self.assertIn(post_id, cards)
-            self.assertIn(cards[post_id]["candidate_confidence"], {"high", "medium"})
-            self.assertGreaterEqual(cards[post_id]["target_fit_score"], 2)
+            self.assertIn(
+                cards[post_id]["candidate_confidence"],
+                {"high", "medium"},
+                msg=f"{post_id}: {cards[post_id]}",
+            )
+            self.assertGreaterEqual(
+                cards[post_id]["target_fit_score"],
+                2,
+                msg=f"{post_id}: {cards[post_id]}",
+            )
 
 
     def test_nearby_word_alone_does_not_create_post_event_fit(self):
