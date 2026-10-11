@@ -265,6 +265,80 @@ GENERIC_CONCERT_DECISION_MARKERS = re.compile(
 )
 
 
+SELF_NEED_ROLE_MARKERS = re.compile(
+    r"我想|我要|我怕|我需要|我不知道|我不會|我不会|我打算|我準備|我准备|我在想|我在找"
+    r"|我想問|我想问|請問|请问|想問|想问|求助|有人知道|有沒有人知道|有没有人知道"
+    r"|住哪|怎麼去|怎么去|怎麼回|怎么回|趕不上|赶不上|來不及|来不及"
+    r"|\bi\s+(?:need|want|plan|am\s+going|will\s+go|have\s+to|don't\s+know)\b"
+    r"|\bcan\s+i\b|\bshould\s+i\b|\bhow\s+(?:do\s+i|can\s+i|to)\b",
+    re.I,
+)
+
+ADVISORY_EXPERIENCE_MARKERS = re.compile(
+    r"一生推|推薦|推荐|建議|建议|一定要|最好|很方便|非常方便|超方便|值得住|可以住"
+    r"|五分鐘.*床上|五分钟.*床上|不用.*戶外|不用.*户外"
+    r"|\brecommend\b|\bhighly\s+recommend\b|\bbest\s+to\b|\bworth\s+staying\b",
+    re.I,
+)
+
+PROCEDURAL_EXPERIENCE_MARKERS = re.compile(
+    r"會整隊|会整队|先.*再|流程|排隊.*後|排队.*后|領完|领完|入場後|入场后"
+    r"|最右邊|最右边|幾號|几号|工作人員會|工作人员会|會帶到|会带到"
+    r"|\bafter\s+entry\b|\bqueue\s+then\b|\bstaff\s+will\b",
+    re.I,
+)
+
+THIRD_PARTY_ROLE_MARKERS = re.compile(
+    r"他|她|哥哥|姐姐|妹妹|藝人|艺人|偶像|歌手|成員|成员|團員|团员|你家姐姐|大姐姐"
+    r"|公司.*(?:他|她)|經紀|经纪",
+    re.I,
+)
+
+RHETORICAL_NARRATIVE_MARKERS = re.compile(
+    r"有病|能滾嗎|能滚吗|滾嗎|滚吗|閉嘴|闭嘴|幸災樂禍|幸灾乐祸|搞不懂|真情實感|真情实感"
+    r"|全靠|開給她自己看|开给她自己看|別入場|别入场|不想去了|吐槽|婆羅門|婆罗门",
+    re.I,
+)
+
+NAMED_BENEFIT_MARKERS = re.compile(
+    r"\bSEND\s*OFF\b|\bVIDEO\s*AUDIO\s*MESSAGE\b|\bSOUNDCHECK\b|\bHI[- ]?BYE\b"
+    r"|福利兌換|福利兑换|VIP.*(?:福利|benefit)|(?:福利|benefit).*(?:海報|海报|message|video|audio)",
+    re.I,
+)
+
+GIVEAWAY_CONTEXT_MARKERS = re.compile(
+    r"送畀|送給|送给|免費送|免费送|隨機揀|随机揀|隨機選|随机选|不收錢|不收钱|讓給|让给",
+    re.I,
+)
+
+RECORDING_OPERATION_MARKERS = re.compile(
+    r"相機|相机|手機|手机|camera|錄影|录像|錄像|拍攝|拍摄|防手震|防抖|對焦|对焦"
+    r"|放大.*糊|變焦|变焦|zoom|fps|4k|8k|曝光|快門|快门|iso|收音",
+    re.I,
+)
+
+STAY_UTILITY_MARKERS = re.compile(
+    r"住哪|住哪裡|住哪里|訂飯店|订饭店|訂酒店|订酒店|飯店推薦|饭店推荐|酒店推薦|酒店推荐"
+    r"|附近.*(?:飯店|饭店|酒店)|(?:飯店|饭店|酒店).*(?:附近|方便|近|推薦|推荐|住)"
+    r"|預算.*(?:飯店|饭店|酒店)|预算.*(?:饭店|酒店)|一定要訂|一定要订"
+    r"|\bhotel\s+(?:near|recommend|booking|booked)\b|\bwhere\s+to\s+stay\b",
+    re.I,
+)
+
+INCIDENTAL_STAY_MARKERS = re.compile(
+    r"(?:打車|打车|taxi).{0,24}(?:回酒店|回飯店|回饭店)"
+    r"|(?:回酒店|回飯店|回饭店).{0,24}(?:睡|躺|休息)"
+    r"|酒店都book|飯店都book|饭店都book",
+    re.I,
+)
+
+SOLO_SELF_MARKERS = re.compile(
+    r"我.*(?:一個人|一个人).*(?:去|看|參加|参加)|(?:一個人|一个人).*(?:去|看|參加|参加).*(?:演唱會|演唱会)"
+    r"|自己去看|自己一個人去|自己一个人去|\bsolo\s+(?:concert|show|trip)\b",
+    re.I,
+)
+
+
 ENGLISH_CONTEXT = re.compile(
     r"\b(?:the|a|an|is|are|was|were|to|from|at|in|on|for|with|after|before|near|"
     r"how|where|what|when|can|could|should|would|need|want|stay|hotel|hostel|"
@@ -323,15 +397,71 @@ def extract_need_network(text: str) -> tuple[list[str], list[str], list[str]]:
     return nodes, terms[:12], edges[:12]
 
 
+def semantic_role_profile(
+    text: str,
+) -> tuple[str, list[str], list[str]]:
+    signals: list[str] = []
+    penalties: list[str] = []
+
+    if NAMED_BENEFIT_MARKERS.search(text) and not RECORDING_OPERATION_MARKERS.search(text):
+        signals.append("named_benefit")
+        penalties.append("named_benefit_not_device_need")
+        return "named_benefit", signals, penalties
+
+    if GIVEAWAY_CONTEXT_MARKERS.search(text):
+        signals.append("giveaway_context")
+        penalties.append("background_logistics")
+        return "narrative_context", signals, penalties
+
+    if THIRD_PARTY_ROLE_MARKERS.search(text) and RHETORICAL_NARRATIVE_MARKERS.search(text):
+        signals.append("third_party_rhetorical")
+        penalties.append("third_party_not_user_need")
+        return "third_party_mention", signals, penalties
+
+    if RHETORICAL_NARRATIVE_MARKERS.search(text):
+        signals.append("rhetorical_narrative")
+        penalties.append("narrative_not_operational")
+        return "narrative_context", signals, penalties
+
+    if SELF_NEED_ROLE_MARKERS.search(text):
+        signals.append("self_need")
+        return "self_need", signals, penalties
+
+    if ADVISORY_EXPERIENCE_MARKERS.search(text):
+        signals.append("advisory_experience")
+        return "advisory_experience", signals, penalties
+
+    if PROCEDURAL_EXPERIENCE_MARKERS.search(text):
+        signals.append("procedural_experience")
+        return "procedural_experience", signals, penalties
+
+    if THIRD_PARTY_ROLE_MARKERS.search(text):
+        signals.append("third_party_mention")
+        penalties.append("third_party_context")
+        return "third_party_mention", signals, penalties
+
+    signals.append("uncertain_role")
+    return "uncertain", signals, penalties
+
+
+def role_supports_need(role: str) -> bool:
+    return role in {"self_need", "advisory_experience", "procedural_experience"}
+
+
 def intent_profile(
     text: str,
     need_nodes: list[str],
+    semantic_role: str,
 ) -> tuple[float, list[str], list[str]]:
     score = 0.0
     signals: list[str] = []
     penalties: list[str] = []
 
-    if USER_DECISION_MARKERS.search(text):
+    if USER_DECISION_MARKERS.search(text) and semantic_role not in {
+        "third_party_mention",
+        "named_benefit",
+        "narrative_context",
+    }:
         score += 4.0
         signals.append("user_decision")
     if TRIP_COMMITMENT_MARKERS.search(text):
@@ -349,13 +479,17 @@ def intent_profile(
     if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
         score += 2.0
         signals.append("media_request")
-    if QUESTION.search(text) and need_nodes:
+    if QUESTION.search(text) and need_nodes and semantic_role not in {
+        "third_party_mention",
+        "named_benefit",
+        "narrative_context",
+    }:
         score += 2.0
         signals.append("need_question")
-    if ACTION_MARKERS.search(text) and need_nodes:
+    if ACTION_MARKERS.search(text) and need_nodes and role_supports_need(semantic_role):
         score += 2.0
         signals.append("action_marker")
-    if LOGISTICS_CONTEXT_MARKERS.search(text) and need_nodes:
+    if LOGISTICS_CONTEXT_MARKERS.search(text) and need_nodes and role_supports_need(semantic_role):
         score += 3.0
         signals.append("logistics_context")
 
@@ -369,6 +503,10 @@ def intent_profile(
     if need_nodes and THIRD_PARTY_LOGISTICS_MARKERS.search(text) and not USER_DECISION_MARKERS.search(text):
         score -= 4.0
         penalties.append("third_party_logistics")
+
+    if semantic_role in {"third_party_mention", "named_benefit", "narrative_context"}:
+        score -= 4.0
+        penalties.append("semantic_role_block")
 
     if STAFFING_OR_PROMO_MARKERS.search(text):
         score -= 8.0
@@ -450,82 +588,131 @@ def target_fit_profile(
     text: str,
     features: set[str],
     need_nodes: list[str],
+    semantic_role: str,
 ) -> tuple[float, list[str], list[str]]:
     score = 0.0
     signals: list[str] = []
     penalties: list[str] = []
     nodes = set(need_nodes)
+    role_ok = role_supports_need(semantic_role)
 
-    if "mobility" in nodes:
+    if "mobility" in nodes and role_ok:
         score += 4.0
         signals.append("mobility")
+    elif "mobility" in nodes:
+        penalties.append("role_blocked_mobility")
+
     if "stay" in nodes:
-        score += 4.0
-        signals.append("stay")
-    if "venue_outside" in nodes:
+        stay_is_utility = (
+            STAY_UTILITY_MARKERS.search(text)
+            or semantic_role == "advisory_experience"
+        )
+        if role_ok and stay_is_utility and not INCIDENTAL_STAY_MARKERS.search(text):
+            score += 4.0
+            signals.append("stay")
+        else:
+            penalties.append("incidental_stay")
+
+    if "venue_outside" in nodes and role_ok:
         score += 4.0
         signals.append("venue_outside")
-    if "trip_extension" in nodes and POST_EVENT_NEARBY_MARKERS.search(text):
+    elif "venue_outside" in nodes:
+        penalties.append("role_blocked_venue_outside")
+
+    if "trip_extension" in nodes and POST_EVENT_NEARBY_MARKERS.search(text) and role_ok:
         score += 3.0
         signals.append("post_event_nearby")
-    if "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text):
+
+    if "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text) and role_ok:
         score += 4.0
         signals.append("venue_operation")
-    if "wear_support" in nodes and ATTENDEE_PREP_MARKERS.search(text) and (
-        QUESTION.search(text) or USER_DECISION_MARKERS.search(text)
-    ):
+    elif "venue_inside" in nodes and VENUE_OPERATION_MARKERS.search(text):
+        penalties.append("role_blocked_venue_operation")
+
+    if "wear_support" in nodes and ATTENDEE_PREP_MARKERS.search(text) and role_ok:
         score += 2.0
         signals.append("attendee_prep")
-    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text):
+
+    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
         score += 3.0
         signals.append("participation_eligibility")
-    if LIVE_RECORDING_SETUP_MARKERS.search(text) and QUESTION.search(text):
+
+    if (
+        RECORDING_OPERATION_MARKERS.search(text)
+        and QUESTION.search(text)
+        and semantic_role == "self_need"
+        and not NAMED_BENEFIT_MARKERS.search(text)
+    ):
         score += 4.0
         signals.append("live_recording_setup")
-    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+    elif NAMED_BENEFIT_MARKERS.search(text):
+        penalties.append("named_benefit_not_recording")
+
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
         score += 4.0
         signals.append("experience_gear")
-    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text):
+
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
         score += 3.0
         signals.append("attendee_gear")
-    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text):
+
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
         score += 1.0
         signals.append("media_retrieval")
+
     if POST_PROCESSING_MARKERS.search(text):
         score -= 7.0
         penalties.append("post_processing_only")
-    if PARTICIPATION_PREP_MARKERS.search(text) and (QUESTION.search(text) or USER_DECISION_MARKERS.search(text)):
+
+    if PARTICIPATION_PREP_MARKERS.search(text) and role_ok:
         score += 3.0
         signals.append("participation_prep")
-    if "solo_attendance" in features and (
-        CROSS_CITY_ATTENDANCE_MARKERS.search(text) or USER_DECISION_MARKERS.search(text)
-    ):
-        score += 3.0
-        signals.append("solo_or_cross_city")
-    if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and USER_DECISION_MARKERS.search(text):
+
+    if "solo_attendance" in features:
+        if SOLO_SELF_MARKERS.search(text) and semantic_role == "self_need":
+            score += 3.0
+            signals.append("solo_or_cross_city")
+        else:
+            penalties.append("third_party_or_rhetorical_solo")
+
+    if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and semantic_role == "self_need":
         score += 2.0
         signals.append("cross_city_commitment")
-    if TRIP_COMMITMENT_MARKERS.search(text):
+
+    if TRIP_COMMITMENT_MARKERS.search(text) and semantic_role == "self_need":
         score += 4.0
         signals.append("trip_commitment")
 
     if GENERIC_CONCERT_DECISION_MARKERS.search(text) and not signals:
         score -= 4.0
         penalties.append("generic_concert_question")
+
     if "ticketing_need" in features and not (
-        CROSS_CITY_ATTENDANCE_MARKERS.search(text) or "venue_inside" in nodes
+        "venue_operation" in signals
+        or "participation_eligibility" in signals
+        or "cross_city_commitment" in signals
+        or "trip_commitment" in signals
     ):
         score -= 2.0
         penalties.append("ticketing_only")
-    if "merch_need" in features and not PARTICIPATION_PREP_MARKERS.search(text):
+
+    if "merch_need" in features and "participation_prep" not in signals:
         score -= 2.0
         penalties.append("merch_only")
-    if "vip_benefit" in features and "trip_extension" not in nodes and not CROSS_CITY_ATTENDANCE_MARKERS.search(text):
+
+    if "vip_benefit" in features and not (
+        "post_event_nearby" in signals
+        or "cross_city_commitment" in signals
+        or "trip_commitment" in signals
+    ):
         score -= 2.0
         penalties.append("vip_only")
 
-    return round(max(-10.0, min(12.0, score)), 3), signals, penalties
+    if semantic_role in {"third_party_mention", "named_benefit", "narrative_context"}:
+        score -= 3.0
+        penalties.append("semantic_role_not_target_need")
 
+    return round(max(-10.0, min(12.0, score)), 3), signals, penalties
 
 def candidate_confidence(intent_score: float, target_fit_score: float) -> str:
     if intent_score >= 4 and target_fit_score >= 4:
@@ -566,6 +753,12 @@ def is_discovery_candidate(card: dict[str, Any]) -> bool:
     if card.get("candidate_confidence") != "low":
         return False
     if float(card.get("intent_score") or 0) < 2:
+        return False
+    if card.get("semantic_role") in {
+        "third_party_mention",
+        "named_benefit",
+        "narrative_context",
+    }:
         return False
 
     penalties = set(card.get("target_fit_penalties") or [])
@@ -772,11 +965,17 @@ def build_post_card(
     features = sorted(feature_set)
     language_context, language_tokens = detect_language_context(text)
     need_nodes, need_terms, need_edges = extract_need_network(text)
-    intent_score, intent_signals, intent_penalties = intent_profile(text, need_nodes)
+    semantic_role, semantic_role_signals, semantic_role_penalties = semantic_role_profile(text)
+    intent_score, intent_signals, intent_penalties = intent_profile(
+        text,
+        need_nodes,
+        semantic_role,
+    )
     target_fit_score, target_fit_signals, target_fit_penalties = target_fit_profile(
         text,
         feature_set,
         need_nodes,
+        semantic_role,
     )
     base = base_score(post, text, ts, now)
     action_score = actionability_score(
@@ -812,6 +1011,9 @@ def build_post_card(
         "target_fit_signals": target_fit_signals,
         "target_fit_penalties": target_fit_penalties,
         "target_fit_paths": target_fit_paths(target_fit_signals),
+        "semantic_role": semantic_role,
+        "semantic_role_signals": semantic_role_signals,
+        "semantic_role_penalties": semantic_role_penalties,
         "intent_signals": intent_signals,
         "intent_penalties": intent_penalties,
         "language_context": language_context,
