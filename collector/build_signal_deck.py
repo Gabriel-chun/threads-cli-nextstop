@@ -267,6 +267,7 @@ GENERIC_CONCERT_DECISION_MARKERS = re.compile(
 
 SELF_NEED_ROLE_MARKERS = re.compile(
     r"我想|我要|我怕|我需要|我不知道|我不會|我不会|我打算|我準備|我准备|我在想|我在找"
+    r"|我在糾結|我在纠结|我猶豫|我犹豫|我懶得|我懒得"
     r"|我想問|我想问|請問|请问|想問|想问|求助|有人知道|有沒有人知道|有没有人知道"
     r"|住哪|怎麼去|怎么去|怎麼回|怎么回|趕不上|赶不上|來不及|来不及"
     r"|\bi\s+(?:need|want|plan|am\s+going|will\s+go|have\s+to|don't\s+know)\b"
