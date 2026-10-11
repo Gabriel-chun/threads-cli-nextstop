@@ -1,22 +1,22 @@
 {
   "schema_version": "signal-deck-v0.4",
-  "generated_at": "2026-10-11T00:18:03.282312Z",
+  "generated_at": "2026-10-11T01:18:34.688209Z",
   "refresh_policy": "daily",
   "window_key": "5d",
   "window": {
     "label": "5日",
     "days": 5,
     "signal_count": 398,
-    "core_eligible_count": 17,
-    "adjacent_count": 6,
+    "core_eligible_count": 12,
+    "adjacent_count": 5,
     "discovery_count": 5,
-    "eligible_count": 28,
-    "high_confidence_count": 7,
-    "medium_confidence_count": 16,
-    "medium_sampled_count": 16,
-    "low_confidence_count": 375,
-    "card_count": 28,
-    "default_review_limit": 28,
+    "eligible_count": 22,
+    "high_confidence_count": 5,
+    "medium_confidence_count": 12,
+    "medium_sampled_count": 12,
+    "low_confidence_count": 381,
+    "card_count": 22,
+    "default_review_limit": 22,
     "extend_step": 10,
     "display_limit": 5,
     "cards": [
@@ -36,18 +36,24 @@
         "intent_score": 10.0,
         "intent_band": "high",
         "candidate_confidence": "high",
-        "target_fit_score": 12.0,
+        "target_fit_score": 6.0,
         "target_fit_band": "high",
         "target_fit_signals": [
-          "stay",
           "venue_outside",
-          "solo_or_cross_city",
           "cross_city_commitment"
         ],
-        "target_fit_penalties": [],
+        "target_fit_penalties": [
+          "incidental_stay",
+          "third_party_or_rhetorical_solo"
+        ],
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question",
@@ -101,23 +107,26 @@
         "category": "住宿／落腳",
         "kind": "actionable",
         "status": "現在",
-        "score": 84.338,
-        "base_score": 70.513,
+        "score": 84.086,
+        "base_score": 70.261,
         "actionability_score": 15.0,
         "actionability_band": "high",
         "ranking_delta": -1.175,
         "intent_score": 5.0,
         "intent_band": "high",
-        "candidate_confidence": "high",
-        "target_fit_score": 4.0,
-        "target_fit_band": "high",
-        "target_fit_signals": [
-          "stay"
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [
+          "incidental_stay"
         ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
         ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question",
           "logistics_context"
@@ -153,7 +162,7 @@
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "core"
+        "review_lane": "discovery"
       },
       {
         "id": "post_816ba92dfec2b61e",
@@ -180,6 +189,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question",
@@ -226,9 +240,9 @@
         "post_id": "4004966082838223979",
         "category": "住宿／落腳",
         "kind": "actionable",
-        "status": "現在",
-        "score": 79.65,
-        "base_score": 70.007,
+        "status": "今日",
+        "score": 79.398,
+        "base_score": 69.755,
         "actionability_score": 8.85,
         "actionability_band": "medium",
         "ranking_delta": 0.793,
@@ -244,6 +258,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "advisory_experience",
+        "semantic_role_signals": [
+          "advisory_experience"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "logistics_context"
         ],
@@ -280,75 +299,6 @@
         "review_lane": "core"
       },
       {
-        "id": "post_375caf59ed0d94f2",
-        "post_key": "post_375caf59ed0d94f2",
-        "snapshot_id": "deck_2026-10-11_5d_375caf59ed0d94f2",
-        "post_id": "4004668107352425211",
-        "category": "票務／入場摩擦",
-        "kind": "actionable",
-        "status": "今日",
-        "score": 77.586,
-        "base_score": 67.54,
-        "actionability_score": 13.0,
-        "actionability_band": "high",
-        "ranking_delta": -2.954,
-        "intent_score": 4.0,
-        "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 2.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "stay"
-        ],
-        "target_fit_penalties": [
-          "ticketing_only"
-        ],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "hk_zh",
-        "language_tokens": [
-          "紅館",
-          "唔",
-          "嘅",
-          "俾",
-          "嗰",
-          "冇",
-          "酒店",
-          "演唱會"
-        ],
-        "need_nodes": [
-          "stay"
-        ],
-        "need_terms": [
-          "酒店"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "accommodation_need",
-          "ticketing_need"
-        ],
-        "username": "cesar__lizardo",
-        "text": "10號紅館，我真係去唔到…\n\n公司派咗幾張安仔10號場嘅實體飛俾我\n但嗰日要出差，連酒店都book埋，冇辦法去\n\n唔想浪費，諗住送畀真心鍾意安仔嘅人\n\n真心想去就留言要10號\n我隨機揀，唔收錢\n\n#許志安 #紅館 #演唱會門票",
-        "summary": "10號紅館，我真係去唔到… 公司派咗幾張安仔10號場嘅實體飛俾我 但嗰日要出差，連酒店都book埋，冇辦法去 唔想浪費，諗住送畀真心鍾意安仔嘅人 真心想去就留言要10號 我隨機揀，唔收錢 #許志安 #紅館 #演唱會門票",
-        "permalink": "https://www.threads.com/@cesar__lizardo/post/DeTcG0OE8L7",
-        "posted_at": "2026-10-10T06:27:41Z",
-        "media_type": "CAROUSEL_ALBUM",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
         "id": "post_3e8d1d25ada35efb",
         "post_key": "post_3e8d1d25ada35efb",
         "snapshot_id": "deck_2026-10-11_5d_3e8d1d25ada35efb",
@@ -356,8 +306,8 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "今日",
-        "score": 73.687,
-        "base_score": 69.951,
+        "score": 73.434,
+        "base_score": 69.698,
         "actionability_score": 6.9,
         "actionability_band": "medium",
         "ranking_delta": -3.164,
@@ -373,6 +323,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "procedural_experience",
+        "semantic_role_signals": [
+          "procedural_experience"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "logistics_context"
         ],
@@ -415,8 +370,8 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "近期",
-        "score": 72.901,
-        "base_score": 63.901,
+        "score": 72.649,
+        "base_score": 63.649,
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
@@ -432,6 +387,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -477,8 +437,8 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "近期",
-        "score": 72.847,
-        "base_score": 63.847,
+        "score": 72.594,
+        "base_score": 63.594,
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
@@ -494,6 +454,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -531,119 +496,6 @@
         "review_lane": "core"
       },
       {
-        "id": "post_cf93a2e763797295",
-        "post_key": "post_cf93a2e763797295",
-        "snapshot_id": "deck_2026-10-11_5d_cf93a2e763797295",
-        "post_id": "4004930498103079340",
-        "category": "票務／入場摩擦",
-        "kind": "actionable",
-        "status": "今日",
-        "score": 72.612,
-        "base_score": 69.712,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -4.0,
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hans",
-        "language_tokens": [
-          "演唱会",
-          "入场"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "入场"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "ticketing_need"
-        ],
-        "username": "tusijuan1125",
-        "text": "林忆莲演唱会能不能卡资历啊不会跟唱70%以上曲目的别入场，对不起看完一场我就成婆罗门了，舞曲串烧我都high翻了前面坐个老头一直扭头看我，能滚吗？",
-        "summary": "林忆莲演唱会能不能卡资历啊不会跟唱70%以上曲目的别入场，对不起看完一场我就成婆罗门了，舞曲串烧我都high翻了前面坐个老头一直扭头看我，能滚吗？",
-        "permalink": "https://www.threads.com/@tusijuan1125/post/DeUXxGpj_Gs",
-        "posted_at": "2026-10-10T15:09:01Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_24bfeed635a04ab3",
-        "post_key": "post_24bfeed635a04ab3",
-        "snapshot_id": "deck_2026-10-11_5d_24bfeed635a04ab3",
-        "post_id": "4005006718346092999",
-        "category": "陪同／Solo Attendance",
-        "kind": "actionable",
-        "status": "現在",
-        "score": 71.375,
-        "base_score": 70.343,
-        "actionability_score": 4.0,
-        "actionability_band": "low",
-        "ranking_delta": -2.968,
-        "intent_score": 4.0,
-        "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "solo_or_cross_city"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hans",
-        "language_tokens": [
-          "演唱会"
-        ],
-        "need_nodes": [],
-        "need_terms": [],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "solo_attendance"
-        ],
-        "username": "goose.8063422",
-        "text": "特别想问李羲承你是真情实感觉得你走到今天全靠大姐姐一个人吗？下次回归你让她给你买20多万本专辑，音源让她自己给你刷，演唱会开给她自己看，要是能这样我绝对闭嘴。",
-        "summary": "特别想问李羲承你是真情实感觉得你走到今天全靠大姐姐一个人吗？下次回归你让她给你买20多万本专辑，音源让她自己给你刷，演唱会开给她自己看，要是能这样我绝对闭嘴。",
-        "permalink": "https://www.threads.com/@goose.8063422/post/DeUpGQSEmHH",
-        "posted_at": "2026-10-10T17:40:27Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
         "id": "post_35e3b043c77b6ef1",
         "post_key": "post_35e3b043c77b6ef1",
         "snapshot_id": "deck_2026-10-11_5d_35e3b043c77b6ef1",
@@ -651,23 +503,26 @@
         "category": "住宿／落腳",
         "kind": "actionable",
         "status": "近期",
-        "score": 70.566,
-        "base_score": 62.891,
+        "score": 70.313,
+        "base_score": 62.638,
         "actionability_score": 8.85,
         "actionability_band": "medium",
         "ranking_delta": -1.175,
         "intent_score": 2.0,
         "intent_band": "medium",
-        "candidate_confidence": "medium",
-        "target_fit_score": 4.0,
-        "target_fit_band": "high",
-        "target_fit_signals": [
-          "stay"
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [
+          "incidental_stay"
         ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
         ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question"
         ],
@@ -702,7 +557,7 @@
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "core"
+        "review_lane": "discovery"
       },
       {
         "id": "post_3ec94f488f216b88",
@@ -725,6 +580,11 @@
         "target_fit_signals": [],
         "target_fit_penalties": [],
         "target_fit_paths": [],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -775,16 +635,23 @@
         "ranking_delta": -4.0,
         "intent_score": 6.0,
         "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
+        "candidate_confidence": "low",
+        "target_fit_score": 1.0,
+        "target_fit_band": "low",
         "target_fit_signals": [
           "solo_or_cross_city"
         ],
-        "target_fit_penalties": [],
+        "target_fit_penalties": [
+          "ticketing_only"
+        ],
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -821,7 +688,7 @@
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "core"
+        "review_lane": "discovery"
       },
       {
         "id": "post_469e62f308bf336d",
@@ -839,11 +706,18 @@
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "low",
-        "target_fit_score": 0.0,
+        "target_fit_score": -2.0,
         "target_fit_band": "low",
         "target_fit_signals": [],
-        "target_fit_penalties": [],
+        "target_fit_penalties": [
+          "ticketing_only"
+        ],
         "target_fit_paths": [],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -881,63 +755,6 @@
         "review_lane": "discovery"
       },
       {
-        "id": "post_4e4c8b8056f246e5",
-        "post_key": "post_4e4c8b8056f246e5",
-        "snapshot_id": "deck_2026-10-11_5d_4e4c8b8056f246e5",
-        "post_id": "4003336765812372243",
-        "category": "票務／入場摩擦",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 69.0,
-        "base_score": 60.0,
-        "actionability_score": 13.0,
-        "actionability_band": "high",
-        "ranking_delta": -4.0,
-        "intent_score": 6.0,
-        "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "intent_signals": [
-          "user_decision",
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "實名"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "ticketing_need"
-        ],
-        "username": "oddd.00",
-        "text": "救命🥹真的需要大家幫忙！！！\n\n想問問大家有沒有認識有在處理演唱會票券、換票／收票的人，或是剛好有人手上有 10/11 BIGBANG 台北場的票想換／釋出的🥹\n\n事情是這樣：\n我原本是跟票务買 BIGBANG 的票，當初沒有特別確認日期，結果對方最後幫我買到的是 10/10。\n\n但我剛剛才跟男朋友確認好，他 只有10/11有空，所以現在變成我一定要想辦法處理掉10/10，換成10/11才能一起去😭😭\n\n而且這次是實名制，現在距離演唱會只剩沒幾天，真的有點慌……\n\n所以想問問大家：\n👉 有沒有認識可以協助換票／收票／票務處理的人？\n👉 或是有人手上剛好有 10/11 的票想釋出？\n👉 如果有人有 10/10想換11/10/11 的票，也可以私訊我聊！\n\n我這邊的票資訊、價格、區域都可以私訊提供。\n\n真的很急🥹🥹如果有認識相關管道的拜託大家幫我介紹一下，感謝大家！！",
-        "summary": "救命🥹真的需要大家幫忙！！！ 想問問大家有沒有認識有在處理演唱會票券、換票／收票的人，或是剛好有人手上有 10/11 BIGBANG 台北場的票想換／釋出的🥹 事情是這樣： 我原本是跟票务買 BIGBANG 的票，當初沒有特別確認日期，結果對方最後幫我買到的是 10/10。 但我剛剛才跟男朋友確認好，他 只有10/11有空，所以現在變成我一定要想辦法處理掉…",
-        "permalink": "https://www.threads.com/@oddd.00/post/DeOtZPygfMT",
-        "posted_at": "2026-10-08T10:22:33Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
         "id": "post_a38bf000d8f6e947",
         "post_key": "post_a38bf000d8f6e947",
         "snapshot_id": "deck_2026-10-11_5d_a38bf000d8f6e947",
@@ -952,19 +769,24 @@
         "ranking_delta": -4.0,
         "intent_score": 6.0,
         "intent_band": "high",
-        "candidate_confidence": "high",
-        "target_fit_score": 5.0,
-        "target_fit_band": "high",
+        "candidate_confidence": "medium",
+        "target_fit_score": 2.0,
+        "target_fit_band": "medium",
         "target_fit_signals": [
-          "venue_operation",
-          "solo_or_cross_city"
+          "venue_operation"
         ],
         "target_fit_penalties": [
+          "third_party_or_rhetorical_solo",
           "vip_only"
         ],
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "need_question"
@@ -1003,175 +825,62 @@
         "review_lane": "core"
       },
       {
-        "id": "post_1fc270103dccdb86",
-        "post_key": "post_1fc270103dccdb86",
-        "snapshot_id": "deck_2026-10-11_5d_1fc270103dccdb86",
-        "post_id": "4004830564507143466",
-        "category": "票務／入場摩擦",
-        "kind": "actionable",
-        "status": "今日",
-        "score": 67.885,
-        "base_score": 68.885,
-        "actionability_score": 3.0,
+        "id": "post_2933de023d1d6587",
+        "post_key": "post_2933de023d1d6587",
+        "snapshot_id": "deck_2026-10-11_5d_2933de023d1d6587",
+        "post_id": "4004255854849615228",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "近期",
+        "score": 65.373,
+        "base_score": 63.875,
+        "actionability_score": 4.3,
         "actionability_band": "low",
-        "ranking_delta": -4.0,
-        "intent_score": 4.0,
-        "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": -2.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [
-          "ticketing_only"
-        ],
-        "target_fit_paths": [],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會"
-        ],
-        "need_nodes": [],
-        "need_terms": [],
-        "need_edges": [],
-        "feature_tags": [
-          "first_timer",
-          "question_intent",
-          "ticketing_need"
-        ],
-        "username": "youdianyao",
-        "text": "想問一下，這是我第一次看YOASOBI的演唱會，之前FC有抽到東蛋的票，但是看他只有指定席一個選項，是之後會有升等的抽選來分席位嗎",
-        "summary": "想問一下，這是我第一次看YOASOBI的演唱會，之前FC有抽到東蛋的票，但是看他只有指定席一個選項，是之後會有升等的抽選來分席位嗎",
-        "permalink": "https://www.threads.com/@youdianyao/post/DeUBC4PE00q",
-        "posted_at": "2026-10-10T11:50:28Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_5aa86e298993dc22",
-        "post_key": "post_5aa86e298993dc22",
-        "snapshot_id": "deck_2026-10-11_5d_5aa86e298993dc22",
-        "post_id": "4004718330065936037",
-        "category": "VIP／互動福利",
-        "kind": "actionable",
-        "status": "今日",
-        "score": 65.121,
-        "base_score": 67.956,
-        "actionability_score": 1.0,
-        "actionability_band": "low",
-        "ranking_delta": -3.835,
-        "intent_score": 4.0,
-        "intent_band": "high",
+        "ranking_delta": -2.802,
+        "intent_score": 2.0,
+        "intent_band": "medium",
         "candidate_confidence": "medium",
         "target_fit_score": 2.0,
         "target_fit_band": "medium",
         "target_fit_signals": [
-          "live_recording_setup"
-        ],
-        "target_fit_penalties": [
-          "vip_only"
-        ],
-        "target_fit_paths": [
-          "experience_utility"
-        ],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會",
-          "怎麼"
-        ],
-        "need_nodes": [],
-        "need_terms": [],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "vip_benefit"
-        ],
-        "username": "kissu880711",
-        "text": "請問一下...\n明天演唱會最後一個福利每個人都有的海報幾點跟怎麼拿？\n還有福利兌換的SEND OFF + VIDEO AUDIO MESSAGE是什麼 每個人都可以？",
-        "summary": "請問一下... 明天演唱會最後一個福利每個人都有的海報幾點跟怎麼拿？ 還有福利兌換的SEND OFF + VIDEO AUDIO MESSAGE是什麼 每個人都可以？",
-        "permalink": "https://www.threads.com/@kissu880711/post/DeTnhpxE16l",
-        "posted_at": "2026-10-10T08:07:28Z",
-        "media_type": "CAROUSEL_ALBUM",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "adjacent"
-      },
-      {
-        "id": "post_6c3a9411f28794ee",
-        "post_key": "post_6c3a9411f28794ee",
-        "snapshot_id": "deck_2026-10-11_5d_6c3a9411f28794ee",
-        "post_id": "4003344313471962038",
-        "category": "陪同／Solo Attendance",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 65.0,
-        "base_score": 60.0,
-        "actionability_score": 9.0,
-        "actionability_band": "medium",
-        "ranking_delta": -4.0,
-        "intent_score": 6.0,
-        "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "solo_or_cross_city"
+          "cross_city_commitment"
         ],
         "target_fit_penalties": [],
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
-          "user_decision",
           "need_question"
         ],
         "intent_penalties": [],
-        "language_context": "zh_hant",
+        "language_context": "english",
         "language_tokens": [
-          "演唱會",
-          "應援"
+          "concert"
         ],
         "need_nodes": [
           "wear_support"
         ],
         "need_terms": [
-          "應援"
+          "lightstick"
         ],
         "need_edges": [],
         "feature_tags": [
-          "question_intent",
-          "solo_attendance",
-          "venue_experience"
+          "question_intent"
         ],
-        "username": "reindeer.60433653",
-        "text": "想問問有人想一起去看派偉俊演唱會的嗎！！\n很想找個伴一起去😳\n開演前也可以一起去逛逛、領應援！\n（我在A區500多號ㄉ💞）",
-        "summary": "想問問有人想一起去看派偉俊演唱會的嗎！！ 很想找個伴一起去😳 開演前也可以一起去逛逛、領應援！ （我在A區500多號ㄉ💞）",
-        "permalink": "https://www.threads.com/@reindeer.60433653/post/DeOvHFGE4u2",
-        "posted_at": "2026-10-08T10:37:33Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
+        "username": "carter.b.golden",
+        "text": "This is actively making me never want to travel to AZ for a concert again, even though it is one of the closest stops to me that gets K-Pop tours. What do you mean they are not allowing K-Pop lightsticks *at* the K-Pop concert?!",
+        "summary": "This is actively making me never want to travel to AZ for a concert again, even though it is one of the closest stops to me that gets K-Pop tours. What do you mean they are not al…",
+        "permalink": "https://www.threads.com/@carter.b.golden/post/DeR-XwKFuV8",
+        "posted_at": "2026-10-09T16:48:37Z",
+        "media_type": "IMAGE",
+        "query": "concert",
         "source_queries": [
-          "演唱會"
+          "concert"
         ],
         "retrieval_sources": [
           "threads_ssr"
@@ -1187,8 +896,8 @@
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
-        "score": 64.882,
-        "base_score": 63.384,
+        "score": 64.63,
+        "base_score": 63.132,
         "actionability_score": 4.3,
         "actionability_band": "low",
         "ranking_delta": -2.802,
@@ -1204,6 +913,11 @@
         "target_fit_paths": [
           "experience_utility"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "utility_question"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question"
         ],
@@ -1265,6 +979,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "utility_question"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question"
         ],
@@ -1328,6 +1047,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision"
         ],
@@ -1383,6 +1107,11 @@
         "target_fit_paths": [
           "experience_utility"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "utility_question"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question"
         ],
@@ -1446,6 +1175,11 @@
         "target_fit_paths": [
           "experience_utility"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "utility_question"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "need_question"
         ],
@@ -1489,8 +1223,8 @@
         "category": "其他演出內容",
         "kind": "context",
         "status": "今日",
-        "score": 61.14,
-        "base_score": 66.942,
+        "score": 60.888,
+        "base_score": 66.69,
         "actionability_score": -3.0,
         "actionability_band": "low",
         "ranking_delta": -2.802,
@@ -1506,6 +1240,11 @@
         "target_fit_paths": [
           "experience_utility"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision"
         ],
@@ -1562,6 +1301,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision"
         ],
@@ -1619,6 +1363,11 @@
         "target_fit_paths": [
           "experience_utility"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
           "attendee_gear_need"
@@ -1675,6 +1424,11 @@
         "target_fit_paths": [
           "attendance_logistics"
         ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision"
         ],
