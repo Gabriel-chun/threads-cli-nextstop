@@ -150,6 +150,38 @@ export type TrendIndexRow = {
   edge_count:number;
 };
 
+
+export type ReviewIntelligencePatternCounts = Record<string,{relevant:number;irrelevant:number}>;
+
+export type ReviewIntelligenceCluster = {
+  cluster_id:string;
+  label_zh:string;
+  label_en:string;
+  relevant_count:number;
+  irrelevant_count:number;
+  affiliate_fit:"ready"|"adjacent"|"insight_only"|"none";
+  solution_map:string[];
+  evidence:Array<{
+    post_key:string;
+    category:string;
+    text:string;
+    reviewed_at?:string|null;
+  }>;
+};
+
+export type ReviewIntelligence = {
+  schema_version:"review-intelligence-v0.1";
+  generated_at:string;
+  source:string;
+  review_counts:{total:number;relevant:number;irrelevant:number};
+  positive_patterns:ReviewIntelligencePatternCounts;
+  negative_patterns:ReviewIntelligencePatternCounts;
+  category_stats:Record<string,{relevant:number;irrelevant:number}>;
+  feature_stats:Record<string,{relevant:number;irrelevant:number}>;
+  demand_clusters:ReviewIntelligenceCluster[];
+  note?:string;
+};
+
 export type TrendIndex = {
   schema_version:string;
   updated_at?:string;
@@ -158,6 +190,7 @@ export type TrendIndex = {
 };
 
 const RAW="https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/trends";
+const REVIEW_INTELLIGENCE_RAW="https://raw.githubusercontent.com/Gabriel-chun/threads-cli-nextstop/main/collector/archive/latest/review_intelligence.json";
 
 async function read<T>(url:string):Promise<T|null>{
   const r=await fetch(url,{headers:{"User-Agent":"next-stop-live-trend-observation"},cache:"no-store"});
@@ -166,6 +199,10 @@ async function read<T>(url:string):Promise<T|null>{
 
 export async function loadTrendIndex():Promise<TrendIndex|null>{
   return read<TrendIndex>(RAW+"/index.json");
+}
+
+export async function loadReviewIntelligence():Promise<ReviewIntelligence|null>{
+  return read<ReviewIntelligence>(REVIEW_INTELLIGENCE_RAW);
 }
 
 export async function loadTrendRadar(selector?:string):Promise<TrendRadar|null>{

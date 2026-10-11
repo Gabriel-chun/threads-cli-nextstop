@@ -1,19 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { EventWatchRow, TrendEvidence, TrendIndexRow, TrendLink, TrendRadar } from "../lib/trendRadar";
+import type { EventWatchRow, ReviewIntelligence, ReviewIntelligenceCluster, TrendEvidence, TrendIndexRow, TrendLink, TrendRadar } from "../lib/trendRadar";
 import { isTrendObservation } from "../lib/trendRadar";
 import { useI18n } from "./I18nProvider";
 
-type View = "observation"|"connections"|"eventWatch";
+type View = "observation"|"connections"|"eventWatch"|"reviewIntelligence";
 
 function stateKey(state:string){ return "trend.state."+state; }
 
-export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snapshots:TrendIndexRow[]}){
+export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null}){
   const {t,formatDate,formatCount}=useI18n();
   const [view,setView]=useState<View>("observation");
   const [selectedLink,setSelectedLink]=useState<TrendLink|null>(null);
   const [selectedEvent,setSelectedEvent]=useState<EventWatchRow|null>(null);
+  const [selectedReviewCluster,setSelectedReviewCluster]=useState<ReviewIntelligenceCluster|null>(null);
   const v02=isTrendObservation(data);
 
   const evidence=useMemo<TrendEvidence[]>(()=>v02?data.evidence:[],[data,v02]);
@@ -66,6 +67,7 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
       <button type="button" className={view==="observation"?"active":""} onClick={()=>setView("observation")}>{t("trend.tab.observation")}</button>
       <button type="button" className={view==="connections"?"active":""} onClick={()=>setView("connections")}>{t("trend.tab.connections")}</button>
       <button type="button" className={view==="eventWatch"?"active":""} onClick={()=>setView("eventWatch")}>{t("trend.tab.eventWatch")}</button>
+      <button type="button" className={view==="reviewIntelligence"?"active":""} onClick={()=>setView("reviewIntelligence")}>{t("trend.tab.reviewIntelligence")}</button>
     </div>
 
     {!data ? <section className="quietEmpty"><p className="muted">{t("common.noData")}</p></section> : null}
@@ -139,8 +141,13 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
       </button>)}
     </section>:null}
 
-    {(selectedLink||selectedEvent) ? <aside className="trendEvidenceDrawer quietDrawer" aria-live="polite">
-      <div className="trendDrawerHead"><div><p className="kicker">{t("trend.supportingEvidence")}</p><h2>{selectedLink?selectedLink.source_label+" ↔ "+selectedLink.target_label:selectedEvent?.event_name}</h2></div><button type="button" onClick={()=>{setSelectedLink(null);setSelectedEvent(null);}}>{t("common.close")}</button></div>
+    {view==="reviewIntelligence" ? <ReviewIntelligenceView
+      data={reviewIntelligence}
+      onSelectCluster={(cluster)=>{setSelectedLink(null);setSelectedEvent(null);setSelectedReviewCluster(cluster);}}
+    /> : null}
+
+    {(selectedLink||selectedEvent||selectedReviewCluster) ? <aside className="trendEvidenceDrawer quietDrawer" aria-live="polite">
+      <div className="trendDrawerHead"><div><p className="kicker">{t("trend.supportingEvidence")}</p><h2>{selectedLink?selectedLink.source_label+" ↔ "+selectedLink.target_label:selectedEvent?.event_name || (selectedReviewCluster ? t("trend.review.cluster."+selectedReviewCluster.cluster_id) : "")}</h2></div><button type="button" onClick={()=>{setSelectedLink(null);setSelectedEvent(null);setSelectedReviewCluster(null);}}>{t("common.close")}</button></div>
       {selectedLink?<div className="trendEvidenceMeta">
         <span>{t("common.firstSeen")}</span><strong>{formatDate(selectedLink.first_seen)}</strong>
         <span>{t("common.lastSeen")}</span><strong>{formatDate(selectedLink.last_seen)}</strong>
@@ -149,12 +156,79 @@ export function TrendObservationView({data,snapshots}:{data:TrendRadar|null;snap
         <span>{t("trend.uniqueAuthors")}</span><strong>{selectedLink.unique_author_count}</strong>
         <span>{t("trend.resolutionConfidence")}</span><strong>{t("trend.confidence."+selectedLink.resolution_confidence)}</strong>
       </div>:null}
-      {drawerEvidence.length?drawerEvidence.map(ev=><EvidenceCard key={ev.evidence_id} evidence={ev}/>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
-      {selectedEvent?.source?<a className="quietTextLink" href={selectedEvent.source} target="_blank" rel="noreferrer">{t("common.openSource")}</a>:null}
+      {selectedReviewCluster ? <>
+        <div className="trendEvidenceMeta reviewClusterMeta">
+          <span>{t("trend.review.affiliateFit")}</span><strong>{t("deck.affiliateFit."+selectedReviewCluster.affiliate_fit)}</strong>
+          <span>{t("trend.review.relevantEvidence")}</span><strong>{selectedReviewCluster.relevant_count}</strong>
+          <span>{t("trend.review.irrelevantOverlap")}</span><strong>{selectedReviewCluster.irrelevant_count}</strong>
+        </div>
+        {selectedReviewCluster.solution_map.length?<div className="trendChipList">{selectedReviewCluster.solution_map.map(item=><span key={item}>{item}</span>)}</div>:null}
+        {selectedReviewCluster.evidence.length?selectedReviewCluster.evidence.map(item=><article className="trendEvidenceCard quietEvidenceCard" key={item.post_key}>
+          <p>{item.text}</p>
+          <div className="trendEvidenceMeta"><span>{t("trend.review.category")}</span><strong>{item.category}</strong><span>{t("trend.review.reviewedAt")}</span><strong>{formatDate(item.reviewed_at)}</strong></div>
+        </article>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
+      </> : <>
+        {drawerEvidence.length?drawerEvidence.map(ev=><EvidenceCard key={ev.evidence_id} evidence={ev}/>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
+        {selectedEvent?.source?<a className="quietTextLink" href={selectedEvent.source} target="_blank" rel="noreferrer">{t("common.openSource")}</a>:null}
+      </>}
     </aside>:null}
 
     <footer><span>Next Stop Live · {t("trend.footerSystem")}</span><span>{t("trend.readOnly")}</span></footer>
   </main>;
+}
+
+function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|null;onSelectCluster:(cluster:ReviewIntelligenceCluster)=>void}){
+  const {t}=useI18n();
+  if(!data) return <section className="quietEmpty"><p className="muted">{t("trend.review.noData")}</p></section>;
+
+  const ready=data.demand_clusters.filter(row=>row.affiliate_fit==="ready");
+  const adjacent=data.demand_clusters.filter(row=>row.affiliate_fit==="adjacent");
+  const topPositive=Object.entries(data.positive_patterns)
+    .map(([key,value])=>({key,...value,delta:(value.relevant/Math.max(1,data.review_counts.relevant))-(value.irrelevant/Math.max(1,data.review_counts.irrelevant))}))
+    .sort((a,b)=>b.delta-a.delta)
+    .slice(0,4);
+  const topNegative=Object.entries(data.negative_patterns)
+    .map(([key,value])=>({key,...value,delta:(value.irrelevant/Math.max(1,data.review_counts.irrelevant))-(value.relevant/Math.max(1,data.review_counts.relevant))}))
+    .sort((a,b)=>b.delta-a.delta)
+    .slice(0,4);
+
+  return <section className="reviewIntelligence">
+    <div className="quietStats trendQuietStats reviewIntelligenceStats">
+      <span><strong>{data.review_counts.relevant}</strong>{t("deck.relevant")}</span>
+      <span><strong>{data.review_counts.irrelevant}</strong>{t("deck.irrelevant")}</span>
+      <span><strong>{ready.length}</strong>{t("trend.review.readyClusters")}</span>
+      <span><strong>{adjacent.length}</strong>{t("trend.review.adjacentClusters")}</span>
+    </div>
+
+    <div className="reviewContrastGrid">
+      <section className="reviewContrastColumn">
+        <p className="kicker">{t("trend.review.positivePatterns")}</p>
+        {topPositive.map(row=><div className="reviewContrastRow" key={row.key}><span>{t("trend.review.pattern."+row.key)}</span><strong>{row.relevant}</strong><small>{t("deck.relevant")}</small></div>)}
+      </section>
+      <section className="reviewContrastColumn">
+        <p className="kicker">{t("trend.review.negativePatterns")}</p>
+        {topNegative.map(row=><div className="reviewContrastRow" key={row.key}><span>{t("trend.review.pattern."+row.key)}</span><strong>{row.irrelevant}</strong><small>{t("deck.irrelevant")}</small></div>)}
+      </section>
+    </div>
+
+    <div className="reviewDemandHead">
+      <div><p className="kicker">{t("trend.review.demandClusters")}</p><h2>{t("trend.review.demandQuestion")}</h2></div>
+      <small>{t("trend.review.derivedNote")}</small>
+    </div>
+
+    <div className="quietPrimaryList reviewDemandList">
+      {data.demand_clusters.map(cluster=><button type="button" className="quietConnectionRow reviewDemandRow" key={cluster.cluster_id} onClick={()=>onSelectCluster(cluster)}>
+        <span className="reviewDemandMain">
+          <strong>{t("trend.review.cluster."+cluster.cluster_id)}</strong>
+          <small>{cluster.solution_map.length?cluster.solution_map.slice(0,3).join(" · "):t("trend.review.insightOnly")}</small>
+        </span>
+        <span className="reviewDemandRight">
+          <em className={"reviewAffiliateBadge "+cluster.affiliate_fit}>{t("deck.affiliateFit."+cluster.affiliate_fit)}</em>
+          <span className="quietConnectionMeta">{cluster.relevant_count} {t("common.evidence")}</span>
+        </span>
+      </button>)}
+    </div>
+  </section>;
 }
 
 function EvidenceCard({evidence}:{evidence:TrendEvidence}){

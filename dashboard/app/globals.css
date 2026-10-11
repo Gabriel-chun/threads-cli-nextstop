@@ -3394,3 +3394,158 @@ footer {
   background: rgba(172, 137, 47, .08);
   color: var(--muted);
 }
+
+
+/* Review Intelligence / Affiliate Demand */
+.reviewIntelligence {
+  margin-top: 2px;
+}
+
+.reviewIntelligenceStats {
+  margin-bottom: 14px;
+}
+
+.reviewContrastGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 0 22px;
+}
+
+.reviewContrastColumn {
+  min-width: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(221,213,202,.78);
+}
+
+.reviewContrastColumn .kicker {
+  margin-bottom: 6px;
+}
+
+.reviewContrastRow {
+  min-height: 40px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid rgba(221,213,202,.55);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.reviewContrastRow strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.reviewContrastRow small {
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.reviewDemandHead {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.reviewDemandHead h2 {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 620;
+}
+
+.reviewDemandHead > small {
+  color: var(--quiet);
+  font-size: 9px;
+}
+
+.reviewDemandRow {
+  align-items: center;
+}
+
+.reviewDemandMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.reviewDemandMain strong {
+  font-size: 13px;
+  font-weight: 620;
+}
+
+.reviewDemandMain small {
+  overflow: hidden;
+  color: var(--quiet);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reviewDemandRight {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewAffiliateBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.reviewAffiliateBadge.ready {
+  color: var(--success);
+  border-color: rgba(66,106,83,.28);
+  background: rgba(66,106,83,.05);
+}
+
+.reviewAffiliateBadge.adjacent {
+  color: var(--accent);
+  border-color: #D7B6A8;
+  background: var(--accent-soft);
+}
+
+.reviewAffiliateBadge.insight_only,
+.reviewAffiliateBadge.none {
+  color: var(--quiet);
+  background: transparent;
+}
+
+.reviewClusterMeta {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 700px) {
+  .reviewContrastGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .reviewDemandHead {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .reviewDemandRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .reviewDemandMain small {
+    white-space: normal;
+  }
+}
