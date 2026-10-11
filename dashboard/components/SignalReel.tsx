@@ -734,6 +734,14 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             {selected.candidate_confidence ? (
               <span>confidence · {t("trend.confidence."+selected.candidate_confidence)}</span>
             ) : null}
+            {selected.affiliate_fit ? (
+              <span>{t("deck.affiliateFit")} · {t("deck.affiliateFit."+selected.affiliate_fit)}</span>
+            ) : null}
+            {(selected.solution_map || []).map((item) => (
+              <span key={item.category}>
+                {t("deck.solutionMap")} · {item.category}
+              </span>
+            ))}
             {(selected.feature_tags || []).map((tag) => <span key={tag}>{tag}</span>)}
           </div>
 
