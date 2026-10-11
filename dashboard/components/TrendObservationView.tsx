@@ -147,7 +147,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
     /> : null}
 
     {(selectedLink||selectedEvent||selectedReviewCluster) ? <aside className="trendEvidenceDrawer quietDrawer" aria-live="polite">
-      <div className="trendDrawerHead"><div><p className="kicker">{t("trend.supportingEvidence")}</p><h2>{selectedLink?selectedLink.source_label+" ↔ "+selectedLink.target_label:selectedEvent?.event_name || (selectedReviewCluster ? (selectedReviewCluster.label_zh) : "")}</h2></div><button type="button" onClick={()=>{setSelectedLink(null);setSelectedEvent(null);setSelectedReviewCluster(null);}}>{t("common.close")}</button></div>
+      <div className="trendDrawerHead"><div><p className="kicker">{t("trend.supportingEvidence")}</p><h2>{selectedLink?selectedLink.source_label+" ↔ "+selectedLink.target_label:selectedEvent?.event_name || (selectedReviewCluster ? t("trend.review.cluster."+selectedReviewCluster.cluster_id) : "")}</h2></div><button type="button" onClick={()=>{setSelectedLink(null);setSelectedEvent(null);setSelectedReviewCluster(null);}}>{t("common.close")}</button></div>
       {selectedLink?<div className="trendEvidenceMeta">
         <span>{t("common.firstSeen")}</span><strong>{formatDate(selectedLink.first_seen)}</strong>
         <span>{t("common.lastSeen")}</span><strong>{formatDate(selectedLink.last_seen)}</strong>
@@ -165,7 +165,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
         {selectedReviewCluster.solution_map.length?<div className="trendChipList">{selectedReviewCluster.solution_map.map(item=><span key={item}>{item}</span>)}</div>:null}
         {selectedReviewCluster.evidence.length?selectedReviewCluster.evidence.map(item=><article className="trendEvidenceCard quietEvidenceCard" key={item.post_key}>
           <p>{item.text}</p>
-          <div className="trendEvidenceMeta"><span>{t("trend.review.category")}</span><strong>{item.category}</strong><span>{t("common.updated")}</span><strong>{formatDate(item.reviewed_at)}</strong></div>
+          <div className="trendEvidenceMeta"><span>{t("trend.review.category")}</span><strong>{item.category}</strong><span>{t("trend.review.reviewedAt")}</span><strong>{formatDate(item.reviewed_at)}</strong></div>
         </article>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
       </> : <>
         {drawerEvidence.length?drawerEvidence.map(ev=><EvidenceCard key={ev.evidence_id} evidence={ev}/>):<p className="muted">{t("trend.eventNoEvidence")}</p>}
@@ -219,7 +219,7 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
     <div className="quietPrimaryList reviewDemandList">
       {data.demand_clusters.map(cluster=><button type="button" className="quietConnectionRow reviewDemandRow" key={cluster.cluster_id} onClick={()=>onSelectCluster(cluster)}>
         <span className="reviewDemandMain">
-          <strong>{cluster.label_zh}</strong>
+          <strong>{t("trend.review.cluster."+cluster.cluster_id)}</strong>
           <small>{cluster.solution_map.length?cluster.solution_map.slice(0,3).join(" · "):t("trend.review.insightOnly")}</small>
         </span>
         <span className="reviewDemandRight">
