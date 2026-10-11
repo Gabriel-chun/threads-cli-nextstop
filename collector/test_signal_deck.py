@@ -752,6 +752,25 @@ class SignalDeckV03Tests(unittest.TestCase):
         self.assertEqual(by_id["procedure"]["semantic_role"], "procedural_experience")
         self.assertIn("venue_operation", by_id["procedure"]["target_fit_signals"])
 
+
+    def test_live_incidental_hotel_context_does_not_enter_discovery(self):
+        now = datetime(2026, 10, 11, 2, 0, tzinfo=timezone.utc)
+        posts = [
+            {
+                "id": "rain-hotel-live",
+                "text": "我好奇8.28那天坐内场的女孩有真心希望演唱会准时开始的吗。我当时被雨淋懵了我都希望立刻宣布演唱会取消然后我打车回酒店",
+                "username": "rain",
+                "permalink": "https://www.threads.com/@rain/post/rain-hotel-live",
+                "timestamp": "2026-10-11T01:30:00Z",
+                "signal_counted": True,
+                "clean_exclusion_reason": "",
+                "relevance_score": 70,
+            }
+        ]
+        window = build_deck(posts, now)["windows"]["1d"]
+        self.assertEqual(window["cards"], [])
+        self.assertEqual(window["discovery_count"], 0)
+
     def test_other_latin_stays_in_raw_data_but_is_excluded_from_review_deck(self):
         now = datetime(2026, 10, 3, 3, 0, tzinfo=timezone.utc)
         posts = [{

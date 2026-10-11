@@ -773,6 +773,7 @@ DISCOVERY_BLOCKING_PENALTIES = {
     "post_processing_only",
     "vip_only",
     "merch_only",
+    "incidental_stay",
 }
 
 
