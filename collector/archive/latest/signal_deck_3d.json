@@ -1,12 +1,12 @@
 {
   "schema_version": "signal-deck-v0.4",
-  "generated_at": "2026-10-11T01:21:56.846497Z",
+  "generated_at": "2026-10-11T01:44:29.231791Z",
   "refresh_policy": "daily",
   "window_key": "3d",
   "window": {
     "label": "3日",
     "days": 3,
-    "signal_count": 268,
+    "signal_count": 266,
     "core_eligible_count": 9,
     "adjacent_count": 3,
     "discovery_count": 5,
@@ -14,8 +14,12 @@
     "high_confidence_count": 4,
     "medium_confidence_count": 8,
     "medium_sampled_count": 8,
-    "low_confidence_count": 256,
+    "low_confidence_count": 254,
     "card_count": 17,
+    "affiliate_ready_count": 1,
+    "affiliate_adjacent_count": 7,
+    "affiliate_insight_only_count": 4,
+    "affiliate_none_count": 5,
     "default_review_limit": 17,
     "extend_step": 10,
     "display_limit": 5,
@@ -28,11 +32,32 @@
         "category": "住宿／落腳",
         "kind": "actionable",
         "status": "近期",
-        "score": 88.829,
+        "score": 89.829,
         "base_score": 60.0,
         "actionability_score": 31.0,
         "actionability_band": "high",
         "ranking_delta": -2.171,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "venue_access_or_return",
+          "trip_commitment"
+        ],
+        "solution_map": [
+          {
+            "category": "local_transfer_or_transit_pass",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "venue_outside"
+          },
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
         "intent_score": 10.0,
         "intent_band": "high",
         "candidate_confidence": "high",
@@ -107,11 +132,25 @@
         "category": "住宿／落腳",
         "kind": "actionable",
         "status": "今日",
-        "score": 79.384,
-        "base_score": 69.741,
+        "score": 81.29,
+        "base_score": 69.647,
         "actionability_score": 8.85,
         "actionability_band": "medium",
         "ranking_delta": 0.793,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_stay_need"
+        ],
+        "solution_map": [
+          {
+            "category": "accommodation_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "stay"
+          }
+        ],
         "intent_score": 3.0,
         "intent_band": "medium",
         "candidate_confidence": "medium",
@@ -172,11 +211,18 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "今日",
-        "score": 73.42,
-        "base_score": 69.684,
+        "score": 73.327,
+        "base_score": 69.591,
         "actionability_score": 6.9,
         "actionability_band": "medium",
         "ranking_delta": -3.164,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "insight_only",
+        "affiliate_fit_score": 1.0,
+        "affiliate_fit_reasons": [
+          "useful_need_without_direct_offer"
+        ],
+        "solution_map": [],
         "intent_score": 3.0,
         "intent_band": "medium",
         "candidate_confidence": "medium",
@@ -236,11 +282,18 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "近期",
-        "score": 72.635,
-        "base_score": 63.635,
+        "score": 72.541,
+        "base_score": 63.541,
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "insight_only",
+        "affiliate_fit_score": 1.0,
+        "affiliate_fit_reasons": [
+          "useful_need_without_direct_offer"
+        ],
+        "solution_map": [],
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "high",
@@ -303,11 +356,18 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "近期",
-        "score": 72.58,
-        "base_score": 63.58,
+        "score": 72.486,
+        "base_score": 63.486,
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "insight_only",
+        "affiliate_fit_score": 1.0,
+        "affiliate_fit_reasons": [
+          "useful_need_without_direct_offer"
+        ],
+        "solution_map": [],
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "high",
@@ -362,70 +422,6 @@
         "review_lane": "core"
       },
       {
-        "id": "post_469e62f308bf336d",
-        "post_key": "post_469e62f308bf336d",
-        "snapshot_id": "deck_2026-10-11_3d_469e62f308bf336d",
-        "post_id": "4003075482719536306",
-        "category": "票務／入場摩擦",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 69.0,
-        "base_score": 60.0,
-        "actionability_score": 13.0,
-        "actionability_band": "high",
-        "ranking_delta": -4.0,
-        "intent_score": 6.0,
-        "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": -2.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [
-          "ticketing_only"
-        ],
-        "target_fit_paths": [],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "self_need"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "user_decision",
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "實名"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "ticketing_need"
-        ],
-        "username": "kevinjay1124",
-        "text": "請問 廣大的脆友 BIGBANG的演唱會票不是實名制 \n好奇問 這實名制的票卷 怎有人能讓票？",
-        "summary": "請問 廣大的脆友 BIGBANG的演唱會票不是實名制 好奇問 這實名制的票卷 怎有人能讓票？",
-        "permalink": "https://www.threads.com/@kevinjay1124/post/DeNx_E8ksSy",
-        "posted_at": "2026-10-08T01:43:26Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
         "id": "post_4e4c8b8056f246e5",
         "post_key": "post_4e4c8b8056f246e5",
         "snapshot_id": "deck_2026-10-11_3d_4e4c8b8056f246e5",
@@ -438,6 +434,13 @@
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "low",
@@ -502,6 +505,13 @@
         "actionability_score": 13.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "insight_only",
+        "affiliate_fit_score": 1.0,
+        "affiliate_fit_reasons": [
+          "useful_need_without_direct_offer"
+        ],
+        "solution_map": [],
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "medium",
@@ -567,11 +577,18 @@
         "category": "票務／入場摩擦",
         "kind": "actionable",
         "status": "今日",
-        "score": 67.619,
-        "base_score": 68.619,
+        "score": 67.525,
+        "base_score": 68.525,
         "actionability_score": 3.0,
         "actionability_band": "low",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
         "intent_score": 4.0,
         "intent_band": "high",
         "candidate_confidence": "low",
@@ -627,11 +644,18 @@
         "category": "場館／現場體驗",
         "kind": "context",
         "status": "近期",
-        "score": 67.387,
-        "base_score": 63.777,
+        "score": 67.293,
+        "base_score": 63.683,
         "actionability_score": 6.0,
         "actionability_band": "medium",
         "ranking_delta": -2.39,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
         "intent_score": 4.0,
         "intent_band": "high",
         "candidate_confidence": "low",
@@ -688,11 +712,25 @@
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
-        "score": 65.359,
-        "base_score": 63.861,
+        "score": 66.265,
+        "base_score": 63.767,
         "actionability_score": 4.3,
         "actionability_band": "low",
         "ranking_delta": -2.802,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "trip_commitment"
+        ],
+        "solution_map": [
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
         "intent_score": 2.0,
         "intent_band": "medium",
         "candidate_confidence": "medium",
@@ -745,6 +783,84 @@
         "review_lane": "core"
       },
       {
+        "id": "post_1fc44208b343df2e",
+        "post_key": "post_1fc44208b343df2e",
+        "snapshot_id": "deck_2026-10-11_3d_1fc44208b343df2e",
+        "post_id": "4004166124326119104",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "近期",
+        "score": 65.522,
+        "base_score": 63.024,
+        "actionability_score": 4.3,
+        "actionability_band": "low",
+        "ranking_delta": -2.802,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "attendee_preparation"
+        ],
+        "solution_map": [
+          {
+            "category": "apparel_or_outerwear",
+            "kind": "product",
+            "strength": "adjacent",
+            "source_signal": "attendee_prep"
+          }
+        ],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "medium",
+        "target_fit_score": 2.0,
+        "target_fit_band": "medium",
+        "target_fit_signals": [
+          "attendee_prep"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "experience_utility"
+        ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "utility_question"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "wear_support"
+        ],
+        "need_terms": [
+          "dress code"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "thikkmisses",
+        "text": "Who made up this dress code  for the usher & Chris brown concert in Houston ?",
+        "summary": "Who made up this dress code for the usher & Chris brown concert in Houston ?",
+        "permalink": "https://www.threads.com/@thikkmisses/post/DeRp-AGHGbA",
+        "posted_at": "2026-10-09T13:50:20Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "adjacent"
+      },
+      {
         "id": "post_6c3a9411f28794ee",
         "post_key": "post_6c3a9411f28794ee",
         "snapshot_id": "deck_2026-10-11_3d_6c3a9411f28794ee",
@@ -757,6 +873,13 @@
         "actionability_score": 9.0,
         "actionability_band": "medium",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
         "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "low",
@@ -811,70 +934,6 @@
         "review_lane": "discovery"
       },
       {
-        "id": "post_1fc44208b343df2e",
-        "post_key": "post_1fc44208b343df2e",
-        "snapshot_id": "deck_2026-10-11_3d_1fc44208b343df2e",
-        "post_id": "4004166124326119104",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 64.616,
-        "base_score": 63.118,
-        "actionability_score": 4.3,
-        "actionability_band": "low",
-        "ranking_delta": -2.802,
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "medium",
-        "target_fit_score": 2.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "attendee_prep"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "experience_utility"
-        ],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "utility_question"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "wear_support"
-        ],
-        "need_terms": [
-          "dress code"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "thikkmisses",
-        "text": "Who made up this dress code  for the usher & Chris brown concert in Houston ?",
-        "summary": "Who made up this dress code for the usher & Chris brown concert in Houston ?",
-        "permalink": "https://www.threads.com/@thikkmisses/post/DeRp-AGHGbA",
-        "posted_at": "2026-10-09T13:50:20Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "adjacent"
-      },
-      {
         "id": "post_c713da956f5c50b0",
         "post_key": "post_c713da956f5c50b0",
         "snapshot_id": "deck_2026-10-11_3d_c713da956f5c50b0",
@@ -882,11 +941,25 @@
         "category": "陪同／Solo Attendance",
         "kind": "actionable",
         "status": "近期",
-        "score": 62.604,
+        "score": 63.604,
         "base_score": 60.0,
         "actionability_score": 4.0,
         "actionability_band": "low",
         "ranking_delta": -1.396,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "trip_commitment"
+        ],
+        "solution_map": [
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
         "intent_score": 4.0,
         "intent_band": "high",
         "candidate_confidence": "medium",
@@ -942,11 +1015,25 @@
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
-        "score": 61.498,
+        "score": 62.498,
         "base_score": 60.0,
         "actionability_score": 4.3,
         "actionability_band": "low",
         "ranking_delta": -2.802,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "attendee_preparation"
+        ],
+        "solution_map": [
+          {
+            "category": "apparel_or_outerwear",
+            "kind": "product",
+            "strength": "adjacent",
+            "source_signal": "attendee_prep"
+          }
+        ],
         "intent_score": 2.0,
         "intent_band": "medium",
         "candidate_confidence": "medium",
@@ -1007,11 +1094,25 @@
         "category": "其他演出內容",
         "kind": "context",
         "status": "今日",
-        "score": 60.874,
-        "base_score": 66.676,
+        "score": 61.78,
+        "base_score": 66.582,
         "actionability_score": -3.0,
         "actionability_band": "low",
         "ranking_delta": -2.802,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "recording_friction"
+        ],
+        "solution_map": [
+          {
+            "category": "recording_device_or_accessory",
+            "kind": "product",
+            "strength": "adjacent",
+            "source_signal": "live_recording_setup"
+          }
+        ],
         "intent_score": 4.0,
         "intent_band": "high",
         "candidate_confidence": "high",
@@ -1068,11 +1169,25 @@
         "category": "陪同／Solo Attendance",
         "kind": "actionable",
         "status": "近期",
-        "score": 60.0,
+        "score": 61.0,
         "base_score": 60.0,
         "actionability_score": 4.0,
         "actionability_band": "low",
         "ranking_delta": -4.0,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "trip_commitment"
+        ],
+        "solution_map": [
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
         "intent_score": 4.0,
         "intent_band": "high",
         "candidate_confidence": "medium",
@@ -1121,6 +1236,70 @@
         ],
         "source": "Threads",
         "review_lane": "core"
+      },
+      {
+        "id": "post_ec9a911981f16810",
+        "post_key": "post_ec9a911981f16810",
+        "snapshot_id": "deck_2026-10-11_3d_ec9a911981f16810",
+        "post_id": "4003759639803010881",
+        "category": "陪同／Solo Attendance",
+        "kind": "actionable",
+        "status": "近期",
+        "score": 60.347,
+        "base_score": 60.0,
+        "actionability_score": 4.0,
+        "actionability_band": "low",
+        "ranking_delta": -3.653,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 4.0,
+        "intent_band": "high",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hant",
+        "language_tokens": [
+          "演唱會"
+        ],
+        "need_nodes": [],
+        "need_terms": [],
+        "need_edges": [],
+        "feature_tags": [
+          "first_timer",
+          "question_intent"
+        ],
+        "username": "neg_no.25",
+        "text": "第一次看演唱會\n請問廣大脆友 沒有要拍照買週邊的話，17:00開場16:15到小巨蛋會太晚嗎▓",
+        "summary": "第一次看演唱會 請問廣大脆友 沒有要拍照買週邊的話，17:00開場16:15到小巨蛋會太晚嗎▓",
+        "permalink": "https://www.threads.com/@neg_no.25/post/DeQNi34gR9B",
+        "posted_at": "2026-10-09T00:22:43Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱會",
+        "source_queries": [
+          "演唱會"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
       }
     ]
   }
