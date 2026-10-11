@@ -403,7 +403,7 @@ def semantic_role_profile(
     signals: list[str] = []
     penalties: list[str] = []
 
-    if NAMED_BENEFIT_MARKERS.search(text) and not RECORDING_OPERATION_MARKERS.search(text):
+    if NAMED_BENEFIT_MARKERS.search(text):
         signals.append("named_benefit")
         penalties.append("named_benefit_not_device_need")
         return "named_benefit", signals, penalties
@@ -427,6 +427,26 @@ def semantic_role_profile(
         signals.append("self_need")
         return "self_need", signals, penalties
 
+    if TRIP_COMMITMENT_MARKERS.search(text):
+        signals.append("committed_self_need")
+        return "self_need", signals, penalties
+
+    if QUESTION.search(text) and (
+        VENUE_OPERATION_MARKERS.search(text)
+        or ATTENDEE_PREP_MARKERS.search(text)
+        or PARTICIPATION_ELIGIBILITY_MARKERS.search(text)
+        or EXPERIENCE_GEAR_MARKERS.search(text)
+        or ATTENDEE_GEAR_MARKERS.search(text)
+        or RECORDING_OPERATION_MARKERS.search(text)
+        or MEDIA_RETRIEVAL_MARKERS.search(text)
+    ):
+        signals.append("utility_question")
+        return "self_need", signals, penalties
+
+    if QUESTION.search(text) and extract_need_network(text)[0]:
+        signals.append("need_question_role")
+        return "question_need", signals, penalties
+
     if ADVISORY_EXPERIENCE_MARKERS.search(text):
         signals.append("advisory_experience")
         return "advisory_experience", signals, penalties
@@ -445,7 +465,12 @@ def semantic_role_profile(
 
 
 def role_supports_need(role: str) -> bool:
-    return role in {"self_need", "advisory_experience", "procedural_experience"}
+    return role in {
+        "self_need",
+        "question_need",
+        "advisory_experience",
+        "procedural_experience",
+    }
 
 
 def intent_profile(
@@ -633,14 +658,14 @@ def target_fit_profile(
         score += 2.0
         signals.append("attendee_prep")
 
-    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
+    if PARTICIPATION_ELIGIBILITY_MARKERS.search(text) and QUESTION.search(text) and semantic_role in {"self_need", "question_need"}:
         score += 3.0
         signals.append("participation_eligibility")
 
     if (
         RECORDING_OPERATION_MARKERS.search(text)
         and QUESTION.search(text)
-        and semantic_role == "self_need"
+        and semantic_role in {"self_need", "question_need"}
         and not NAMED_BENEFIT_MARKERS.search(text)
     ):
         score += 4.0
@@ -648,15 +673,15 @@ def target_fit_profile(
     elif NAMED_BENEFIT_MARKERS.search(text):
         penalties.append("named_benefit_not_recording")
 
-    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
+    if EXPERIENCE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role in {"self_need", "question_need"}:
         score += 4.0
         signals.append("experience_gear")
 
-    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
+    if ATTENDEE_GEAR_MARKERS.search(text) and QUESTION.search(text) and semantic_role in {"self_need", "question_need"}:
         score += 3.0
         signals.append("attendee_gear")
 
-    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text) and semantic_role == "self_need":
+    if MEDIA_RETRIEVAL_MARKERS.search(text) and QUESTION.search(text) and semantic_role in {"self_need", "question_need"}:
         score += 1.0
         signals.append("media_retrieval")
 
@@ -675,7 +700,7 @@ def target_fit_profile(
         else:
             penalties.append("third_party_or_rhetorical_solo")
 
-    if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and semantic_role == "self_need":
+    if CROSS_CITY_ATTENDANCE_MARKERS.search(text) and semantic_role in {"self_need", "question_need"}:
         score += 2.0
         signals.append("cross_city_commitment")
 
