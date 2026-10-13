@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-12T22:42:26.318613Z",
-  "network_date": "2026-10-13",
+  "generated_at": "2026-10-13T17:33:21.981998Z",
+  "network_date": "2026-10-14",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 1905,
-  "source_card_count": 6,
+  "source_master_count": 2044,
+  "source_card_count": 9,
   "layers": [
     "recall",
     "language",
@@ -17,19 +17,19 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 4
+      "count": 3
     },
     {
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 2
+      "count": 3
     },
     {
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 0
+      "count": 3
     },
     {
       "id": "lang:zh_hant",
@@ -41,7 +41,7 @@
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 2
+      "count": 3
     },
     {
       "id": "lang:hk_zh",
@@ -53,7 +53,7 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 0
+      "count": 2
     },
     {
       "id": "lang:mixed",
@@ -65,37 +65,37 @@
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:food",
       "label": "食",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:stay",
       "label": "住",
       "layer": "need",
-      "count": 0
+      "count": 2
     },
     {
       "id": "need:mobility",
       "label": "行／移動",
       "layer": "need",
-      "count": 1
+      "count": 3
     },
     {
       "id": "need:venue_inside",
       "label": "場館內",
       "layer": "need",
-      "count": 1
+      "count": 2
     },
     {
       "id": "need:venue_outside",
       "label": "場館外",
       "layer": "need",
-      "count": 0
+      "count": 1
     },
     {
       "id": "need:trip_extension",
@@ -104,36 +104,71 @@
       "count": 1
     },
     {
-      "id": "kw:wear_support:應援",
-      "label": "應援",
+      "id": "kw:stay:酒店",
+      "label": "酒店",
       "layer": "keyword",
-      "count": 1,
-      "need_node": "wear_support"
+      "count": 2,
+      "need_node": "stay"
     },
     {
-      "id": "kw:food:美食",
-      "label": "美食",
+      "id": "kw:stay:住哪",
+      "label": "住哪",
       "layer": "keyword",
       "count": 1,
-      "need_node": "food"
+      "need_node": "stay"
     },
     {
-      "id": "kw:mobility:捷運",
-      "label": "捷運",
+      "id": "kw:stay:飯店",
+      "label": "飯店",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "stay"
+    },
+    {
+      "id": "kw:mobility:接駁",
+      "label": "接駁",
       "layer": "keyword",
       "count": 1,
       "need_node": "mobility"
     },
     {
-      "id": "kw:venue_inside:名字",
-      "label": "名字",
+      "id": "kw:mobility:高鐵",
+      "label": "高鐵",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "mobility"
+    },
+    {
+      "id": "kw:mobility:flight",
+      "label": "flight",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "mobility"
+    },
+    {
+      "id": "kw:venue_inside:座位",
+      "label": "座位",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_inside"
     },
     {
-      "id": "kw:trip_extension:附近",
-      "label": "附近",
+      "id": "kw:venue_inside:seat",
+      "label": "seat",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "venue_inside"
+    },
+    {
+      "id": "kw:venue_outside:回程",
+      "label": "回程",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "venue_outside"
+    },
+    {
+      "id": "kw:trip_extension:day trip",
+      "label": "day trip",
       "layer": "keyword",
       "count": 1,
       "need_node": "trip_extension"
@@ -141,14 +176,49 @@
   ],
   "edges": [
     {
-      "source": "recall:演唱會",
-      "target": "lang:zh_hant",
-      "weight": 4
-    },
-    {
       "source": "recall:演唱会",
       "target": "lang:zh_hans",
+      "weight": 3
+    },
+    {
+      "source": "recall:演唱會",
+      "target": "lang:zh_hant",
+      "weight": 3
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:mobility",
       "weight": 2
+    },
+    {
+      "source": "need:stay",
+      "target": "kw:stay:酒店",
+      "weight": 2
+    },
+    {
+      "source": "recall:concert",
+      "target": "lang:english",
+      "weight": 2
+    },
+    {
+      "source": "lang:english",
+      "target": "need:mobility",
+      "weight": 1
+    },
+    {
+      "source": "lang:english",
+      "target": "need:trip_extension",
+      "weight": 1
+    },
+    {
+      "source": "lang:english",
+      "target": "need:venue_inside",
+      "weight": 1
+    },
+    {
+      "source": "lang:zh_hans",
+      "target": "need:stay",
+      "weight": 1
     },
     {
       "source": "lang:zh_hans",
@@ -157,80 +227,115 @@
     },
     {
       "source": "lang:zh_hant",
-      "target": "need:food",
+      "target": "need:stay",
       "weight": 1
     },
     {
       "source": "lang:zh_hant",
-      "target": "need:mobility",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:trip_extension",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:wear_support",
-      "weight": 1
-    },
-    {
-      "source": "need:food",
-      "target": "kw:food:美食",
+      "target": "need:venue_outside",
       "weight": 1
     },
     {
       "source": "need:mobility",
-      "target": "kw:mobility:捷運",
+      "target": "kw:mobility:flight",
+      "weight": 1
+    },
+    {
+      "source": "need:mobility",
+      "target": "kw:mobility:接駁",
+      "weight": 1
+    },
+    {
+      "source": "need:mobility",
+      "target": "kw:mobility:高鐵",
+      "weight": 1
+    },
+    {
+      "source": "need:stay",
+      "target": "kw:stay:住哪",
+      "weight": 1
+    },
+    {
+      "source": "need:stay",
+      "target": "kw:stay:飯店",
       "weight": 1
     },
     {
       "source": "need:trip_extension",
-      "target": "kw:trip_extension:附近",
+      "target": "kw:trip_extension:day trip",
       "weight": 1
     },
     {
       "source": "need:venue_inside",
-      "target": "kw:venue_inside:名字",
+      "target": "kw:venue_inside:seat",
       "weight": 1
     },
     {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:應援",
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:座位",
+      "weight": 1
+    },
+    {
+      "source": "need:venue_outside",
+      "target": "kw:venue_outside:回程",
+      "weight": 1
+    },
+    {
+      "source": "recall:concert",
+      "target": "lang:zh_hant",
       "weight": 1
     }
   ],
   "top_keywords": {
-    "wear_support": [
+    "wear_support": [],
+    "food": [],
+    "stay": [
       {
-        "term": "應援",
+        "term": "酒店",
+        "count": 2
+      },
+      {
+        "term": "住哪",
+        "count": 1
+      },
+      {
+        "term": "飯店",
         "count": 1
       }
     ],
-    "food": [
-      {
-        "term": "美食",
-        "count": 1
-      }
-    ],
-    "stay": [],
     "mobility": [
       {
-        "term": "捷運",
+        "term": "接駁",
+        "count": 1
+      },
+      {
+        "term": "高鐵",
+        "count": 1
+      },
+      {
+        "term": "flight",
         "count": 1
       }
     ],
     "venue_inside": [
       {
-        "term": "名字",
+        "term": "座位",
+        "count": 1
+      },
+      {
+        "term": "seat",
         "count": 1
       }
     ],
-    "venue_outside": [],
+    "venue_outside": [
+      {
+        "term": "回程",
+        "count": 1
+      }
+    ],
     "trip_extension": [
       {
-        "term": "附近",
+        "term": "day trip",
         "count": 1
       }
     ]
