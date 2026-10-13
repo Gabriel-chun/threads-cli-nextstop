@@ -1,0 +1,514 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-10-13_201610Z:clean-v2.4-depth3",
+  "run": {
+    "run_stamp": "2026-10-13_201610Z",
+    "run_at": "2026-10-13T20:17:01.622250Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-depth3",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "depth3",
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "38461374738"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-13_201610Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-13_201610Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-13_201610Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-13_201610Z.txt",
+    "snapshot_fingerprint": "sha256:cb1520e16be58a6c0d500c42d8326e53a3ab83dcc18fdab59b4ee3a3a8001553",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 103,
+      "snapshot_unique": 28,
+      "dedupe_unique": 28,
+      "clean_signals": 25,
+      "excluded_transactions": 3,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 89.3,
+      "new_3h": 25,
+      "new_12h": 88,
+      "unique_authors": 25,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 28
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-10-12_165753Z",
+      "run_at": "2026-10-12T16:59:02.676047Z",
+      "elapsed_minutes": 1638.0,
+      "pipeline_version": "clean-v2.4-depth3",
+      "clean_signals": 35,
+      "new_3h": 44,
+      "new_12h": 85,
+      "clean_rate_pct": 97.2,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 25,
+      "retained_signal_count": 0,
+      "clean_signal_delta": -10,
+      "rolling_3h_delta": -19,
+      "rolling_12h_delta": 3
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": false,
+        "coverage_complete": false,
+        "coverage_hours": 24.0,
+        "sample_count": 0,
+        "max_gap_minutes": 1638.0,
+        "sampling_quality": "insufficient",
+        "sampling": {
+          "quality": "insufficient",
+          "eligible_sample_count": 0,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1638.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 8,
+          "excluded_provenance_counts": {
+            "manual": 8
+          }
+        },
+        "metrics": {
+          "clean_signals_median": null,
+          "new_3h_median": null,
+          "new_12h_median": null,
+          "clean_rate_pct_median": null
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 3,
+        "max_gap_minutes": 1638.0,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 3,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1638.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 23,
+          "excluded_provenance_counts": {
+            "manual": 23
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 35.0,
+          "new_3h_median": 40.0,
+          "new_12h_median": 85.0,
+          "clean_rate_pct_median": 94.6
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 9,
+        "max_gap_minutes": 1638.0,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 9,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1638.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 54,
+          "excluded_provenance_counts": {
+            "manual": 54
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 26.0,
+          "new_3h_median": 29.0,
+          "new_12h_median": 78.0,
+          "clean_rate_pct_median": 94.6
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 22,
+        "unique_authors": 22,
+        "post_ids": [
+          "4006898878804624662",
+          "4007009494672989271",
+          "4007060575675453542",
+          "4007065461208533417",
+          "4007075125303794492",
+          "4007078758653876209",
+          "4007084888377932336",
+          "4007085805756037693",
+          "4007086333289808264",
+          "4007095676923807003",
+          "4007095859057738721",
+          "4007105359844127975",
+          "4007110658860455078",
+          "4007113105314474835",
+          "4007117769455847949",
+          "4007120735281810131",
+          "4007122787210581293",
+          "4007125152949824546",
+          "4007129208740708352",
+          "4007144507171276575",
+          "4007153410805735053",
+          "4007252539045285594"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 2,
+        "unique_authors": 2,
+        "post_ids": [
+          "4007093797019996286",
+          "4007110475846426637"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "其他問題／需求",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4006981983637427012"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 25,
+    "limit": 16,
+    "returned": 16,
+    "items": [
+      {
+        "post_id": "4007252539045285594",
+        "username": "myqnam",
+        "posted_at": "2026-10-13T20:04:28Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@myqnam/post/DecnvPzE47a",
+        "is_new_since_previous": true,
+        "excerpt": "OMAI TV - Đối tác truyền thông chính thức của Concert ATVNCG2026 📣\nPhóng viên Mai Quang Nam hân hạnh đồng hành cùng quý vị trong seri đưa tin độc quyền này 🎤",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007153410805735053",
+        "username": "cuoipham1209",
+        "posted_at": "2026-10-13T16:45:32Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@cuoipham1209/post/DecRMvbkh6N",
+        "is_new_since_previous": true,
+        "excerpt": "Nhà ở ngay Global City.\nGiờ 12h đêm vẫn đang nghe tiếng chú Thư với các anh rehearsal xếp đội hình cho concert ATVNCG các bác ạ.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007144507171276575",
+        "username": "m7xqvz22",
+        "posted_at": "2026-10-13T16:27:51Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@m7xqvz22/post/DecPLLRmgcf",
+        "is_new_since_previous": true,
+        "excerpt": "其实我还有易烊千玺去年演唱会后台照 是合影(不是跟我)因为拍照的人跟我朋友认识 我朋友知道我喜欢发给我了 这照片我任何人都没发过一直自己留着 到现在我都没发现那张照片流出来 真的特别帅 非常帅 脸好小头好小...现在说完我又要去回味一遍了▓▓▓",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007129208740708352",
+        "username": "00bee1108xlin",
+        "posted_at": "2026-10-13T15:57:27Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@00bee1108xlin/post/DecLsjgFQAA",
+        "is_new_since_previous": true,
+        "excerpt": "很好奇为什么肖战演唱会炒得这么恐怖啊🫪我知道他死忠很多但票价居然这么疯狂吗???求解答",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007125152949824546",
+        "username": "woohoobooya",
+        "posted_at": "2026-10-13T15:49:24Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@woohoobooya/post/DecKxiQG2wi",
+        "is_new_since_previous": true,
+        "excerpt": "🥹 trong ảnh kiu là lần sau đến concert cùng nhao nha đúng hămmmmmmm oeeeeee",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007122787210581293",
+        "username": "shirithecat",
+        "posted_at": "2026-10-13T15:44:42Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@shirithecat/post/DecKPG_D1Ut",
+        "is_new_since_previous": true,
+        "excerpt": "Tuần lễ concert đã đến, để bản thân và mọi người xung quanh có trải nghiệm tốt nhất,\n\nTôi xin được nhắc: HÃY LĂN NÉCH!\n\nMột đôi néch húi là một concert chớt, xincamonxincamon",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007120735281810131",
+        "username": "kokaun_1001",
+        "posted_at": "2026-10-13T15:40:37Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@kokaun_1001/post/DecJxP-kwrT",
+        "is_new_since_previous": true,
+        "excerpt": "看到很多人說5200台幣很貴。馬來西亞人表示台灣人本土看演唱會真的不貴😢算是蠻不錯的價格了。因為歌手馬來西亞演唱會前面位置應該都比這價格1.5倍😌",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007117769455847949",
+        "username": "maejimmyseana",
+        "posted_at": "2026-10-13T15:34:44Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@maejimmyseana/post/DecJGF1kkoN",
+        "is_new_since_previous": true,
+        "excerpt": "Chuyện Quách Văn Thơm thống nhất thành phố sợi chỉ có ai không tin không ạ? Chứ chiều tới giờ cái áo mưa tím của chú tôi phải nhập vai 80 kiếp người r😔\nConcert ATVNCG 2026",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007113105314474835",
+        "username": "taolao.taonha",
+        "posted_at": "2026-10-13T15:25:28Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@taolao.taonha/post/DecICOBFOtT",
+        "is_new_since_previous": true,
+        "excerpt": "Anh tôi đấy, \nHọp báo thống nhất sợi chỉ bằng visual\nConcert thống nhất sợi chỉ nhờ áo mưa",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007110658860455078",
+        "username": "trandat1909",
+        "posted_at": "2026-10-13T15:20:36Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@trandat1909/post/DecHenlDxSm",
+        "is_new_since_previous": true,
+        "excerpt": "Chuyên mục pass vé concert 17/10\nChuyện là Đạt có mua vé cho người thân tham dự concert ATVNCG ngày 17/10 sắp tới tuy nhiên vì lí do sức khoẻ nên cần pass lại 2 vé \n\nHạng vé: Ngoại Ô 1 - Hàng ghế G \nGiá vé như giá gốc 3.500.000/ vé \nAi có nhu cầu nhắn tin mình nha, lấy vé trực tiếp ở sân khấu.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007110475846426637",
+        "username": "_079.yan_",
+        "posted_at": "2026-10-13T15:20:14Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@_079.yan_/post/DecHb9IkqAN",
+        "is_new_since_previous": true,
+        "excerpt": "有意收Bigbang演唱會🙏🏻",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4007105359844127975",
+        "username": "kid.w1216",
+        "posted_at": "2026-10-13T15:10:04Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@kid.w1216/post/DecGRgfErTn",
+        "is_new_since_previous": true,
+        "excerpt": "當我攞假去睇演唱會,同事同朋友聽完好驚訝,佢地表示冇諗過我會對許志安有興趣。呃..對佢個人的而且確係冇興趣😂但對佢啲歌好有興趣!!!\n細個個陣時,迪士尼有套卡通叫熊之歷險,個時好興有粵語版vcd(暴露年齡),入面有首歌叫no way out(粵語版: 前路),個時聽依首歌就覺得個男人唱得好好聽!好有feel!邊個黎架!點知原來係許志安😳另外仲有wolcome同on my way都係佢唱,佢仲有幫套卡通配音(p.s. 對白好少,堅尼嘅阿哥😂)之後就開始聽許志安嘅歌..發現佢啲歌真係好撚好聽..",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007093797019996286",
+        "username": "june.le24",
+        "posted_at": "2026-10-13T15:00:11Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@june.le24/post/DecDpPxDFB-",
+        "is_new_since_previous": true,
+        "excerpt": "Có chiếc lightstick ☁️✨ đổi màu là khoe với Mây ngay, không hổ danh là Trần chiều fan hị hị 🩷🤍🧡💙💚💜❤️🩵\n\nChiếc Skylight này là benefit trong TẤT CẢ các hạng vé của concert SKYNOTE 2026 đó ạ. Chúc mọi người ngày mai mua vé đạt nguyện vọng 1 nhé 🫶🏻",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4007095859057738721",
+        "username": "iamkingjer",
+        "posted_at": "2026-10-13T14:51:12Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@iamkingjer/post/DecEHQME0Ph",
+        "is_new_since_previous": true,
+        "excerpt": "未賣已經加場😎😎😎QUEEN\n\n佢話已經睇咗演唱會舞台嘅設計圖,表示非常震撼 。據悉今次演唱會舞台,會繼續同國際演唱會舞台大師Es Devlin合作,佢地上次喺《Pretty Crazy演唱會》上首次合作,將紅館演唱會水準拉到最高。另外早前張敬軒開騷時就幫祖兒宣傳,叫大家一定要睇祖兒1月嘅演唱會:「會係世界級演唱會,大家一定要睇!」睇嚟今次啲飛應該會搶餐死!\n\n容祖兒《AURA TOUR》演唱會(暫定3場:1月18、22、23日)\n優先訂飛:11月9-10日\n公開發售:11月12-13日",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007095676923807003",
+        "username": "neverlandwerunaway",
+        "posted_at": "2026-10-13T14:50:50Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@neverlandwerunaway/post/DecEEmkDAUb",
+        "is_new_since_previous": true,
+        "excerpt": "脱粉肖战五年了,中间从来没仰卧起坐,为什么还是想去演唱会",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007086333289808264",
+        "username": "ali.the.kat",
+        "posted_at": "2026-10-13T14:32:16Z",
+        "first_seen_at": "2026-10-13T20:17:01.622250Z",
+        "permalink": "https://www.threads.com/@ali.the.kat/post/DecB8ooD8GI",
+        "is_new_since_previous": true,
+        "excerpt": "Đã thực sự rất đủng đỉnh khi team vote đẩy quỹ vote qua làm booth, với hi vọng chiếc booth concert đầu tiên tuyệt vời nhất cho em Mít. Và đây là bài học đắt giá phết trong cuộc đu idol này.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_coverage_incomplete",
+      "baseline_24h_incomplete",
+      "baseline_24h_sampling_insufficient",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": false,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "insufficient",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 0,
+    "baseline_ineligible_history_sample_count": 73
+  }
+}
