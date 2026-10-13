@@ -1,139 +1,93 @@
 {
   "schema_version": "signal-deck-v0.4",
-  "generated_at": "2026-10-12T23:35:25.005281Z",
+  "generated_at": "2026-10-13T23:03:30.196364Z",
   "refresh_policy": "daily",
   "window_key": "1d",
   "window": {
     "label": "1日",
     "days": 1,
-    "signal_count": 87,
-    "core_eligible_count": 0,
-    "adjacent_count": 1,
+    "signal_count": 86,
+    "core_eligible_count": 5,
+    "adjacent_count": 0,
     "discovery_count": 4,
-    "eligible_count": 5,
-    "high_confidence_count": 0,
-    "medium_confidence_count": 1,
-    "medium_sampled_count": 1,
-    "low_confidence_count": 86,
-    "card_count": 5,
-    "affiliate_ready_count": 1,
-    "affiliate_adjacent_count": 0,
+    "eligible_count": 9,
+    "high_confidence_count": 3,
+    "medium_confidence_count": 2,
+    "medium_sampled_count": 2,
+    "low_confidence_count": 81,
+    "card_count": 9,
+    "affiliate_ready_count": 4,
+    "affiliate_adjacent_count": 1,
     "affiliate_insight_only_count": 0,
     "affiliate_none_count": 4,
-    "default_review_limit": 5,
+    "default_review_limit": 9,
     "extend_step": 10,
     "display_limit": 5,
     "cards": [
       {
-        "id": "post_58d60a1de01e3d07",
-        "post_key": "post_58d60a1de01e3d07",
-        "snapshot_id": "deck_2026-10-12_1d_58d60a1de01e3d07",
-        "post_id": "4006240340738734981",
+        "id": "post_7a40df0bd6347598",
+        "post_key": "post_7a40df0bd6347598",
+        "snapshot_id": "deck_2026-10-13_1d_7a40df0bd6347598",
+        "post_id": "4006900205630733568",
         "category": "交通／散場",
         "kind": "actionable",
         "status": "今日",
-        "score": 94.837,
-        "base_score": 68.733,
-        "actionability_score": 20.0,
+        "score": 97.657,
+        "base_score": 68.329,
+        "actionability_score": 29.0,
         "actionability_band": "high",
-        "ranking_delta": 6.104,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
+        "ranking_delta": -0.672,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
         "affiliate_fit_reasons": [
-          "no_solution_mapping"
+          "local_mobility_planning",
+          "venue_access_or_return",
+          "trip_commitment"
         ],
-        "solution_map": [],
-        "intent_score": 4.0,
+        "solution_map": [
+          {
+            "category": "local_mobility_or_transfer",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "mobility"
+          },
+          {
+            "category": "local_transfer_or_transit_pass",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "venue_outside"
+          },
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
+        "intent_score": 9.0,
         "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [
-          "role_blocked_mobility"
-        ],
-        "target_fit_paths": [],
-        "semantic_role": "uncertain",
-        "semantic_role_signals": [
-          "uncertain_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會",
-          "捷運"
-        ],
-        "need_nodes": [
+        "candidate_confidence": "high",
+        "target_fit_score": 11.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
           "mobility",
-          "trip_extension"
+          "venue_outside",
+          "solo_or_cross_city"
         ],
-        "need_terms": [
-          "捷運",
-          "附近"
-        ],
-        "need_edges": [
-          "mobility->trip_extension"
-        ],
-        "feature_tags": [
-          "transport_need"
-        ],
-        "username": "ping10221204",
-        "text": "看了很多人找演唱會妝髮，\n想了想還是決定讓自己美美的去看演唱會（第一排必須美）\n想找高雄妝髮（捷運站附近，離世運站別太遠）\n時間是11/21上午\n喜歡韓系風格的妝髮💜\n妝不用太濃但要持久（臉滿吃妝的）\n再請報價\n\n好像太晚找了，希望還有化妝師🥺",
-        "summary": "看了很多人找演唱會妝髮， 想了想還是決定讓自己美美的去看演唱會（第一排必須美） 想找高雄妝髮（捷運站附近，離世運站別太遠） 時間是11/21上午 喜歡韓系風格的妝髮💜 妝不用太濃但要持久（臉滿吃妝的） 再請報價 好像太晚找了，希望還有化妝師🥺",
-        "permalink": "https://www.threads.com/@ping10221204/post/DeZBl0qknuF",
-        "posted_at": "2026-10-12T10:31:26Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_788bcd22e4354a4e",
-        "post_key": "post_788bcd22e4354a4e",
-        "snapshot_id": "deck_2026-10-12_1d_788bcd22e4354a4e",
-        "post_id": "4005977695762491474",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "今日",
-        "score": 74.908,
-        "base_score": 66.559,
-        "actionability_score": 11.0,
-        "actionability_band": "medium",
-        "ranking_delta": -2.651,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 6.0,
-        "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
         "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "self_need",
         "semantic_role_signals": [
-          "need_question_role"
+          "self_need"
         ],
         "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
-          "need_question"
+          "need_question",
+          "logistics_context"
         ],
         "intent_penalties": [],
         "language_context": "zh_hant",
@@ -141,20 +95,26 @@
           "演唱會"
         ],
         "need_nodes": [
-          "food"
+          "mobility",
+          "venue_outside"
         ],
         "need_terms": [
-          "美食"
+          "接駁",
+          "回程"
         ],
-        "need_edges": [],
+        "need_edges": [
+          "mobility->venue_outside"
+        ],
         "feature_tags": [
-          "question_intent"
+          "question_intent",
+          "solo_attendance",
+          "transport_need"
         ],
-        "username": "streamwhite",
-        "text": "有件事情納悶很久\n為什麼韓團到台灣開演唱會，結束大多跑去吃金豬\n金豬不是韓國也有？ 不是應該吃一些特色美食之類的😆？\n\n像自己旅行就會想去嘗試當地料理\n\n看了太多都跑去吃金豬，實在好奇🤔",
-        "summary": "有件事情納悶很久 為什麼韓團到台灣開演唱會，結束大多跑去吃金豬 金豬不是韓國也有？ 不是應該吃一些特色美食之類的😆？ 像自己旅行就會想去嘗試當地料理 看了太多都跑去吃金豬，實在好奇🤔",
-        "permalink": "https://www.threads.com/@streamwhite/post/DeYF31eD6hS",
-        "posted_at": "2026-10-12T01:49:36Z",
+        "username": "xxideana519",
+        "text": "想請問～🥹\n明年 2/28 BIGBANG 高雄演唱會，有沒有當天看完直接搭回程北部的接駁車或是包車呢？💛\n因為一個人去看～希望可以看完演唱會再平安回北部～不用在高雄過夜🫶",
+        "summary": "想請問～🥹 明年 2/28 BIGBANG 高雄演唱會，有沒有當天看完直接搭回程北部的接駁車或是包車呢？💛 因為一個人去看～希望可以看完演唱會再平安回北部～不用在高雄過夜🫶",
+        "permalink": "https://www.threads.com/@xxideana519/post/DebXoHvDz0A",
+        "posted_at": "2026-10-13T08:22:28Z",
         "media_type": "TEXT_POST",
         "query": "演唱會",
         "source_queries": [
@@ -164,36 +124,47 @@
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "discovery"
+        "review_lane": "core"
       },
       {
-        "id": "post_9acc7d1ba92b5b36",
-        "post_key": "post_9acc7d1ba92b5b36",
-        "snapshot_id": "deck_2026-10-12_1d_9acc7d1ba92b5b36",
-        "post_id": "4006354356282729806",
-        "category": "場館／現場體驗",
-        "kind": "context",
+        "id": "post_da51760158b1166a",
+        "post_key": "post_da51760158b1166a",
+        "snapshot_id": "deck_2026-10-13_1d_da51760158b1166a",
+        "post_id": "4006809766647174983",
+        "category": "交通／散場",
+        "kind": "actionable",
         "status": "今日",
-        "score": 74.677,
-        "base_score": 69.677,
-        "actionability_score": 9.0,
-        "actionability_band": "medium",
-        "ranking_delta": -4.0,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
+        "score": 87.511,
+        "base_score": 67.58,
+        "actionability_score": 16.0,
+        "actionability_band": "high",
+        "ranking_delta": 1.931,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
         "affiliate_fit_reasons": [
-          "no_solution_mapping"
+          "bookable_intercity_mobility"
         ],
-        "solution_map": [],
+        "solution_map": [
+          {
+            "category": "intercity_transport_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "mobility"
+          }
+        ],
         "intent_score": 6.0,
         "intent_band": "high",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
+        "candidate_confidence": "high",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "mobility"
+        ],
         "target_fit_penalties": [],
-        "target_fit_paths": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
         "semantic_role": "self_need",
         "semantic_role_signals": [
           "self_need"
@@ -207,25 +178,24 @@
         "language_context": "zh_hant",
         "language_tokens": [
           "演唱會",
-          "應援",
-          "怎麼"
+          "高鐵"
         ],
         "need_nodes": [
-          "wear_support"
+          "mobility"
         ],
         "need_terms": [
-          "應援"
+          "高鐵"
         ],
         "need_edges": [],
         "feature_tags": [
           "question_intent",
-          "venue_experience"
+          "transport_need"
         ],
-        "username": "ye__jiiii04",
-        "text": "想問踢妹們 926寶石盒那場演唱會 KINGKONG的人名應援怎麼樣（或者其他首） 其實我一直都很好奇上面聽長什麼樣子ㅠㅠ 我擔心我們喊的不夠大聲 我自己竭盡全力喊 根本沒有聽到",
-        "summary": "想問踢妹們 926寶石盒那場演唱會 KINGKONG的人名應援怎麼樣（或者其他首） 其實我一直都很好奇上面聽長什麼樣子ㅠㅠ 我擔心我們喊的不夠大聲 我自己竭盡全力喊 根本沒有聽到",
-        "permalink": "https://www.threads.com/@ye__jiiii04/post/DeZbg96kiVO",
-        "posted_at": "2026-10-12T14:17:58Z",
+        "username": "idly.1234567",
+        "text": "有人知道藤井風10/31演唱會週邊時段晚取是可以的嗎🥲 當天的高鐵沒有那麼早到 但靠後的時段都沒了🥹",
+        "summary": "有人知道藤井風10/31演唱會週邊時段晚取是可以的嗎🥲 當天的高鐵沒有那麼早到 但靠後的時段都沒了🥹",
+        "permalink": "https://www.threads.com/@idly.1234567/post/DebDED3khdH",
+        "posted_at": "2026-10-13T05:22:47Z",
         "media_type": "TEXT_POST",
         "query": "演唱會",
         "source_queries": [
@@ -235,21 +205,341 @@
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "discovery"
+        "review_lane": "core"
       },
       {
-        "id": "post_403cfe7690e1cdc0",
-        "post_key": "post_403cfe7690e1cdc0",
-        "snapshot_id": "deck_2026-10-12_1d_403cfe7690e1cdc0",
-        "post_id": "4006149361134371830",
+        "id": "post_3b66553e3c944c4c",
+        "post_key": "post_3b66553e3c944c4c",
+        "snapshot_id": "deck_2026-10-13_1d_3b66553e3c944c4c",
+        "post_id": "4007116496744450106",
+        "category": "住宿／落腳",
+        "kind": "actionable",
+        "status": "現在",
+        "score": 86.992,
+        "base_score": 70.12,
+        "actionability_score": 16.0,
+        "actionability_band": "high",
+        "ranking_delta": -1.128,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_stay_need"
+        ],
+        "solution_map": [
+          {
+            "category": "accommodation_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "stay"
+          }
+        ],
+        "intent_score": 6.0,
+        "intent_band": "high",
+        "candidate_confidence": "high",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "stay"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision",
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hant",
+        "language_tokens": [
+          "演唱會",
+          "飯店"
+        ],
+        "need_nodes": [
+          "stay"
+        ],
+        "need_terms": [
+          "住哪",
+          "飯店"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "accommodation_need",
+          "question_intent"
+        ],
+        "username": "mocaholicz",
+        "text": "各位台灣的田粉大家好，想請教一下。\n\n我已經十年沒去台灣了，這次特地為了演唱會要去小巨蛋，請問住哪一區的飯店比較方便呢？再麻煩大家給我一點建議，我現在真的好緊張🙏🏻",
+        "summary": "各位台灣的田粉大家好，想請教一下。 我已經十年沒去台灣了，這次特地為了演唱會要去小巨蛋，請問住哪一區的飯店比較方便呢？再麻煩大家給我一點建議，我現在真的好緊張🙏🏻",
+        "permalink": "https://www.threads.com/@mocaholicz/post/DecIzkiD4g6",
+        "posted_at": "2026-10-13T15:32:12Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱會",
+        "source_queries": [
+          "演唱會"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
+        "id": "post_a2f1cd8d0f2233e0",
+        "post_key": "post_a2f1cd8d0f2233e0",
+        "snapshot_id": "deck_2026-10-13_1d_a2f1cd8d0f2233e0",
+        "post_id": "4006781067851674052",
         "category": "其他演出內容",
         "kind": "context",
         "status": "今日",
-        "score": 72.231,
-        "base_score": 67.982,
+        "score": 80.956,
+        "base_score": 67.343,
+        "actionability_score": 12.75,
+        "actionability_band": "high",
+        "ranking_delta": -1.137,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_intercity_mobility"
+        ],
+        "solution_map": [
+          {
+            "category": "intercity_transport_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "mobility"
+          }
+        ],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "medium",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "mobility"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "mobility",
+          "trip_extension"
+        ],
+        "need_terms": [
+          "flight",
+          "day trip"
+        ],
+        "need_edges": [
+          "mobility->trip_extension"
+        ],
+        "feature_tags": [
+          "question_intent",
+          "transport_need"
+        ],
+        "username": "fazhashim",
+        "text": "Why is this concert cancellation issue suddenly becoming a big deal again!? Honestly, we fans have almost forgotten about it. 😑 Yes, we were shocked and disappointed when it first happened, but we moved on. I even have a friend who had already booked her flight from Sarawak, but she didn't make a fuss or complain. She simply accepted it as something that wasn't meant to be. 💛 Instead of attending the concert, she just turned it into a holiday trip to KL.",
+        "summary": "Why is this concert cancellation issue suddenly becoming a big deal again!? Honestly, we fans have almost forgotten about it. 😑 Yes, we were shocked and disappointed when it first…",
+        "permalink": "https://www.threads.com/@fazhashim/post/Dea8icCDzHE",
+        "posted_at": "2026-10-13T04:25:46Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
+        "id": "post_8aae9ed457346302",
+        "post_key": "post_8aae9ed457346302",
+        "snapshot_id": "deck_2026-10-13_1d_8aae9ed457346302",
+        "post_id": "4006902797854122194",
+        "category": "住宿／落腳",
+        "kind": "actionable",
+        "status": "今日",
+        "score": 79.885,
+        "base_score": 68.35,
+        "actionability_score": 8.85,
+        "actionability_band": "medium",
+        "ranking_delta": 0.685,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_stay_need",
+          "trip_commitment"
+        ],
+        "solution_map": [
+          {
+            "category": "accommodation_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "stay"
+          },
+          {
+            "category": "trip_planning_bundle",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "cross_city"
+          }
+        ],
+        "intent_score": 3.0,
+        "intent_band": "medium",
+        "candidate_confidence": "medium",
+        "target_fit_score": 8.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "stay",
+          "trip_commitment"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "committed_self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "trip_commitment"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hans",
+        "language_tokens": [
+          "酒店",
+          "演唱会"
+        ],
+        "need_nodes": [
+          "stay"
+        ],
+        "need_terms": [
+          "酒店"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "accommodation_need"
+        ],
+        "username": "iszmeuzn",
+        "text": "bsb厦门那酒店一晚上一千多。😤演唱会预算全留着给四素订酒店了吧▓",
+        "summary": "bsb厦门那酒店一晚上一千多。😤演唱会预算全留着给四素订酒店了吧▓",
+        "permalink": "https://www.threads.com/@iszmeuzn/post/DebYN17nSDS",
+        "posted_at": "2026-10-13T08:27:37Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱会",
+        "source_queries": [
+          "演唱会"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
+        "id": "post_77934031928bbfd0",
+        "post_key": "post_77934031928bbfd0",
+        "snapshot_id": "deck_2026-10-13_1d_77934031928bbfd0",
+        "post_id": "4006999691803899081",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 73.997,
+        "base_score": 69.153,
+        "actionability_score": 8.0,
+        "actionability_band": "medium",
+        "ranking_delta": -3.156,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 6.0,
+        "intent_band": "high",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "advisory_experience",
+        "semantic_role_signals": [
+          "advisory_experience"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision",
+          "action_marker"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hans",
+        "language_tokens": [
+          "演唱会"
+        ],
+        "need_nodes": [
+          "venue_inside"
+        ],
+        "need_terms": [
+          "座位"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "long_fandom_story"
+        ],
+        "username": "sheep.1853022",
+        "text": "肖战演唱会第一排25w…18年我在电视台实习 要推荐嘉宾人选 我推荐了肖战 因为节目选题和重庆有关 肖战重庆人 我觉得契合主题 最关键当时镇魂大火 我觉得明年陈情令播出世界上又会多两个爆火的下海咖 这不是一波免费的滔天流量 结果傻坤领导问我是不是肖战粉丝是不是想公费追星▓\n傻坤领导你后悔了不 现在你再用不到200的预算去请肖战只能买到他演唱会第一排的八个座位…",
+        "summary": "肖战演唱会第一排25w…18年我在电视台实习 要推荐嘉宾人选 我推荐了肖战 因为节目选题和重庆有关 肖战重庆人 我觉得契合主题 最关键当时镇魂大火 我觉得明年陈情令播出世界上又会多两个爆火的下海咖 这不是一波免费的滔天流量 结果傻坤领导问我是不是肖战粉丝是不是想公费追星▓ 傻坤领导你后悔了不 现在你再用不到200的预算去请肖战只能买到他演唱会第一排的八个座…",
+        "permalink": "https://www.threads.com/@sheep.1853022/post/DebuP1dEjTJ",
+        "posted_at": "2026-10-13T11:40:08Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱会",
+        "source_queries": [
+          "演唱会"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_d5a681eed2a8b9b2",
+        "post_key": "post_d5a681eed2a8b9b2",
+        "snapshot_id": "deck_2026-10-13_1d_d5a681eed2a8b9b2",
+        "post_id": "4006863346271927103",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 72.275,
+        "base_score": 68.024,
         "actionability_score": 6.9,
         "actionability_band": "medium",
-        "ranking_delta": -2.651,
+        "ranking_delta": -2.649,
         "affiliate_priority_delta": 0.0,
         "affiliate_fit": "none",
         "affiliate_fit_score": 0.0,
@@ -274,26 +564,90 @@
           "need_question"
         ],
         "intent_penalties": [],
-        "language_context": "zh_hans",
+        "language_context": "english",
         "language_tokens": [
-          "演唱会"
+          "concert"
         ],
         "need_nodes": [
           "venue_inside"
         ],
         "need_terms": [
-          "名字"
+          "seat"
         ],
         "need_edges": [],
         "feature_tags": [
           "question_intent"
         ],
-        "username": "ycx017",
-        "text": "大麦深圳同城热榜为什么是朋丫演唱会▓好势成双的名字呢",
-        "summary": "大麦深圳同城热榜为什么是朋丫演唱会▓好势成双的名字呢",
-        "permalink": "https://www.threads.com/@ycx017/post/DeYs55TkoP2",
-        "posted_at": "2026-10-12T07:31:01Z",
-        "media_type": "VIDEO",
+        "username": "sy4kiru",
+        "text": "hello anybody selling x2 seating tickets for the concert tonight?",
+        "summary": "hello anybody selling x2 seating tickets for the concert tonight?",
+        "permalink": "https://www.threads.com/@sy4kiru/post/DebPPvyEjs_",
+        "posted_at": "2026-10-13T07:09:14Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_090b8904b926fd0b",
+        "post_key": "post_090b8904b926fd0b",
+        "snapshot_id": "deck_2026-10-13_1d_090b8904b926fd0b",
+        "post_id": "4006781568072366082",
+        "category": "場館／現場體驗",
+        "kind": "context",
+        "status": "今日",
+        "score": 68.642,
+        "base_score": 67.347,
+        "actionability_score": 4.0,
+        "actionability_band": "low",
+        "ranking_delta": -2.705,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 4.0,
+        "intent_band": "high",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hans",
+        "language_tokens": [
+          "演唱会",
+          "场馆"
+        ],
+        "need_nodes": [],
+        "need_terms": [],
+        "need_edges": [],
+        "feature_tags": [
+          "venue_experience"
+        ],
+        "username": "wuj_03",
+        "text": "当肖战真正官宣演唱会的时候，我发现网上所有的追星文案都比不上我想表达的感情浓度，我只想坐在场馆里面看看你…战哥……肖战啊……",
+        "summary": "当肖战真正官宣演唱会的时候，我发现网上所有的追星文案都比不上我想表达的感情浓度，我只想坐在场馆里面看看你…战哥……肖战啊……",
+        "permalink": "https://www.threads.com/@wuj_03/post/Dea8pt5iTgC",
+        "posted_at": "2026-10-13T04:26:45Z",
+        "media_type": "TEXT_POST",
         "query": "演唱会",
         "source_queries": [
           "演唱会"
@@ -305,79 +659,66 @@
         "review_lane": "discovery"
       },
       {
-        "id": "post_5bfe90bb4f98606e",
-        "post_key": "post_5bfe90bb4f98606e",
-        "snapshot_id": "deck_2026-10-12_1d_5bfe90bb4f98606e",
-        "post_id": "4006338990163692672",
+        "id": "post_fbb7c4ca75e7fc4a",
+        "post_key": "post_fbb7c4ca75e7fc4a",
+        "snapshot_id": "deck_2026-10-13_1d_fbb7c4ca75e7fc4a",
+        "post_id": "4006946440702319408",
         "category": "其他演出內容",
         "kind": "context",
         "status": "今日",
-        "score": 68.899,
-        "base_score": 69.55,
-        "actionability_score": 0.0,
+        "score": 61.712,
+        "base_score": 68.712,
+        "actionability_score": -3.0,
         "actionability_band": "low",
-        "ranking_delta": -2.651,
-        "affiliate_priority_delta": 2.0,
-        "affiliate_fit": "ready",
-        "affiliate_fit_score": 4.0,
+        "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
         "affiliate_fit_reasons": [
-          "attendee_product_need"
+          "no_solution_mapping"
         ],
-        "solution_map": [
-          {
-            "category": "concert_bag_or_clear_bag",
-            "kind": "product",
-            "strength": "direct",
-            "source_signal": "attendee_gear"
-          }
-        ],
-        "intent_score": 7.0,
+        "solution_map": [],
+        "intent_score": 4.0,
         "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "attendee_gear"
-        ],
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
         "target_fit_penalties": [],
-        "target_fit_paths": [
-          "experience_utility"
-        ],
+        "target_fit_paths": [],
         "semantic_role": "self_need",
         "semantic_role_signals": [
           "self_need"
         ],
         "semantic_role_penalties": [],
         "intent_signals": [
-          "user_decision",
-          "attendee_gear_need"
+          "user_decision"
         ],
         "intent_penalties": [],
         "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會"
-        ],
+        "language_tokens": [],
         "need_nodes": [],
         "need_terms": [],
         "need_edges": [],
         "feature_tags": [
+          "first_timer",
           "question_intent"
         ],
-        "username": "ray_42._",
-        "text": "想問大家去Tws演唱會都用什麼包包🥹",
-        "summary": "想問大家去Tws演唱會都用什麼包包🥹",
-        "permalink": "https://www.threads.com/@ray_42._/post/DeZYBXGgQyA",
-        "posted_at": "2026-10-12T13:47:26Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
+        "username": "ringo_lch",
+        "text": "香港人第一次到台灣看concert，請問小巨蛋這位置會很邊緣嗎？",
+        "summary": "香港人第一次到台灣看concert，請問小巨蛋這位置會很邊緣嗎？",
+        "permalink": "https://www.threads.com/@ringo_lch/post/DebiI7gE9sw",
+        "posted_at": "2026-10-13T09:54:20Z",
+        "media_type": "IMAGE",
+        "query": "concert",
         "source_queries": [
-          "演唱會"
+          "concert"
         ],
         "retrieval_sources": [
           "threads_ssr"
         ],
         "source": "Threads",
-        "review_lane": "adjacent"
+        "review_lane": "discovery"
       }
     ]
   }
