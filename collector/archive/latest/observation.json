@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-14_093158Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-14_121708Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-14_093158Z",
-    "run_at": "2026-10-14T09:33:04.111918Z",
+    "run_stamp": "2026-10-14_121708Z",
+    "run_at": "2026-10-14T12:18:06.992824Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -17,35 +17,35 @@
     "provenance": "manual",
     "baseline_eligible": false,
     "workflow_event": "workflow_dispatch",
-    "github_run_id": "38542940934"
+    "github_run_id": "38562554332"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-14_093158Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-14_093158Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-14_093158Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-14_093158Z.txt",
-    "snapshot_fingerprint": "sha256:531aa2a98007e0ee74310edbdc357bffd125af41b99749b8b23ea9043143cf82",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-14_121708Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-14_121708Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-14_121708Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-14_121708Z.txt",
+    "snapshot_fingerprint": "sha256:f444666ab8e3d634e6b9af5f738a022bc260b8fe931b1d92b3e967dad2e1ade1",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 103,
-      "snapshot_unique": 23,
-      "dedupe_unique": 23,
-      "clean_signals": 21,
-      "excluded_transactions": 2,
-      "suppressed_duplicates": 0,
-      "clean_rate_pct": 91.3,
-      "new_3h": 24,
-      "new_12h": 51,
-      "unique_authors": 21,
+      "raw_rows": 107,
+      "snapshot_unique": 31,
+      "dedupe_unique": 29,
+      "clean_signals": 26,
+      "excluded_transactions": 3,
+      "suppressed_duplicates": 2,
+      "clean_rate_pct": 89.7,
+      "new_3h": 26,
+      "new_12h": 59,
+      "unique_authors": 27,
       "author_diversity_ratio": 1.0,
-      "duplicate_adjusted_volume": 23
+      "duplicate_adjusted_volume": 29
     },
     "previous_comparable_run": {
       "run_stamp": "2026-10-14_064737Z",
       "run_at": "2026-10-14T06:48:35.829614Z",
-      "elapsed_minutes": 164.5,
+      "elapsed_minutes": 329.5,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 20,
       "new_3h": 22,
@@ -63,11 +63,11 @@
     },
     "delta": {
       "overlap_available": true,
-      "new_signal_count": 11,
-      "retained_signal_count": 10,
-      "clean_signal_delta": 1,
-      "rolling_3h_delta": 2,
-      "rolling_12h_delta": 3
+      "new_signal_count": 23,
+      "retained_signal_count": 4,
+      "clean_signal_delta": 6,
+      "rolling_3h_delta": 4,
+      "rolling_12h_delta": 11
     },
     "baselines": {
       "24h": {
@@ -195,52 +195,209 @@
       {
         "kind": "noise",
         "category": "粉絲心得／現場紀錄",
-        "count": 19,
-        "unique_authors": 19,
+        "count": 22,
+        "unique_authors": 22,
         "post_ids": [
-          "4007327806418530827",
-          "4007342916381074939",
-          "4007360663655792349",
           "4007381781413674501",
+          "4007434860289495852",
           "4007451178983093413",
-          "4007463589560561050",
           "4007473250452480944",
-          "4007477224891457347",
-          "4007484340502757243",
-          "4007485076468265892",
-          "4007490586441503034",
           "4007492783367746198",
-          "4007510721952837748",
           "4007523376680653182",
+          "4007550663001284268",
           "4007557326417058754",
+          "4007559003534604410",
+          "4007560517049288593",
           "4007575270212025710",
-          "4007587274963848531",
           "4007587809813643878",
-          "4007587884749032188"
+          "4007587884749032188",
+          "4007601639498746930",
+          "4007621844602278897",
+          "4007645993709981495",
+          "4007655150530356632",
+          "4007667397612348461",
+          "4007684250031756470",
+          "4007685959957706549",
+          "4007696280309584724",
+          "4007707596032019775"
         ]
       },
       {
         "kind": "context",
         "category": "場館／現場體驗",
-        "count": 2,
-        "unique_authors": 2,
+        "count": 3,
+        "unique_authors": 3,
         "post_ids": [
           "4007531755908789313",
-          "4007639457280901109"
+          "4007639457280901109",
+          "4007686765087363139"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "票務／入場摩擦",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4007671166621971668"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4007603420576005338"
         ]
       }
     ]
   },
   "evidence": {
-    "total_clean_evidence": 21,
+    "total_clean_evidence": 27,
     "limit": 16,
     "returned": 16,
     "items": [
       {
+        "post_id": "4007707596032019775",
+        "username": "lin47095",
+        "posted_at": "2026-10-14T11:06:36Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@lin47095/post/DeePNMpH40_",
+        "is_new_since_previous": true,
+        "excerpt": "😭搶錯日期超崩潰!\nBABYMONSTER台北演唱會 11/21\nVIP A區 01排兩張連票✨\n小巨蛋超前排神位,含加購福利\n本來滿心期待結果日期看錯,去不了了🥺\n找真心寶怪粉接手!\n想近距離看寶怪的趕快私,就這兩張連座￼",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007696280309584724",
+        "username": "josephcar8136",
+        "posted_at": "2026-10-14T10:44:19Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@josephcar8136/post/DeeMoiDgdNU",
+        "is_new_since_previous": true,
+        "excerpt": "藍到發紅的世新,好爛!藉著校慶演唱會,邀請空安上台致詞!但我不解的是,學生吃這一套嗎?真的是蠢到無極限(我不再罵他壞了,他連使壞的智商都沒有)!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007686765087363139",
+        "username": "chen_0321",
+        "posted_at": "2026-10-14T10:25:13Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@chen_0321/post/DeeKeEUERBD",
+        "is_new_since_previous": true,
+        "excerpt": "因為突然多了幾個選舉當天的演唱會\n大家在擔心粉絲甚至是工作人員的投票問題\n粉絲投完再去看我覺得沒什麼問題\n但工作人員的部分就有很多人喜歡出來說\n啊其他人不用上班嗎怎麼沒這個問題\n還有人提國軍留守沒辦法投票的\n請問一下狀況跟性質是有一樣?\n國家大事提醒不嫌多吧\n呼籲或擔心一下又怎麼了嗎?\n沒叫兩聲你是怕別人不知道你是政治低能兒嗎?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "場館／現場體驗"
+        }
+      },
+      {
+        "post_id": "4007685959957706549",
+        "username": "panda.39353043",
+        "posted_at": "2026-10-14T10:23:37Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@panda.39353043/post/DeeKSWemXc1",
+        "is_new_since_previous": true,
+        "excerpt": "[261014] Ticket sales update for the Jessica \"Reflection\" concert in Taipei 261024",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007684250031756470",
+        "username": "rfyygvytd",
+        "posted_at": "2026-10-14T10:20:13Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@rfyygvytd/post/DeeJ5d_EhS2",
+        "is_new_since_previous": true,
+        "excerpt": "是12s2,是ds,是22_ds,是航班买断,是随时偶遇,是爱豆拉大婆,是fromm定制回复,是信封写大名的윤정,是只看原价和免费活动,是演唱会门票都舍不得买、导览合影买不起发帖说接受资助,是有活动就卖手幅集资追星,是三十岁还在兼职的小妹,主打一个自己一分钱不花,爱豆的行程和别人的钱包全安排明白了,兜比脸干净,算盘比谁都响,阿姨的当务之急是找个班上。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007671166621971668",
+        "username": "aboutdazhen",
+        "posted_at": "2026-10-14T09:54:14Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@aboutdazhen/post/DeeG7FHE_TU",
+        "is_new_since_previous": true,
+        "excerpt": "假設田馥甄演唱會買了連號 7、8、9號,\n因為實名制的關係,臨時去不了的朋友剛好是 8號,\n這樣我和另一位(7號、9號)進場或座位會被強制分開嗎?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "actionable",
+          "category": "票務／入場摩擦"
+        }
+      },
+      {
+        "post_id": "4007667397612348461",
+        "username": "ting_bbb5",
+        "posted_at": "2026-10-14T09:46:44Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@ting_bbb5/post/DeeGEO8mSQt",
+        "is_new_since_previous": true,
+        "excerpt": "收墨尔本周杰伦演唱会预算100🔪以下*2",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007655150530356632",
+        "username": "d3byyy_",
+        "posted_at": "2026-10-14T09:22:25Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@d3byyy_/post/DeeDSA9oGWY",
+        "is_new_since_previous": true,
+        "excerpt": "WTS: One Obstructed view\nRFS: One of my friends cancelled\n\nI prefer may downpayment to avoid same day concert cancellation. \n\nMay physical ticket narin. ☺️",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007645993709981495",
+        "username": "nqocc_ahnn",
+        "posted_at": "2026-10-14T09:04:13Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@nqocc_ahnn/post/DeeBMxAmc83",
+        "is_new_since_previous": true,
+        "excerpt": "Setmap concert UPRIZE 12/12.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
         "post_id": "4007639457280901109",
         "username": "ericchen.5074",
         "posted_at": "2026-10-14T08:51:14Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
         "permalink": "https://www.threads.com/@ericchen.5074/post/Ded_tpfET_1",
         "is_new_since_previous": true,
         "excerpt": "演唱會辦在投票日 一堆人靠腰說這樣工作人員不能投票\n啊怎麼沒人幫國軍弟兄們訴苦\n每次投票日 因為留守無法返鄉的國軍大約有5000人\n他們的投票權怎麼沒人來幫忙捍衛\n還是因為國軍是刻板印象裡面的藍營票倉 不出來投也罷🙂‍↕️",
@@ -252,10 +409,55 @@
         }
       },
       {
+        "post_id": "4007621844602278897",
+        "username": "examistry",
+        "posted_at": "2026-10-14T08:16:14Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@examistry/post/Ded7tWZnVPx",
+        "is_new_since_previous": true,
+        "excerpt": "相信音乐,这个恒星之城演唱会我没记错的话主要是为F3而开的吧,现在河道上为了个演出日期又把矛头指向五月天,我想请问你有什么头绪吗?这就是你们莫名其妙把主唱搞上去顶缺的代价,人家看见陈信宏就直接等同于五月天,完全忽视了那三个,现在相当于五月天又在替人家扛骂!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4007603420576005338",
+        "username": "realezlelly",
+        "posted_at": "2026-10-14T07:39:38Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@realezlelly/post/Ded3hPsErza",
+        "is_new_since_previous": true,
+        "excerpt": "要是新加坡BIGBANG演唱会有什么冬瓜豆腐\n印尼我跟你没完🙄🤬",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4007601639498746930",
+        "username": "jasminehr",
+        "posted_at": "2026-10-14T07:36:05Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
+        "permalink": "https://www.threads.com/@jasminehr/post/Ded3HU7mIwy",
+        "is_new_since_previous": true,
+        "excerpt": "How to stadium concert in weekend 🥹🥹🥹",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
         "post_id": "4007587884749032188",
         "username": "damianivv",
         "posted_at": "2026-10-14T07:08:46Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
         "permalink": "https://www.threads.com/@damianivv/post/Dedz_K0oAr8",
         "is_new_since_previous": true,
         "excerpt": "垃圾政府\n11/28、11/29開演唱會就是為了要把台灣賣給中國\n身為這個國家的人民\n真的覺得很丟臉\n哪個國家的政府會像我們一樣?",
@@ -270,7 +472,7 @@
         "post_id": "4007587809813643878",
         "username": "chang.ding.dang",
         "posted_at": "2026-10-14T07:08:37Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
         "permalink": "https://www.threads.com/@chang.ding.dang/post/Dedz-FCIMJm",
         "is_new_since_previous": true,
         "excerpt": "一分鐘 秒售 比演唱會門票還難搶🔥",
@@ -282,193 +484,13 @@
         }
       },
       {
-        "post_id": "4007587274963848531",
-        "username": "ericiaglow1222",
-        "posted_at": "2026-10-14T07:07:33Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@ericiaglow1222/post/Dedz2S6mI1T",
-        "is_new_since_previous": true,
-        "excerpt": "卧槽尼玛呀今年四月份tbz演唱会的时候我去买了个戒指 结果今天戴丢了 我不活了",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
         "post_id": "4007575270212025710",
         "username": "jenchowky",
         "posted_at": "2026-10-14T06:43:42Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
+        "first_seen_at": "2026-10-14T12:18:06.992824Z",
         "permalink": "https://www.threads.com/@jenchowky/post/DedxHmnoL1u",
         "is_new_since_previous": true,
         "excerpt": "好耐未試過為演唱會飛咁忐忑\n好耐未試過真人排隊買飛\n準時6點上線\n呢度應該係大戶🤡",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007557326417058754",
-        "username": "wangjiexi642",
-        "posted_at": "2026-10-14T06:08:03Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@wangjiexi642/post/DedtCfKGlvC",
-        "is_new_since_previous": true,
-        "excerpt": "为什么肖战这么招富婆喜欢?他演唱会的票价一万多,八千多是认真的吗?富婆是因为陈情令喜欢的多吗?真心发问呀",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007531755908789313",
-        "username": "bucowbei1989",
-        "posted_at": "2026-10-14T05:17:15Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@bucowbei1989/post/DednOYxCnRB",
-        "is_new_since_previous": true,
-        "excerpt": "演唱會故意辦在投票日\n\n而且在這麼近的時間才決定\n\n看起來是收到指示了吧!一定已經有批工作人員要先進場、不能投票了呢\n\n大家,請記住我們先是臺灣人,然後才能自由的追星。",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "場館／現場體驗"
-        }
-      },
-      {
-        "post_id": "4007523376680653182",
-        "username": "domo821821",
-        "posted_at": "2026-10-14T05:00:36Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@domo821821/post/DedlUdAH9F-",
-        "is_new_since_previous": true,
-        "excerpt": "現在有一個很酷的現象可以觀察,\n舉凡演唱會或是外國偶像來台\n辦在11/28的,你們去看主辦單位是誰,\n大概9成都是有中資。\n\n(尤其是最近才釋出訊息的,都是帶任務的)",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007510721952837748",
-        "username": "zo1yneee111",
-        "posted_at": "2026-10-14T04:35:27Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@zo1yneee111/post/DedicTXkXB0",
-        "is_new_since_previous": true,
-        "excerpt": "收周杰伦墨尔本演唱会1张 预算250内",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007485076468265892",
-        "username": "sunflowerniess",
-        "posted_at": "2026-10-14T03:44:30Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@sunflowerniess/post/DedcnHJkfOk",
-        "is_new_since_previous": true,
-        "excerpt": "looking for bts concert tickets cat6 or cat7 plsss",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007463589560561050",
-        "username": "imzzxxulu",
-        "posted_at": "2026-10-14T03:01:49Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@imzzxxulu/post/DedXub6Ea2a",
-        "is_new_since_previous": true,
-        "excerpt": "不能再大肆宣扬127演唱会有多么爽多么好看了再这样我澳门场抢不到票飞升了怎么办。",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007492783367746198",
-        "username": "yourrrmajesty____",
-        "posted_at": "2026-10-14T03:59:49Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@yourrrmajesty____/post/DedeXQwk3KW",
-        "is_new_since_previous": false,
-        "excerpt": "WTB Lany concert day 1",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007490586441503034",
-        "username": "mmakkab_",
-        "posted_at": "2026-10-14T03:55:27Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@mmakkab_/post/Dedd3StkVE6",
-        "is_new_since_previous": false,
-        "excerpt": "没开足盆会员有必要开一个领zone卡吗 唉感觉演唱会不领总感觉少了什么但是花一百块钱又有点舍不得 唉!",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007484340502757243",
-        "username": "grace_lam915",
-        "posted_at": "2026-10-14T03:43:02Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@grace_lam915/post/DedccZum397",
-        "is_new_since_previous": false,
-        "excerpt": "為甚麽那些youtuber 會將炎明熹與單依純比較甚至踩單捧炎?其實論外型、實力、唱功及學歷都比炎高吧!估勿論炎將來在內地會否成為天后,但目前來講單在內地已經開了三十多場演唱會及代言幾個國際品牌!",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007477224891457347",
-        "username": "_dinakamila",
-        "posted_at": "2026-10-14T03:28:54Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@_dinakamila/post/Deda02zH59D",
-        "is_new_since_previous": false,
-        "excerpt": "WANT TO BUY (WTB)\n\nHey guys! i’m looking for 1 Kanye West concert ticket in Jakarta - CAT 4\n\nPlease kindly DM me or nassjla if you have one.\n\nThank you!\n#wtb #kanyewestjakarta",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
-        "post_id": "4007473250452480944",
-        "username": "kissesmt",
-        "posted_at": "2026-10-14T03:21:00Z",
-        "first_seen_at": "2026-10-14T09:33:04.111918Z",
-        "permalink": "https://www.threads.com/@kissesmt/post/DedZ7BUGaOw",
-        "is_new_since_previous": false,
-        "excerpt": "Juskolord, buying concert tickets in the Philippines is a whole different kind of frustration— literally feels like a scam at this point 🥲 \n\nArtist pre-sale palang, sold out na lahat?? Every single section, including floor standing! And this is despite having a pretty low queue number, ha? 😒 Parang joke e! 😫",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
