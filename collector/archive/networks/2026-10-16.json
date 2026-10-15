@@ -1,10 +1,10 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-15T16:05:08.469624Z",
+  "generated_at": "2026-10-15T19:40:17.819650Z",
   "network_date": "2026-10-16",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 2280,
+  "source_master_count": 2297,
   "source_card_count": 8,
   "layers": [
     "recall",
@@ -23,13 +23,13 @@
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 2
+      "count": 1
     },
     {
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 1
+      "count": 2
     },
     {
       "id": "lang:zh_hant",
@@ -41,7 +41,7 @@
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 2
+      "count": 1
     },
     {
       "id": "lang:hk_zh",
@@ -53,7 +53,7 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 1
+      "count": 2
     },
     {
       "id": "lang:mixed",
@@ -104,6 +104,13 @@
       "count": 0
     },
     {
+      "id": "kw:wear_support:應援",
+      "label": "應援",
+      "layer": "keyword",
+      "count": 3,
+      "need_node": "wear_support"
+    },
+    {
       "id": "kw:wear_support:周邊",
       "label": "周邊",
       "layer": "keyword",
@@ -111,11 +118,11 @@
       "need_node": "wear_support"
     },
     {
-      "id": "kw:wear_support:应援",
-      "label": "应援",
+      "id": "kw:venue_inside:seat",
+      "label": "seat",
       "layer": "keyword",
       "count": 1,
-      "need_node": "wear_support"
+      "need_node": "venue_inside"
     },
     {
       "id": "kw:venue_inside:入場",
@@ -127,13 +134,6 @@
     {
       "id": "kw:venue_inside:实名",
       "label": "实名",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_inside"
-    },
-    {
-      "id": "kw:venue_inside:入场",
-      "label": "入场",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_inside"
@@ -153,8 +153,13 @@
       "weight": 5
     },
     {
-      "source": "lang:zh_hans",
-      "target": "need:venue_inside",
+      "source": "need:wear_support",
+      "target": "kw:wear_support:應援",
+      "weight": 3
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:wear_support",
       "weight": 2
     },
     {
@@ -163,13 +168,18 @@
       "weight": 2
     },
     {
-      "source": "recall:演唱会",
-      "target": "lang:zh_hans",
+      "source": "recall:concert",
+      "target": "lang:english",
       "weight": 2
     },
     {
+      "source": "lang:english",
+      "target": "need:venue_inside",
+      "weight": 1
+    },
+    {
       "source": "lang:zh_hans",
-      "target": "need:wear_support",
+      "target": "need:venue_inside",
       "weight": 1
     },
     {
@@ -183,13 +193,8 @@
       "weight": 1
     },
     {
-      "source": "lang:zh_hant",
-      "target": "need:wear_support",
-      "weight": 1
-    },
-    {
       "source": "need:venue_inside",
-      "target": "kw:venue_inside:入场",
+      "target": "kw:venue_inside:seat",
       "weight": 1
     },
     {
@@ -208,25 +213,20 @@
       "weight": 1
     },
     {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:应援",
-      "weight": 1
-    },
-    {
-      "source": "recall:concert",
-      "target": "lang:english",
+      "source": "recall:演唱会",
+      "target": "lang:zh_hans",
       "weight": 1
     }
   ],
   "top_keywords": {
     "wear_support": [
       {
-        "term": "周邊",
-        "count": 2
+        "term": "應援",
+        "count": 3
       },
       {
-        "term": "应援",
-        "count": 1
+        "term": "周邊",
+        "count": 2
       }
     ],
     "food": [],
@@ -234,15 +234,15 @@
     "mobility": [],
     "venue_inside": [
       {
+        "term": "seat",
+        "count": 1
+      },
+      {
         "term": "入場",
         "count": 1
       },
       {
         "term": "实名",
-        "count": 1
-      },
-      {
-        "term": "入场",
         "count": 1
       }
     ],
