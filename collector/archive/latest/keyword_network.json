@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-15T19:40:17.819650Z",
-  "network_date": "2026-10-16",
+  "generated_at": "2026-10-16T16:18:28.595016Z",
+  "network_date": "2026-10-17",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 2297,
-  "source_card_count": 8,
+  "source_master_count": 2412,
+  "source_card_count": 2,
   "layers": [
     "recall",
     "language",
@@ -17,31 +17,31 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 5
+      "count": 2
     },
     {
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 1
+      "count": 0
     },
     {
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 2
+      "count": 0
     },
     {
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 5
+      "count": 1
     },
     {
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 1
+      "count": 0
     },
     {
       "id": "lang:hk_zh",
@@ -53,19 +53,19 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 2
+      "count": 0
     },
     {
       "id": "lang:mixed",
       "label": "mixed",
       "layer": "language",
-      "count": 0
+      "count": 1
     },
     {
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 2
+      "count": 0
     },
     {
       "id": "need:food",
@@ -89,13 +89,13 @@
       "id": "need:venue_inside",
       "label": "場館內",
       "layer": "need",
-      "count": 3
+      "count": 1
     },
     {
       "id": "need:venue_outside",
       "label": "場館外",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:trip_extension",
@@ -104,154 +104,63 @@
       "count": 0
     },
     {
-      "id": "kw:wear_support:應援",
-      "label": "應援",
-      "layer": "keyword",
-      "count": 3,
-      "need_node": "wear_support"
-    },
-    {
-      "id": "kw:wear_support:周邊",
-      "label": "周邊",
-      "layer": "keyword",
-      "count": 2,
-      "need_node": "wear_support"
-    },
-    {
-      "id": "kw:venue_inside:seat",
-      "label": "seat",
+      "id": "kw:venue_inside:實名",
+      "label": "實名",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_inside"
     },
     {
-      "id": "kw:venue_inside:入場",
-      "label": "入場",
+      "id": "kw:venue_inside:驗證",
+      "label": "驗證",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_inside"
-    },
-    {
-      "id": "kw:venue_inside:实名",
-      "label": "实名",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_inside"
-    },
-    {
-      "id": "kw:venue_outside:怎麼回",
-      "label": "怎麼回",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_outside"
     }
   ],
   "edges": [
     {
+      "source": "lang:zh_hant",
+      "target": "need:venue_inside",
+      "weight": 1
+    },
+    {
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:實名",
+      "weight": 1
+    },
+    {
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:驗證",
+      "weight": 1
+    },
+    {
+      "source": "recall:演唱會",
+      "target": "lang:mixed",
+      "weight": 1
+    },
+    {
       "source": "recall:演唱會",
       "target": "lang:zh_hant",
-      "weight": 5
-    },
-    {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:應援",
-      "weight": 3
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:wear_support",
-      "weight": 2
-    },
-    {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:周邊",
-      "weight": 2
-    },
-    {
-      "source": "recall:concert",
-      "target": "lang:english",
-      "weight": 2
-    },
-    {
-      "source": "lang:english",
-      "target": "need:venue_inside",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hans",
-      "target": "need:venue_inside",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:venue_inside",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:venue_outside",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:seat",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:入場",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:实名",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_outside",
-      "target": "kw:venue_outside:怎麼回",
-      "weight": 1
-    },
-    {
-      "source": "recall:演唱会",
-      "target": "lang:zh_hans",
       "weight": 1
     }
   ],
   "top_keywords": {
-    "wear_support": [
-      {
-        "term": "應援",
-        "count": 3
-      },
-      {
-        "term": "周邊",
-        "count": 2
-      }
-    ],
+    "wear_support": [],
     "food": [],
     "stay": [],
     "mobility": [],
     "venue_inside": [
       {
-        "term": "seat",
+        "term": "實名",
         "count": 1
       },
       {
-        "term": "入場",
-        "count": 1
-      },
-      {
-        "term": "实名",
+        "term": "驗證",
         "count": 1
       }
     ],
-    "venue_outside": [
-      {
-        "term": "怎麼回",
-        "count": 1
-      }
-    ],
+    "venue_outside": [],
     "trip_extension": []
   }
 }
