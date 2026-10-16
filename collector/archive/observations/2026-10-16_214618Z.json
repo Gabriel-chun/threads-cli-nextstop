@@ -1,0 +1,489 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-10-16_214618Z:clean-v2.4-depth3",
+  "run": {
+    "run_stamp": "2026-10-16_214618Z",
+    "run_at": "2026-10-16T21:47:09.787797Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-depth3",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "depth3",
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "38971511186"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-16_214618Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-16_214618Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-16_214618Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-16_214618Z.txt",
+    "snapshot_fingerprint": "sha256:338086a51abb0af3a1a3d43f26eed02a72d0d40486d69bea2e6e5411607e2064",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 96,
+      "snapshot_unique": 16,
+      "dedupe_unique": 16,
+      "clean_signals": 15,
+      "excluded_transactions": 1,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 93.8,
+      "new_3h": 25,
+      "new_12h": 73,
+      "unique_authors": 15,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 16
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-10-15_182307Z",
+      "run_at": "2026-10-15T18:23:58.000605Z",
+      "elapsed_minutes": 1643.2,
+      "pipeline_version": "clean-v2.4-depth3",
+      "clean_signals": 35,
+      "new_3h": 39,
+      "new_12h": 83,
+      "clean_rate_pct": 100.0,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 15,
+      "retained_signal_count": 0,
+      "clean_signal_delta": -20,
+      "rolling_3h_delta": -14,
+      "rolling_12h_delta": -10
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": false,
+        "coverage_complete": false,
+        "coverage_hours": 24.0,
+        "sample_count": 0,
+        "max_gap_minutes": 1643.2,
+        "sampling_quality": "insufficient",
+        "sampling": {
+          "quality": "insufficient",
+          "eligible_sample_count": 0,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1643.2,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 8,
+          "excluded_provenance_counts": {
+            "manual": 8
+          }
+        },
+        "metrics": {
+          "clean_signals_median": null,
+          "new_3h_median": null,
+          "new_12h_median": null,
+          "clean_rate_pct_median": null
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 2,
+        "max_gap_minutes": 2269.6,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 2,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 2269.6,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 24,
+          "excluded_provenance_counts": {
+            "manual": 24
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 27.5,
+          "new_3h_median": 30.5,
+          "new_12h_median": 65.5,
+          "clean_rate_pct_median": 100.0
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 6,
+        "max_gap_minutes": 2269.6,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 6,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 2269.6,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 56,
+          "excluded_provenance_counts": {
+            "manual": 56
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.5,
+          "new_3h_median": 37.0,
+          "new_12h_median": 83.0,
+          "clean_rate_pct_median": 95.9
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 12,
+        "unique_authors": 12,
+        "post_ids": [
+          "4009134154580165683",
+          "4009162662014044241",
+          "4009199199099008987",
+          "4009215034593113373",
+          "4009242085707049961",
+          "4009256971870446670",
+          "4009273436477042604",
+          "4009292670908780774",
+          "4009304752433271397",
+          "4009323264387702572",
+          "4009395615771215953",
+          "4009417763911344695"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 2,
+        "unique_authors": 2,
+        "post_ids": [
+          "4009306608094112924",
+          "4009378241076983977"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "其他問題／需求",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4009267115483859368"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 15,
+    "limit": 16,
+    "returned": 15,
+    "items": [
+      {
+        "post_id": "4009417763911344695",
+        "username": "vickymiuro",
+        "posted_at": "2026-10-16T19:44:24Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@vickymiuro/post/DekUDamE6I3",
+        "is_new_since_previous": true,
+        "excerpt": "好的 怎么看演唱会要不要应援拍不拍是各位自己的问题 我管不到各位的消费者权益 那要我说一下这次澳门场中国观众表现出来的被艺人反馈到的样子是什么样的。我按时间顺序说。\n朴综星还是谁(我真忘了)第一次talk环节问大家开心吗这种话,底下有人喊不开心给他吓一跳,说怎么还有人说不开心。唱gbgh的时候中文说了大家站起来,没人站,又说大家怎么不站起来,陆续才有多数区站了。朴成训说希望这几天的人都开心 只是提到明后天 底下一大片人开始发出不好的声音逼他又找补。最后西村力说演唱会马上要结束了,四巡流程公开的本来那也是shoutout之前的最后一次talk了,一大堆人开始打断他的话大喊安可。沈载伦shoutout没人理懵逼了那种我都懒得提了。\n脚盆肯定有做的不对的地方,但是四巡流程是公开的,他们改没了一首歌 我没记错的话...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009395615771215953",
+        "username": "big_niii",
+        "posted_at": "2026-10-16T19:00:24Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@big_niii/post/DekPBHiDUhR",
+        "is_new_since_previous": true,
+        "excerpt": "Who doing half off for the Brent fiyaz concert ??",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009378241076983977",
+        "username": "0yj.26",
+        "posted_at": "2026-10-16T18:25:53Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@0yj.26/post/DekLESFkvip",
+        "is_new_since_previous": true,
+        "excerpt": "BND的事情也讓我想到\n我擔之前來台灣開演唱會\n前一天也不是在哀居po限動\n而是去微博發文:)\n好像是類似問期不期待明天\n但那個明天是台灣場\n瞬間超解...\n我不期待他國人完全理解中台關係\n但真的只求愛豆多看一點國際新聞...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4009323264387702572",
+        "username": "lovemewakemeup_flyhigh",
+        "posted_at": "2026-10-16T16:36:39Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@lovemewakemeup_flyhigh/post/Dej-kRDid8s",
+        "is_new_since_previous": true,
+        "excerpt": "卖了一张梓渝演唱会vip 本来没什么的\n买家妹妹这么一说,我就觉得自己卖便宜了🫠",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009306608094112924",
+        "username": "yingxianceng",
+        "posted_at": "2026-10-16T16:03:34Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@yingxianceng/post/Dej6x4rE2yc",
+        "is_new_since_previous": true,
+        "excerpt": "YOASOBI《SUPER PLANET》\n的手燈 App 已經可以下載了!\n\n第一次要去日本看演唱會\n沒想到連手燈都有專屬 App\n覺得有點驚訝😂\n\n而且 App 裡面的小 Y 真的好可愛🥹💜\n這個是可以拿來當手機桌布\nYOASOBI 超惑星準備中!\n大阪場倒數6天",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4009304752433271397",
+        "username": "yellow_leekfor",
+        "posted_at": "2026-10-16T15:59:52Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@yellow_leekfor/post/Dej6W4dEhJl",
+        "is_new_since_previous": true,
+        "excerpt": "没见过演唱会还怪观众的,你们赢了好吧",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009292670908780774",
+        "username": "bangtan.girl_13430",
+        "posted_at": "2026-10-16T15:35:52Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@bangtan.girl_13430/post/Dej3nEqGFDm",
+        "is_new_since_previous": true,
+        "excerpt": "演唱會的時候到底要不要租借手機呀😭\n小女是iphone 14 很怕到時候拍出來糊糊的\n但要租借也不知哪個機型最好(網路上好多說法",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009273436477042604",
+        "username": "wxnswbb",
+        "posted_at": "2026-10-16T14:57:39Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@wxnswbb/post/DejzPLMn6-s",
+        "is_new_since_previous": true,
+        "excerpt": "小猴子敢不敢把签售城市也像演唱会这样一下全飒出来",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009267115483859368",
+        "username": "xing0619",
+        "posted_at": "2026-10-16T14:45:06Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@xing0619/post/DejxzMUEgmo",
+        "is_new_since_previous": true,
+        "excerpt": "靠北讓鄰家男那麼親中\n禹智皓跟koz你對得起friday的老闆嗎?\n人家那麼熱情邀請你帶他們來開演唱會耶\n孩子們查個ai好不好為什麼在微博提台北場",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "其他問題／需求"
+        }
+      },
+      {
+        "post_id": "4009256971870446670",
+        "username": "evilcsb",
+        "posted_at": "2026-10-16T14:24:56Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@evilcsb/post/DejvflVmKRO",
+        "is_new_since_previous": true,
+        "excerpt": "第一次睇完演唱會咁燥▓\n特登過大海嚟澳門睇Enhypen 竟然得兩個鐘▓▓\n오빠在搞笑嗎😭",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009242085707049961",
+        "username": "xebs6666",
+        "posted_at": "2026-10-16T13:55:22Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@xebs6666/post/DejsG9hHWvp",
+        "is_new_since_previous": true,
+        "excerpt": "合理怀疑金泰妍的个人棒会在她演唱会当场周来卖🌝我已经迫不及待了",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009215034593113373",
+        "username": "se1fi.sh",
+        "posted_at": "2026-10-16T13:01:37Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@se1fi.sh/post/Dejl9UNE_Ud",
+        "is_new_since_previous": true,
+        "excerpt": "陈奕迅开演唱会这阵仗比得过黄伟文作品展吗",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009199199099008987",
+        "username": "pingyuepp",
+        "posted_at": "2026-10-16T12:30:09Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@pingyuepp/post/DejiW4QE7fb",
+        "is_new_since_previous": true,
+        "excerpt": "1128舉辦大量韓星演唱會 \n普發2萬\n65歲以上老人免繳健保\n好像懂了什麼",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009162662014044241",
+        "username": "3arbudss",
+        "posted_at": "2026-10-16T11:17:34Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@3arbudss/post/DejaDMcG0hR",
+        "is_new_since_previous": true,
+        "excerpt": "为什么关智斌那么多捂嘴粉?他应该做的变成我要感恩戴德的事情,他开演唱会他不应该做好吗,真愿意为他花980的粉丝有没有500个啊?还说开下一场,每个人都在蹲打折以为都是瞎子吗。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4009134154580165683",
+        "username": "gianglehk2802",
+        "posted_at": "2026-10-16T10:20:56Z",
+        "first_seen_at": "2026-10-16T21:47:09.787797Z",
+        "permalink": "https://www.threads.com/@gianglehk2802/post/DejTkW0owQz",
+        "is_new_since_previous": true,
+        "excerpt": "Tiếp tục mở sạp 30k fibi lộn xộn ở Traffee ĐTĐ▓\nBĐTX và vòng tay, phonecharm k24 nhó. Ai không đi concert ra mói cho vui:)))) \nTầng 2 bàn ngay cạnh cầu thang nhe cạ nhà",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_coverage_incomplete",
+      "baseline_24h_incomplete",
+      "baseline_24h_sampling_insufficient",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": false,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "insufficient",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 0,
+    "baseline_ineligible_history_sample_count": 74
+  }
+}
