@@ -1,5 +1,6 @@
 import { KeywordNetworkView } from "../../components/KeywordNetworkView";
 import { LocaleDate, T } from "../../components/I18nProvider";
+import { aggregateKeywordNetworks, calendarNetworkDate } from "../../lib/keywordNetworkHistory";
 import { loadKeywordNetwork, loadKeywordNetworkIndex } from "../../lib/keywordNetwork";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,18 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
   const requestedDate=params.date && /^\d{4}-\d{2}-\d{2}$/.test(params.date)?params.date:undefined;
   const selectedDate=requestedDate && availableDates.includes(requestedDate)?requestedDate:availableDates[0];
   const data=await loadKeywordNetwork(selectedDate);
+  const anchor=selectedDate||data?.network_date;
+  const snapshots=anchor?await Promise.all(Array.from({length:7},(_,i)=>{
+    const date=calendarNetworkDate(anchor,-i);
+    return availableDates.includes(date)
+      ? loadKeywordNetwork(date).then(snapshot=>({date,snapshot}))
+      : Promise.resolve({date,snapshot:null});
+  })):[];
+  const overlays=anchor?({
+    1:aggregateKeywordNetworks(snapshots,anchor,1),
+    3:aggregateKeywordNetworks(snapshots,anchor,3),
+    7:aggregateKeywordNetworks(snapshots,anchor,7)
+  }):null;
 
   return <main className="networkWorkspace quietWorkspace">
     <header className="workspaceHeader quietWorkspaceHeader">
@@ -31,7 +44,7 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
 
     {!data?<section className="quietEmpty"><p className="muted"><T k="network.notGenerated" /></p></section>:<>
       <section className="quietMainSurface">
-        <KeywordNetworkView data={data} />
+        <KeywordNetworkView data={data} overlays={overlays} />
       </section>
 
       <details className="quietDetails">
