@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeywordNetworkNode, KeywordNetworkEdge } from "../lib/keywordNetwork";
+import { networkEdgeKey } from "../lib/keywordNetworkHistory";
 import { createKeywordParticles, linkedKeywordIds, nearestKeywordParticle, stepKeywordParticles, type Particle } from "../lib/keywordPhysics";
 import { useI18n } from "./I18nProvider";
 
-type Props={nodes:KeywordNetworkNode[];edges:KeywordNetworkEdge[];selectedId:string|null;onSelect:(id:string|null)=>void;resetKey:number};
+type Props={nodes:KeywordNetworkNode[];edges:KeywordNetworkEdge[];selectedId:string|null;edgeDays?:Record<string,number>;onSelect:(id:string|null)=>void;resetKey:number};
 const palette:Record<KeywordNetworkNode["layer"],string>={recall:"#a84328",language:"#8a6a59",need:"#426a53",keyword:"#987d68"};
 
-export function KeywordParticleCanvas({nodes,edges,selectedId,onSelect,resetKey}:Props){
+export function KeywordParticleCanvas({nodes,edges,selectedId,edgeDays,onSelect,resetKey}:Props){
   const {t}=useI18n();
   const canvasRef=useRef<HTMLCanvasElement|null>(null);
   const particlesRef=useRef<Particle[]>([]);
@@ -62,6 +63,7 @@ export function KeywordParticleCanvas({nodes,edges,selectedId,onSelect,resetKey}
       for(const edge of links){
         const a=byId.get(edge.source),b=byId.get(edge.target);
         if(!a||!b)continue;
+        const recurrence=edgeDays?.[networkEdgeKey(edge)]||1;
         const selectedEdge=selected&&(edge.source===selected||edge.target===selected);
         const dim=selected&&!selectedEdge;
         const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1;
@@ -69,7 +71,7 @@ export function KeywordParticleCanvas({nodes,edges,selectedId,onSelect,resetKey}
         const mx=(a.x+b.x)/2-dy/len*sway,my=(a.y+b.y)/2+dx/len*sway;
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(mx,my,b.x,b.y);
         ctx.strokeStyle=selectedEdge?"rgba(168,67,40,.78)":"rgba(137,126,115,.48)";
-        ctx.lineWidth=Math.min(2.6,.8+Math.sqrt(Math.max(0,edge.weight))*.22);
+        ctx.lineWidth=Math.min(3.8,.8+Math.sqrt(Math.max(0,edge.weight))*.22+(recurrence-1)*.35);
         ctx.globalAlpha=dim?.09:selectedEdge?1:.45;ctx.stroke();
         if(!reduced.matches&&!dim){
           const phase=(time*.00015+(edge.weight%17)/17)%1;
@@ -103,7 +105,7 @@ export function KeywordParticleCanvas({nodes,edges,selectedId,onSelect,resetKey}
     };
     raf=requestAnimationFrame(draw);
     return()=>cancelAnimationFrame(raf);
-  },[size,links,ids,hovered]);
+  },[size,links,ids,hovered,edgeDays]);
 
   function localPoint(e:React.PointerEvent<HTMLCanvasElement>){
     const rect=e.currentTarget.getBoundingClientRect();
