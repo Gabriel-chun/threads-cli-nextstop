@@ -46,13 +46,26 @@ NEGATIVE_PATTERNS = [
     ("announcement", re.compile(r"官宣|海報|海报|補場|补场|timeline|rehearsal|開賣|开卖|售票資訊|售票信息|宣傳|宣传", re.I)),
 ]
 
-def load_rows(review_dir: Path) -> list[dict[str, Any]]:
+def load_rows(review_dir: Path, snapshot: Path | None = None) -> list[dict[str, Any]]:
+    # Read the full, up-to-date Notion review state during scheduled archive runs.
+    # Historical daily archives are only a fallback for manual/offline rebuilds.
+    if snapshot is not None:
+        payload = json.loads(snapshot.read_text(encoding="utf-8"))
+        if payload.get("schema_version") != "signal-review-current-v0.1":
+            raise ValueError("Unexpected current review snapshot schema")
+        if not isinstance(payload.get("rows"), list) or not payload["rows"]:
+            raise ValueError("Empty or invalid current review snapshot")
+        sources = [payload]
+    else:
+        sources = []
+        for path in sorted(review_dir.glob("20??-??-??.json")):
+            try:
+                sources.append(json.loads(path.read_text(encoding="utf-8")))
+            except (OSError, ValueError):
+                continue
+
     latest: dict[str, dict[str, Any]] = {}
-    for path in sorted(review_dir.glob("20??-??-??.json")):
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            continue
+    for payload in sources:
         for row in payload.get("rows") or []:
             if not isinstance(row, dict):
                 continue
@@ -61,7 +74,9 @@ def load_rows(review_dir: Path) -> list[dict[str, Any]]:
             if not key or label not in {"relevant", "irrelevant"}:
                 continue
             current = latest.get(key)
-            if current is None or str(row.get("reviewed_at") or "") >= str(current.get("reviewed_at") or ""):
+            updated = str(row.get("notion_edited_at") or row.get("reviewed_at") or "")
+            previous = str((current or {}).get("notion_edited_at") or (current or {}).get("reviewed_at") or "")
+            if current is None or updated >= previous:
                 latest[key] = row
     return list(latest.values())
 
@@ -75,7 +90,7 @@ def pattern_counts(rows: list[dict[str, Any]], patterns: list[tuple[str, re.Patt
                 out[name][label] += 1
     return out
 
-def build(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
+def build(rows: list[dict[str, Any]], now: datetime, source: str = "github:collector/archive/reviews") -> dict[str, Any]:
     relevant = [row for row in rows if row.get("label") == "relevant"]
     irrelevant = [row for row in rows if row.get("label") == "irrelevant"]
     clusters: list[dict[str, Any]] = []
@@ -125,7 +140,7 @@ def build(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
     return {
         "schema_version": "review-intelligence-v0.1",
         "generated_at": now.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "source": "github:collector/archive/reviews",
+        "source": source,
         "review_counts": {
             "total": len(rows),
             "relevant": len(relevant),
@@ -142,6 +157,7 @@ def build(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reviews", default="collector/archive/reviews")
+    parser.add_argument("--snapshot", default="", help="Current complete review state (temporary GitHub Actions runner file)")
     parser.add_argument("--output", default="collector/archive/latest/review_intelligence.json")
     parser.add_argument("--now", default="")
     args = parser.parse_args()
@@ -150,7 +166,8 @@ def main() -> None:
         now = datetime.fromisoformat(args.now.replace("Z", "+00:00"))
         if now.tzinfo is None:
             now = now.replace(tzinfo=timezone.utc)
-    payload = build(load_rows(Path(args.reviews)), now)
+    payload = build(load_rows(Path(args.reviews), Path(args.snapshot) if args.snapshot else None), now,
+                    source="notion:signal-review-current" if args.snapshot else "github:collector/archive/reviews")
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

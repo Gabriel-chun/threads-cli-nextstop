@@ -19,34 +19,43 @@ def smooth_weight(relevant: int, irrelevant: int, scale: float) -> float:
     return round(centered * scale * confidence, 3)
 
 
-def load_rows(review_dir: Path) -> list[dict[str, Any]]:
-    latest_by_post: dict[str, dict[str, Any]] = {}
+def load_rows(review_dir: Path, snapshot: Path | None = None) -> list[dict[str, Any]]:
+    # Use a nightly ephemeral current-state snapshot so edits to past labels apply.
+    if snapshot is not None:
+        payload = json.loads(snapshot.read_text(encoding="utf-8"))
+        if payload.get("schema_version") != "signal-review-current-v0.1":
+            raise ValueError("Unexpected current review snapshot schema")
+        if not isinstance(payload.get("rows"), list) or not payload["rows"]:
+            raise ValueError("Empty or invalid current review snapshot")
+        sources = [payload]
+    else:
+        sources = []
+        for path in sorted(review_dir.glob("20??-??-??.json")):
+            try:
+                sources.append(json.loads(path.read_text(encoding="utf-8")))
+            except (OSError, ValueError):
+                continue
 
-    for path in sorted(review_dir.glob("20??-??-??.json")):
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            continue
+    latest_by_post: dict[str, dict[str, Any]] = {}
+    for payload in sources:
         rows = payload.get("rows") or []
         if not isinstance(rows, list):
             continue
-
         for row in rows:
             if not isinstance(row, dict):
                 continue
             post_key = str(row.get("post_key") or "")
-            label = str(row.get("label") or "")
-            if not post_key or label not in {"relevant", "irrelevant"}:
+            if not post_key or str(row.get("label") or "") not in {"relevant", "irrelevant"}:
                 continue
-
             current = latest_by_post.get(post_key)
-            if current is None or str(row.get("reviewed_at") or "") >= str(current.get("reviewed_at") or ""):
+            updated = str(row.get("notion_edited_at") or row.get("reviewed_at") or "")
+            previous = str((current or {}).get("notion_edited_at") or (current or {}).get("reviewed_at") or "")
+            if current is None or updated >= previous:
                 latest_by_post[post_key] = row
-
     return list(latest_by_post.values())
 
 
-def build_profile(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
+def build_profile(rows: list[dict[str, Any]], now: datetime, source: str = "github:collector/archive/reviews") -> dict[str, Any]:
     feature_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"relevant": 0, "irrelevant": 0})
     category_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"relevant": 0, "irrelevant": 0})
 
@@ -66,7 +75,7 @@ def build_profile(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
     return {
         "schema_version": "relevance-profile-v0.3",
         "generated_at": now.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "source": "github:collector/archive/reviews",
+        "source": source,
         "learning_mode": "positive-ranking",
         "feedback_count": len(rows),
         "relevant_count": sum(1 for row in rows if row["label"] == "relevant"),
@@ -91,6 +100,7 @@ def build_profile(rows: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reviews", default="collector/archive/reviews")
+    parser.add_argument("--snapshot", default="", help="Current complete review state (temporary GitHub Actions runner file)")
     parser.add_argument("--output", default="collector/archive/latest/relevance_profile.json")
     parser.add_argument("--now", default="")
     args = parser.parse_args()
@@ -101,8 +111,9 @@ def main() -> None:
         if now.tzinfo is None:
             now = now.replace(tzinfo=timezone.utc)
 
-    rows = load_rows(Path(args.reviews))
-    profile = build_profile(rows, now)
+    rows = load_rows(Path(args.reviews), Path(args.snapshot) if args.snapshot else None)
+    profile = build_profile(rows, now,
+                            source="notion:signal-review-current" if args.snapshot else "github:collector/archive/reviews")
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
