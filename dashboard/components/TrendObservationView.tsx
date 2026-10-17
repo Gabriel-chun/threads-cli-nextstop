@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 import type { EventWatchRow, ReviewIntelligence, ReviewIntelligenceCluster, TrendEvidence, TrendIndexRow, TrendLink, TrendRadar } from "../lib/trendRadar";
 import { isTrendObservation } from "../lib/trendRadar";
+import { matchingAffiliateProducts, type AffiliateProduct } from "../lib/affiliateCatalog";
 import { useI18n } from "./I18nProvider";
 
 type View = "observation"|"connections"|"eventWatch"|"reviewIntelligence";
 
 function stateKey(state:string){ return "trend.state."+state; }
 
-export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null}){
+export function TrendObservationView({data,snapshots,reviewIntelligence,affiliateProducts}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null;affiliateProducts:AffiliateProduct[]}){
   const {t,formatDate,formatCount}=useI18n();
   const [view,setView]=useState<View>("observation");
   const [selectedLink,setSelectedLink]=useState<TrendLink|null>(null);
@@ -143,6 +144,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
 
     {view==="reviewIntelligence" ? <ReviewIntelligenceView
       data={reviewIntelligence}
+      affiliateProducts={affiliateProducts}
       onSelectCluster={(cluster)=>{setSelectedLink(null);setSelectedEvent(null);setSelectedReviewCluster(cluster);}}
     /> : null}
 
@@ -162,6 +164,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
           <span>{t("trend.review.relevantEvidence")}</span><strong>{selectedReviewCluster.relevant_count}</strong>
           <span>{t("trend.review.irrelevantOverlap")}</span><strong>{selectedReviewCluster.irrelevant_count}</strong>
         </div>
+        <AffiliateProductMatches products={matchingAffiliateProducts(affiliateProducts,selectedReviewCluster.cluster_id)} />
         {selectedReviewCluster.solution_map.length?<div className="trendChipList">{selectedReviewCluster.solution_map.map(item=><span key={item}>{item}</span>)}</div>:null}
         {selectedReviewCluster.evidence.length?selectedReviewCluster.evidence.map(item=><article className="trendEvidenceCard quietEvidenceCard" key={item.post_key}>
           <p>{item.text}</p>
@@ -177,7 +180,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
   </main>;
 }
 
-function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|null;onSelectCluster:(cluster:ReviewIntelligenceCluster)=>void}){
+function ReviewIntelligenceView({data,onSelectCluster,affiliateProducts}:{data:ReviewIntelligence|null;onSelectCluster:(cluster:ReviewIntelligenceCluster)=>void;affiliateProducts:AffiliateProduct[]}){
   const {t}=useI18n();
   if(!data) return <section className="quietEmpty"><p className="muted">{t("trend.review.noData")}</p></section>;
 
@@ -220,7 +223,7 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
       {data.demand_clusters.map(cluster=><button type="button" className="quietConnectionRow reviewDemandRow" key={cluster.cluster_id} onClick={()=>onSelectCluster(cluster)}>
         <span className="reviewDemandMain">
           <strong>{t("trend.review.cluster."+cluster.cluster_id)}</strong>
-          <small>{cluster.solution_map.length?cluster.solution_map.slice(0,3).join(" · "):t("trend.review.insightOnly")}</small>
+          <small>{cluster.solution_map.length?cluster.solution_map.slice(0,3).join(" · "):t("trend.review.insightOnly")}{matchingAffiliateProducts(affiliateProducts,cluster.cluster_id).length ? " · "+t("affiliate.productCount",{count:matchingAffiliateProducts(affiliateProducts,cluster.cluster_id).length}) : ""}</small>
         </span>
         <span className="reviewDemandRight">
           <em className={"reviewAffiliateBadge "+cluster.affiliate_fit}>{t("deck.affiliateFit."+cluster.affiliate_fit)}</em>
@@ -249,4 +252,26 @@ function EvidenceCard({evidence}:{evidence:TrendEvidence}){
     {chips.length?<div className="trendChipList">{chips.map((chip,index)=><span key={chip+index}>{chip}</span>)}</div>:null}
     {evidence.source_url?<a href={evidence.source_url} target="_blank" rel="noreferrer">{t("common.openSource")}</a>:null}
   </article>;
+}
+
+function AffiliateProductMatches({products}:{products:AffiliateProduct[]}){
+  const {t,locale}=useI18n();
+  if (!products.length) return null;
+  return <section className="affiliateMatches" aria-label={t("affiliate.title")}>
+    <div className="affiliateMatchHeading">
+      <strong>{t("affiliate.title")}</strong>
+      <small>{t("affiliate.disclosure")}</small>
+    </div>
+    {products.map(product=><article key={product.product_id} className="affiliateMatchRow">
+      <div>
+        <strong>{locale==="zh-TW"?product.title_zh:product.title_en}</strong>
+        <p>{locale==="zh-TW"?product.context_zh:product.context_en}</p>
+        <small>{product.affiliate_url?t("affiliate.tracked"):t("affiliate.untracked")}</small>
+      </div>
+      <a className="affiliateMatchLink" href={product.affiliate_url||product.public_url} target="_blank" rel="noopener noreferrer sponsored">
+        {t("affiliate.openProduct")} ↗
+      </a>
+    </article>)}
+    <p className="affiliateMatchFootnote">{t("affiliate.availability")}</p>
+  </section>;
 }
