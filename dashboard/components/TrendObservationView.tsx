@@ -9,9 +9,9 @@ type View = "observation"|"connections"|"eventWatch"|"reviewIntelligence";
 
 function stateKey(state:string){ return "trend.state."+state; }
 
-export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null}){
+export function TrendObservationView({data,snapshots,reviewIntelligence,initialView="reviewIntelligence"}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null;initialView?:View}){
   const {t,formatDate,formatCount}=useI18n();
-  const [view,setView]=useState<View>("observation");
+  const [view,setView]=useState<View>(initialView);
   const [selectedLink,setSelectedLink]=useState<TrendLink|null>(null);
   const [selectedEvent,setSelectedEvent]=useState<EventWatchRow|null>(null);
   const [selectedReviewCluster,setSelectedReviewCluster]=useState<ReviewIntelligenceCluster|null>(null);
@@ -55,22 +55,34 @@ export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:T
         <p className="eyebrow">{t("trend.eyebrow")}</p>
         <h1>{t("trend.title")}</h1>
       </div>
+
+    </header>
+
+
+    <div className="trendTabs quietTabs" role="group" aria-label={t("nav.researchSystem")}>
+      <button type="button" className={view==="reviewIntelligence"?"active":""} onClick={()=>setView("reviewIntelligence")}>{t("trend.tab.reviewIntelligence")}</button>
+      <details className="trendResearchMenu">
+        <summary>{t("nav.researchSystem")}</summary>
+        <div className="trendResearchOptions">
+          <button type="button" className={view==="observation"?"active":""} onClick={()=>setView("observation")}>{t("trend.tab.observation")}</button>
+          <button type="button" className={view==="connections"?"active":""} onClick={()=>setView("connections")}>{t("trend.tab.connections")}</button>
+          <button type="button" className={view==="eventWatch"?"active":""} onClick={()=>setView("eventWatch")}>{t("trend.tab.eventWatch")}</button>
+          <a href="/network">{t("nav.keywordNetwork")} ↗</a>
+        </div>
+      </details>
+    </div>
+    {view!=="reviewIntelligence" && snapshots.length ? <details className="trendHistoryDetails">
+      <summary>{t("nav.historySnapshots")}</summary>
       <label>
         <span className="srOnly">{t("trend.selectSnapshot")}</span>
         <select className="trendSnapshotSelect quietSelect" value={data?.run_stamp||""} onChange={e=>selectSnapshot(e.target.value)}>
           {snapshots.map(row=><option key={row.run_stamp} value={row.run_stamp}>{formatDate(row.generated_at)} · {row.sampling_strategy||row.schema_version||""}</option>)}
         </select>
       </label>
-    </header>
+    </details> : null}
 
-    <div className="trendTabs quietTabs" role="tablist">
-      <button type="button" className={view==="observation"?"active":""} onClick={()=>setView("observation")}>{t("trend.tab.observation")}</button>
-      <button type="button" className={view==="connections"?"active":""} onClick={()=>setView("connections")}>{t("trend.tab.connections")}</button>
-      <button type="button" className={view==="eventWatch"?"active":""} onClick={()=>setView("eventWatch")}>{t("trend.tab.eventWatch")}</button>
-      <button type="button" className={view==="reviewIntelligence"?"active":""} onClick={()=>setView("reviewIntelligence")}>{t("trend.tab.reviewIntelligence")}</button>
-    </div>
 
-    {!data ? <section className="quietEmpty"><p className="muted">{t("common.noData")}</p></section> : null}
+    {!data && view!=="reviewIntelligence" ? <section className="quietEmpty"><p className="muted">{t("common.noData")}</p></section> : null}
 
     {data && view==="observation" ? <>
       <div className="quietStats trendQuietStats">

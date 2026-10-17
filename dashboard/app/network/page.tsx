@@ -20,20 +20,16 @@ export default async function NetworkPage({searchParams}:{searchParams:Promise<{
       </div>
     </header>
 
-    {availableDates.length?<nav className="networkDateStrip quietDateStrip" aria-labelledby="networkSnapshotDatesLabel"><span id="networkSnapshotDatesLabel" className="srOnly"><T k="network.snapshotDatesAria" /></span>
+    {availableDates.length?<details className="networkHistoryDetails">
+      <summary><T k="nav.historySnapshots" /></summary>
+      <nav className="networkDateStrip quietDateStrip" aria-labelledby="networkSnapshotDatesLabel"><span id="networkSnapshotDatesLabel" className="srOnly"><T k="network.snapshotDatesAria" /></span>
       {availableDates.map(date=><a key={date} href={"/network?date="+date} className={date===selectedDate?"active":""}>
         <strong>{date.slice(5).replace("-","/")}</strong>
       </a>)}
-    </nav>:null}
+      </nav>
+    </details>:null}
 
     {!data?<section className="quietEmpty"><p className="muted"><T k="network.notGenerated" /></p></section>:<>
-      <div className="quietStats">
-        <span><strong>{data.nodes.filter(node=>node.count>0).length}</strong> <T k="network.metric.nodes" /></span>
-        <span><strong>{data.edges.length}</strong> <T k="network.metric.edges" /></span>
-        <span><strong>{data.source_card_count}</strong> <T k="network.metric.sourceCards" /></span>
-        <span><LocaleDate value={data.generated_at} /></span>
-      </div>
-
       <section className="quietMainSurface">
         <KeywordNetworkView data={data} />
       </section>

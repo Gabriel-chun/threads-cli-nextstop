@@ -584,17 +584,12 @@ export function SignalReel({ deck }: { deck: SignalDeck }) {
             <button type="button" className="syncNotionButton" disabled={syncingNotion || pendingReviews.length===0} onClick={()=>void syncPendingToNotion()}>
               {syncingNotion ? t("deck.syncing") : pendingReviews.length ? t("deck.syncPending",{count:pendingReviews.length}) : t("deck.synced")}
             </button>
-            {allCounts.unreviewed === 0 ? (
-              demoMode ? (
-                <button type="button" className="demoModeButton active" onClick={stopDemo}>
-                  {t("deck.demoStop")}
-                </button>
-              ) : (
-                <button type="button" className="demoModeButton" onClick={startDemo}>
-                  {t("deck.demoStart")}
-                </button>
-              )
-            ) : null}
+            {allCounts.unreviewed === 0 ? <details className="signalDemoTools">
+              <summary>{t("deck.demoMode")}</summary>
+              <button type="button" className="demoModeButton" onClick={demoMode?stopDemo:startDemo}>
+                {demoMode?t("deck.demoStop"):t("deck.demoStart")}
+              </button>
+            </details> : null}
             <a href="/reviews">{t("deck.openLedger")}</a>
           </div>
         </div>

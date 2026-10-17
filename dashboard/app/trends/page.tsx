@@ -6,9 +6,10 @@ export const dynamic="force-dynamic";
 export default async function TrendsPage({
   searchParams
 }:{
-  searchParams:Promise<{snapshot?:string;date?:string}>
+  searchParams:Promise<{snapshot?:string;date?:string;view?:string}>
 }){
   const params=await searchParams;
+  const initialView = params.view==="observation" || params.view==="connections" || params.view==="eventWatch" ? params.view : "reviewIntelligence";
   const index=await loadTrendIndex();
   const snapshots=index?.snapshots||[];
   const requested=params.snapshot || params.date;
@@ -19,5 +20,5 @@ export default async function TrendsPage({
     loadTrendRadar(selected),
     loadReviewIntelligence()
   ]);
-  return <TrendObservationView data={data} snapshots={snapshots} reviewIntelligence={reviewIntelligence} />;
+  return <TrendObservationView data={data} snapshots={snapshots} reviewIntelligence={reviewIntelligence} initialView={initialView} />;
 }
