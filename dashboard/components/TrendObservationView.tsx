@@ -216,8 +216,6 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
         {topNegative.map(row=><div className="reviewContrastRow" key={row.key}><span>{t("trend.review.pattern."+row.key)}</span><strong>{row.irrelevant}</strong><small>{t("deck.irrelevant")}</small></div>)}
       </section>
     </div>
-
-      </div>
     </details>
     <div className="reviewDemandHead">
       <div><p className="kicker">{t("trend.review.demandClusters")}</p><h2>{t("trend.review.demandQuestion")}</h2></div>
