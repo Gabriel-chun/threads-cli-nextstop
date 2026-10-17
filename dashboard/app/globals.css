@@ -3629,3 +3629,21 @@ footer {
 .exploreDetailLinks a{color:var(--accent)}
 .exploreNoResults{font-size:13px;color:var(--muted);padding:20px 0}
 @media(max-width:700px){.exploreResults{grid-template-columns:1fr}.exploreObjectDetail{order:-1}}
+
+/* Explore is the atlas: no parallel results dashboard. */
+.exploreAtlasTools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.exploreAtlasLayout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(240px,.65fr);gap:18px}
+.exploreAtlasStage{position:relative;min-width:0;height:clamp(420px,55vw,670px);background:radial-gradient(circle at 42% 42%,rgba(168,67,40,.035),transparent 52%),var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.exploreAtlasStage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.exploreAtlasStage canvas:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+.exploreAtlasLegend{position:absolute;bottom:14px;left:14px;display:flex;gap:12px;flex-wrap:wrap;pointer-events:none;font-size:11px;color:var(--muted)}
+.exploreAtlasLegend span{display:flex;align-items:center;gap:5px}
+.exploreAtlasLegend i{width:8px;height:8px;border-radius:50%}
+.exploreAtlasSide{min-width:0}
+.exploreAtlasHint{padding:16px 5px;color:var(--muted);font-size:13px;line-height:1.6}
+.exploreAtlasHint small{font-size:11px}
+.exploreMatchList{margin-top:16px;border-top:1px solid var(--line);padding:12px 0}
+.exploreMatchList>small{display:block;color:var(--muted);margin-bottom:8px}
+.exploreMatchList button{display:block;width:100%;padding:9px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:12px;text-align:left;cursor:pointer}
+.exploreMatchList button:hover{background:var(--surface-2)}
+@media(max-width:740px){.exploreAtlasLayout{grid-template-columns:1fr}.exploreAtlasStage{height:480px}.exploreAtlasSide{min-height:80px}}
