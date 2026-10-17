@@ -272,10 +272,8 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
           <thead>
             <tr>
               <th>{t("reviews.header.label")}</th>
-              <th>{t("reviews.header.signal")}</th>
               <th>{t("reviews.header.category")}</th>
               <th>{t("reviews.header.content")}</th>
-              <th>{t("reviews.header.review")}</th>
               <th>{t("reviews.header.source")}</th>
             </tr>
           </thead>
@@ -295,7 +293,6 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                       <small className="reviewLabelCorrection">{t("reviews.humanCorrection")}</small>
                     ) : null}
                   </td>
-                  <td><code>{row.anonymous_id}</code></td>
                   <td>
                     <label className="reviewCategoryEditor">
                       <span className="srOnly">{t("reviews.adjustCategory")}</span>
@@ -350,17 +347,15 @@ export function ReviewLedger({ rows }: { rows: DeidentifiedReviewRow[] }) {
                             ))}
                           </div>
                         ) : null}
-                        <small className="reviewSwipeHelp">
-                          {t("reviews.swipeHelp")}
-                        </small>
+                        <details className="reviewRowDetails" onPointerDown={event=>event.stopPropagation()} onPointerUp={event=>event.stopPropagation()}>
+                          <summary>{t("nav.systemDetails")}</summary>
+                          <code>{row.anonymous_id}</code>
+                          <small>{formatDate(row.reviewed_at)}</small>
+                          {row.label_updated_at ? <small>{t("reviews.correctedAt",{date:formatDate(row.label_updated_at)})}</small> : null}
+                          <small>{t("reviews.swipeHelp")}</small>
+                        </details>
                       </div>
                     </div>
-                  </td>
-                  <td>
-                    <small>{formatDate(row.reviewed_at)}</small>
-                    {row.label_updated_at ? (
-                      <small>{t("reviews.correctedAt",{date:formatDate(row.label_updated_at)})}</small>
-                    ) : null}
                   </td>
                   <td>
                     {row.evidence_url ? (
