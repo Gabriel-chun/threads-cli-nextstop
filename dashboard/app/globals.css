@@ -3647,3 +3647,10 @@ footer {
 .exploreMatchList button{display:block;width:100%;padding:9px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:12px;text-align:left;cursor:pointer}
 .exploreMatchList button:hover{background:var(--surface-2)}
 @media(max-width:740px){.exploreAtlasLayout{grid-template-columns:1fr}.exploreAtlasStage{height:480px}.exploreAtlasSide{min-height:80px}}
+
+/* Control Room-inspired quiet atlas: the graph, not the frame, carries attention. */
+.quietExplore .exploreAtlasLayout {grid-template-columns:minmax(0,2.4fr) minmax(220px,.56fr);gap:14px}
+.quietExplore .exploreAtlasStage {background:#faf9f6;border-color:rgba(220,216,207,.60);border-radius:18px;height:clamp(490px,57vw,720px)}
+.quietExplore .exploreAtlasLegend {opacity:.64;font-size:10px;gap:14px}
+.quietExplore .exploreAtlasSide {font-size:12px}
+@media(max-width:740px){.quietExplore .exploreAtlasLayout {grid-template-columns:1fr}.quietExplore .exploreAtlasStage {height:490px}}
