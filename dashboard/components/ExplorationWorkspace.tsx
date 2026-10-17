@@ -1,6 +1,7 @@
 "use client";
 import {useMemo,useState} from "react";
 import {ExploreParticleMap} from "./ExploreParticleMap";
+import {selectQuietAtlasObjects} from "../lib/quietAtlas";
 import {makeExplorationAtlas} from "../lib/exploreAtlas";
 import type {KeywordNetworkOverlay,NetworkWindow} from "../lib/keywordNetworkHistory";
 import {useI18n} from "./I18nProvider";
@@ -16,6 +17,7 @@ export function ExplorationWorkspace({items,overlays}:{items:ExplorationObject[]
   const atlas=useMemo(()=>makeExplorationAtlas(items,overlays?.[days]||null),[items,overlays,days]);
   const allowed=new Set((overlays?.[days]?.graph.nodes||[]).filter(n=>n.count>0).map(n=>"keyword:"+n.id));
   const particles=atlas.items.filter(item=>item.kind!=="keyword"||allowed.has(item.id));
+  const visible=useMemo(()=>selectQuietAtlasObjects(particles,atlas.edges,{kind,query,matches:matches.map(x=>x.id),focused:focus,limit:20}),[particles,atlas.edges,kind,query,matches,focus]);
   const selected=items.find(item=>item.id===focus)||null;
   return <main className="networkWorkspace quietWorkspace quietExplore">
     <header className="workspaceHeader quietWorkspaceHeader"><div><p className="eyebrow">NEXT STOP LIVE / EXPLORE</p><h1>{t("explore.title")}</h1><p className="muted">{t("explore.lead")}</p></div></header>
@@ -33,7 +35,7 @@ export function ExplorationWorkspace({items,overlays}:{items:ExplorationObject[]
       </div>
     </div>
     <div className="exploreAtlasLayout">
-      <ExploreParticleMap items={particles.filter(o=>kind==="all"||o.kind===kind)} edges={atlas.edges} focused={focus} onFocus={setFocus} query={query} matches={matches.map(x=>x.id)}/>
+      <ExploreParticleMap items={visible} edges={atlas.edges} focused={focus} onFocus={setFocus} query={query} matches={matches.map(x=>x.id)}/>
       <aside className="exploreAtlasSide">
         {selected?<div className="exploreObjectDetail"><div className="exploreDetailHead"><small>{t("explore.type."+selected.kind)}</small><button type="button" onClick={()=>setFocus(null)}>{t("common.close")}</button></div>
           <h2>{selected.label}</h2><p>{selected.context}</p>
