@@ -25,8 +25,8 @@ export default async function ReviewsPage() {
       <article><span><T k="reviews.metric.reviewed" /></span><strong>{rows.length}</strong><small><T k="reviews.notionState" /></small></article>
       <article><span><T k="reviews.metric.relevant" /></span><strong>{relevant}</strong><small><T k="common.humanSelected" /></small></article>
       <article><span><T k="reviews.metric.irrelevant" /></span><strong>{irrelevant}</strong><small><T k="common.humanExcluded" /></small></article>
-      <article><span><T k="reviews.metric.unsure" /></span><strong>{unsure}</strong><small><T k="reviews.unsureHelp" /></small></article>
-      <article className="accent"><span><T k="reviews.metric.archive" /></span><strong>00:00</strong><small><T k="reviews.metric.archiveHelp" /></small></article>
+      {unsure>0?<article><span><T k="reviews.metric.unsure" /></span><strong>{unsure}</strong><small><T k="reviews.unsureHelp" /></small></article>:null}
+
     </section>
 
     <section className="panel reviewLedgerPanel">
@@ -38,7 +38,7 @@ export default async function ReviewsPage() {
         </div>
         <div className="reviewLedgerActions">
           <div className="reviewArchiveStatus" aria-labelledby="reviewArchiveStatusLabel"><span id="reviewArchiveStatusLabel" className="srOnly"><T k="reviews.archiveStatusAria" /></span><strong><T k="reviews.liveSave" /></strong><small><T k="reviews.archiveAtMidnight" /></small></div>
-          <a className="downloadButton reviewDownloadButton" href="/api/download/reviews/latest"><span>🗂️</span><div><strong><T k="reviews.download" /></strong><small><T k="reviews.downloadHelp" /></small></div></a>
+          <details className="reviewExportDetails"><summary><T k="nav.systemDetails" /></summary><a className="reviewExportLink" href="/api/download/reviews/latest"><T k="reviews.download" /> ↗</a></details>
         </div>
       </div>
       <ReviewLedger rows={rows} />
