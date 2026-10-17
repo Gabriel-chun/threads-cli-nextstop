@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-10-17T16:33:31.141831Z",
+  "generated_at": "2026-10-17T18:07:23.164658Z",
   "network_date": "2026-10-18",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
   "source_master_count": 2564,
-  "source_card_count": 7,
+  "source_card_count": 6,
   "layers": [
     "recall",
     "language",
@@ -29,7 +29,7 @@
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 2
+      "count": 1
     },
     {
       "id": "lang:zh_hant",
@@ -53,7 +53,7 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 2
+      "count": 1
     },
     {
       "id": "lang:mixed",
@@ -95,7 +95,7 @@
       "id": "need:venue_outside",
       "label": "場館外",
       "layer": "need",
-      "count": 2
+      "count": 1
     },
     {
       "id": "need:trip_extension",
@@ -139,13 +139,6 @@
       "need_node": "mobility"
     },
     {
-      "id": "kw:venue_outside:after the concert",
-      "label": "after the concert",
-      "layer": "keyword",
-      "count": 3,
-      "need_node": "venue_outside"
-    },
-    {
       "id": "kw:venue_outside:散場",
       "label": "散場",
       "layer": "keyword",
@@ -155,11 +148,6 @@
   ],
   "edges": [
     {
-      "source": "need:venue_outside",
-      "target": "kw:venue_outside:after the concert",
-      "weight": 3
-    },
-    {
       "source": "recall:演唱会",
       "target": "lang:zh_hans",
       "weight": 3
@@ -168,16 +156,6 @@
       "source": "lang:zh_hans",
       "target": "need:wear_support",
       "weight": 2
-    },
-    {
-      "source": "recall:concert",
-      "target": "lang:english",
-      "weight": 2
-    },
-    {
-      "source": "lang:english",
-      "target": "need:venue_outside",
-      "weight": 1
     },
     {
       "source": "lang:english",
@@ -230,6 +208,11 @@
       "weight": 1
     },
     {
+      "source": "recall:concert",
+      "target": "lang:english",
+      "weight": 1
+    },
+    {
       "source": "recall:演唱會",
       "target": "lang:mixed",
       "weight": 1
@@ -270,10 +253,6 @@
     ],
     "venue_inside": [],
     "venue_outside": [
-      {
-        "term": "after the concert",
-        "count": 3
-      },
       {
         "term": "散場",
         "count": 1
