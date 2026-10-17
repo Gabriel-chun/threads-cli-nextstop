@@ -1,3 +1,4 @@
+import { loadAffiliateProducts } from "../../lib/affiliateCatalog";
 import { TrendObservationView } from "../../components/TrendObservationView";
 import { loadReviewIntelligence, loadTrendIndex, loadTrendRadar } from "../../lib/trendRadar";
 
@@ -15,9 +16,10 @@ export default async function TrendsPage({
   const selected=requested && snapshots.some(row=>row.run_stamp===requested || row.run_stamp.startsWith(requested))
     ? requested
     : snapshots[0]?.run_stamp;
-  const [data,reviewIntelligence]=await Promise.all([
+  const [data,reviewIntelligence,affiliateProducts]=await Promise.all([
     loadTrendRadar(selected),
-    loadReviewIntelligence()
+    loadReviewIntelligence(),
+    loadAffiliateProducts()
   ]);
-  return <TrendObservationView data={data} snapshots={snapshots} reviewIntelligence={reviewIntelligence} />;
+  return <TrendObservationView data={data} snapshots={snapshots} reviewIntelligence={reviewIntelligence} affiliateProducts={affiliateProducts} />;
 }
