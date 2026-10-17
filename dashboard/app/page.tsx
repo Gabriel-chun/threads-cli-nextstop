@@ -128,16 +128,14 @@ async function Diagnostics({
             <li>get_latest_download</li><li>get_reviewed_cards_download</li>
           </ul>
           <a className="downloadButton" href="/api/download/latest"><span>↓</span><div><strong><T k="signal.downloadLatest" /></strong><small><T k="signal.downloadLatestHelp" /></small></div></a>
-          <a className="downloadButton" href="/reviews"><span>↗</span><div><strong><T k="signal.openReviews" /></strong><small><T k="signal.openReviewsHelp" /></small></div></a>
-          <a className="downloadButton" href="/network"><span>↗</span><div><strong><T k="signal.openNetwork" /></strong><small><T k="signal.openNetworkHelp" /></small></div></a>
-          <a className="downloadButton" href="/trends"><span>↗</span><div><strong><T k="signal.openTrends" /></strong><small><T k="signal.openTrendsHelp" /></small></div></a>
         </aside>
       </section>
     </div>
   );
 }
 
-export default async function Page() {
+export default async function Page({searchParams}:{searchParams:Promise<{details?:string}>}) {
+  const {details}=await searchParams;
   const historyPromise = loadTrendHistory(36);
   const deckPromise = loadInitialSignalDeck("3d");
   const data = await loadHomeObservation();
@@ -159,33 +157,24 @@ export default async function Page() {
         </div>
       </header>
 
-      <div className="quietStats" aria-label="Signal summary">
-        <span><strong>{data.actionable}</strong> <T k="signal.metric.actionable" /></span>
-        <span><strong>{data.cleanCount}</strong> <T k="signal.metric.clean" /></span>
-        <span><strong>{data.concertRaw}</strong> <T k="signal.metric.concertRaw" /></span>
-      </div>
-
-      <Suspense fallback={
-        <section className="quietTrendStrip" aria-label="Signal trend">
-          <div className="quietTrendStripHead"><div><span><T k="signal.velocity" /></span><strong>{`3h ${data.currentNew3h} · 12h ${data.currentNew12h}`}</strong></div></div>
-        </section>
-      }>
-        <TrendStrip historyPromise={historyPromise} />
-      </Suspense>
-
       <Suspense fallback={<section className="signalDeckPanel" aria-busy="true"><div className="signalDeckHead"><div><p className="kicker"><T k="deck.kicker" /></p><h2><T k="deck.title" /></h2></div></div></section>}>
         <SignalDeckStream deckPromise={deckPromise} />
       </Suspense>
 
-      <details className="quietDetails">
+      <details id="system-details" className="quietDetails" open={details==="1"}>
         <summary>
-          <span><T k="signal.details" /></span>
+          <span><T k="nav.systemDetails" /></span>
           <small><T k="common.updated" values={{date:""}} /> <LocaleDate value={data.generatedAt} /></small>
         </summary>
 
-        <Suspense fallback={<div className="quietDetailsBody"><p className="muted">Loading system details…</p></div>}>
-          <Diagnostics data={data} historyPromise={historyPromise} />
-        </Suspense>
+        <div className="quietDetailsBody">
+          <Suspense fallback={<p className="muted"><T k="common.loading" /></p>}>
+            <TrendStrip historyPromise={historyPromise} />
+          </Suspense>
+          <Suspense fallback={<p className="muted"><T k="common.loading" /></p>}>
+            <Diagnostics data={data} historyPromise={historyPromise} />
+          </Suspense>
+        </div>
       </details>
 
       <footer><span>Next Stop Live · <T k="signal.footer" /></span></footer>
