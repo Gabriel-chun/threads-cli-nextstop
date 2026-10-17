@@ -10,10 +10,7 @@ const primaryLinks = [
 ];
 
 const researchLinks = [
-  { href: "/network", key: "nav.keywordNetwork" },
-  { href: "/trends?view=observation", key: "trend.tab.observation" },
-  { href: "/trends?view=connections", key: "trend.tab.connections" },
-  { href: "/trends?view=eventWatch", key: "trend.tab.eventWatch" },
+  { href: "/explore", key: "explore.title" },
   { href: "/?details=1#system-details", key: "nav.systemDetails" }
 ];
 
