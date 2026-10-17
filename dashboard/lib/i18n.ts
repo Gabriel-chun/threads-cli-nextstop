@@ -3,6 +3,13 @@ export type TranslationValues = Record<string, string | number>;
 
 export const dictionaries: Record<UiLocale, Record<string,string>> = {
   "zh-TW": {
+    "affiliate.title": "對應 KKday 商品",
+    "affiliate.productCount": "{count} 項商品",
+    "affiliate.disclosure": "商品候選清單，不代表已開通佣金",
+    "affiliate.tracked": "已設定 CID 追蹤連結（仍須確認佣金資格）",
+    "affiliate.untracked": "一般商品連結 · 尚未設定聯盟追蹤",
+    "affiliate.openProduct": "查看商品",
+    "affiliate.availability": "請依日期、出發地及商品條款確認供應情況與價格。",
     "nav.signalDesk": "訊號桌",
     "nav.keywordNetwork": "關鍵字網路",
     "nav.trendObservation": "趨勢觀察",
@@ -341,6 +348,13 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
     "reviews.filterAria": "審核分類篩選"
   },
   "en": {
+    "affiliate.title": "Matched KKday products",
+    "affiliate.productCount": "{count} products",
+    "affiliate.disclosure": "Curated candidates, not confirmed commission eligibility",
+    "affiliate.tracked": "CID tracking configured; commission eligibility unverified",
+    "affiliate.untracked": "Public product link · affiliate tracking not configured",
+    "affiliate.openProduct": "View product",
+    "affiliate.availability": "Check date, origin, availability, price, and product terms before recommending.",
     "nav.signalDesk": "Signal Desk",
     "nav.keywordNetwork": "Keyword Network",
     "nav.trendObservation": "Trend Observation",
