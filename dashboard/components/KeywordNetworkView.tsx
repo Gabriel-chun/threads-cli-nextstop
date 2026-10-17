@@ -7,6 +7,7 @@ import type {
   KeywordNetworkNode
 } from "../lib/keywordNetwork";
 import { useI18n } from "./I18nProvider";
+import { KeywordParticleCanvas } from "./KeywordParticleCanvas";
 
 type ViewMode = "table" | "network";
 type Point = { x: number; y: number };
@@ -82,6 +83,7 @@ function labelWidth(label: string) {
 export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   const {t}=useI18n();
   const [view, setView] = useState<ViewMode>("network");
+  const [particleReset, setParticleReset] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [positions, setPositions] = useState<Map<string, Point>>(new Map());
   const [drag, setDrag] = useState<DragState | null>(null);
@@ -210,6 +212,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   }
 
   function resetLayout() {
+    setParticleReset(v=>v+1);
     setPositions(new Map(baseLayout));
     setSelected(null);
     setDrag(null);
@@ -263,133 +266,21 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   const networkView = (
     <div className={`networkGraphLayout quietGraphLayout ${selectedNode ? "hasSelection" : ""}`}>
       <div className="networkGraphCanvas quietGraphCanvas">
-        <svg
-          ref={svgRef}
-          viewBox="0 0 1100 650"
-          aria-label={t("network.graph")}
-          onPointerDown={(event) => {
-            if (event.target === event.currentTarget) setSelected(null);
-          }}
-        >
-          <g className="networkLaneBands">
-            {LAYERS.map((layer) => {
-              const bounds = LANE_BOUNDS[layer];
-              return (
-                <g key={layer}>
-                  <rect
-                    x={bounds.left}
-                    y="42"
-                    width={bounds.right - bounds.left}
-                    height="590"
-                    rx="18"
-                  />
-                  <text
-                    x={(bounds.left + bounds.right) / 2}
-                    y="27"
-                    textAnchor="middle"
-                  >
-                    {layerTitle(layer,t)}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-
-          <g className="networkGraphEdges">
-            {data.edges.map((edge, index) => {
-              const source = pointFor(edge.source);
-              const target = pointFor(edge.target);
-              if (!source || !target) return null;
-
-              const dim = Boolean(
-                selected && edge.source !== selected && edge.target !== selected
-              );
-              const width = 1 + (edge.weight / maxWeight) * 4;
-
-              return (
-                <line
-                  key={edge.source + edge.target + index}
-                  x1={source.x}
-                  y1={source.y}
-                  x2={target.x}
-                  y2={target.y}
-                  strokeWidth={width}
-                  className={dim ? "dim" : "active"}
-                />
-              );
-            })}
-          </g>
-
-          <g className="networkGraphNodes">
-            {activeNodes.map((node) => {
-              const point = pointFor(node.id);
-              if (!point) return null;
-
-              const dim = Boolean(selected && !connected.has(node.id));
-              const selectedHere = selected === node.id;
-              const draggingHere = drag?.id === node.id;
-              const r = nodeRadius(node);
-              const bounds = LANE_BOUNDS[node.layer];
-              const width = labelWidth(node.label);
-              const roomRight = bounds.right - (point.x + r);
-              const roomLeft = point.x - r - bounds.left;
-              const placeRight = roomRight >= width + 14 || roomRight >= roomLeft;
-              const labelX = placeRight
-                ? point.x + r + 8
-                : point.x - r - width - 8;
-              const labelY = point.y - 17;
-
-              return (
-                <g
-                  key={node.id}
-                  className={[
-                    "networkGraphNode",
-                    node.layer,
-                    dim ? "dim" : "",
-                    selectedHere ? "selected" : "",
-                    draggingHere ? "dragging" : ""
-                  ].join(" ")}
-                  onPointerDown={(event) => onNodePointerDown(event, node)}
-                  onPointerMove={(event) => onNodePointerMove(event, node)}
-                  onPointerUp={(event) => onNodePointerUp(event, node)}
-                  onPointerCancel={() => setDrag(null)}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <circle cx={point.x} cy={point.y} r={r} />
-                  <g className="networkGraphLabel">
-                    <rect
-                      x={labelX}
-                      y={labelY}
-                      width={width}
-                      height="34"
-                      rx="8"
-                    />
-                    <text x={labelX + 9} y={point.y - 1}>
-                      {node.label}
-                    </text>
-                    <text
-                      className="networkGraphNodeCount"
-                      x={labelX + 9}
-                      y={point.y + 11}
-                    >
-                      {node.count}
-                    </text>
-                  </g>
-                </g>
-              );
-            })}
-          </g>
-        </svg>
+        <KeywordParticleCanvas
+          nodes={activeNodes}
+          edges={data.edges}
+          selectedId={selected}
+          onSelect={setSelected}
+          resetKey={particleReset}
+        />
       </div>
-
-      {selectedNode ? <ConnectionPanel
+      <ConnectionPanel
         selectedNode={selectedNode}
         edges={activeEdges}
         nodeMap={nodeMap}
         onClear={() => setSelected(null)}
         t={t}
-      /> : null}
+      />
     </div>
   );
 
