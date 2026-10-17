@@ -33,7 +33,7 @@ export function ExplorationWorkspace({items,overlays}:{items:ExplorationObject[]
       </div>
     </div>
     <div className="exploreAtlasLayout">
-      <ExploreParticleMap items={particles.filter(o=>kind==="all"||o.kind===kind)} edges={atlas.edges} focused={focus} onFocus={setFocus} query={query}/>
+      <ExploreParticleMap items={particles.filter(o=>kind==="all"||o.kind===kind)} edges={atlas.edges} focused={focus} onFocus={setFocus} query={query} matches={matches.map(x=>x.id)}/>
       <aside className="exploreAtlasSide">
         {selected?<div className="exploreObjectDetail"><div className="exploreDetailHead"><small>{t("explore.type."+selected.kind)}</small><button type="button" onClick={()=>setFocus(null)}>{t("common.close")}</button></div>
           <h2>{selected.label}</h2><p>{selected.context}</p>
