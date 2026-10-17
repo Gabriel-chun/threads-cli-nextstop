@@ -3,6 +3,13 @@ export type TranslationValues = Record<string, string | number>;
 
 export const dictionaries: Record<UiLocale, Record<string,string>> = {
   "zh-TW": {
+    "explore.particleAria": "互動粒子圖：點選節點查看證據，左右方向鍵切換，Escape 清除聚焦。",
+    "explore.particleHint": "點選粒子，讓關係與證據浮現。搜尋只負責聚焦，不需要切換頁面。",
+    "explore.windowLabel": "時間範圍",
+    "explore.window.1": "1 日",
+    "explore.window.3": "3 日",
+    "explore.window.7": "7 日",
+    "explore.availableDays": "已載入 {count}／{total} 日快照",
     "explore.title": "探索",
     "explore.lead": "從一個藝人、演出、需求或關鍵字出發。資料持續累積，但不必全部展示。",
     "explore.searchLabel": "搜尋研究物件",
@@ -362,6 +369,13 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
     "reviews.filterAria": "審核分類篩選"
   },
   "en": {
+    "explore.particleAria": "Interactive particles: select a node for evidence, use left/right arrows, Escape to clear.",
+    "explore.particleHint": "Select a particle to reveal its context. Search focuses objects without leaving this page.",
+    "explore.windowLabel": "Time window",
+    "explore.window.1": "1 day",
+    "explore.window.3": "3 days",
+    "explore.window.7": "7 days",
+    "explore.availableDays": "{count} of {total} snapshots loaded",
     "explore.title": "Explore",
     "explore.lead": "Start with an artist, event, need or keyword. The archive grows without filling your dashboard.",
     "explore.searchLabel": "Search research objects",
