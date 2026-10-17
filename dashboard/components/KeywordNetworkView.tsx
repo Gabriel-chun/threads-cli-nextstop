@@ -8,6 +8,8 @@ import type {
 } from "../lib/keywordNetwork";
 import { useI18n } from "./I18nProvider";
 import { KeywordParticleCanvas } from "./KeywordParticleCanvas";
+import { KeywordHistoryPanel } from "./KeywordHistoryPanel";
+import type { KeywordNetworkOverlay, NetworkWindow } from "../lib/keywordNetworkHistory";
 
 type ViewMode = "table" | "network";
 type Point = { x: number; y: number };
@@ -80,9 +82,12 @@ function labelWidth(label: string) {
   return clamp(28 + chars * 10, 54, 132);
 }
 
-export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
+export function KeywordNetworkView({ data, overlays }: { data: KeywordNetwork; overlays: Record<NetworkWindow,KeywordNetworkOverlay>|null }) {
   const {t}=useI18n();
   const [view, setView] = useState<ViewMode>("network");
+  const [windowDays,setWindowDays]=useState<NetworkWindow>(1);
+  const current=overlays?.[windowDays];
+  const graph=current?.graph||data;
   const [particleReset, setParticleReset] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [positions, setPositions] = useState<Map<string, Point>>(new Map());
@@ -90,8 +95,8 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const activeNodes = useMemo(
-    () => data.nodes.filter((node) => node.count > 0),
-    [data.nodes]
+    () => graph.nodes.filter((node) => node.count > 0),
+    [graph.nodes]
   );
 
   const nodeMap = useMemo(
@@ -116,16 +121,16 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
     setPositions(new Map(baseLayout));
     setSelected(null);
     setDrag(null);
-  }, [baseLayout, data.network_date]);
+  }, [baseLayout, graph.network_date]);
 
   const pointFor = (id: string) => positions.get(id) || baseLayout.get(id);
 
   const activeEdges = useMemo(
     () =>
       selected
-        ? data.edges.filter((edge) => edge.source === selected || edge.target === selected)
-        : data.edges,
-    [data.edges, selected]
+        ? graph.edges.filter((edge) => edge.source === selected || edge.target === selected)
+        : graph.edges,
+    [graph.edges, selected]
   );
 
   const connected = useMemo(() => {
@@ -140,7 +145,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
   }, [activeEdges, selected]);
 
   const selectedNode = selected ? nodeMap.get(selected) || null : null;
-  const maxWeight = Math.max(1, ...data.edges.map((edge) => edge.weight));
+  const maxWeight = Math.max(1, ...graph.edges.map((edge) => edge.weight));
 
   function clientToSvg(clientX: number, clientY: number): Point | null {
     const svg = svgRef.current;
@@ -268,7 +273,8 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
       <div className="networkGraphCanvas quietGraphCanvas">
         <KeywordParticleCanvas
           nodes={activeNodes}
-          edges={data.edges}
+          edges={graph.edges}
+          edgeDays={current?.edgeDays}
           selectedId={selected}
           onSelect={setSelected}
           resetKey={particleReset}
@@ -286,6 +292,12 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
 
   return (
     <div className="quietNetworkView">
+      <div className="keywordRangeToolbar">
+        <div className="networkViewTabs quietTabs" role="group" aria-label={t("network.rangeLabel")}>
+          {([1,3,7] as const).map(days=><button key={days} type="button" className={windowDays===days?"active":""} aria-pressed={windowDays===days} onClick={()=>{setWindowDays(days);setSelected(null);}}>{t("network.window."+days)}</button>)}
+        </div>
+        <small>{current?t("network.availableDays",{count:current.loadedDays,total:windowDays}):t("common.noData")}</small>
+      </div>
       <div className="networkViewToolbar quietToolbar">
         <div className="networkViewTabs quietTabs">
           <button
@@ -319,6 +331,7 @@ export function KeywordNetworkView({ data }: { data: KeywordNetwork }) {
       </div>
 
       {view === "table" ? tableView : networkView}
+      {current ? <KeywordHistoryPanel overlay={current}/> : null}
     </div>
   );
 }
