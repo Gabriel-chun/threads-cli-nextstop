@@ -3549,3 +3549,16 @@ footer {
     white-space: normal;
   }
 }
+
+/* Demand-to-product mapping: compact editorial rows, no promotional banners. */
+.affiliateMatches { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.affiliateMatchHeading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.affiliateMatchHeading strong { font-size: 15px; }
+.affiliateMatchHeading small, .affiliateMatchRow small, .affiliateMatchFootnote { color: var(--muted); font-size: 12px; }
+.affiliateMatchRow { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; border-top: 1px solid var(--line); }
+.affiliateMatchRow strong { display: block; font-size: 14px; font-weight: 650; }
+.affiliateMatchRow p { color: var(--muted); font-size: 13px; margin: 3px 0 5px; line-height: 1.55; }
+.affiliateMatchLink { color: var(--accent); font-size: 13px; font-weight: 650; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
+.affiliateMatchLink:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.affiliateMatchFootnote { margin: 12px 0 0; }
+@media (max-width: 560px) { .affiliateMatchRow { align-items: flex-start; flex-direction: column; gap: 8px; } }
