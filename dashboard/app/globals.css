@@ -3585,3 +3585,31 @@ footer {
 .reviewsWorkspace .reviewDataTable th:nth-child(1) { width:105px; }
 .reviewsWorkspace .reviewDataTable th:nth-child(2) { width:175px; }
 .reviewsWorkspace .reviewDataTable th:nth-child(4) { width:100px; }
+
+/* Control Room-inspired keyword particle atlas, sourced from canonical edges. */
+.keywordParticleStage { position: relative; width:100%; height:clamp(390px,55vw,650px); min-width:0; overflow:hidden; border-radius:12px; }
+.keywordParticleCanvas { width:100%; height:100%; display:block; cursor:crosshair; touch-action:none; outline-offset:-4px; }
+.keywordParticleCanvas:focus-visible { outline:2px solid var(--accent); }
+.keywordParticleTooltip { position:absolute; pointer-events:none; z-index:2; max-width:190px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:rgba(255,253,249,.96); box-shadow:0 8px 22px rgba(40,33,25,.09); }
+.keywordParticleTooltip strong,.keywordParticleTooltip small { display:block; font-size:12px; }
+.keywordParticleTooltip small { color:var(--muted); margin-top:3px; font-size:10px; }
+.keywordParticleLegend { position:absolute; bottom:14px; left:14px; right:14px; display:flex; flex-wrap:wrap; gap:13px; pointer-events:none; color:var(--muted); font-size:11px; }
+.keywordParticleLegend span { display:inline-flex; align-items:center; gap:5px; }
+.keywordParticleLegend i { width:7px; height:7px; border-radius:50%; }
+@media (max-width:560px) { .keywordParticleStage { height:430px; } .keywordParticleLegend { gap:8px; font-size:10px; } }
+
+
+.keywordRangeToolbar,.keywordTrackingHead {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:8px 0 18px}
+.keywordRangeToolbar small,.keywordTrackingHead small {font-size:12px;color:var(--muted)}
+.keywordTracking {margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+.keywordTracking h2 {font-size:17px;font-weight:620}
+.keywordTracking h3 {font-size:14px;margin:22px 0 10px}
+.keywordTrackingSummary {margin:12px 0 18px}
+.keywordTrackingTableScroll {width:100%;overflow-x:auto}
+.keywordTrackingTable {width:100%;border-collapse:collapse;font-size:12px;text-align:left}
+.keywordTrackingTable th,.keywordTrackingTable td {padding:11px 10px;border-bottom:1px solid var(--line)}
+.keywordTrackingTable th {font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap}
+.keywordTrackingTable .missing {color:var(--muted)}
+.keywordDayBars {height:34px;display:flex;align-items:flex-end;gap:5px}
+.keywordDayBars span {display:block;width:11px;min-height:3px;background:var(--accent);border-radius:3px 3px 0 0;opacity:.7}
+.keywordDayBars span.missing {background:repeating-linear-gradient(45deg,#bbb 0px,#bbb 2px,transparent 2px,transparent 4px)}
