@@ -3,6 +3,9 @@ export type TranslationValues = Record<string, string | number>;
 
 export const dictionaries: Record<UiLocale, Record<string,string>> = {
   "zh-TW": {
+    "nav.researchSystem": "研究與系統",
+    "nav.systemDetails": "系統與資料詳情",
+    "nav.historySnapshots": "歷史快照",
     "nav.signalDesk": "訊號桌",
     "nav.keywordNetwork": "關鍵字網路",
     "nav.trendObservation": "趨勢觀察",
@@ -341,6 +344,9 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
     "reviews.filterAria": "審核分類篩選"
   },
   "en": {
+    "nav.researchSystem": "Research & system",
+    "nav.systemDetails": "System & data details",
+    "nav.historySnapshots": "Snapshot history",
     "nav.signalDesk": "Signal Desk",
     "nav.keywordNetwork": "Keyword Network",
     "nav.trendObservation": "Trend Observation",
