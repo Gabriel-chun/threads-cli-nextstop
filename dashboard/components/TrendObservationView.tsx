@@ -9,13 +9,9 @@ type View = "observation"|"connections"|"eventWatch"|"reviewIntelligence";
 
 function stateKey(state:string){ return "trend.state."+state; }
 
-export function TrendObservationView({data,snapshots,reviewIntelligence}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null}){
+export function TrendObservationView({data,snapshots,reviewIntelligence,initialView="reviewIntelligence"}:{data:TrendRadar|null;snapshots:TrendIndexRow[];reviewIntelligence:ReviewIntelligence|null;initialView?:View}){
   const {t,formatDate,formatCount}=useI18n();
-  const [view,setView]=useState<View>(()=>{
-    if(typeof window==="undefined") return "reviewIntelligence";
-    const requested=new URLSearchParams(window.location.search).get("view");
-    return requested==="observation"||requested==="connections"||requested==="eventWatch" ? requested : "reviewIntelligence";
-  });
+  const [view,setView]=useState<View>(initialView);
   const [selectedLink,setSelectedLink]=useState<TrendLink|null>(null);
   const [selectedEvent,setSelectedEvent]=useState<EventWatchRow|null>(null);
   const [selectedReviewCluster,setSelectedReviewCluster]=useState<ReviewIntelligenceCluster|null>(null);
