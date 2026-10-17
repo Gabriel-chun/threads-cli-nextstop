@@ -29,7 +29,7 @@ export function KeywordHistoryPanel({overlay}:{overlay:KeywordNetworkOverlay}) {
         </tr></thead>
         <tbody>{[...overlay.daily].reverse().map(row=><tr key={row.date} className={!row.available?"missing":""}>
           <td>{row.date.slice(5).replace("-","/")}</td>
-          {row.available?<><td>{row.sourceCards}</td><td>{row.nodes}</td><td>{row.edges}</td><td>{row.firstSeen}</td><td>{row.revisited}</>:<td colSpan={5}>{t("network.missingSnapshot")}</td>}
+          {row.available?<><td>{row.sourceCards}</td><td>{row.nodes}</td><td>{row.edges}</td><td>{row.firstSeen}</td><td>{row.revisited}</td></>:<td colSpan={5}>{t("network.missingSnapshot")}</td>}
         </tr>)}</tbody>
       </table>
     </div>
