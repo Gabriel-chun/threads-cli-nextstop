@@ -28,6 +28,8 @@ jobs:
         run: npx tsx --test lib/reviewQuota.test.ts
       - name: Test Taipei daily review archive
         run: npx tsx --test lib/reviewArchive.test.ts
+      - name: Test quiet particle selection
+        run: npx tsx --test lib/quietAtlas.test.ts
       - name: Test evidence-backed exploration atlas
         run: npx tsx --test lib/exploreAtlas.test.ts lib/keywordNetworkHistory.test.ts
       - name: Test object-based exploration search
