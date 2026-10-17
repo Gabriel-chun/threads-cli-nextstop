@@ -59,17 +59,9 @@ export function TrendObservationView({data,snapshots,reviewIntelligence,initialV
     </header>
 
 
-    <div className="trendTabs quietTabs" role="group" aria-label={t("nav.researchSystem")}>
-      <button type="button" className={view==="reviewIntelligence"?"active":""} onClick={()=>setView("reviewIntelligence")}>{t("trend.tab.reviewIntelligence")}</button>
-      <details className="trendResearchMenu">
-        <summary>{t("nav.researchSystem")}</summary>
-        <div className="trendResearchOptions">
-          <button type="button" className={view==="observation"?"active":""} onClick={()=>setView("observation")}>{t("trend.tab.observation")}</button>
-          <button type="button" className={view==="connections"?"active":""} onClick={()=>setView("connections")}>{t("trend.tab.connections")}</button>
-          <button type="button" className={view==="eventWatch"?"active":""} onClick={()=>setView("eventWatch")}>{t("trend.tab.eventWatch")}</button>
-          <a href="/network">{t("nav.keywordNetwork")} ↗</a>
-        </div>
-      </details>
+    <div className="quietObjectUtility">
+      {view!=="reviewIntelligence"?<button type="button" onClick={()=>setView("reviewIntelligence")}>{t("trend.tab.reviewIntelligence")}</button>:null}
+      <a href="/explore">{t("explore.title")} ↗</a>
     </div>
     {view!=="reviewIntelligence" && snapshots.length ? <details className="trendHistoryDetails">
       <summary>{t("nav.historySnapshots")}</summary>
@@ -212,7 +204,9 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
       <span><strong>{adjacent.length}</strong>{t("trend.review.adjacentClusters")}</span>
     </div>
 
-    <div className="reviewContrastGrid">
+    <details className="reviewResearchDetails">
+      <summary>{t("explore.patternDetails")}</summary>
+      <div className="reviewContrastGrid">
       <section className="reviewContrastColumn">
         <p className="kicker">{t("trend.review.positivePatterns")}</p>
         {topPositive.map(row=><div className="reviewContrastRow" key={row.key}><span>{t("trend.review.pattern."+row.key)}</span><strong>{row.relevant}</strong><small>{t("deck.relevant")}</small></div>)}
@@ -222,14 +216,14 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
         {topNegative.map(row=><div className="reviewContrastRow" key={row.key}><span>{t("trend.review.pattern."+row.key)}</span><strong>{row.irrelevant}</strong><small>{t("deck.irrelevant")}</small></div>)}
       </section>
     </div>
-
+    </details>
     <div className="reviewDemandHead">
       <div><p className="kicker">{t("trend.review.demandClusters")}</p><h2>{t("trend.review.demandQuestion")}</h2></div>
       <small>{t("trend.review.derivedNote")}</small>
     </div>
 
     <div className="quietPrimaryList reviewDemandList">
-      {data.demand_clusters.map(cluster=><button type="button" className="quietConnectionRow reviewDemandRow" key={cluster.cluster_id} onClick={()=>onSelectCluster(cluster)}>
+      {data.demand_clusters.filter(c=>c.relevant_count>0 && (c.affiliate_fit==="ready"||c.affiliate_fit==="adjacent")).sort((a,b)=>b.relevant_count-a.relevant_count).slice(0,4).map(cluster=><button type="button" className="quietConnectionRow reviewDemandRow" key={cluster.cluster_id} onClick={()=>onSelectCluster(cluster)}>
         <span className="reviewDemandMain">
           <strong>{t("trend.review.cluster."+cluster.cluster_id)}</strong>
           <small>{cluster.solution_map.length?cluster.solution_map.slice(0,3).join(" · "):t("trend.review.insightOnly")}</small>
@@ -240,6 +234,7 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
         </span>
       </button>)}
     </div>
+    <a className="quietMoreResults" href="/explore">{t("explore.searchAll")} ↗</a>
   </section>;
 }
 

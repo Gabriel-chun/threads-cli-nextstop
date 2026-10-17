@@ -28,6 +28,8 @@ jobs:
         run: npx tsx --test lib/reviewQuota.test.ts
       - name: Test Taipei daily review archive
         run: npx tsx --test lib/reviewArchive.test.ts
+      - name: Test object-based exploration search
+        run: npx tsx --test lib/explorationObjects.test.ts
       - name: Test Review Ledger de-identification
         run: npx tsx --test lib/reviewLedger.test.ts
       - name: Test mutation security boundary
