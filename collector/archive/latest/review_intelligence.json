@@ -1,20 +1,20 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-10-17T18:00:05.712772Z",
+  "generated_at": "2026-10-18T18:19:20.344229Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 408,
-    "relevant": 59,
-    "irrelevant": 349
+    "total": 416,
+    "relevant": 60,
+    "irrelevant": 356
   },
   "positive_patterns": {
     "self_need": {
       "relevant": 29,
-      "irrelevant": 69
+      "irrelevant": 70
     },
     "time_constraint": {
       "relevant": 16,
-      "irrelevant": 12
+      "irrelevant": 14
     },
     "booking_decision": {
       "relevant": 9,
@@ -46,27 +46,27 @@
   "category_stats": {
     "VIP／互動福利": {
       "relevant": 4,
-      "irrelevant": 16
+      "irrelevant": 17
     },
     "交通／散場": {
       "relevant": 13,
-      "irrelevant": 4
+      "irrelevant": 6
     },
     "住宿／落腳": {
-      "relevant": 8,
+      "relevant": 9,
       "irrelevant": 2
     },
     "其他演出內容": {
       "relevant": 21,
-      "irrelevant": 229
+      "irrelevant": 230
     },
     "周邊／現場商品": {
       "relevant": 3,
-      "irrelevant": 17
+      "irrelevant": 19
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 18
+      "irrelevant": 19
     },
     "拍攝／現場規則": {
       "relevant": 0,
@@ -83,7 +83,7 @@
   },
   "feature_stats": {
     "accommodation_need": {
-      "relevant": 8,
+      "relevant": 9,
       "irrelevant": 5
     },
     "cp_fandom_language": {
@@ -104,11 +104,11 @@
     },
     "merch_need": {
       "relevant": 6,
-      "irrelevant": 22
+      "irrelevant": 24
     },
     "question_intent": {
-      "relevant": 38,
-      "irrelevant": 120
+      "relevant": 39,
+      "irrelevant": 126
     },
     "solo_attendance": {
       "relevant": 5,
@@ -120,15 +120,15 @@
     },
     "transport_need": {
       "relevant": 18,
-      "irrelevant": 4
+      "irrelevant": 7
     },
     "venue_experience": {
       "relevant": 4,
-      "irrelevant": 27
+      "irrelevant": 28
     },
     "vip_benefit": {
       "relevant": 4,
-      "irrelevant": 20
+      "irrelevant": 21
     }
   },
   "demand_clusters": [
@@ -137,7 +137,7 @@
       "label_zh": "散場返程",
       "label_en": "Post-show return",
       "relevant_count": 20,
-      "irrelevant_count": 7,
+      "irrelevant_count": 8,
       "affiliate_fit": "ready",
       "solution_map": [
         "intercity_transport_booking",
@@ -181,7 +181,7 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 9,
+      "relevant_count": 10,
       "irrelevant_count": 5,
       "affiliate_fit": "ready",
       "solution_map": [
@@ -190,6 +190,12 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_a8cfb3fcd52db136",
+          "category": "住宿／落腳",
+          "text": "有人有多的jasper演唱會的票嗎🥲\n請看看我\n飯店提前訂了不能取消😭",
+          "reviewed_at": "2026-10-18T01:19:00.000+00:00"
+        },
         {
           "post_key": "post_8aae9ed457346302",
           "category": "住宿／落腳",
@@ -213,12 +219,6 @@
           "category": "住宿／落腳",
           "text": "我好奇8.28那天坐内场的女孩有真心希望演唱会准时开始的吗。我当时被雨淋懵了我都希望立刻宣布演唱会取消然后我打车回酒店",
           "reviewed_at": "2026-10-11T00:30:00.000+00:00"
-        },
-        {
-          "post_key": "post_224c7fc24cf9528a",
-          "category": "住宿／落腳",
-          "text": "有没有去曼谷看Bigbang演唱会的脆蜜呀？你们演唱会结束怎么回酒店呢？感觉大晚上的没有公共交通了一个人也不敢打车🥲",
-          "reviewed_at": "2026-10-09T01:59:00.000+00:00"
         }
       ]
     },
@@ -271,7 +271,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 30,
+      "irrelevant_count": 31,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -348,7 +348,7 @@
       "label_zh": "現場準備",
       "label_en": "Venue preparation",
       "relevant_count": 3,
-      "irrelevant_count": 9,
+      "irrelevant_count": 10,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "apparel_or_outerwear",
