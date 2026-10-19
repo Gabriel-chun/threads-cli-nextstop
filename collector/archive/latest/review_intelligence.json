@@ -1,20 +1,20 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-10-18T18:19:20.344229Z",
+  "generated_at": "2026-10-19T20:46:17.780998Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 416,
-    "relevant": 60,
-    "irrelevant": 356
+    "total": 423,
+    "relevant": 61,
+    "irrelevant": 362
   },
   "positive_patterns": {
     "self_need": {
       "relevant": 29,
-      "irrelevant": 70
+      "irrelevant": 72
     },
     "time_constraint": {
       "relevant": 16,
-      "irrelevant": 14
+      "irrelevant": 15
     },
     "booking_decision": {
       "relevant": 9,
@@ -22,12 +22,12 @@
     },
     "actionable_friction": {
       "relevant": 10,
-      "irrelevant": 47
+      "irrelevant": 48
     }
   },
   "negative_patterns": {
     "resale": {
-      "relevant": 1,
+      "relevant": 2,
       "irrelevant": 14
     },
     "fan_opinion": {
@@ -49,7 +49,7 @@
       "irrelevant": 17
     },
     "交通／散場": {
-      "relevant": 13,
+      "relevant": 14,
       "irrelevant": 6
     },
     "住宿／落腳": {
@@ -58,7 +58,7 @@
     },
     "其他演出內容": {
       "relevant": 21,
-      "irrelevant": 230
+      "irrelevant": 234
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -74,11 +74,11 @@
     },
     "票務／入場摩擦": {
       "relevant": 7,
-      "irrelevant": 48
+      "irrelevant": 49
     },
     "陪同／Solo Attendance": {
       "relevant": 2,
-      "irrelevant": 13
+      "irrelevant": 14
     }
   },
   "feature_stats": {
@@ -96,7 +96,7 @@
     },
     "first_timer": {
       "relevant": 7,
-      "irrelevant": 27
+      "irrelevant": 30
     },
     "long_fandom_story": {
       "relevant": 4,
@@ -107,8 +107,8 @@
       "irrelevant": 24
     },
     "question_intent": {
-      "relevant": 39,
-      "irrelevant": 126
+      "relevant": 40,
+      "irrelevant": 132
     },
     "solo_attendance": {
       "relevant": 5,
@@ -116,11 +116,11 @@
     },
     "ticketing_need": {
       "relevant": 7,
-      "irrelevant": 49
+      "irrelevant": 50
     },
     "transport_need": {
       "relevant": 18,
-      "irrelevant": 7
+      "irrelevant": 8
     },
     "venue_experience": {
       "relevant": 4,
@@ -136,7 +136,7 @@
       "cluster_id": "post_show_return",
       "label_zh": "散場返程",
       "label_en": "Post-show return",
-      "relevant_count": 20,
+      "relevant_count": 21,
       "irrelevant_count": 8,
       "affiliate_fit": "ready",
       "solution_map": [
@@ -145,6 +145,12 @@
         "accommodation_booking"
       ],
       "evidence": [
+        {
+          "post_key": "post_fd10f0392e4d034e",
+          "category": "交通／散場",
+          "text": "搶到票了\n但交通問題馬上開始傷腦筋⋯\n\n有同樣台中朝馬\n想要找包車的嗎？\n目前想找回程\n\n11/21那週演唱會大混戰\n包車很滿\n（我絕～對不是在抱怨我們太晚開票🤪）\n有包車公司也歡迎私訊聯繫喔～",
+          "reviewed_at": "2026-10-19T14:34:00.000+00:00"
+        },
         {
           "post_key": "post_da51760158b1166a",
           "category": "交通／散場",
@@ -168,12 +174,6 @@
           "category": "交通／散場",
           "text": "請問優里演唱會建議要離開的話買幾點的票比較安全呢？\n因為沒參加過不覺得會唱多久，有上網查大概2.5-3小時\n\n如果17:00開唱，要趕高鐵21:00會太趕嗎？還是21:30比較安全，不知道有沒有人參加過可以給點建議！因為要從高雄上去很擔心沒車🥹",
           "reviewed_at": "2026-10-07T03:02:00.000+00:00"
-        },
-        {
-          "post_key": "post_9b9166bf96cf8b9c",
-          "category": "其他演出內容",
-          "text": "求求 6/9  OR 6/10 Radiohead 演唱會日本場一張！\n以為靠吸引力法則穩中的，機票也買好了\n結果還是落選，真的好絕望",
-          "reviewed_at": "2026-10-04T03:53:00.000+00:00"
         }
       ]
     },
@@ -227,7 +227,7 @@
       "label_zh": "演前／演後周邊",
       "label_en": "Pre / post-show nearby",
       "relevant_count": 10,
-      "irrelevant_count": 11,
+      "irrelevant_count": 12,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "local_experience_or_activity",
@@ -382,7 +382,7 @@
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
       "relevant_count": 5,
-      "irrelevant_count": 34,
+      "irrelevant_count": 35,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
