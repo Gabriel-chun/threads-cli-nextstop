@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-18_214611Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-19_003113Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-18_214611Z",
-    "run_at": "2026-10-18T21:47:08.304456Z",
+    "run_stamp": "2026-10-19_003113Z",
+    "run_at": "2026-10-19T00:32:12.601209Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -17,35 +17,35 @@
     "provenance": "manual",
     "baseline_eligible": false,
     "workflow_event": "workflow_dispatch",
-    "github_run_id": "39169238472"
+    "github_run_id": "39181078086"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-18_214611Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-18_214611Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-18_214611Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-18_214611Z.txt",
-    "snapshot_fingerprint": "sha256:0569920b5a6049dca7844b2d0b5af21e70cabdc7bf335028277df032c262d6e1",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-19_003113Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-19_003113Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-19_003113Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-19_003113Z.txt",
+    "snapshot_fingerprint": "sha256:a63722d890a29d0b7f4c4d005c2cb46a3108eb9c2f84d6cdd88c56c8be52fb1d",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 100,
-      "snapshot_unique": 29,
-      "dedupe_unique": 29,
-      "clean_signals": 29,
+      "raw_rows": 102,
+      "snapshot_unique": 23,
+      "dedupe_unique": 23,
+      "clean_signals": 23,
       "excluded_transactions": 0,
       "suppressed_duplicates": 0,
       "clean_rate_pct": 100.0,
-      "new_3h": 28,
+      "new_3h": 19,
       "new_12h": 66,
-      "unique_authors": 29,
+      "unique_authors": 23,
       "author_diversity_ratio": 1.0,
-      "duplicate_adjusted_volume": 29
+      "duplicate_adjusted_volume": 23
     },
     "previous_comparable_run": {
       "run_stamp": "2026-10-18_105443Z",
       "run_at": "2026-10-18T10:55:34.540446Z",
-      "elapsed_minutes": 651.6,
+      "elapsed_minutes": 816.6,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 26,
       "new_3h": 31,
@@ -63,10 +63,10 @@
     },
     "delta": {
       "overlap_available": true,
-      "new_signal_count": 29,
+      "new_signal_count": 23,
       "retained_signal_count": 0,
-      "clean_signal_delta": 3,
-      "rolling_3h_delta": -3,
+      "clean_signal_delta": -3,
+      "rolling_3h_delta": -12,
       "rolling_12h_delta": -2
     },
     "baselines": {
@@ -77,14 +77,14 @@
         "coverage_complete": true,
         "coverage_hours": 24.0,
         "sample_count": 1,
-        "max_gap_minutes": 803.4,
+        "max_gap_minutes": 816.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
           "eligible_sample_count": 1,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
-          "max_gap_minutes": 803.4,
+          "max_gap_minutes": 816.6,
           "cadence_within_tolerance": false
         },
         "compatibility": {
@@ -150,12 +150,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 168.0,
-        "sample_count": 8,
+        "sample_count": 7,
         "max_gap_minutes": 2611.2,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 8,
+          "eligible_sample_count": 7,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 2611.2,
@@ -169,16 +169,16 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 55,
+          "excluded_baseline_ineligible_samples": 56,
           "excluded_provenance_counts": {
-            "manual": 55
+            "manual": 56
           }
         },
         "metrics": {
-          "clean_signals_median": 34.5,
-          "new_3h_median": 37.5,
-          "new_12h_median": 84.5,
-          "clean_rate_pct_median": 97.15
+          "clean_signals_median": 34.0,
+          "new_3h_median": 36.0,
+          "new_12h_median": 84.0,
+          "clean_rate_pct_median": 97.2
         }
       }
     }
@@ -195,53 +195,47 @@
       {
         "kind": "noise",
         "category": "粉絲心得／現場紀錄",
-        "count": 23,
-        "unique_authors": 23,
+        "count": 20,
+        "unique_authors": 20,
         "post_ids": [
-          "4010569186904479235",
-          "4010587424526284282",
-          "4010592926086728624",
-          "4010609603041706966",
-          "4010609123145618972",
-          "4010617935059992087",
-          "4010641931931057038",
           "4010645695817003985",
-          "4010679101929180738",
+          "4010655722116153359",
+          "4010669884652334669",
+          "4010674581308417607",
+          "4010687854819742253",
+          "4010688429113363001",
+          "4010688772416544699",
           "4010689752357608280",
           "4010693948170904593",
+          "4010697987957476897",
+          "4010702584344234026",
+          "4010719704193390991",
+          "4010724037084830207",
           "4010742957061903370",
-          "4010749145967499361",
-          "4010752845779060236",
-          "4010756027762850066",
-          "4010760621483298501",
-          "4010783108748275457",
+          "4010766082993405719",
           "4010783283600360047",
           "4010795436026870458",
-          "4010804289110665286",
           "4010833874422793217",
-          "4010888941004173800",
-          "4010893371564443891"
+          "4010887575682386496",
+          "4010988231671922692"
         ]
       },
       {
-        "kind": "context",
-        "category": "場館／現場體驗",
-        "count": 4,
-        "unique_authors": 4,
-        "post_ids": [
-          "4010631151185142455",
-          "4010761740137748154",
-          "4010780600705170843",
-          "4010788970363531905"
-        ]
-      },
-      {
-        "kind": "context",
-        "category": "其他問題／需求",
+        "kind": "actionable",
+        "category": "取消／交通／行程風險",
         "count": 1,
         "unique_authors": 1,
         "post_ids": [
-          "4010784442679504827"
+          "4011001280571059590"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "周邊／現場商品",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4010788328173671188"
         ]
       },
       {
@@ -256,18 +250,33 @@
     ]
   },
   "evidence": {
-    "total_clean_evidence": 29,
+    "total_clean_evidence": 23,
     "limit": 16,
     "returned": 16,
     "items": [
       {
-        "post_id": "4010893371564443891",
-        "username": "jhope466555",
-        "posted_at": "2026-10-18T20:36:11Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@jhope466555/post/DepjkVUEUjz",
+        "post_id": "4011001280571059590",
+        "username": "moo.nlight9017",
+        "posted_at": "2026-10-19T00:10:34Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@moo.nlight9017/post/Dep8GnaEy2G",
         "is_new_since_previous": true,
-        "excerpt": "Thank you all for your love and support! Special thanks to everyone who attended my concert. I wish you all a safe journey back home. To those who couldn’t attend, I appreciate you too. Thank you for being part of my journey and making our dreams come true. Love you all forever Army’s ! 💜🫶",
+        "excerpt": "問問噗哩\n這樣台北場要先取票?\n如果後續延期或取消\n先取票會影響嗎?\n\n我真的不是第一次看演唱會\n但第一次遇到可能延期或取消啊😭😭",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "actionable",
+          "category": "取消／交通／行程風險"
+        }
+      },
+      {
+        "post_id": "4010988231671922692",
+        "username": "zhsbd1348",
+        "posted_at": "2026-10-18T23:44:39Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@zhsbd1348/post/Dep5IurE8AE",
+        "is_new_since_previous": true,
+        "excerpt": "脆蜜们首尔哪里有bnd应援棒卖...我起飞了才发现又没带应援棒。演唱会懒得带fm忘记带。",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -276,13 +285,13 @@
         }
       },
       {
-        "post_id": "4010888941004173800",
-        "username": "cheloh_",
-        "posted_at": "2026-10-18T20:27:23Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@cheloh_/post/Depij3CGLHo",
+        "post_id": "4010887575682386496",
+        "username": "luvian.zip",
+        "posted_at": "2026-10-18T20:24:40Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@luvian.zip/post/DepiP_ek4pA",
         "is_new_since_previous": true,
-        "excerpt": "Regine the Finale Concert Meet and Greet tickets on Oct 20, available. Pm Me.",
+        "excerpt": "這輩子絕對不會有第二次看演唱會\n看到凌晨四點還沒到家的機會吧\n\n謝謝KMONSTER讓我知道\n我到底有多喜歡tripleS\n\n愛KMONSTER",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -294,7 +303,7 @@
         "post_id": "4010833874422793217",
         "username": "oleum04veil",
         "posted_at": "2026-10-18T18:37:58Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
         "permalink": "https://www.threads.com/@oleum04veil/post/DepWCiSEwQB",
         "is_new_since_previous": true,
         "excerpt": "虽然但是今天的演唱会有一种很强的走流程感",
@@ -309,7 +318,7 @@
         "post_id": "4010809391121069168",
         "username": "vincent_ent_",
         "posted_at": "2026-10-18T17:49:19Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
         "permalink": "https://www.threads.com/@vincent_ent_/post/DepQeQbknRw",
         "is_new_since_previous": true,
         "excerpt": "【🎆 Fear, and Loathing in Las Vegas 台北演唱會 落幕 🎆】\n\nSo語解密\n\nMC1\n我們是來自日本的 Fear, and Loathing in Las Vegas 請多多指教,台北的朋友們,謝謝你們來看我們,你們應該還沒完全熱起來吧?讓我們一首接一首繼續唱下去吧!一起High起來!\n\nMC2\n我們昨天在香港演出,香港的觀眾真的超有活力,聽說台北更猛,你們說是不是?怎麼感覺比昨天還小聲?喂!再大聲一點,不要輸給香港!\n\nMC3\n謝謝大家,說到台北就會想到夜市,我們還沒去,一直很期待,所以今天差不多該結束演唱會,去逛夜市了吧?開玩笑的,乾脆就在這裡跳到天亮吧!再讓我聽到你們的聲音!\n\nPhoto:Whosdandan",
@@ -321,25 +330,10 @@
         }
       },
       {
-        "post_id": "4010804289110665286",
-        "username": "vimivunama",
-        "posted_at": "2026-10-18T17:39:11Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@vimivunama/post/DepPUA0DehG",
-        "is_new_since_previous": true,
-        "excerpt": "K.O - Xa\n\nATVNCG2026 CONCERT D2",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "noise",
-          "category": "粉絲心得／現場紀錄"
-        }
-      },
-      {
         "post_id": "4010795436026870458",
         "username": "tuuioos",
         "posted_at": "2026-10-18T17:21:36Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
         "permalink": "https://www.threads.com/@tuuioos/post/DepNTLvI7q6",
         "is_new_since_previous": true,
         "excerpt": "其实老四挺穷的,从小就是个穷孩子,对比老猪演唱会的￼嘉宾,老四的嘉宾没什么水花,男团女团,几个前辈,妈妈,最有看点的也仅仅是鸡娃...\n\n从请的嘉宾就能看得出来这个人的￼势力和地位\n\n对他来说,可能唯一能攀的高枝就是那个政二代女朋友,那自然是公主说什么他就得做什么🚬",
@@ -351,40 +345,25 @@
         }
       },
       {
-        "post_id": "4010788970363531905",
-        "username": "grass7988",
-        "posted_at": "2026-10-18T17:08:45Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@grass7988/post/DepL1GHkrKB",
+        "post_id": "4010788328173671188",
+        "username": "slothlove99",
+        "posted_at": "2026-10-18T17:07:28Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@slothlove99/post/DepLrwCExMU",
         "is_new_since_previous": true,
-        "excerpt": "今天演唱會結束大家走到舞台前\n要去見紙花\n結果工作人員說不能過去\n我們就停下腳步\n如果真的不行 其實可以拉紅龍避免誤闖\n畢竟都結束了 小混蛋們想要幫忙撿紙花\n想知道有什麼立即的危險或是有什麼考量?",
+        "excerpt": "第一次演唱會看到笑不出來\n本來設想高高興興一起慶生\n帶著美好的回憶繼續上班\n\n今天是你生日我就不多說什麼\n如果這是你想要的話\n那我只能說你開心就好\n\n我現在看著身邊一大袋周邊\n腦中一片空白\n我不知道我那麼努力\n到底是為了什麼\n\n以後如果再有特別場\n我就不參加了\n我怕受傷\n\n從今天起\n這個帳號可能會暫停更新\n我真的好累 想休息一下\n演唱會影片跟心得\n等我哄好自己再說\n\n大家都知道所有藝人我最愛你\n所有為什麼要這樣對我\n雖然如此但還是生日快樂\n\n(這篇有點微暴言\n(等我清醒一點會刪文",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "場館／現場體驗"
-        }
-      },
-      {
-        "post_id": "4010784442679504827",
-        "username": "w_e_i_y_u_",
-        "posted_at": "2026-10-18T16:59:45Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@w_e_i_y_u_/post/DepKzNYky-7",
-        "is_new_since_previous": true,
-        "excerpt": "我是今年年頭才報到的堅果🌰 (今年才入坑的意思),而且是馬來西亞的。\n\n鋒澤和婁還會到馬來西亞開演唱會/音樂節,想問剩下的晉賴要怎麼追😢 就算好像去台灣,也追不到本人對嗎?他們重心都放在主持上了,應該很少線下活動見面機會😩 八大會鼓勵粉絲接娛百下班嗎?有什麼辦法追真人啊啊啊 苦惱~🤯\n(不想去信義區夜店偶遇賴,想要官方活動哈哈哈)",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "其他問題／需求"
+          "kind": "actionable",
+          "category": "周邊／現場商品"
         }
       },
       {
         "post_id": "4010783283600360047",
         "username": "choco_c0nut8964",
         "posted_at": "2026-10-18T16:57:27Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
         "permalink": "https://www.threads.com/@choco_c0nut8964/post/DepKiV6EwJv",
         "is_new_since_previous": true,
         "excerpt": "我的第一次切瓜 第一次自己出国 第一次看演唱会 都献给老产了 老产你们要对我负责啊......",
@@ -396,13 +375,13 @@
         }
       },
       {
-        "post_id": "4010783108748275457",
-        "username": "k_kloud25",
-        "posted_at": "2026-10-18T16:57:06Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@k_kloud25/post/DepKfzEE-8B",
+        "post_id": "4010766082993405719",
+        "username": "zciica",
+        "posted_at": "2026-10-18T16:23:17Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@zciica/post/DepGoCmAb8X",
         "is_new_since_previous": true,
-        "excerpt": "老子今晚演唱会心情全被毁了.... 为什么要这样贴脸我",
+        "excerpt": "我一直有个疑问,演唱会安可真的是被喊回来的吗,不是说场馆超时要被罚款之类的,抱着这个疑问每次看演唱会到最后大家都在喊安可的时候我都喊的不是特别有激情▓▓",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -411,43 +390,13 @@
         }
       },
       {
-        "post_id": "4010780600705170843",
-        "username": "jaexia2",
-        "posted_at": "2026-10-18T16:52:07Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@jaexia2/post/DepJ7TRDz2b",
+        "post_id": "4010742957061903370",
+        "username": "double__ju",
+        "posted_at": "2026-10-18T15:37:20Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@double__ju/post/DepBXg5ExQK",
         "is_new_since_previous": true,
-        "excerpt": "JX演唱會,\nVIP 4 26排,\n刷了一下午,\n默默希望大多數時間大家都好好坐著,\n不要舉高手機、手燈、毛巾、橫幅等擋到後面的人,\n最後的帶動跳再站起來嗨就好,\n拜託拜託了!🙏\n另外現場真的沒賣正版手燈嗎?\n詐騙太多了不敢在網路上找代購,\n如果真的沒有,\n只好雙手空空了,\n不想買外面攤販亂七八糟的手燈。",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "場館／現場體驗"
-        }
-      },
-      {
-        "post_id": "4010761740137748154",
-        "username": "anelo_life_experience",
-        "posted_at": "2026-10-18T16:14:39Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@anelo_life_experience/post/DepFo1_o1a6",
-        "is_new_since_previous": true,
-        "excerpt": "嘿 我大江啦\n這個時間應該各位小混蛋都離開演唱會會場回到家了吧,那就換我來說幾句話🫣\n\n首先還是要先跟理想混蛋的團隊還有各位小混蛋們道歉,週六演唱會前因為我太興奮了所以小暴雷,差點影響理想混蛋與團隊各位工作人員的精心準備,以及參與演唱會小混蛋們的體驗,這部分是我的思慮欠周,在此致上我所有的歉意。\n\n說真的這次的演唱會算是我的人生希望之一,跟優秀的朋友一起合作,用我自己創作的香水讓理想混蛋的現場可以成為視覺、聽覺還有嗅覺綜合體驗。\n\n這次的氣味經過討論我們選擇了即將上市的《琥珀茶光》,這是這支作品第一次的大眾曝光,也是我目前最滿意的作品!透過柑橘陳皮與紅茶的搭配,襯托出理想混蛋的歌曲自帶的那種溫柔支撐著各個聽眾的能量,再把這支香水撒在紙花上,當紙花從天空飄落的時候可以帶給現場環繞式的體驗,不知道各位小混蛋們...",
-        "derived_annotation": {
-          "authoritative": false,
-          "classifier": "dashboard-intent-regex:v1",
-          "kind": "context",
-          "category": "場館／現場體驗"
-        }
-      },
-      {
-        "post_id": "4010760621483298501",
-        "username": "kylenneqwe_",
-        "posted_at": "2026-10-18T16:12:26Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@kylenneqwe_/post/DepFYkKow7F",
-        "is_new_since_previous": true,
-        "excerpt": "I've been to some regional music fests no pero usually ang artists na ilaha ipang invite kay someone na nadungog ra nako, some known bands pero dili lang gyod ko fan. \nI went to tacloban to attend the unfiltered concert which featured BINI, Adie, and Showtime Baby dolls and some local bands ands acts as first acts.",
+        "excerpt": "🐱:\n我真的很想跟你們一起過聖誕節\n太不可思議了 連台北也售罄了\n也是第一次在聖誕節舉辦solo演唱會\n其實我之前不是也去看了厲旭圭賢的聖誕演唱會\n還有D&E也辦過\n我一直在許願好想做一次喔🥺🥺🥺",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -456,13 +405,13 @@
         }
       },
       {
-        "post_id": "4010756027762850066",
-        "username": "8964private8964",
-        "posted_at": "2026-10-18T16:03:18Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@8964private8964/post/DepEVt7j7kS",
+        "post_id": "4010724037084830207",
+        "username": "taiwan_mr._hung_64",
+        "posted_at": "2026-10-18T14:59:53Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@taiwan_mr._hung_64/post/Deo9EMSj9n_",
         "is_new_since_previous": true,
-        "excerpt": "清远又是啥地方🤣🤣不针对地域 但是真适合开大型演唱会么 承载了吗",
+        "excerpt": "法國發生暴動,而法國總統馬克宏又在哪裡呢?\n原來是在看席琳·狄翁的演唱會啊🙂",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -471,13 +420,13 @@
         }
       },
       {
-        "post_id": "4010752845779060236",
-        "username": "wjdgka_",
-        "posted_at": "2026-10-18T15:56:59Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@wjdgka_/post/DepDnaejEYM",
+        "post_id": "4010719704193390991",
+        "username": "yyykimgu",
+        "posted_at": "2026-10-18T14:51:08Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@yyykimgu/post/Deo8FI-G1mP",
         "is_new_since_previous": true,
-        "excerpt": "但凡看过aespa演唱会的就知道猫步轻悄根本不开麦。",
+        "excerpt": "妈呀,今天陪朋友去演唱会网不好手滑点赞黑帖了,我急速滑跪▓谢谢互关提醒我▓再也不敢了",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
@@ -486,13 +435,58 @@
         }
       },
       {
-        "post_id": "4010749145967499361",
-        "username": "yueh1987",
-        "posted_at": "2026-10-18T15:49:37Z",
-        "first_seen_at": "2026-10-18T21:47:08.304456Z",
-        "permalink": "https://www.threads.com/@yueh1987/post/DepCxkwmBhh",
+        "post_id": "4010702584344234026",
+        "username": "tttttttpeach_10",
+        "posted_at": "2026-10-18T14:17:07Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@tttttttpeach_10/post/Deo4MA3lEgq",
         "is_new_since_previous": true,
-        "excerpt": "必須認真說\n\n已經很久沒看過這麼有誠意的演唱會了\n17:00開演,準時👏👏\n\n安可後\n唱了三首歌👏👏\n\n演唱會唱了三小時接近四小時\n舞台穿插在特區中間👍\n\n#理想混蛋 \n\n原本不知道他們是誰,\n只知道「接住你、離開的一路上、不是因為天氣晴朗才愛你」\n\n到今天2026/10/18高雄巨蛋演唱會\n看著大螢幕上每首歌的歌詞,居然也賺到了我的眼淚🥲\n\n甚至到昨天..\n我才想說看看他們到底長怎樣\n\n殊不知主唱曾經是不分科住院醫師\n兩個吉他手曾經是藥師\n\n有點糗的是今天的嘉賓\n我們都一臉茫然....\n\n公館青少年..是誰😅",
+        "excerpt": "实话就是老四演唱会没有老猪演唱会好看。。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4010697987957476897",
+        "username": "gyusukii_",
+        "posted_at": "2026-10-18T14:07:59Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@gyusukii_/post/Deo3JIJlE4h",
+        "is_new_since_previous": true,
+        "excerpt": "距离演唱会只有26天也就是四个星期不到,乌龟大人就算一周四练,感觉也拿不到大结果了...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4010693948170904593",
+        "username": "na857966",
+        "posted_at": "2026-10-18T13:59:57Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@na857966/post/Deo2OVziSQR",
+        "is_new_since_previous": true,
+        "excerpt": "真不知道预感老马回去人家演唱会什么 没那么熟在那一直期待什么的 莫名其妙 又没一起演过戏 只合作过lol几天。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4010689752357608280",
+        "username": "umiii4ein_jh",
+        "posted_at": "2026-10-18T13:51:37Z",
+        "first_seen_at": "2026-10-19T00:32:12.601209Z",
+        "permalink": "https://www.threads.com/@umiii4ein_jh/post/Deo1RSJkxtY",
+        "is_new_since_previous": true,
+        "excerpt": "虽然宝石盒拼盘唱了一个小时 但是他们演唱会有两个小时呀🤢",
         "derived_annotation": {
           "authoritative": false,
           "classifier": "dashboard-intent-regex:v1",
