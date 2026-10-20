@@ -1,0 +1,457 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-10-20_064643Z:clean-v2.4-depth3",
+  "run": {
+    "run_stamp": "2026-10-20_064643Z",
+    "run_at": "2026-10-20T06:47:35.974886Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-depth3",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "depth3",
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "39382300428"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-20_064643Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-20_064643Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-20_064643Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-20_064643Z.txt",
+    "snapshot_fingerprint": "sha256:154ffdc8a220d41613954e0a1572c5c95af764c3830a02b45282ef4c3daa54c5",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 105,
+      "snapshot_unique": 17,
+      "dedupe_unique": 17,
+      "clean_signals": 13,
+      "excluded_transactions": 4,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 76.5,
+      "new_3h": 18,
+      "new_12h": 49,
+      "unique_authors": 13,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 17
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-10-18_105443Z",
+      "run_at": "2026-10-18T10:55:34.540446Z",
+      "elapsed_minutes": 2632.0,
+      "pipeline_version": "clean-v2.4-depth3",
+      "clean_signals": 26,
+      "new_3h": 31,
+      "new_12h": 68,
+      "clean_rate_pct": 89.7,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 13,
+      "retained_signal_count": 0,
+      "clean_signal_delta": -13,
+      "rolling_3h_delta": -13,
+      "rolling_12h_delta": -19
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": false,
+        "coverage_complete": false,
+        "coverage_hours": 24.0,
+        "sample_count": 0,
+        "max_gap_minutes": 2632.0,
+        "sampling_quality": "insufficient",
+        "sampling": {
+          "quality": "insufficient",
+          "eligible_sample_count": 0,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 2632.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 8,
+          "excluded_provenance_counts": {
+            "manual": 8
+          }
+        },
+        "metrics": {
+          "clean_signals_median": null,
+          "new_3h_median": null,
+          "new_12h_median": null,
+          "clean_rate_pct_median": null
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 4,
+        "max_gap_minutes": 2632.0,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 4,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 2632.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 23,
+          "excluded_provenance_counts": {
+            "manual": 23
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.0,
+          "new_3h_median": 33.5,
+          "new_12h_median": 87.0,
+          "clean_rate_pct_median": 96.85
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 6,
+        "max_gap_minutes": 2632.0,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 6,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 2632.0,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 56,
+          "excluded_provenance_counts": {
+            "manual": 56
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.0,
+          "new_3h_median": 33.5,
+          "new_12h_median": 83.5,
+          "clean_rate_pct_median": 97.44999999999999
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 11,
+        "unique_authors": 11,
+        "post_ids": [
+          "4011719102364328270",
+          "4011729859679194224",
+          "4011830453946507316",
+          "4011836132337826022",
+          "4011839260323955663",
+          "4011842161793363947",
+          "4011843579366583953",
+          "4011852334480947751",
+          "4011875493884345800",
+          "4011898031388605942",
+          "4011908501848816342"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "周邊／現場商品",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4011761859418415435"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4011803346637563223"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 13,
+    "limit": 16,
+    "returned": 13,
+    "items": [
+      {
+        "post_id": "4011908501848816342",
+        "username": "sydneythekydneyy",
+        "posted_at": "2026-10-20T06:13:04Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@sydneythekydneyy/post/DetKYbEEXrW",
+        "is_new_since_previous": true,
+        "excerpt": "I just went to the Pheobe Bridgers “The Lost Tour” concert with no phones and here are my notes for anyone who may be concerned!!!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011898031388605942",
+        "username": "chiha_ru8140",
+        "posted_at": "2026-10-20T05:52:15Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@chiha_ru8140/post/DetIADsAb32",
+        "is_new_since_previous": true,
+        "excerpt": "偶第一次去演唱會 要獻給Plave!!\n大家可以告訴我應該要準備什麼嗎\n超級緊張又期待 很怕自己手忙腳亂\n原本沒打算去的 但被推了一把🥹\n麻煩各位噗哩了 請多指教",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011875493884345800",
+        "username": "_trishiajune",
+        "posted_at": "2026-10-20T05:07:29Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@_trishiajune/post/DetC4GAEj3I",
+        "is_new_since_previous": true,
+        "excerpt": "hello, singapore girlies! do any of you have a spare ticket for the BTS concert on December 20? Huhuhu 🥹🙏🏻",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011852334480947751",
+        "username": "meishidebuhuisi",
+        "posted_at": "2026-10-20T04:21:28Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@meishidebuhuisi/post/Des9nFIDvon",
+        "is_new_since_previous": true,
+        "excerpt": "卢广仲的澳门演唱会后续收到原价票的可能性大吗",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011843579366583953",
+        "username": "0711nick",
+        "posted_at": "2026-10-20T04:04:04Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@0711nick/post/Des7nrSk66R",
+        "is_new_since_previous": true,
+        "excerpt": "想收米津玄的演唱會台灣大哥大優先購序號",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011842161793363947",
+        "username": "syaza.leo",
+        "posted_at": "2026-10-20T04:01:15Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@syaza.leo/post/Des7TDEoO_r",
+        "is_new_since_previous": true,
+        "excerpt": "Me cari plus one untuk concert The Weeknd day 2 hehe.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011839260323955663",
+        "username": "sieuenx",
+        "posted_at": "2026-10-20T03:55:29Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@sieuenx/post/Des6o03k0PP",
+        "is_new_since_previous": true,
+        "excerpt": "有女生也是今天自己去查理的演唱會嗎\n今天要看演唱會剛剛才買票⋯⋯\n還沒想好要穿什麼。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011836132337826022",
+        "username": "soyamoyadudu",
+        "posted_at": "2026-10-20T03:49:16Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@soyamoyadudu/post/Des57TtErjm",
+        "is_new_since_previous": true,
+        "excerpt": "sebenarnya aku baru nak berjinak kat threads (sebab concert nexz) ni so this is my intro:\n\n♡ sofie, she/her\n♡ 06’, intj 🙏 \n♡ baby nex2y (not larping i swear, just new 😭)\n♡ moya + haru biased 💗\n♡ also a PLLI \n\njom moots, saya introvert, tapi if you gila i gila jugak 🙈",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011830453946507316",
+        "username": "juyeon_r1",
+        "posted_at": "2026-10-20T03:37:59Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@juyeon_r1/post/Des4orSk2A0",
+        "is_new_since_previous": true,
+        "excerpt": "如果12月不是演唱会的话,你们放生吗",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011803346637563223",
+        "username": "blendofsoulnc",
+        "posted_at": "2026-10-20T02:44:08Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@blendofsoulnc/post/DesyeNpDiVX",
+        "is_new_since_previous": true,
+        "excerpt": "Pissedddddd about the Raleigh show being canceled for Victoria Monet concert. We were really excited for the show and had just bought tickets 🙄",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4011761859418415435",
+        "username": "tl_2126",
+        "posted_at": "2026-10-20T01:21:42Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@tl_2126/post/DespCfqGGFL",
+        "is_new_since_previous": true,
+        "excerpt": "藝聲演唱會周邊現貨有\n虎藝喵/藝喵束口袋/藝喵手機支架/虎藝喵手機支架/照片組/豹紋包(含小卡)\n今天內出貨完畢可直接下單",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "actionable",
+          "category": "周邊／現場商品"
+        }
+      },
+      {
+        "post_id": "4011729859679194224",
+        "username": "xscs_aaa",
+        "posted_at": "2026-10-20T00:18:08Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@xscs_aaa/post/Deshw1lAYxw",
+        "is_new_since_previous": true,
+        "excerpt": "王嘉尔17号北京首场内场的粉丝,是看不得一点18号演唱会的视频的,内心极度不平衡,氛围差到爆,我第一次看演唱会,而且这是我喜欢那么多年,终于有时间,去第一次追他线下。但我真的期待了很久很久。我追星运那么差吗,真的太憋屈了。17号的演唱会场子真的好冷,感觉我那块前前后后的人,都像是来凑热闹的。我就听到后几排有几个零零星星的女生,一直卖力的给王嘉尔回应,但是姐妹 你们为什么没有坐在我附近🥹,让我也热闹热闹?看的我无聊死了,憋屈死了!一股压抑无处释放!虽然王嘉尔有在卖力,但是感觉第一场他自己也没有完全沉浸在里面,我怀疑他自己也没嗨爽。嘉尔啊,真的太冷了太冷了!!!!你能不能赔我一张门票,让我感受你场子热起来什么样啊!?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4011719102364328270",
+        "username": "kia_aboki",
+        "posted_at": "2026-10-19T23:56:45Z",
+        "first_seen_at": "2026-10-20T06:47:35.974886Z",
+        "permalink": "https://www.threads.com/@kia_aboki/post/DesfUTDEyFO",
+        "is_new_since_previous": true,
+        "excerpt": "🚨 CONCERT CREW RECRUITMENT — IPOH 🇲🇾\n\n📍 Venue: Ipoh Convention Centre\n📅 28–29 October 2026\n💰 RM300–RM480/day\n\nRoles available:\n• Gate Crew\n• Event Usher\n• Ticketing Assistant\n• Crowd Support\n\n🎓 Students & fresh graduates welcome. Briefing provided!\n\n📩 DM “IPOH CREW” for more information.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_coverage_incomplete",
+      "baseline_24h_incomplete",
+      "baseline_24h_sampling_insufficient",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": false,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "insufficient",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 0,
+    "baseline_ineligible_history_sample_count": 75
+  }
+}
