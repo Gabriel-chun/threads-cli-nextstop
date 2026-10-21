@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-21_143912Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-21_174708Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-21_143912Z",
-    "run_at": "2026-10-21T14:40:04.261160Z",
+    "run_stamp": "2026-10-21_174708Z",
+    "run_at": "2026-10-21T17:48:01.722999Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -14,16 +14,16 @@
     "min_score": 30,
     "collector_mode": "depth3",
     "coverage_status": "observed",
-    "provenance": "scheduled",
-    "baseline_eligible": true,
-    "workflow_event": "schedule",
-    "github_run_id": "39618594865"
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "39646698161"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-21_143912Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-21_143912Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-21_143912Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-21_143912Z.txt",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-21_174708Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-21_174708Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-21_174708Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-21_174708Z.txt",
     "snapshot_fingerprint": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "master_dependency": false
   },
@@ -37,19 +37,19 @@
       "suppressed_duplicates": 0,
       "clean_rate_pct": 0,
       "new_3h": 0,
-      "new_12h": 22,
+      "new_12h": 13,
       "unique_authors": 0,
       "author_diversity_ratio": null,
       "duplicate_adjusted_volume": 0
     },
     "previous_comparable_run": {
-      "run_stamp": "2026-10-21_093616Z",
-      "run_at": "2026-10-21T09:37:04.688842Z",
-      "elapsed_minutes": 303.0,
+      "run_stamp": "2026-10-21_143912Z",
+      "run_at": "2026-10-21T14:40:04.261160Z",
+      "elapsed_minutes": 188.0,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 0,
-      "new_3h": 13,
-      "new_12h": 29,
+      "new_3h": 0,
+      "new_12h": 22,
       "clean_rate_pct": 0,
       "compatibility": {
         "pipeline_version": "compatible",
@@ -66,8 +66,8 @@
       "new_signal_count": 0,
       "retained_signal_count": 0,
       "clean_signal_delta": 0,
-      "rolling_3h_delta": -13,
-      "rolling_12h_delta": -7
+      "rolling_3h_delta": 0,
+      "rolling_12h_delta": -9
     },
     "baselines": {
       "24h": {
@@ -76,12 +76,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 24.0,
-        "sample_count": 2,
+        "sample_count": 3,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 2,
+          "eligible_sample_count": 3,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -95,16 +95,16 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 7,
+          "excluded_baseline_ineligible_samples": 5,
           "excluded_provenance_counts": {
-            "manual": 7
+            "manual": 5
           }
         },
         "metrics": {
-          "clean_signals_median": 7.0,
-          "new_3h_median": 14.0,
-          "new_12h_median": 35.0,
-          "clean_rate_pct_median": 43.75
+          "clean_signals_median": 0.0,
+          "new_3h_median": 13.0,
+          "new_12h_median": 29.0,
+          "clean_rate_pct_median": 0.0
         }
       },
       "72h": {
@@ -113,12 +113,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 72.0,
-        "sample_count": 2,
+        "sample_count": 3,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 2,
+          "eligible_sample_count": 3,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -132,16 +132,16 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 24,
+          "excluded_baseline_ineligible_samples": 23,
           "excluded_provenance_counts": {
-            "manual": 24
+            "manual": 23
           }
         },
         "metrics": {
-          "clean_signals_median": 7.0,
-          "new_3h_median": 14.0,
-          "new_12h_median": 35.0,
-          "clean_rate_pct_median": 43.75
+          "clean_signals_median": 0.0,
+          "new_3h_median": 13.0,
+          "new_12h_median": 29.0,
+          "clean_rate_pct_median": 0.0
         }
       },
       "7d": {
@@ -150,12 +150,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 168.0,
-        "sample_count": 7,
+        "sample_count": 8,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 7,
+          "eligible_sample_count": 8,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -169,16 +169,16 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 56,
+          "excluded_baseline_ineligible_samples": 55,
           "excluded_provenance_counts": {
-            "manual": 56
+            "manual": 55
           }
         },
         "metrics": {
-          "clean_signals_median": 28.0,
-          "new_3h_median": 31.0,
-          "new_12h_median": 83.0,
-          "clean_rate_pct_median": 96.6
+          "clean_signals_median": 27.0,
+          "new_3h_median": 28.5,
+          "new_12h_median": 75.5,
+          "clean_rate_pct_median": 93.15
         }
       }
     }
@@ -216,6 +216,6 @@
     "baseline_sampling_quality_72h": "sparse",
     "baseline_sampling_quality_7d": "sparse",
     "incompatible_history_sample_count": 0,
-    "baseline_ineligible_history_sample_count": 75
+    "baseline_ineligible_history_sample_count": 74
   }
 }
