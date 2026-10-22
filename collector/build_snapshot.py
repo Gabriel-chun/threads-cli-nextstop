@@ -406,6 +406,20 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         for row in rows:
             writer.writerow({field: csv_value(row.get(field, "")) for field in CSV_FIELDS})
 
+def snapshot_rejection_reason(row: dict[str, Any], min_score: int, since: datetime) -> str:
+    """Return only a reason category, never source text or personal identifiers."""
+    if int(row.get("relevance_score") or 0) < min_score:
+        return "below_min_score"
+    ts = parse_time(row.get("timestamp"))
+    if ts is None:
+        return "missing_or_invalid_timestamp"
+    if ts < since:
+        return "older_than_window"
+    if not key_for(row):
+        return "missing_post_identifier"
+    return ""
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw-dir", default="collector/raw")
@@ -423,20 +437,23 @@ def main() -> None:
     since = datetime.now(timezone.utc) - timedelta(hours=window_hours)
     raw_rows = load_raw_dir(Path(args.raw_dir))
 
+    filter_diagnostics = {
+        "below_min_score": 0,
+        "missing_or_invalid_timestamp": 0,
+        "older_than_window": 0,
+        "missing_post_identifier": 0,
+        "accepted_raw_rows": 0,
+    }
     snapshot_by_key: dict[str, dict[str, Any]] = {}
     for raw in raw_rows:
         row = normalize_row(raw, run_at)
-        if int(row.get("relevance_score") or 0) < args.min_score:
+        reason = snapshot_rejection_reason(row, args.min_score, since)
+        if reason:
+            filter_diagnostics[reason] += 1
             continue
 
-        ts = parse_time(row.get("timestamp"))
-        if ts is None or ts < since:
-            continue
-
+        filter_diagnostics["accepted_raw_rows"] += 1
         key = key_for(row)
-        if not key:
-            continue
-
         if key in snapshot_by_key:
             snapshot_by_key[key] = merge_rows(snapshot_by_key[key], row, increment_seen=False)
         else:
@@ -510,6 +527,7 @@ def main() -> None:
         "run_at": run_at,
         "run_stamp": args.run_stamp,
         "raw_rows": len(raw_rows),
+        "filter_diagnostics": filter_diagnostics,
         "snapshot_unique_rows": len(snapshot_rows),
         "master_unique_rows": len(master),
         "min_score": args.min_score,
