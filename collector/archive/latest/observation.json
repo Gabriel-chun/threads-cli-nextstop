@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-22_170145Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-22_192733Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-22_170145Z",
-    "run_at": "2026-10-22T17:02:36.556208Z",
+    "run_stamp": "2026-10-22_192733Z",
+    "run_at": "2026-10-22T19:28:27.952766Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -14,16 +14,16 @@
     "min_score": 30,
     "collector_mode": "depth3",
     "coverage_status": "stale",
-    "provenance": "manual",
-    "baseline_eligible": false,
-    "workflow_event": "workflow_dispatch",
-    "github_run_id": "39818943601"
+    "provenance": "scheduled",
+    "baseline_eligible": true,
+    "workflow_event": "schedule",
+    "github_run_id": "39840112737"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-22_170145Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-22_170145Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-22_170145Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-22_170145Z.txt",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-22_192733Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-22_192733Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-22_192733Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-22_192733Z.txt",
     "snapshot_fingerprint": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "master_dependency": false
   },
@@ -45,7 +45,7 @@
     "previous_comparable_run": {
       "run_stamp": "2026-10-21_143912Z",
       "run_at": "2026-10-21T14:40:04.261160Z",
-      "elapsed_minutes": 1582.5,
+      "elapsed_minutes": 1728.4,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 0,
       "new_3h": 0,
@@ -77,14 +77,14 @@
         "coverage_complete": false,
         "coverage_hours": 24.0,
         "sample_count": 0,
-        "max_gap_minutes": 1582.5,
+        "max_gap_minutes": 1728.4,
         "sampling_quality": "insufficient",
         "sampling": {
           "quality": "insufficient",
           "eligible_sample_count": 0,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
-          "max_gap_minutes": 1582.5,
+          "max_gap_minutes": 1728.4,
           "cadence_within_tolerance": false
         },
         "compatibility": {
@@ -133,9 +133,9 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 25,
+          "excluded_baseline_ineligible_samples": 26,
           "excluded_provenance_counts": {
-            "manual": 23,
+            "manual": 24,
             "smoke": 2
           }
         },
@@ -152,12 +152,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 168.0,
-        "sample_count": 8,
+        "sample_count": 7,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 8,
+          "eligible_sample_count": 7,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -171,17 +171,17 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 57,
+          "excluded_baseline_ineligible_samples": 58,
           "excluded_provenance_counts": {
-            "manual": 55,
+            "manual": 56,
             "smoke": 2
           }
         },
         "metrics": {
-          "clean_signals_median": 27.0,
-          "new_3h_median": 28.5,
-          "new_12h_median": 75.5,
-          "clean_rate_pct_median": 93.15
+          "clean_signals_median": 26.0,
+          "new_3h_median": 26.0,
+          "new_12h_median": 68.0,
+          "clean_rate_pct_median": 89.7
         }
       }
     }
