@@ -1,0 +1,66 @@
+name: Dashboard Cloudflare Deploy
+
+# The production Worker is deployed only after Dashboard CI succeeds on main.
+# Collector archive commits do not trigger Dashboard CI, so they do not redeploy.
+on:
+  workflow_run:
+    workflows: ["Dashboard CI"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nextstop-dashboard-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the commit validated by Dashboard CI
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Require deployment-only Cloudflare credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo "::error title=Cloudflare deployment not configured::Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to repository Actions secrets. See dashboard/DEPLOYMENT.md."
+            exit 1
+          fi
+
+      - name: Install Dashboard dependencies
+        working-directory: dashboard
+        run: npm install --no-audit --no-fund
+
+      - name: Build and check client secret boundary
+        working-directory: dashboard
+        run: npm run build:vinext
+
+      # Intentionally deploy without syncing runtime secrets: Cloudflare keeps
+      # its existing NOTION_TOKEN and NEXTSTOP_EVENT_EMIT_TOKEN bindings.
+      - name: Deploy existing Cloudflare Worker
+        working-directory: dashboard
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy:ci
