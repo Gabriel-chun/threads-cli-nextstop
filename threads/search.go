@@ -215,7 +215,24 @@ func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
 }
 
 func (c *Client) searchSSRPage(ctx context.Context, query string) ([]Post, string, bool, error) {
-	u := WebBase + "/search?q=" + url.QueryEscape(query)
+	// The public Recent tab is preferred for time-window collection. Keep the
+	// original Top tab as a fallback when Recent cannot be read or is empty.
+	posts, cursor, more, err := c.searchSSRPageBySort(ctx, query, "recent")
+	if err == nil && len(posts) > 0 {
+		return posts, cursor, more, nil
+	}
+	topPosts, topCursor, topMore, topErr := c.searchSSRPageBySort(ctx, query, "default")
+	if topErr == nil {
+		return topPosts, topCursor, topMore, nil
+	}
+	if err != nil {
+		return nil, "", false, err
+	}
+	return nil, "", false, topErr
+}
+
+func (c *Client) searchSSRPageBySort(ctx context.Context, query, sortMode string) ([]Post, string, bool, error) {
+	u := WebBase + "/search?q=" + url.QueryEscape(query) + "&serp_type=" + url.QueryEscape(sortMode)
 	html, err := c.getHTML(ctx, u)
 	if err != nil {
 		return nil, "", false, err
