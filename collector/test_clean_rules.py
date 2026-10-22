@@ -49,5 +49,18 @@ class TicketCleanRulesTest(unittest.TestCase):
         )
 
 
+class SnapshotFilterDiagnosticsTest(unittest.TestCase):
+    def test_rejection_reasons_are_exclusive(self):
+        from datetime import datetime, timezone
+        since = datetime(2026, 10, 22, 0, 0, tzinfo=timezone.utc)
+        check = build_snapshot.snapshot_rejection_reason
+        base = {"relevance_score": 60, "timestamp": "2026-10-22T01:00:00Z", "permalink": "https://example.com/post/1"}
+        self.assertEqual(check(base, 30, since), "")
+        self.assertEqual(check({**base, "relevance_score": 10}, 30, since), "below_min_score")
+        self.assertEqual(check({**base, "timestamp": ""}, 30, since), "missing_or_invalid_timestamp")
+        self.assertEqual(check({**base, "timestamp": "2026-10-21T23:00:00Z"}, 30, since), "older_than_window")
+        self.assertEqual(check({**base, "permalink": "", "id": ""}, 30, since), "missing_post_identifier")
+
+
 if __name__ == "__main__":
     unittest.main()
