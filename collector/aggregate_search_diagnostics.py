@@ -22,7 +22,7 @@ def aggregate(raw_dir: Path) -> dict:
             "pages": pages,
             "returned_total_by_page": sum(int(x.get("returned", 0)) for x in pages),
             "fresh_12h_by_page": sum(int(x.get("fresh_12h", 0)) for x in pages),
-            "any_pagination_failure": any(x.get("status") == "request_failed" for x in pages),
+            "any_pagination_failure": any(x.get("status") not in {"ok", "no_more_pages", "cursor_unavailable_or_unchanged"} for x in pages),
         })
     return {"schema_version": "search-source-v1", "query_count": len(reports), "queries": reports}
 

@@ -195,12 +195,13 @@ export async function collectorHealth() {
     : Number.POSITIVE_INFINITY;
   const fresh = ageMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
   const succeeded = latest.status === "Success";
+  const sourceStale = (latest as typeof latest & { coverage_status?: string }).coverage_status === "stale";
 
   return {
-    healthy: succeeded && fresh,
+    healthy: succeeded && fresh && !sourceStale,
     status: latest.status === "Failed"
       ? "failure"
-      : succeeded && !fresh
+      : succeeded && (!fresh || sourceStale)
         ? "stale"
         : succeeded
           ? "success"
@@ -324,6 +325,7 @@ type ObservationBundle = {
   run?: {
     run_at?: string;
     status?: string;
+    coverage_status?: string;
   };
   deterministic_facts?: {
     current?: {
@@ -393,11 +395,12 @@ export async function loadHomeObservation() {
     : Number.POSITIVE_INFINITY;
   const fresh = runAgeMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
   const succeeded = runStatus === "success";
+  const sourceStale = observation.run?.coverage_status === "stale";
   const health = {
-    healthy: succeeded && fresh,
+    healthy: succeeded && fresh && !sourceStale,
     status: runStatus === "failed"
       ? "failure"
-      : succeeded && !fresh
+      : succeeded && (!fresh || sourceStale)
         ? "stale"
         : succeeded
           ? "success"

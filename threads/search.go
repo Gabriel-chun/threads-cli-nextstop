@@ -70,7 +70,7 @@ func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit,
 			}
 			gPosts, next, more, gErr := c.graphqlSearchPage(ctx, query, graphCursor)
 			if gErr != nil {
-                emit("threads_graphql", page, nil, "request_failed")
+                emit("threads_graphql", page, nil, graphqlFailureKind(gErr))
 				c.logf(1, "anonymous GraphQL search depth stopped at page %d: %v", page, gErr)
 				break
 			}
