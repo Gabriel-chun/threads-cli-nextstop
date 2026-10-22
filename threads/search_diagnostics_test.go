@@ -2,6 +2,7 @@ package threads
 
 import (
     "testing"
+    "strings"
     "time"
 )
 
@@ -23,4 +24,24 @@ func TestSummarizeSearchPage(t *testing.T) {
     if d.Source != "threads_ssr" || d.Page != 1 || d.Status != "ok" {
         t.Fatalf("unexpected diagnostic identity: %+v", d)
     }
+}
+
+func TestDecodeGraphQLPayloadCategorizesFailures(t *testing.T) {
+    cases := []struct { name string; status int; body string; want string }{
+        {"rate_limited", 429, `{"data":{}}`, "http_429"},
+        {"server_error", 503, `{"data":{}}`, "http_503"},
+        {"bad_json", 200, "<html>", "invalid_json"},
+        {"api_error", 200, `{"errors":[{"message":"private upstream detail"}],"data":null}`, "graphql_errors"},
+        {"missing_data", 200, `{"data":null}`, "missing_data"},
+    }
+    for _, tc := range cases {
+        t.Run(tc.name, func(t *testing.T) {
+            _, err := decodeGraphQLPayload(tc.status, []byte(tc.body))
+            if err == nil { t.Fatal("expected failure") }
+            if got := graphqlFailureKind(err); got != tc.want { t.Fatalf("want %s, got %s", tc.want, got) }
+            if strings.Contains(err.Error(), "private upstream detail") { t.Fatal("leaked upstream error") }
+        })
+    }
+    data, err := decodeGraphQLPayload(200, []byte(`{"data":{"search":{"ok":true}}}`))
+    if err != nil || data == nil { t.Fatalf("valid payload failed: %v", err) }
 }
