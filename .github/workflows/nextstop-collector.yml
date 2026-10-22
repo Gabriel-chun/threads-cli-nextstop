@@ -115,7 +115,11 @@ jobs:
               baseline_eligible="false"
               ;;
             push)
-              if [[ "$PUSH_COMMIT_MESSAGE" == *"[pipe-test]"* ]]; then
+              if [[ "$PUSH_COMMIT_MESSAGE" == *"[manual-run]"* ]]; then
+                provenance="manual"
+                baseline_eligible="false"
+                echo "[observation] explicit [manual-run] push; one-off real collection, excluded from scheduled baseline"
+              elif [[ "$PUSH_COMMIT_MESSAGE" == *"[pipe-test]"* ]]; then
                 provenance="scheduled"
                 baseline_eligible="true"
                 echo "[observation] explicit [pipe-test] push; treating as scheduled-equivalent for end-to-end validation"
