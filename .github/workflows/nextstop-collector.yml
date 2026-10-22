@@ -233,9 +233,11 @@ jobs:
               diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
 
           raw_rows = int(summary.get("raw_rows") or 0)
+          accepted = int((summary.get("filter_diagnostics") or {}).get("accepted_raw_rows") or 0)
           degraded = raw_rows == 0
-
-          summary["coverage_status"] = "degraded" if degraded else "observed"
+          stale = raw_rows > 0 and accepted == 0
+          # Keep workflow success separate from source-data quality.
+          summary["coverage_status"] = "degraded" if degraded else "stale" if stale else "observed"
           summary_path.write_text(
               json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
@@ -243,7 +245,7 @@ jobs:
 
           with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
               env.write(f"COLLECTOR_COVERAGE_STATUS={summary['coverage_status']}\n")
-              if degraded:
+              if degraded or stale:
                   env.write("OBS_BASELINE_ELIGIBLE=false\n")
 
           print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows}")
