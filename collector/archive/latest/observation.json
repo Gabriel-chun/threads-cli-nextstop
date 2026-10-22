@@ -1,9 +1,9 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-22_192733Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-22_220143Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-22_192733Z",
-    "run_at": "2026-10-22T19:28:27.952766Z",
+    "run_stamp": "2026-10-22_220143Z",
+    "run_at": "2026-10-22T22:02:33.517518Z",
     "status": "success",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
@@ -13,43 +13,43 @@
     "window_hours": 12,
     "min_score": 30,
     "collector_mode": "depth3",
-    "coverage_status": "stale",
-    "provenance": "scheduled",
-    "baseline_eligible": true,
-    "workflow_event": "schedule",
-    "github_run_id": "39840112737"
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "39861759945"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-22_192733Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-22_192733Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-22_192733Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-22_192733Z.txt",
-    "snapshot_fingerprint": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-22_220143Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-22_220143Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-22_220143Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-22_220143Z.txt",
+    "snapshot_fingerprint": "sha256:d1f6723824279b4a0ce7922c31d24847008648a2ce87ec04b07329cd23e5c509",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 35,
-      "snapshot_unique": 0,
-      "dedupe_unique": 0,
-      "clean_signals": 0,
+      "raw_rows": 33,
+      "snapshot_unique": 1,
+      "dedupe_unique": 1,
+      "clean_signals": 1,
       "excluded_transactions": 0,
       "suppressed_duplicates": 0,
-      "clean_rate_pct": 0,
-      "new_3h": 0,
-      "new_12h": 0,
-      "unique_authors": 0,
-      "author_diversity_ratio": null,
-      "duplicate_adjusted_volume": 0
+      "clean_rate_pct": 100.0,
+      "new_3h": 1,
+      "new_12h": 1,
+      "unique_authors": 1,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 1
     },
     "previous_comparable_run": {
-      "run_stamp": "2026-10-21_143912Z",
-      "run_at": "2026-10-21T14:40:04.261160Z",
-      "elapsed_minutes": 1728.4,
+      "run_stamp": "2026-10-22_192733Z",
+      "run_at": "2026-10-22T19:28:27.952766Z",
+      "elapsed_minutes": 154.1,
       "pipeline_version": "clean-v2.4-depth3",
       "clean_signals": 0,
       "new_3h": 0,
-      "new_12h": 22,
+      "new_12h": 0,
       "clean_rate_pct": 0,
       "compatibility": {
         "pipeline_version": "compatible",
@@ -63,25 +63,25 @@
     },
     "delta": {
       "overlap_available": true,
-      "new_signal_count": 0,
+      "new_signal_count": 1,
       "retained_signal_count": 0,
-      "clean_signal_delta": 0,
-      "rolling_3h_delta": 0,
-      "rolling_12h_delta": -22
+      "clean_signal_delta": 1,
+      "rolling_3h_delta": 1,
+      "rolling_12h_delta": 1
     },
     "baselines": {
       "24h": {
         "window": "24h",
         "hours": 24,
-        "complete": false,
-        "coverage_complete": false,
+        "complete": true,
+        "coverage_complete": true,
         "coverage_hours": 24.0,
-        "sample_count": 0,
+        "sample_count": 1,
         "max_gap_minutes": 1728.4,
-        "sampling_quality": "insufficient",
+        "sampling_quality": "sparse",
         "sampling": {
-          "quality": "insufficient",
-          "eligible_sample_count": 0,
+          "quality": "sparse",
+          "eligible_sample_count": 1,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 1728.4,
@@ -95,17 +95,17 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 11,
+          "excluded_baseline_ineligible_samples": 10,
           "excluded_provenance_counts": {
-            "manual": 9,
+            "manual": 8,
             "smoke": 2
           }
         },
         "metrics": {
-          "clean_signals_median": null,
-          "new_3h_median": null,
-          "new_12h_median": null,
-          "clean_rate_pct_median": null
+          "clean_signals_median": 0.0,
+          "new_3h_median": 0.0,
+          "new_12h_median": 0.0,
+          "clean_rate_pct_median": 0.0
         }
       },
       "72h": {
@@ -114,12 +114,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 72.0,
-        "sample_count": 3,
+        "sample_count": 4,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 3,
+          "eligible_sample_count": 4,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -133,16 +133,16 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 26,
+          "excluded_baseline_ineligible_samples": 25,
           "excluded_provenance_counts": {
-            "manual": 24,
+            "manual": 23,
             "smoke": 2
           }
         },
         "metrics": {
           "clean_signals_median": 0.0,
-          "new_3h_median": 13.0,
-          "new_12h_median": 29.0,
+          "new_3h_median": 6.5,
+          "new_12h_median": 25.5,
           "clean_rate_pct_median": 0.0
         }
       },
@@ -152,12 +152,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 168.0,
-        "sample_count": 7,
+        "sample_count": 8,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 7,
+          "eligible_sample_count": 8,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -171,17 +171,17 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 58,
+          "excluded_baseline_ineligible_samples": 57,
           "excluded_provenance_counts": {
-            "manual": 56,
+            "manual": 55,
             "smoke": 2
           }
         },
         "metrics": {
-          "clean_signals_median": 26.0,
-          "new_3h_median": 26.0,
-          "new_12h_median": 68.0,
-          "clean_rate_pct_median": 89.7
+          "clean_signals_median": 20.0,
+          "new_3h_median": 20.5,
+          "new_12h_median": 54.5,
+          "clean_rate_pct_median": 88.6
         }
       }
     }
@@ -194,33 +194,57 @@
       "deterministic": true,
       "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
     },
-    "clusters": []
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4013493242784012348"
+        ]
+      }
+    ]
   },
   "evidence": {
-    "total_clean_evidence": 0,
+    "total_clean_evidence": 1,
     "limit": 16,
-    "returned": 0,
-    "items": []
+    "returned": 1,
+    "items": [
+      {
+        "post_id": "4013493242784012348",
+        "username": "sdyhjk._.240122",
+        "posted_at": "2026-10-22T10:41:39Z",
+        "first_seen_at": "2026-10-22T22:02:33.517518Z",
+        "permalink": "https://www.threads.com/@sdyhjk._.240122/post/DeyytcEklg8",
+        "is_new_since_previous": true,
+        "excerpt": "演唱會...\n會順利的吧.....",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
   },
   "data_quality": {
     "flags": [
-      "baseline_24h_coverage_incomplete",
-      "baseline_24h_incomplete",
-      "baseline_24h_sampling_insufficient",
+      "baseline_24h_sampling_sparse",
       "baseline_72h_sampling_sparse",
       "baseline_7d_sampling_sparse",
       "baseline_ineligible_history_present"
     ],
-    "coverage_status": "stale",
+    "coverage_status": "observed",
     "failed_query_count": 0,
     "query_count": 3,
-    "baseline_complete_24h": false,
+    "baseline_complete_24h": true,
     "baseline_complete_72h": true,
     "baseline_complete_7d": true,
-    "baseline_sampling_quality_24h": "insufficient",
+    "baseline_sampling_quality_24h": "sparse",
     "baseline_sampling_quality_72h": "sparse",
     "baseline_sampling_quality_7d": "sparse",
     "incompatible_history_sample_count": 0,
-    "baseline_ineligible_history_sample_count": 75
+    "baseline_ineligible_history_sample_count": 74
   }
 }
