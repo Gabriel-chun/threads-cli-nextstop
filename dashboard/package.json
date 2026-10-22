@@ -12,7 +12,8 @@
     "start:vinext": "wrangler dev --config dist/server/wrangler.json",
     "deploy:vinext": "node scripts/deploy-cloudflare.mjs",
     "test:i18n": "tsx --test lib/i18n.test.ts",
-    "check:i18n": "node scripts/check-i18n-copy.mjs"
+    "check:i18n": "node scripts/check-i18n-copy.mjs",
+    "deploy:ci": "vinext-cloudflare deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
