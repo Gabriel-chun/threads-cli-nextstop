@@ -24,7 +24,18 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 // All candidates are deduplicated before relevance scoring, and every surviving
 // row records which retrieval sources found it.
 func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, depth int, googleFallback bool) iter.Seq2[SearchResult, error] {
-	return func(yield func(SearchResult, error) bool) {
+	return c.SearchWithDiagnostics(ctx, query, limit, depth, googleFallback, nil)
+}
+
+// SearchWithDiagnostics records aggregate retrieval-page statistics without post text, IDs, or cursors.
+func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit, depth int, googleFallback bool, report func(SearchPageDiagnostic)) iter.Seq2[SearchResult, error] {
+ return func(yield func(SearchResult, error) bool) {
+        started := time.Now().UTC()
+        emit := func(source string, page int, posts []Post, status string) {
+           if report == nil { return }
+           d := SummarizeSearchPage(source, page, posts, started, 12*time.Hour, status)
+           report(d)
+        }
 		if depth < 1 {
 			depth = 1
 		}
@@ -40,9 +51,11 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 
 		posts, cursor, hasMore, err := c.searchSSRPage(ctx, query)
 		if err != nil {
+            emit("threads_ssr", 1, nil, "request_failed")
 			yield(SearchResult{}, err)
 			return
 		}
+        emit("threads_ssr", 1, posts, "ok")
 		for _, p := range posts {
 			candidates = append(candidates, sourcedPost{post: p, source: "threads_ssr"})
 		}
@@ -52,21 +65,26 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 		graphCursor := cursor
 		for page := 2; page <= depth; page++ {
 			if page > 2 && !hasMore {
+                emit("threads_graphql", page, nil, "no_more_pages")
 				break
 			}
 			gPosts, next, more, gErr := c.graphqlSearchPage(ctx, query, graphCursor)
 			if gErr != nil {
+                emit("threads_graphql", page, nil, "request_failed")
 				c.logf(1, "anonymous GraphQL search depth stopped at page %d: %v", page, gErr)
 				break
 			}
+			emit("threads_graphql", page, gPosts, "ok")
 			for _, p := range gPosts {
 				candidates = append(candidates, sourcedPost{post: p, source: "threads_graphql"})
 			}
 			if next == "" || next == graphCursor {
+                emit("threads_graphql", page, nil, "cursor_unavailable_or_unchanged")
 				break
 			}
 			graphCursor, hasMore = next, more
 			if !more {
+                emit("threads_graphql", page, nil, "no_more_pages")
 				break
 			}
 		}
@@ -74,8 +92,10 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 		if googleFallback {
 			gPosts, gErr := c.googleThreadsSearch(ctx, query, 5)
 			if gErr != nil {
+                emit("google_site", 1, nil, "request_failed")
 				c.logf(1, "Google coverage fallback unavailable: %v", gErr)
 			} else {
+                emit("google_site", 1, gPosts, "ok")
 				for _, p := range gPosts {
 					candidates = append(candidates, sourcedPost{post: p, source: "google_site"})
 				}
@@ -344,3 +364,27 @@ func normalizeSearchText(s string) string {
 	).Replace(s)
 	return strings.Join(strings.Fields(s), " ")
 }
+
+// SearchPageDiagnostic stores only aggregate, privacy-preserving source statistics.
+type SearchPageDiagnostic struct {
+ Source string `json:"source"`
+ Page int `json:"page"`
+ Status string `json:"status"`
+ Returned int `json:"returned"`
+ Fresh12h int `json:"fresh_12h"`
+ MissingTime int `json:"missing_time"`
+ LatestPostedAt string `json:"latest_posted_at,omitempty"`
+}
+
+func SummarizeSearchPage(source string, page int, posts []Post, now time.Time, window time.Duration, status string) SearchPageDiagnostic {
+ d := SearchPageDiagnostic{Source: source, Page: page, Status: status, Returned: len(posts)}
+ var latest time.Time
+ for _, p := range posts {
+   if p.Timestamp.IsZero() { d.MissingTime++; continue }
+   if !p.Timestamp.Before(now.Add(-window)) && !p.Timestamp.After(now) { d.Fresh12h++ }
+   if p.Timestamp.After(latest) { latest = p.Timestamp }
+ }
+ if !latest.IsZero() { d.LatestPostedAt = latest.UTC().Format(time.RFC3339) }
+ return d
+}
+

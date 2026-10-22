@@ -35,7 +35,7 @@ while IFS= read -r query || [[ -n "$query" ]]; do
 
   echo "[collector] ($i) $query"
 
-  search_args=(search --depth "$SEARCH_DEPTH")
+  search_args=(search --depth "$SEARCH_DEPTH" --diagnostics-file "$RAW_DIR/query_$(printf '%02d' "$i")_source_diagnostics.json")
   if [[ "$GOOGLE_FALLBACK" == "true" ]]; then
     search_args+=(--google-fallback)
   fi

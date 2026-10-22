@@ -271,6 +271,7 @@ jobs:
 
       - name: Include collector diagnostics
         run: |
+          python3 collector/aggregate_search_diagnostics.py --raw-dir collector/raw --output collector/output/search_source_diagnostics.json
           cp collector/failed_queries.txt collector/output/failed_queries.txt
           cp "$QUERY_FILE" collector/output/queries.txt
           if [[ -s collector/raw/browser_diagnostics.json ]]; then
@@ -391,6 +392,9 @@ jobs:
           cp collector/output/summary.json collector/archive/runs/summary_"$RUN_STAMP".json
           cp collector/output/queries.txt collector/archive/runs/queries_"$RUN_STAMP".txt
           cp collector/output/failed_queries.txt collector/archive/runs/failed_queries_"$RUN_STAMP".txt
+          if [[ -s collector/output/search_source_diagnostics.json ]]; then
+            cp collector/output/search_source_diagnostics.json collector/archive/runs/search_source_diagnostics_"$RUN_STAMP".json
+          fi
           if [[ -s collector/output/browser_diagnostics.json ]]; then
             cp collector/output/browser_diagnostics.json collector/archive/runs/browser_diagnostics_"$RUN_STAMP".json
           fi
