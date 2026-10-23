@@ -1,10 +1,10 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-10-23_004641Z:clean-v2.4-depth3",
+  "observation_id": "concert:2026-10-23_033152Z:clean-v2.4-depth3",
   "run": {
-    "run_stamp": "2026-10-23_004641Z",
-    "run_at": "2026-10-23T00:47:38.229914Z",
-    "status": "success",
+    "run_stamp": "2026-10-23_033152Z",
+    "run_at": "2026-10-23T03:32:48.430232Z",
+    "status": "degraded",
     "pipeline_version": "clean-v2.4-depth3",
     "track": "演唱會",
     "config_key": "concert",
@@ -17,40 +17,40 @@
     "provenance": "manual",
     "baseline_eligible": false,
     "workflow_event": "workflow_dispatch",
-    "github_run_id": "39880055335"
+    "github_run_id": "39895432834"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-23_004641Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-10-23_004641Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-10-23_004641Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-23_004641Z.txt",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-23_033152Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-23_033152Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-23_033152Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-23_033152Z.txt",
     "snapshot_fingerprint": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 34,
+      "raw_rows": 24,
       "snapshot_unique": 0,
       "dedupe_unique": 0,
       "clean_signals": 0,
       "excluded_transactions": 0,
       "suppressed_duplicates": 0,
       "clean_rate_pct": 0,
-      "new_3h": 1,
+      "new_3h": 0,
       "new_12h": 1,
       "unique_authors": 0,
       "author_diversity_ratio": null,
       "duplicate_adjusted_volume": 0
     },
     "previous_comparable_run": {
-      "run_stamp": "2026-10-22_192733Z",
-      "run_at": "2026-10-22T19:28:27.952766Z",
-      "elapsed_minutes": 319.2,
+      "run_stamp": "2026-10-21_043612Z",
+      "run_at": "2026-10-21T04:37:07.905575Z",
+      "elapsed_minutes": 2815.7,
       "pipeline_version": "clean-v2.4-depth3",
-      "clean_signals": 0,
-      "new_3h": 0,
-      "new_12h": 0,
-      "clean_rate_pct": 0,
+      "clean_signals": 14,
+      "new_3h": 15,
+      "new_12h": 41,
+      "clean_rate_pct": 87.5,
       "compatibility": {
         "pipeline_version": "compatible",
         "query": "compatible",
@@ -65,26 +65,26 @@
       "overlap_available": true,
       "new_signal_count": 0,
       "retained_signal_count": 0,
-      "clean_signal_delta": 0,
-      "rolling_3h_delta": 1,
-      "rolling_12h_delta": 1
+      "clean_signal_delta": -14,
+      "rolling_3h_delta": -15,
+      "rolling_12h_delta": -40
     },
     "baselines": {
       "24h": {
         "window": "24h",
         "hours": 24,
-        "complete": true,
-        "coverage_complete": true,
+        "complete": false,
+        "coverage_complete": false,
         "coverage_hours": 24.0,
-        "sample_count": 1,
-        "max_gap_minutes": 1728.4,
-        "sampling_quality": "sparse",
+        "sample_count": 0,
+        "max_gap_minutes": 2815.7,
+        "sampling_quality": "insufficient",
         "sampling": {
-          "quality": "sparse",
-          "eligible_sample_count": 1,
+          "quality": "insufficient",
+          "eligible_sample_count": 0,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
-          "max_gap_minutes": 1728.4,
+          "max_gap_minutes": 2815.7,
           "cadence_within_tolerance": false
         },
         "compatibility": {
@@ -95,17 +95,18 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 10,
+          "excluded_baseline_ineligible_samples": 11,
           "excluded_provenance_counts": {
             "manual": 8,
-            "smoke": 2
+            "smoke": 2,
+            "scheduled": 1
           }
         },
         "metrics": {
-          "clean_signals_median": 0.0,
-          "new_3h_median": 0.0,
-          "new_12h_median": 0.0,
-          "clean_rate_pct_median": 0.0
+          "clean_signals_median": null,
+          "new_3h_median": null,
+          "new_12h_median": null,
+          "clean_rate_pct_median": null
         }
       },
       "72h": {
@@ -114,12 +115,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 72.0,
-        "sample_count": 4,
+        "sample_count": 1,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 4,
+          "eligible_sample_count": 1,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -133,17 +134,18 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 25,
+          "excluded_baseline_ineligible_samples": 28,
           "excluded_provenance_counts": {
             "manual": 23,
+            "scheduled": 3,
             "smoke": 2
           }
         },
         "metrics": {
-          "clean_signals_median": 0.0,
-          "new_3h_median": 6.5,
-          "new_12h_median": 25.5,
-          "clean_rate_pct_median": 0.0
+          "clean_signals_median": 14.0,
+          "new_3h_median": 15.0,
+          "new_12h_median": 41.0,
+          "clean_rate_pct_median": 87.5
         }
       },
       "7d": {
@@ -152,12 +154,12 @@
         "complete": true,
         "coverage_complete": true,
         "coverage_hours": 168.0,
-        "sample_count": 8,
+        "sample_count": 5,
         "max_gap_minutes": 3941.6,
         "sampling_quality": "sparse",
         "sampling": {
           "quality": "sparse",
-          "eligible_sample_count": 8,
+          "eligible_sample_count": 5,
           "expected_cadence_minutes": 120,
           "max_expected_gap_minutes": 180,
           "max_gap_minutes": 3941.6,
@@ -171,17 +173,18 @@
           "excluded_pipeline_mismatch": 0,
           "excluded_query_mismatch": 0,
           "excluded_config_mismatch": 0,
-          "excluded_baseline_ineligible_samples": 57,
+          "excluded_baseline_ineligible_samples": 60,
           "excluded_provenance_counts": {
             "manual": 55,
+            "scheduled": 3,
             "smoke": 2
           }
         },
         "metrics": {
-          "clean_signals_median": 20.0,
-          "new_3h_median": 20.5,
-          "new_12h_median": 54.5,
-          "clean_rate_pct_median": 88.6
+          "clean_signals_median": 28.0,
+          "new_3h_median": 31.0,
+          "new_12h_median": 84.0,
+          "clean_rate_pct_median": 96.6
         }
       }
     }
@@ -204,21 +207,25 @@
   },
   "data_quality": {
     "flags": [
-      "baseline_24h_sampling_sparse",
+      "baseline_24h_coverage_incomplete",
+      "baseline_24h_incomplete",
+      "baseline_24h_sampling_insufficient",
       "baseline_72h_sampling_sparse",
       "baseline_7d_sampling_sparse",
-      "baseline_ineligible_history_present"
+      "baseline_ineligible_history_present",
+      "collector_coverage_stale",
+      "collector_source_failure"
     ],
     "coverage_status": "stale",
     "failed_query_count": 0,
     "query_count": 3,
-    "baseline_complete_24h": true,
+    "baseline_complete_24h": false,
     "baseline_complete_72h": true,
     "baseline_complete_7d": true,
-    "baseline_sampling_quality_24h": "sparse",
+    "baseline_sampling_quality_24h": "insufficient",
     "baseline_sampling_quality_72h": "sparse",
     "baseline_sampling_quality_7d": "sparse",
     "incompatible_history_sample_count": 0,
-    "baseline_ineligible_history_sample_count": 74
+    "baseline_ineligible_history_sample_count": 77
   }
 }
