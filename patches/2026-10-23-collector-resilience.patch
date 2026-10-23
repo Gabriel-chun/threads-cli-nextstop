@@ -1,0 +1,810 @@
+diff --git a/.github/workflows/dashboard-ci.yml b/.github/workflows/dashboard-ci.yml
+index 029787a..c783918 100644
+--- a/.github/workflows/dashboard-ci.yml
++++ b/.github/workflows/dashboard-ci.yml
+@@ -38,6 +38,8 @@ jobs:
+         run: npx tsx --test lib/reviewLedger.test.ts
+       - name: Test mutation security boundary
+         run: npx tsx --test lib/writeSecurity.test.ts
++      - name: Test collector source gaps and health
++        run: npx tsx --test lib/collectorQuality.test.ts
+       - name: Build
+         run: npm run build
+       - name: Runtime MCP discovery regression
+diff --git a/.github/workflows/hardening-ci.yml b/.github/workflows/hardening-ci.yml
+index 34905ad..3290b3b 100644
+--- a/.github/workflows/hardening-ci.yml
++++ b/.github/workflows/hardening-ci.yml
+@@ -24,7 +24,7 @@ jobs:
+         run: |
+           python3 -m unittest collector/test_clean_rules.py
+           python3 -m unittest collector/test_observation.py
+-          python3 -m unittest collector/test_coverage.py
++          python3 -m unittest collector/test_coverage.py collector/test_archive_resilience.py
+           python3 -m unittest collector/test_signal_deck.py
+           python3 -m unittest collector/test_relevance_profile.py
+           python3 -m unittest collector/test_language_exploration.py
+@@ -37,6 +37,7 @@ jobs:
+         run: |
+           npm install --no-audit --no-fund
+           npm run test:i18n
++          npx tsx --test lib/collectorQuality.test.ts
+           npm run check:i18n
+           npm run build
+           npm run build:vinext
+diff --git a/.github/workflows/nextstop-collector.yml b/.github/workflows/nextstop-collector.yml
+index 64edf5e..a587121 100644
+--- a/.github/workflows/nextstop-collector.yml
++++ b/.github/workflows/nextstop-collector.yml
+@@ -9,6 +9,11 @@ on:
+     # Effective target: one real collection about every 2 hours; collection uses a single public recent-search SSR window.
+     # so missed schedule events are less likely to create 4–7 hour gaps.
+     - cron: "7,22,37,52 * * * *"
++  workflow_run:
++    # Independent heartbeats only; never subscribe to workflows triggered by this collector.
++    workflows: ["Next Stop Trend Tracking", "Language Need Exploration"]
++    types: [completed]
++    branches: [main]
+   workflow_dispatch:
+   push:
+     branches: [main]
+@@ -23,6 +28,7 @@ concurrency:
+ 
+ jobs:
+   cadence:
++    if: github.event_name != 'workflow_run' || (github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository)
+     runs-on: ubuntu-latest
+     outputs:
+       should_run: ${{ steps.gate.outputs.should_run }}
+@@ -78,6 +84,7 @@ jobs:
+       image: mcr.microsoft.com/playwright:v1.56.1-noble
+     timeout-minutes: 30
+     outputs:
++      notion_sync_status: ${{ steps.notion.outcome }}
+       run_stamp: ${{ steps.stamp.outputs.run_stamp }}
+       provenance: ${{ steps.provenance.outputs.provenance }}
+       baseline_eligible: ${{ steps.quality.outputs.baseline_eligible }}
+@@ -309,6 +316,9 @@ jobs:
+           if-no-files-found: error
+ 
+       - name: Sync snapshot to Notion
++        id: notion
++        timeout-minutes: 5
++        continue-on-error: true
+         env:
+           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+           NOTION_POSTS_DATA_SOURCE_ID: "1d268bf4-2656-46c2-9ed1-b2143e611d3c"
+@@ -333,6 +343,7 @@ jobs:
+     runs-on: ubuntu-latest
+     timeout-minutes: 10
+     env:
++      NOTION_SYNC_STATUS: ${{ needs.collect.outputs.notion_sync_status }}
+       RUN_STAMP: ${{ needs.collect.outputs.run_stamp }}
+       OBS_RUN_PROVENANCE: ${{ needs.collect.outputs.provenance }}
+       OBS_BASELINE_ELIGIBLE: ${{ needs.collect.outputs.baseline_eligible }}
+@@ -353,6 +364,8 @@ jobs:
+         run: |
+           set -euo pipefail
+ 
++          python3 collector/archive_resilience.py
++
+           mkdir -p collector/archive/latest
+           mkdir -p collector/archive/snapshots
+           mkdir -p collector/archive/runs
+@@ -402,6 +415,10 @@ jobs:
+               "pipeline_version": summary.get("pipeline_version"),
+               "collector_mode": summary.get("collector_mode"),
+               "coverage_status": summary.get("coverage_status"),
++              "snapshot_unique_rows": summary.get("snapshot_unique_rows"),
++              "accepted_raw_rows": (summary.get("filter_diagnostics") or {}).get("accepted_raw_rows"),
++              "source_failure_count": summary.get("source_failure_count", 0),
++              "notion_sync_status": summary.get("notion_sync_status"),
+               "raw_rows": summary.get("raw_rows", 0),
+               "dedupe_unique_signals": summary.get("dedupe_unique_signals", 0),
+               "unique_signals": summary.get("unique_signals", 0),
+@@ -449,6 +466,9 @@ jobs:
+           from pathlib import Path
+           summary = json.loads(Path(f"collector/archive/runs/summary_{os.environ['RUN_STAMP']}.json").read_text())
+           coverage = summary.get("coverage_status")
++          if summary.get("notion_sync_status") != "success":
++              print("::error::Source archive saved, but Notion synchronization did not succeed. Inspect the sync step before retrying writes.")
++              raise SystemExit(1)
+           if coverage in {"stale", "degraded"}:
+               print(f"::error::Collector archive saved, but source coverage is {coverage}; no healthy sample was produced. No automatic retry requested.")
+               raise SystemExit(1)
+diff --git a/collector/archive_resilience.py b/collector/archive_resilience.py
+new file mode 100644
+index 0000000..b1511d8
+--- /dev/null
++++ b/collector/archive_resilience.py
+@@ -0,0 +1,39 @@
++#!/usr/bin/env python3
++"""Record downstream sync health and preserve the last usable source snapshot.
++
++Run after artifact download and before copying output into the archive. Source
++quality and Notion availability are deliberately independent.
++"""
++import json
++import os
++import shutil
++from pathlib import Path
++from assess_coverage import quality_allows_baseline
++
++
++def prepare(output, latest, sync_status):
++    summary_path = output / "summary.json"
++    observation_path = output / "observation_bundle.json"
++    summary = json.loads(summary_path.read_text())
++    observation = json.loads(observation_path.read_text())
++    summary["notion_sync_status"] = sync_status
++    observation.setdefault("run", {})["notion_sync_status"] = sync_status
++    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
++    observation_path.write_text(json.dumps(observation, ensure_ascii=False, indent=2) + "\n")
++    usable = (summary.get("coverage_status") == "observed"
++              and summary.get("run_status") == "Success"
++              and quality_allows_baseline(summary))
++    if usable:
++        latest.mkdir(parents=True, exist_ok=True)
++        # Validate all inputs before replacing the prior good backup.
++        snapshot = output / f"snapshot_{summary['run_stamp']}.json"
++        json.loads(snapshot.read_text())
++        shutil.copyfile(snapshot, latest / "last_good_snapshot.json")
++        shutil.copyfile(summary_path, latest / "last_good_summary.json")
++        shutil.copyfile(observation_path, latest / "last_good_observation.json")
++    return usable
++
++
++if __name__ == "__main__":
++    prepare(Path("collector/output"), Path("collector/archive/latest"),
++            os.environ.get("NOTION_SYNC_STATUS", "unknown"))
+diff --git a/collector/collect.sh b/collector/collect.sh
+index 16709b2..5b4dee8 100644
+--- a/collector/collect.sh
++++ b/collector/collect.sh
+@@ -9,7 +9,16 @@ SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
+ SEARCH_DEPTH="${COLLECTOR_SEARCH_DEPTH:-3}"
+ SEARCH_TYPE="${COLLECTOR_SEARCH_TYPE:-top}"
+ GOOGLE_FALLBACK="${COLLECTOR_GOOGLE_FALLBACK:-false}"
+-QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-2}"
++# Recent search is one public SSR window: keep failures bounded rather than
++# multiplying shell retries by the CLI retry budget.
++DEFAULT_QUERY_ATTEMPTS=2
++DEFAULT_CLIENT_RETRIES=8
++if [[ "$SEARCH_TYPE" == "recent" ]]; then
++  DEFAULT_QUERY_ATTEMPTS=1
++  DEFAULT_CLIENT_RETRIES=1
++fi
++QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-$DEFAULT_QUERY_ATTEMPTS}"
++CLIENT_RETRIES="${COLLECTOR_CLIENT_RETRIES:-$DEFAULT_CLIENT_RETRIES}"
+ RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-20}"
+ 
+ mkdir -p "$RAW_DIR"
+@@ -28,7 +37,7 @@ fi
+ i=0
+ while IFS= read -r query || [[ -n "$query" ]]; do
+   query="$(printf '%s' "$query" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+-  [[ -z "$query" ]] && continue
++  [[ -z "$query" || "$query" == \#* ]] && continue
+ 
+   i=$((i + 1))
+   outfile="$RAW_DIR/query_$(printf '%02d' "$i").jsonl"
+@@ -56,7 +65,7 @@ while IFS= read -r query || [[ -n "$query" ]]; do
+ 
+     if "$TH_BIN" "${client_args[@]}" \
+         --delay 5s \
+-        --retries 8 \
++        --retries "$CLIENT_RETRIES" \
+         --timeout 45s \
+         --quiet \
+         -o jsonl \
+diff --git a/collector/test_archive_resilience.py b/collector/test_archive_resilience.py
+new file mode 100644
+index 0000000..ee0e411
+--- /dev/null
++++ b/collector/test_archive_resilience.py
+@@ -0,0 +1,48 @@
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++import unittest
++
++sys.path.insert(0, str(Path(__file__).parent))
++from archive_resilience import prepare
++
++
++class ArchiveResilienceTest(unittest.TestCase):
++    def test_sync_failure_saves_good_source_and_stale_attempt_keeps_backup(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            output, latest = Path(tmp) / 'output', Path(tmp) / 'latest'
++            output.mkdir()
++            good = dict(run_stamp='test', run_status='Success', coverage_status='observed',
++                        raw_rows=4, filter_diagnostics={'accepted_raw_rows': 2})
++            (output / 'summary.json').write_text(json.dumps(good))
++            (output / 'observation_bundle.json').write_text('{"run": {}}')
++            (output / 'snapshot_test.json').write_text('[{"id":"real"}]')
++            self.assertTrue(prepare(output, latest, 'failure'))
++            self.assertEqual(json.loads((latest / 'last_good_summary.json').read_text())['notion_sync_status'], 'failure')
++            backup = (latest / 'last_good_snapshot.json').read_bytes()
++            good.update(coverage_status='stale', run_status='Partial')
++            (output / 'summary.json').write_text(json.dumps(good))
++            self.assertFalse(prepare(output, latest, 'success'))
++            self.assertEqual((latest / 'last_good_snapshot.json').read_bytes(), backup)
++            self.assertEqual(json.loads((output / 'observation_bundle.json').read_text())['run']['notion_sync_status'], 'success')
++
++    def test_recent_query_failure_is_bounded_and_recorded(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            root = Path(tmp)
++            binary = root / 'th'
++            binary.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> "$CALL_LOG"\nexit 5\n')
++            binary.chmod(0o755)
++            (root / 'queries').write_text('# comment\nconcert\n')
++            result = subprocess.run(['bash', str(Path(__file__).with_name('collect.sh').resolve())],
++                env={**os.environ, 'TH_BIN': str(binary), 'QUERY_FILE': str(root/'queries'),
++                     'RAW_DIR': str(root/'raw'), 'FAILED_FILE': str(root/'failed'),
++                     'CALL_LOG': str(root/'calls'), 'SLEEP_SECONDS': '0',
++                     'COLLECTOR_SEARCH_TYPE': 'recent'}, capture_output=True)
++            self.assertEqual(result.returncode, 0)  # aggregation assesses quality later
++            calls = (root/'calls').read_text().splitlines()
++            self.assertEqual(len(calls), 1)
++            self.assertIn('--retries 1', calls[0])
++            self.assertEqual((root/'failed').read_text(), 'concert\n')
+diff --git a/collector/test_coverage.py b/collector/test_coverage.py
+index 32eace3..b2b6f94 100644
+--- a/collector/test_coverage.py
++++ b/collector/test_coverage.py
+@@ -87,7 +87,7 @@ class WorkflowRegressionTest(unittest.TestCase):
+             (root / "collector/archive/runs").mkdir(parents=True)
+             from datetime import datetime, timezone
+             (root / "collector/archive/runs/summary_recent.json").write_text(json.dumps({"run_at": datetime.now(timezone.utc).isoformat()}))
+-            for event in ["schedule", "workflow_dispatch", "push"]:
++            for event in ["schedule", "workflow_dispatch", "push", "workflow_run"]:
+                 output = root / f"{event}.txt"
+                 subprocess.run(["bash", "-e", "-c", script], cwd=root,
+                                env={**os.environ, "GITHUB_OUTPUT": str(output), "GITHUB_EVENT_NAME": event},
+@@ -105,10 +105,23 @@ class WorkflowRegressionTest(unittest.TestCase):
+             (root / "collector/archive/runs").mkdir(parents=True)
+             path = root / "collector/archive/runs/summary_test.json"
+             for coverage, code in [("stale", 1), ("degraded", 1), ("partial", 0), ("observed", 0)]:
+-                path.write_text(json.dumps({"coverage_status": coverage}))
++                path.write_text(json.dumps({"coverage_status": coverage, "notion_sync_status": "success"}))
+                 result = subprocess.run(["bash", "-e", "-c", self.step_script("Report archived source health")], cwd=root,
+                                         env={**os.environ, "RUN_STAMP": "test"}, capture_output=True)
+                 self.assertEqual(result.returncode, code)
++            path.write_text(json.dumps({"coverage_status": "observed", "notion_sync_status": "failure"}))
++            result = subprocess.run(["bash", "-e", "-c", self.step_script("Report archived source health")], cwd=root,
++                                    env={**os.environ, "RUN_STAMP": "test"}, capture_output=True)
++            self.assertEqual(result.returncode, 1)
++
++    def test_backup_heartbeats_cannot_loop_back_from_collector_dependents(self):
++        heartbeat = self.workflow.split("  workflow_run:", 1)[1].split("  workflow_dispatch:", 1)[0]
++        self.assertIn('"Next Stop Trend Tracking"', heartbeat)
++        self.assertIn('"Language Need Exploration"', heartbeat)
++        for dependent in ["Daily Signal Deck", "Daily Keyword Network", "Observation Event"]:
++            self.assertNotIn(dependent, heartbeat)
++        self.assertIn("head_repository.full_name == github.repository", self.workflow)
++        self.assertIn("id: notion\n        timeout-minutes: 5\n        continue-on-error: true", self.workflow)
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/dashboard/app/page.tsx b/dashboard/app/page.tsx
+index 7ea165a..2a6c96a 100644
+--- a/dashboard/app/page.tsx
++++ b/dashboard/app/page.tsx
+@@ -16,7 +16,7 @@ async function TrendStrip({ historyPromise }: { historyPromise: Promise<TrendPoi
+       <div className="quietTrendStripHead">
+         <div>
+           <span><T k="signal.velocity" /></span>
+-          <strong>{latestTrend ? `3h ${latestTrend.new3h} · 12h ${latestTrend.new12h}` : "—"}</strong>
++          <strong>{latestTrend?.sourceUsable && Number.isFinite(latestTrend.new3h) && Number.isFinite(latestTrend.new12h) ? `3h ${latestTrend.new3h} · 12h ${latestTrend.new12h}` : "—"}</strong>
+         </div>
+         <small><T k="signal.chart.trendWindow" /></small>
+       </div>
+@@ -56,16 +56,16 @@ async function Diagnostics({
+   return (
+     <div className="quietDetailsBody">
+       <section className="metrics quietMetricCards">
+-        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.concertRaw}</strong><small><T k="signal.metric.rawHelp" /></small></article>
+-        <article><span><T k="signal.metric.clean" /></span><strong>{data.cleanCount}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
+-        <article><span><T k="signal.metric.actionable" /></span><strong>{data.actionable}</strong><small><T k="signal.metric.actionableHelp" /></small></article>
++        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.sourceValid ? data.concertRaw : "—"}</strong><small><T k="signal.metric.rawHelp" /></small></article>
++        <article><span><T k="signal.metric.clean" /></span><strong>{data.sourceValid ? data.cleanCount : "—"}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
++        <article><span><T k="signal.metric.actionable" /></span><strong>{data.sourceValid ? data.actionable : "—"}</strong><small><T k="signal.metric.actionableHelp" /></small></article>
+       </section>
+ 
+       <section className="trendGrid">
+         <div className="panel trendPanel">
+           <div className="panelHead">
+             <div><p className="kicker"><T k="signal.pipelineQuality" /></p><h2><T k="signal.cleanResale" /></h2></div>
+-            <p className="trendValue">{latestTrend ? `${latestTrend.cleanRatePct}%` : "—"}</p>
++            <p className="trendValue">{latestTrend?.sourceUsable && Number.isFinite(latestTrend.cleanRatePct) ? `${latestTrend.cleanRatePct}%` : "—"}</p>
+           </div>
+           <TrendChart data={history} series={[
+             { key: "cleanSignals", labelKey: "signal.chart.clean", className: "trendA" },
+@@ -93,9 +93,9 @@ async function Diagnostics({
+         <aside className="panel split">
+           <p className="kicker"><T k="signal.pipeline" /></p>
+           <h2><T k="signal.threeLayers" /></h2>
+-          <div className="layer actionable"><span>A</span><div><strong>{data.actionable} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
+-          <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
+-          <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
++          <div className="layer actionable"><span>A</span><div><strong>{data.sourceValid ? data.actionable : "—"} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
++          <div className="layer context"><span>B</span><div><strong>{data.sourceValid ? data.context : "—"} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
++          <div className="layer noise"><span>C</span><div><strong>{data.sourceValid ? data.noise : "—"} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
+         </aside>
+       </section>
+ 
+diff --git a/dashboard/components/TrendChart.tsx b/dashboard/components/TrendChart.tsx
+index 87adf52..c76bcde 100644
+--- a/dashboard/components/TrendChart.tsx
++++ b/dashboard/components/TrendChart.tsx
+@@ -1,5 +1,6 @@
+ "use client";
+ 
++import { trendSegments, trendTimeTicks } from "../lib/collectorQuality";
+ import type { TrendPoint } from "../lib/signals";
+ import { useI18n } from "./I18nProvider";
+ 
+@@ -27,14 +28,16 @@ export function TrendChart({
+   const height = compact ? 104 : 220;
+   const padX = 18;
+   const padY = compact ? 10 : 18;
+-  const values = data.flatMap((row) => series.map((item) => Number(row[item.key] || 0)));
++  const values = data.filter(row => row.sourceUsable).flatMap((row) => series.map((item) => row[item.key])).filter(Number.isFinite);
+   const max = Math.max(1, ...values);
+-  const x = (index: number) =>
+-    data.length <= 1 ? width / 2 : padX + (index / (data.length - 1)) * (width - padX * 2);
++  const firstTime = Date.parse(data[0].runAt);
++  const lastTime = Date.parse(data[data.length - 1].runAt);
++  const x = (row: TrendPoint) => lastTime <= firstTime ? width / 2
++    : padX + ((Date.parse(row.runAt) - firstTime) / (lastTime - firstTime)) * (width - padX * 2);
+   const y = (value: number) =>
+     height - padY - (value / max) * (height - padY * 2);
+ 
+-  const labels = [data[0], data[Math.floor((data.length - 1) / 2)], data[data.length - 1]];
++  const labels = trendTimeTicks(firstTime, lastTime);
+ 
+   return (
+     <div className={compact ? "trendChart compact" : "trendChart"}>
+@@ -46,13 +49,17 @@ export function TrendChart({
+       <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={t("signal.chart.aria")}>
+         {!compact ? <line className="trendGridLine" x1={padX} x2={width - padX} y1={height / 2} y2={height / 2} /> : null}
+         <line className="trendGridLine" x1={padX} x2={width - padX} y1={height - padY} y2={height - padY} />
+-        {series.map((item) => {
+-          const points = data.map((row, index) => `${x(index)},${y(Number(row[item.key] || 0))}`).join(" ");
+-          return <polyline key={item.key} className={`trendLine ${item.className}`} points={points} />;
+-        })}
++        <desc>{t("signal.chart.gaps")}</desc>
++        {series.flatMap((item) => trendSegments(data, row => row[item.key]).map((segment, index) => (
++          <g key={`${item.key}-${index}`}>
++            <polyline className={`trendLine ${item.className}`} points={segment.map(row => `${x(row)},${y(row[item.key])}`).join(" ")} />
++            {segment.length === 1 ? <circle className={`trendLine ${item.className}`} cx={x(segment[0])} cy={y(segment[0][item.key])} r={2.5} /> : null}
++          </g>
++        )))}
+       </svg>
+-      <div className="trendAxis">
+-        {labels.map((row, index) => <span key={index}>{formatDate(row.runAt)}</span>)}
++      <p className="quietTrendExplainer">{t("signal.chart.gaps")}</p>
++      <div className="trendAxis" style={{ marginInline: `${padX / width * 100}%` }}>
++        {labels.map((time, index) => <span key={index} style={{ flex: 1, textAlign: index === 0 ? "left" : index === 1 ? "center" : "right" }}>{formatDate(time)}</span>)}
+       </div>
+     </div>
+   );
+diff --git a/dashboard/lib/collectorQuality.test.ts b/dashboard/lib/collectorQuality.test.ts
+new file mode 100644
+index 0000000..e90439d
+--- /dev/null
++++ b/dashboard/lib/collectorQuality.test.ts
+@@ -0,0 +1,63 @@
++import { test } from "node:test";
++import assert from "node:assert/strict";
++import { freshTimestamp, sourceUsable, trendSegments, trendTimeTicks } from "./collectorQuality";
++import { loadTrendHistory, collectorHealth, loadHomeObservation } from "./signals";
++
++test("source gaps differ from a valid all-resale zero", () => {
++  assert.equal(sourceUsable({status:"Success", raw_rows:34, dedupe_unique_signals:0, unique_signals:0}), false);
++  assert.equal(sourceUsable({status:"Success", raw_rows:34, dedupe_unique_signals:4, unique_signals:0}), true);
++  for (const coverage_status of ["stale", "degraded", "partial"]) {
++    assert.equal(sourceUsable({status:"Success",coverage_status}), false);
++  }
++  assert.equal(sourceUsable({status:"Partial"}), false);
++});
++test("health rejects overdue and future-dated observations", () => {
++  const now = Date.parse("2026-10-23T06:00:00Z");
++  assert.equal(freshTimestamp("2026-10-23T04:00:00Z",now),true);
++  assert.equal(freshTimestamp("2026-10-23T02:59:00Z",now),false);
++  assert.equal(freshTimestamp("2026-10-24T06:00:00Z",now),false);
++});
++test("lines break at failures, missing intervals and method changes; real zero remains", () => {
++  const row = (h:number, sourceUsable=true, pipelineVersion="v1", value=0) => ({runAt:`2026-10-23T${String(h).padStart(2,"0")}:00:00Z`,sourceUsable,pipelineVersion,value});
++  const rows=[row(0),row(2),row(4,false),row(6),row(10),row(12,true,"v2"),row(14,true,"v2",NaN)];
++  assert.deepEqual(trendSegments(rows,r=>r.value).map(s=>s.length),[2,1,1,1]);
++});
++test("history preserves Partial and Failed markers and health reports sync failure",async()=>{
++  const original=globalThis.fetch;
++  globalThis.fetch=async()=>Response.json([
++    {run_at:"2026-10-23T02:00:00Z",status:"Success",raw_rows:34,dedupe_unique_signals:0,unique_signals:0},
++    {run_at:"2026-10-23T04:00:00Z",status:"Partial",coverage_status:"stale"},
++    {run_at:new Date().toISOString(),status:"Failed"}
++  ]);
++  try {
++    const rows=await loadTrendHistory();
++    assert.deepEqual(rows.map(r=>r.status),["Success","Partial","Failed"]);
++    assert.ok(rows.every(r=>!r.sourceUsable));
++    assert.ok(Number.isNaN(rows[1].new3h));
++    assert.equal((await collectorHealth()).healthy,false);
++    globalThis.fetch=async()=>Response.json([{run_at:new Date().toISOString(),status:"Success",coverage_status:"observed",notion_sync_status:"failure"}]);
++    assert.equal((await collectorHealth()).status,"failure");
++  } finally {globalThis.fetch=original;}
++});
++
++test("home distinguishes failed source from downstream sync failure and real zero",async()=>{
++  const original=globalThis.fetch;
++  const bundle={run:{run_at:new Date().toISOString(),status:"Success",coverage_status:"observed",notion_sync_status:"success"},deterministic_facts:{current:{raw_rows:34,dedupe_unique:0,clean_signals:0}}};
++  globalThis.fetch=async()=>Response.json(bundle);
++  try {
++    assert.equal((await loadHomeObservation()).sourceValid,false);
++    bundle.deterministic_facts.current.dedupe_unique=4;
++    bundle.run.notion_sync_status="failure";
++    const valid=await loadHomeObservation();
++    assert.equal(valid.sourceValid,true);
++    assert.equal(valid.cleanCount,0);
++    assert.equal(valid.health.status,"failure");
++    globalThis.fetch=async()=>new Response("Unavailable",{status:503});
++    assert.equal((await loadHomeObservation()).sourceValid,false);
++  } finally { globalThis.fetch=original; }
++});
++
++test("irregular collection times use the temporal midpoint for axis labels",()=>{
++  assert.deepEqual(trendTimeTicks(Date.parse("2026-10-23T00:00:00Z"),Date.parse("2026-10-23T20:00:00Z")),
++    ["2026-10-23T00:00:00.000Z","2026-10-23T10:00:00.000Z","2026-10-23T20:00:00.000Z"]);
++});
+diff --git a/dashboard/lib/collectorQuality.ts b/dashboard/lib/collectorQuality.ts
+new file mode 100644
+index 0000000..da87c76
+--- /dev/null
++++ b/dashboard/lib/collectorQuality.ts
+@@ -0,0 +1,42 @@
++/** Source availability is separate from a legitimate zero clean-signal count. */
++export type QualityRow = {
++  status?: string; coverage_status?: string; raw_rows?: number;
++  dedupe_unique_signals?: number; unique_signals?: number;
++  source_failure_count?: number; accepted_raw_rows?: number;
++};
++export function sourceUsable(row: QualityRow): boolean {
++  if (row.status?.toLowerCase() !== "success") return false;
++  if (row.coverage_status && row.coverage_status !== "observed") return false;
++  if (Number(row.source_failure_count || 0) > 0 || row.accepted_raw_rows === 0) return false;
++  // Before quality diagnostics existed, stale candidates were labelled observed.
++  if (Number(row.raw_rows) > 0 && row.dedupe_unique_signals === 0 && row.unique_signals === 0) return false;
++  return true;
++}
++export function freshTimestamp(value: string | null | undefined, now = Date.now()): boolean {
++  const age = now - Date.parse(value || "");
++  return Number.isFinite(age) && age >= -5 * 60_000 && age <= 180 * 60_000;
++}
++export type ChartSample = {
++  runAt: string; pipelineVersion: string | null; sourceUsable: boolean;
++};
++/** Split at source gaps, missed intervals, and changes in collection method. */
++export function trendSegments<T extends ChartSample>(rows: T[], value: (row: T) => number): T[][] {
++  const result: T[][] = [];
++  let current: T[] = [];
++  for (const row of rows) {
++    const valid = row.sourceUsable && Number.isFinite(Date.parse(row.runAt)) && Number.isFinite(value(row));
++    const prior = current.at(-1);
++    if (!valid || (prior && (Date.parse(row.runAt) - Date.parse(prior.runAt) > 180 * 60_000 || row.pipelineVersion !== prior.pipelineVersion))) {
++      if (current.length) result.push(current);
++      current = [];
++    }
++    if (valid) current.push(row);
++  }
++  if (current.length) result.push(current);
++  return result;
++}
++
++/** Axis ticks must share the chart's elapsed-time scale, not sample indexes. */
++export function trendTimeTicks(firstTime: number, lastTime: number): string[] {
++  return [firstTime, (firstTime + lastTime) / 2, lastTime].map(time => new Date(time).toISOString());
++}
+diff --git a/dashboard/lib/i18n.ts b/dashboard/lib/i18n.ts
+index 1388dab..dca1dba 100644
+--- a/dashboard/lib/i18n.ts
++++ b/dashboard/lib/i18n.ts
+@@ -348,7 +348,8 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
+     "signal.chart.resaleExcluded": "已排除轉售",
+     "signal.chart.empty": "等待更多觀察點",
+     "signal.chart.aria": "訊號趨勢折線圖",
+-    "signal.chart.trendWindow": "最近 36 次成功採集",
++    "signal.chart.gaps": "資料不足、漏採或採集方式改變時，折線會中斷；缺口不代表零需求。",
++    "signal.chart.trendWindow": "最近 36 次採集嘗試",
+     "signal.chart.explainer": "3h / 12h 是滾動新增乾淨訊號數量，用來看訊號速度；不是 Collector 健康度或比例。",
+     "signal.kind.actionable": "可行動",
+     "signal.kind.context": "脈絡",
+@@ -714,7 +715,8 @@ export const dictionaries: Record<UiLocale, Record<string,string>> = {
+     "signal.chart.resaleExcluded": "Resale excluded",
+     "signal.chart.empty": "Waiting for more observation points",
+     "signal.chart.aria": "Signal trend line chart",
+-    "signal.chart.trendWindow": "Last 36 successful collections",
++    "signal.chart.gaps": "Lines break when data is unavailable, collection is missed, or methods change. Gaps do not mean zero demand.",
++    "signal.chart.trendWindow": "Last 36 collection attempts",
+     "signal.chart.explainer": "3h / 12h are rolling counts of new clean signals. They show signal velocity, not Collector health or a percentage.",
+     "signal.kind.actionable": "Actionable",
+     "signal.kind.context": "Context",
+diff --git a/dashboard/lib/signals.ts b/dashboard/lib/signals.ts
+index 467c926..999d9e3 100644
+--- a/dashboard/lib/signals.ts
++++ b/dashboard/lib/signals.ts
+@@ -1,3 +1,5 @@
++import { sourceUsable, freshTimestamp } from "./collectorQuality";
++
+ export type RawPost = {
+   id: string;
+   query?: string;
+@@ -166,12 +168,11 @@ export function clusterCounts(signals: Signal[]) {
+   return [...counts.values()].sort((a, b) => b.count - a.count);
+ }
+ 
+-const COLLECTOR_HEALTH_MAX_AGE_MS = 4 * 60 * 60 * 1000;
+ 
+ export async function collectorHealth() {
+   const res = await fetch(HISTORY_URL, {
+     headers: { "User-Agent": "next-stop-live-dashboard-health" },
+-    next: { revalidate: 120 }
++    cache: "no-store"
+   });
+   if (!res.ok) throw new Error(`collector history fetch failed: ${res.status}`);
+ 
+@@ -189,19 +190,16 @@ export async function collectorHealth() {
+   }
+ 
+   const updatedAt = latest.run_at;
+-  const updatedMs = Date.parse(updatedAt);
+-  const ageMs = Number.isFinite(updatedMs)
+-    ? Math.max(0, Date.now() - updatedMs)
+-    : Number.POSITIVE_INFINITY;
+-  const fresh = ageMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
++  const fresh = freshTimestamp(updatedAt);
+   const succeeded = latest.status === "Success";
+-  const sourceStale = (latest as typeof latest & { coverage_status?: string }).coverage_status === "stale";
++  const sourceStale = !sourceUsable(latest);
++  const syncFailed = latest.notion_sync_status === "failure";
+ 
+   return {
+-    healthy: succeeded && fresh && !sourceStale,
+-    status: latest.status === "Failed"
++    healthy: succeeded && fresh && !sourceStale && !syncFailed,
++    status: latest.status === "Failed" || syncFailed
+       ? "failure"
+-      : succeeded && (!fresh || sourceStale)
++      : !fresh || sourceStale
+         ? "stale"
+         : succeeded
+           ? "success"
+@@ -275,7 +273,8 @@ export type TrendPoint = {
+   new3h: number;
+   new12h: number;
+   masterCount: number;
+-  status: "Success" | "Failed";
++  status: "Success" | "Failed" | "Partial";
++  sourceUsable: boolean;
+ };
+ 
+ type TrendRow = {
+@@ -290,13 +289,18 @@ type TrendRow = {
+   new_3h?: number;
+   new_12h?: number;
+   master_unique_rows?: number;
+-  status?: "Success" | "Failed";
++  status?: "Success" | "Failed" | "Partial";
++  coverage_status?: string;
++  source_failure_count?: number;
++  accepted_raw_rows?: number;
++  notion_sync_status?: string;
+ };
+ 
+-export async function loadTrendHistory(limit = 36, includeFailed = false): Promise<TrendPoint[]> {
++// Keep failure markers even for the legacy false argument: removing them bridges outages.
++export async function loadTrendHistory(limit = 36, _includeFailed = false): Promise<TrendPoint[]> {
+   const res = await fetch(HISTORY_URL, {
+     headers: { "User-Agent": "next-stop-live-dashboard" },
+-    next: { revalidate: 300 }
++    cache: "no-store"
+   });
+   if (!res.ok) return [];
+ 
+@@ -306,17 +310,19 @@ export async function loadTrendHistory(limit = 36, includeFailed = false): Promi
+       runAt: row.run_at || "",
+       runStamp: row.run_stamp || "",
+       pipelineVersion: row.pipeline_version ?? null,
+-      rawRows: Number(row.raw_rows || 0),
+-      dedupeUnique: Number(row.dedupe_unique_signals || 0),
+-      cleanSignals: Number(row.unique_signals || 0),
+-      excludedTransactions: Number(row.excluded_transactions || 0),
+-      cleanRatePct: Number(row.clean_rate_pct || 0),
+-      new3h: Number(row.new_3h || 0),
+-      new12h: Number(row.new_12h || 0),
+-      masterCount: Number(row.master_unique_rows || 0),
+-      status: row.status === "Failed" ? "Failed" : "Success"
++      rawRows: Number(row.raw_rows ?? Number.NaN),
++      dedupeUnique: Number(row.dedupe_unique_signals ?? Number.NaN),
++      cleanSignals: Number(row.unique_signals ?? Number.NaN),
++      excludedTransactions: Number(row.excluded_transactions ?? Number.NaN),
++      cleanRatePct: Number(row.clean_rate_pct ?? Number.NaN),
++      new3h: Number(row.new_3h ?? Number.NaN),
++      new12h: Number(row.new_12h ?? Number.NaN),
++      masterCount: Number(row.master_unique_rows ?? Number.NaN),
++      sourceUsable: sourceUsable(row),
++      status: row.status === "Success" ? "Success" : row.status === "Failed" ? "Failed" : "Partial"
+     }))
+-    .filter((row) => Boolean(row.runAt) && (includeFailed || row.status === "Success"))
++    .filter((row) => Number.isFinite(Date.parse(row.runAt)))
++    .sort((a, b) => Date.parse(a.runAt) - Date.parse(b.runAt))
+     .slice(-Math.max(1, Math.min(84, limit)));
+ }
+ 
+@@ -326,10 +332,12 @@ type ObservationBundle = {
+     run_at?: string;
+     status?: string;
+     coverage_status?: string;
++    notion_sync_status?: string;
+   };
+   deterministic_facts?: {
+     current?: {
+       raw_rows?: number;
++      dedupe_unique?: number;
+       clean_signals?: number;
+       new_3h?: number;
+       new_12h?: number;
+@@ -361,11 +369,12 @@ type ObservationBundle = {
+ export async function loadHomeObservation() {
+   const observationRes = await fetch(OBSERVATION_URL, {
+     headers: { "User-Agent": "next-stop-live-dashboard-home" },
+-    next: { revalidate: 300 }
++    cache: "no-store"
+   });
+ 
+   if (!observationRes.ok) {
+     return {
++      sourceValid: false,
+       generatedAt: "",
+       concertRaw: 0,
+       cleanCount: 0,
+@@ -390,17 +399,17 @@ export async function loadHomeObservation() {
+   const observation = (await observationRes.json()) as ObservationBundle;
+   const runAt = observation.run?.run_at || null;
+   const runStatus = String(observation.run?.status || "").toLowerCase();
+-  const runAgeMs = runAt && Number.isFinite(Date.parse(runAt))
+-    ? Math.max(0, Date.now() - Date.parse(runAt))
+-    : Number.POSITIVE_INFINITY;
+-  const fresh = runAgeMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
++  const fresh = freshTimestamp(runAt);
+   const succeeded = runStatus === "success";
+-  const sourceStale = observation.run?.coverage_status === "stale";
++  const current = observation.deterministic_facts?.current;
++  const sourceStale = !sourceUsable({status: runStatus, coverage_status: observation.run?.coverage_status,
++    raw_rows: current?.raw_rows, dedupe_unique_signals: current?.dedupe_unique, unique_signals: current?.clean_signals});
++  const syncFailed = observation.run?.notion_sync_status === "failure";
+   const health = {
+-    healthy: succeeded && fresh && !sourceStale,
+-    status: runStatus === "failed"
++    healthy: succeeded && fresh && !sourceStale && !syncFailed,
++    status: runStatus === "failed" || syncFailed
+       ? "failure"
+-      : succeeded && (!fresh || sourceStale)
++      : !fresh || sourceStale
+         ? "stale"
+         : succeeded
+           ? "success"
+@@ -438,6 +447,7 @@ export async function loadHomeObservation() {
+   }));
+ 
+   return {
++    sourceValid: !sourceStale && fresh,
+     generatedAt: observation.run?.run_at || "",
+     concertRaw: Number(observation.deterministic_facts?.current?.raw_rows || 0),
+     cleanCount: Number(observation.deterministic_facts?.current?.clean_signals || 0),
+diff --git a/docs/reviews/2026-10-23-collector-code-review.md b/docs/reviews/2026-10-23-collector-code-review.md
+new file mode 100644
+index 0000000..c5c1813
+--- /dev/null
++++ b/docs/reviews/2026-10-23-collector-code-review.md
+@@ -0,0 +1,96 @@
++# Collector resilience review and patch — 2026-10-23
++
++Base: `2eb4de05beb059b7fbc9b35e16d17c8eba7d8085` (main).
++
++## Scope and evidence
++
++Reviewed the collector trigger/cadence, recent-search CLI integration, query retry
++wrapper, coverage assessment, snapshot/master persistence, Notion configuration
++and synchronization, observation/baseline generation, dashboard history/health,
++trend rendering, deployment workflows, and write/event security boundaries.
++This is a review of that end-to-end path, not a security certification of every
++repository module or an audit of production secrets/provider settings.
++
++The 10/21 outage was an availability gap in usable fresh source rows. Earlier
++archives labelled some all-rejected collections observed/Success; those are not
++measurements of zero demand. PR #63 repaired recent-source retrieval. This patch
++adds failure isolation and truthful presentation; it does not backfill missing
++observations or alter historical archive facts.
++
++## Findings and fixes
++
++| Priority | Location | Trigger and impact | Patch |
++| --- | --- | --- | --- |
++| P1 | `.github/workflows/nextstop-collector.yml` | Notion write failure failed the collect job, preventing the archive job from saving a valid downloaded artifact. | Bound Notion synchronization to five minutes, continue to archive, propagate the actual step outcome, then report failure **after** pushing source data. |
++| P1 | `collector/archive_resilience.py` (new) | No named last-good snapshot; the latest attempt could contain unusable source data. | Preserve `last_good_snapshot.json`, `last_good_summary.json`, `last_good_observation.json` only for observed successful source quality. A later failed/partial attempt retains the previous backup. Sync failures are separate from source quality. |
++| P1 | `dashboard/lib/signals.ts`, `collectorQuality.ts` | Partial was coerced to Success; failed attempts were removed; missing fields became zero; old all-rejected rows looked like demand collapse. | Preserve Partial/Failed markers and explicit source validity. Infer legacy all-rejected gaps from raw > 0, dedupe = 0, clean = 0. Missing metric values remain unavailable. Legitimate clean zero with accepted candidates remains zero. |
++| P2 | `TrendChart.tsx`, `app/page.tsx`, `i18n.ts` | Uniform index spacing hid elapsed hours and polylines connected incompatible collection methods. | Use timestamps for x positions; split lines at invalid samples, intervals over three hours, and pipeline changes. Show isolated valid points and bilingual gap explanations; unavailable latest metrics show a dash. |
++| P2 | `signals.ts`, `collectorQuality.ts` | Health accepted four-hour-old and arbitrarily future-dated timestamps, and did not consistently check degraded/partial source or Notion failure. | Three-hour freshness window for the two-hour target, five-minute clock tolerance, consistent source/sync health; remove application revalidation caches on health/current/history requests. |
++| P2 | `collect.sh` | Recent mode inherited two shell attempts multiplied by eight CLI retries per query, amplifying source outages. | Default recent mode to one shell invocation and a CLI retry budget of one; retain diagnostics/failed query recording. Top-mode legacy defaults remain configurable. Ignore query comments. |
++| P2 | `nextstop-collector.yml` | Primary cron may be delayed or dropped. | Add completion heartbeats from the independently scheduled Trend Tracking and Language Need Exploration workflows. Same concurrency group, latest-main checkout, and 120-minute attempt gate apply. Same-repository/main guard; recovery provenance remains unknown/ineligible rather than scheduled. |
++
++## Safety and operational boundaries
++
++- Heartbeats deliberately exclude Signal Deck, Keyword Network, and Observation
++  Event workflows: those depend on collector completion and could create a loop.
++  The two selected workflows do not subscribe to collector completion.
++- Heartbeats still share GitHub infrastructure and their existing schedules
++  (Trend Tracking every eight hours; exploration daily). They add recovery
++  opportunities, not a guaranteed independent two-hour clock. No additional
++  source collection is forced by this patch. All triggers wait 120 minutes from
++  the latest archived attempt, including an unsuccessful source attempt.
++- An earlier external Collector Watchdog update acknowledged enabled state, but
++  a subsequent lookup could not access that task. It is **not counted as verified
++  backup**. Establishing a verified external scheduler remains an operational gap.
++- Notion configuration lookup remains a fail-closed prerequisite. An API outage
++  before a downloadable snapshot exists, a whole-job cancellation, artifact
++  upload failure, or a repository push failure cannot be repaired by the
++  downstream-sync isolation here. Existing archives and last-good files remain;
++  these conditions must not be advertised as healthy collection.
++- A successful source archive with failed Notion sync is valid backup evidence,
++  but has `notion_sync_status=failure` and the overall workflow reports failure.
++  No automatic re-write/retry of partially completed Notion operations is added.
++- Last-good files are created on the next observed successful source archive;
++  the current patch does not fabricate or rewrite production archive data.
++  The summary's original `run_at` identifies backup age. Treat backup data as
++  historical, never as a current sample. Master download remains the cumulative
++  authoritative master; an empty current snapshot does not erase master rows.
++- Recent mode covers one public SSR search window, not every Threads post.
++  Gaps cannot be reconstructed reliably. The exact external platform change
++  time is not established by repository evidence.
++- Existing write-intent/origin validation and event bearer-token comparison were
++  inspected and their regression tests pass. Browser origin checks are CSRF
++  controls, not user authentication. No credentials or permissions were changed.
++- Dashboard production deployment follows successful Dashboard CI on main.
++  Local builds do not prove production credentials or runtime bindings work.
++
++## Validation
++
++- Python collector suites used by Hardening CI, including resilience/fault tests.
++- All dashboard `lib/*.test.ts` and `lib/mcpEvents/*.test.ts` tests.
++- TypeScript checking, bilingual dictionary parity and production-copy checker.
++- Next production build; Cloudflare/vinext production build and client-secret
++  boundary checker. Local build reports absent runtime secrets, as expected in
++  this unauthenticated local environment; no live Notion write was attempted.
++- Failure fixtures: valid source plus failed Notion sync saves backup and reports
++  failure; subsequent stale attempt preserves backup; rate-limited query stays
++  within bounded shell attempts; failed and Partial history points survive;
++  all-resale real zero remains zero; missing/future/overdue samples are rejected;
++  chart lines split at gaps and method changes; all triggers obey cadence.
++- The standalone patch includes source, regression tests, CI changes, and this
++  review. It excludes itself and generated build/dependency files. Apply from
++  the stated base with `git apply --check patches/2026-10-23-collector-resilience.patch`
++  after obtaining the patch externally (the target patch path need not exist).
++
++## PR review follow-up
++
++The automated review of the first PR revision identified two P2 issues. Both are
++fixed in the final patch: all three layer counts now use source validity, and
++axis labels use the same temporal midpoint as the time-scaled geometry, with
++padding aligned to the plotted area. An irregular-time tick regression was added.
++
++Final local totals: 70 Python tests and 47 dashboard tests. The initial remote
++revision also passed Go tests, Hardening CI and Dashboard CI. The Cloudflare
++Workers Builds preview check failed; reading its logs requires a missing
++`workers-ci.read` scope, so its specific cause is not established. That preview
++check is distinct from the repository's CI-gated main production deployment.

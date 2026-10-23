@@ -9,7 +9,16 @@ SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
 SEARCH_DEPTH="${COLLECTOR_SEARCH_DEPTH:-3}"
 SEARCH_TYPE="${COLLECTOR_SEARCH_TYPE:-top}"
 GOOGLE_FALLBACK="${COLLECTOR_GOOGLE_FALLBACK:-false}"
-QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-2}"
+# Recent search is one public SSR window: keep failures bounded rather than
+# multiplying shell retries by the CLI retry budget.
+DEFAULT_QUERY_ATTEMPTS=2
+DEFAULT_CLIENT_RETRIES=8
+if [[ "$SEARCH_TYPE" == "recent" ]]; then
+  DEFAULT_QUERY_ATTEMPTS=1
+  DEFAULT_CLIENT_RETRIES=1
+fi
+QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-$DEFAULT_QUERY_ATTEMPTS}"
+CLIENT_RETRIES="${COLLECTOR_CLIENT_RETRIES:-$DEFAULT_CLIENT_RETRIES}"
 RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-20}"
 
 mkdir -p "$RAW_DIR"
@@ -28,7 +37,7 @@ fi
 i=0
 while IFS= read -r query || [[ -n "$query" ]]; do
   query="$(printf '%s' "$query" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-  [[ -z "$query" ]] && continue
+  [[ -z "$query" || "$query" == \#* ]] && continue
 
   i=$((i + 1))
   outfile="$RAW_DIR/query_$(printf '%02d' "$i").jsonl"
@@ -56,7 +65,7 @@ while IFS= read -r query || [[ -n "$query" ]]; do
 
     if "$TH_BIN" "${client_args[@]}" \
         --delay 5s \
-        --retries 8 \
+        --retries "$CLIENT_RETRIES" \
         --timeout 45s \
         --quiet \
         -o jsonl \
