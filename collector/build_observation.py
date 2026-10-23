@@ -11,6 +11,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    from collector.assess_coverage import quality_allows_baseline
+except ModuleNotFoundError:
+    from assess_coverage import quality_allows_baseline
+
 SCHEMA_VERSION = "observation-bundle-v1"
 EVENT_VERSION = "1"
 CLASSIFIER_NAME = "dashboard-intent-regex"
@@ -175,7 +180,7 @@ def archive_context(run_stamp: str, runs_dir: Path, observations_dir: Path) -> d
     baseline_eligible = (
         bool(run.get("baseline_eligible"))
         if "baseline_eligible" in run
-        else False
+        else None
     )
     return {
         "summary": summary if isinstance(summary, dict) else {},
@@ -218,7 +223,9 @@ def compatibility(current_summary: dict[str, Any], current_qhash: str | None, co
         config = "unknown"
 
     structurally_compatible = pipeline == "compatible" and query == "compatible" and config in {"compatible", "partial"}
-    baseline_eligible = bool(other.get("baseline_eligible"))
+    baseline_eligible = (bool(other.get("baseline_eligible"))
+                         and provenance_baseline_eligible(normalize_provenance(other.get("provenance")))
+                         and quality_allows_baseline(other_summary))
     return {
         "pipeline_version": pipeline,
         "query": query,
@@ -243,7 +250,7 @@ def comparable_history(history: list[dict[str, Any]], current_at: datetime, curr
                 other["summary"]["pipeline_version"] = row.get("pipeline_version")
         if other.get("provenance") == "unknown" and row.get("provenance"):
             other["provenance"] = normalize_provenance(row.get("provenance"))
-        if not other.get("baseline_eligible") and row.get("baseline_eligible") is True:
+        if other.get("baseline_eligible") is None and row.get("baseline_eligible") is True:
             other["baseline_eligible"] = True
 
         comp = compatibility(current_summary, qhash, config_key, track, other)
@@ -381,7 +388,8 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
     pipeline_version = summary_pipeline_version(summary)
     qhash = query_hash(queries)
     provenance = normalize_provenance(run_provenance)
-    baseline_eligible = provenance_baseline_eligible(provenance)
+    baseline_eligible = (provenance_baseline_eligible(provenance)
+                         and quality_allows_baseline(summary) and not failed_queries)
     expected_cadence_minutes = max(1, int(expected_cadence_minutes))
     current_clean = clean_rows(snapshot_rows)
     current_ids = {post_id(row) for row in current_clean if post_id(row)}
@@ -415,8 +423,10 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         flags.append("previous_comparable_run_missing")
     elif not overlap_available:
         flags.append("previous_snapshot_missing")
-    if summary.get("coverage_status") == "degraded":
-        flags.append("collector_coverage_degraded")
+    if summary.get("coverage_status") in {"stale", "degraded", "partial"}:
+        flags.append(f"collector_coverage_{summary['coverage_status']}")
+    if summary.get("source_failure_count", 0):
+        flags.append("collector_source_failure")
     if failed_queries:
         flags.append("all_queries_failed" if len(failed_queries) >= len(queries) and queries else "partial_query_failure")
     if any((row.get("_compatibility") or {}).get("pipeline_version") == "incompatible" for row in incompatible_rows):
@@ -472,7 +482,7 @@ def build_bundle(*, summary: dict[str, Any], snapshot_rows: list[dict[str, Any]]
         "run": {
             "run_stamp": run_stamp,
             "run_at": iso_z(run_at),
-            "status": "failed" if queries and len(failed_queries) >= len(queries) else "degraded" if failed_queries else "success",
+            "status": "failed" if queries and len(failed_queries) >= len(queries) else "degraded" if failed_queries or not quality_allows_baseline(summary) else "success",
             "pipeline_version": pipeline_version,
             "track": track,
             "config_key": config_key,

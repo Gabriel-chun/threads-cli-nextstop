@@ -29,7 +29,7 @@ def row(i: int):
 
 
 class ObservationBundleTest(unittest.TestCase):
-    def build(self, history=None, evidence_limit=16, pipeline="clean-v2.1", setup=None):
+    def build(self, history=None, evidence_limit=16, pipeline="clean-v2.1", setup=None, summary_overrides=None, provenance="unknown"):
         temp = tempfile.TemporaryDirectory()
         root = Path(temp.name)
         runs, snapshots, observations = root/"runs", root/"snapshots", root/"observations"
@@ -45,11 +45,12 @@ class ObservationBundleTest(unittest.TestCase):
             "unique_signals":5,"suppressed_duplicates":0,"excluded_transactions":0,
             "clean_rate_pct":100.0,"new_3h":2,"new_12h":5,
         }
+        summary.update(summary_overrides or {})
         bundle, event = obs.build_bundle(
             summary=summary,snapshot_rows=snapshot,history=history or [],
             queries=["演唱會"],failed_queries=[],snapshot_path=snapshot_path,
             runs_dir=runs,snapshots_dir=snapshots,observations_dir=observations,
-            track="演唱會",config_key="concert",evidence_limit=evidence_limit,
+            track="演唱會",config_key="concert",evidence_limit=evidence_limit,run_provenance=provenance,
         )
         return temp, bundle, event
 
@@ -186,6 +187,40 @@ class ObservationBundleTest(unittest.TestCase):
         self.assertEqual(bundle["run"]["provenance"], "unknown")
         self.assertFalse(bundle["run"]["baseline_eligible"])
         self.assertFalse(event["run"]["baseline_eligible"])
+
+    def test_unhealthy_scheduled_run_is_not_successful_or_baseline_eligible(self):
+        for coverage in ["stale", "degraded", "partial"]:
+            with self.subTest(coverage=coverage):
+                temp, bundle, event = self.build(summary_overrides={"coverage_status": coverage}, provenance="scheduled")
+                self.addCleanup(temp.cleanup)
+                self.assertFalse(bundle["run"]["baseline_eligible"])
+                self.assertFalse(event["run"]["baseline_eligible"])
+                self.assertEqual(bundle["run"]["status"], "degraded")
+                self.assertIn(f"collector_coverage_{coverage}", bundle["data_quality"]["flags"])
+
+    def test_history_true_cannot_override_explicit_observation_false(self):
+        def setup(runs, snapshots):
+            stamp = "2026-09-29_100000Z"
+            write_json(runs / f"summary_{stamp}.json", {
+                "pipeline_version": "clean-v2.1", "min_score": 30,
+                "since_hours": 12, "coverage_status": "observed"})
+            (runs / f"queries_{stamp}.txt").write_text("演唱會\n")
+            write_json(runs.parent / "observations" / f"{stamp}.json", {
+                "run": {"provenance": "scheduled", "baseline_eligible": False}})
+        history = [{"run_stamp": "2026-09-29_100000Z", "run_at": "2026-09-29T10:00:00Z",
+                    "pipeline_version": "clean-v2.1", "provenance": "scheduled", "baseline_eligible": True}]
+        temp, bundle, _ = self.build(history=history, setup=setup)
+        self.addCleanup(temp.cleanup)
+        self.assertIsNone(bundle["deterministic_facts"]["previous_comparable_run"])
+
+    def test_historical_stale_flag_overrides_old_eligible_true(self):
+        other = {"summary": {"pipeline_version": "v1", "since_hours": 12, "min_score": 30,
+                             "coverage_status": "stale"},
+                 "query_hash": "same", "provenance": "scheduled", "baseline_eligible": True}
+        comp = obs.compatibility({"pipeline_version": "v1", "since_hours": 12, "min_score": 30},
+                                 "same", None, None, other)
+        self.assertTrue(comp["structurally_compatible"])
+        self.assertFalse(comp["compatible_for_baseline"])
 
 
 
