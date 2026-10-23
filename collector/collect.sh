@@ -7,6 +7,7 @@ RAW_DIR="${RAW_DIR:-collector/raw}"
 FAILED_FILE="${FAILED_FILE:-collector/failed_queries.txt}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-6}"
 SEARCH_DEPTH="${COLLECTOR_SEARCH_DEPTH:-3}"
+SEARCH_TYPE="${COLLECTOR_SEARCH_TYPE:-top}"
 GOOGLE_FALLBACK="${COLLECTOR_GOOGLE_FALLBACK:-false}"
 QUERY_ATTEMPTS="${COLLECTOR_QUERY_ATTEMPTS:-2}"
 RETRY_SLEEP_SECONDS="${COLLECTOR_RETRY_SLEEP_SECONDS:-20}"
@@ -35,11 +36,16 @@ while IFS= read -r query || [[ -n "$query" ]]; do
 
   echo "[collector] ($i) $query"
 
-  search_args=(search --depth "$SEARCH_DEPTH" --diagnostics-file "$RAW_DIR/query_$(printf '%02d' "$i")_source_diagnostics.json")
+  search_args=(search --type "$SEARCH_TYPE" --depth "$SEARCH_DEPTH" --diagnostics-file "$RAW_DIR/query_$(printf '%02d' "$i")_source_diagnostics.json")
   if [[ "$GOOGLE_FALLBACK" == "true" ]]; then
     search_args+=(--google-fallback)
   fi
   search_args+=("$query")
+
+  client_args=()
+  if [[ "$SEARCH_TYPE" == "recent" ]]; then
+    client_args+=(--no-cache --user-agent "NextStopLive/1.0 (+https://github.com/Gabriel-chun/threads-cli-nextstop)")
+  fi
 
   success=false
   status=0
@@ -48,7 +54,7 @@ while IFS= read -r query || [[ -n "$query" ]]; do
   while [[ "$attempt" -le "$QUERY_ATTEMPTS" ]]; do
     echo "[collector] query attempt $attempt/$QUERY_ATTEMPTS: $query"
 
-    if "$TH_BIN" \
+    if "$TH_BIN" "${client_args[@]}" \
         --delay 5s \
         --retries 8 \
         --timeout 45s \

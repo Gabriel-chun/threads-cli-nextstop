@@ -1,14 +1,18 @@
 name: Next Stop Threads Collector
+# recovery-safe-main-v1: rerunning cadence checks current main and respects 120 minutes.
 # Source quality is assessed separately from successful execution and archiving.
 
 on:
   schedule:
     # GitHub scheduled events are best-effort and may be delayed or dropped.
     # Wake four times per hour, then gate against the latest archived attempt.
-    # Effective target: one real collection about every 2 hours; collection uses the existing public SSR retrieval.
+    # Effective target: one real collection about every 2 hours; collection uses a single public recent-search SSR window.
     # so missed schedule events are less likely to create 4–7 hour gaps.
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/nextstop-collector.yml"]
 
 permissions:
   contents: write
@@ -26,6 +30,8 @@ jobs:
     steps:
       - name: Checkout cadence state
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Decide whether collection is due
         id: gate
@@ -37,7 +43,7 @@ jobs:
           import os
           from datetime import datetime, timezone
 
-          # Manual dispatch obeys the same cadence; code pushes never collect.
+          # Every trigger, including a code update/recovery, obeys this cadence.
           paths = sorted(glob.glob("collector/archive/runs/summary_*.json"))
           latest = None
           if paths:
@@ -79,6 +85,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set run stamp
         id: stamp
@@ -192,7 +200,9 @@ jobs:
 
       - name: Collect Threads snapshots
         env:
-          COLLECTOR_MODE: depth3
+          COLLECTOR_MODE: recent
+          COLLECTOR_SEARCH_TYPE: recent
+          COLLECTOR_SEARCH_DEPTH: "1"
           QUERY_FILE: ${{ env.QUERY_FILE }}
           COLLECTOR_BROWSER_SCROLLS: "2"
           COLLECTOR_BROWSER_MAX_POSTS: "40"
@@ -206,7 +216,7 @@ jobs:
             --state-dir collector/state \
             --min-score "$COLLECTOR_MIN_SCORE" \
             --since-hours "$COLLECTOR_WINDOW_HOURS" \
-            --collector-mode depth3 \
+            --collector-mode recent \
             --run-stamp "$RUN_STAMP"
 
       - name: Assess retrieval coverage
@@ -310,7 +320,7 @@ jobs:
           COLLECTOR_CONFIG_KEY: ${{ env.COLLECTOR_CONFIG_KEY }}
           COLLECTOR_WINDOW_HOURS: ${{ env.COLLECTOR_WINDOW_HOURS }}
           COLLECTOR_MIN_SCORE: ${{ env.COLLECTOR_MIN_SCORE }}
-          COLLECTOR_MODE: depth3
+          COLLECTOR_MODE: recent
           OUTPUT_DIR: collector/output
           QUERY_FILE: ${{ env.QUERY_FILE }}
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

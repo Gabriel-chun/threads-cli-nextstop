@@ -17,9 +17,9 @@ func (c *Client) Search(ctx context.Context, query string, limit int) iter.Seq2[
 }
 
 // SearchWithOptions combines three anonymous retrieval surfaces:
-//   1. Threads SSR search window
-//   2. logged-out Threads GraphQL pagination (up to depth pages total)
-//   3. optional Google site:threads.com coverage fallback
+//  1. Threads SSR search window
+//  2. logged-out Threads GraphQL pagination (up to depth pages total)
+//  3. optional Google site:threads.com coverage fallback
 //
 // All candidates are deduplicated before relevance scoring, and every surviving
 // row records which retrieval sources found it.
@@ -29,13 +29,21 @@ func (c *Client) SearchWithOptions(ctx context.Context, query string, limit, dep
 
 // SearchWithDiagnostics records aggregate retrieval-page statistics without post text, IDs, or cursors.
 func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit, depth int, googleFallback bool, report func(SearchPageDiagnostic)) iter.Seq2[SearchResult, error] {
- return func(yield func(SearchResult, error) bool) {
-        started := time.Now().UTC()
-        emit := func(source string, page int, posts []Post, status string) {
-           if report == nil { return }
-           d := SummarizeSearchPage(source, page, posts, started, 12*time.Hour, status)
-           report(d)
-        }
+	return c.SearchWithTypeDiagnostics(ctx, query, limit, depth, googleFallback, "top", report)
+}
+
+// SearchWithTypeDiagnostics honors the public recent-search filter. Recent
+// retrieval is one public SSR window; it does not call retired GraphQL queries.
+func (c *Client) SearchWithTypeDiagnostics(ctx context.Context, query string, limit, depth int, googleFallback bool, searchType string, report func(SearchPageDiagnostic)) iter.Seq2[SearchResult, error] {
+	return func(yield func(SearchResult, error) bool) {
+		started := time.Now().UTC()
+		emit := func(source string, page int, posts []Post, status string) {
+			if report == nil {
+				return
+			}
+			d := SummarizeSearchPage(source, page, posts, started, 12*time.Hour, status)
+			report(d)
+		}
 		if depth < 1 {
 			depth = 1
 		}
@@ -49,15 +57,21 @@ func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit,
 		}
 		var candidates []sourcedPost
 
-		posts, cursor, hasMore, err := c.searchSSRPage(ctx, query)
+		source := "threads_ssr"
+		if searchType == "recent" {
+			source = "threads_ssr_recent"
+			depth = 1
+			googleFallback = false
+		}
+		posts, cursor, hasMore, err := c.searchSSRPageWithType(ctx, query, searchType)
 		if err != nil {
-            emit("threads_ssr", 1, nil, "request_failed")
+			emit(source, 1, nil, "request_failed")
 			yield(SearchResult{}, err)
 			return
 		}
-        emit("threads_ssr", 1, posts, "ok")
+		emit(source, 1, posts, "ok")
 		for _, p := range posts {
-			candidates = append(candidates, sourcedPost{post: p, source: "threads_ssr"})
+			candidates = append(candidates, sourcedPost{post: p, source: source})
 		}
 
 		// Depth counts the SSR window as page 1. Resume from its cursor when
@@ -65,12 +79,12 @@ func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit,
 		graphCursor := cursor
 		for page := 2; page <= depth; page++ {
 			if page > 2 && !hasMore {
-                emit("threads_graphql", page, nil, "no_more_pages")
+				emit("threads_graphql", page, nil, "no_more_pages")
 				break
 			}
 			gPosts, next, more, gErr := c.graphqlSearchPage(ctx, query, graphCursor)
 			if gErr != nil {
-                emit("threads_graphql", page, nil, graphqlFailureKind(gErr))
+				emit("threads_graphql", page, nil, graphqlFailureKind(gErr))
 				c.logf(1, "anonymous GraphQL search depth stopped at page %d: %v", page, gErr)
 				break
 			}
@@ -79,12 +93,12 @@ func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit,
 				candidates = append(candidates, sourcedPost{post: p, source: "threads_graphql"})
 			}
 			if next == "" || next == graphCursor {
-                emit("threads_graphql", page, nil, "cursor_unavailable_or_unchanged")
+				emit("threads_graphql", page, nil, "cursor_unavailable_or_unchanged")
 				break
 			}
 			graphCursor, hasMore = next, more
 			if !more {
-                emit("threads_graphql", page, nil, "no_more_pages")
+				emit("threads_graphql", page, nil, "no_more_pages")
 				break
 			}
 		}
@@ -92,10 +106,10 @@ func (c *Client) SearchWithDiagnostics(ctx context.Context, query string, limit,
 		if googleFallback {
 			gPosts, gErr := c.googleThreadsSearch(ctx, query, 5)
 			if gErr != nil {
-                emit("google_site", 1, nil, "request_failed")
+				emit("google_site", 1, nil, "request_failed")
 				c.logf(1, "Google coverage fallback unavailable: %v", gErr)
 			} else {
-                emit("google_site", 1, gPosts, "ok")
+				emit("google_site", 1, gPosts, "ok")
 				for _, p := range gPosts {
 					candidates = append(candidates, sourcedPost{post: p, source: "google_site"})
 				}
@@ -215,7 +229,14 @@ func (c *Client) searchSSR(ctx context.Context, query string) ([]Post, error) {
 }
 
 func (c *Client) searchSSRPage(ctx context.Context, query string) ([]Post, string, bool, error) {
+	return c.searchSSRPageWithType(ctx, query, "top")
+}
+
+func (c *Client) searchSSRPageWithType(ctx context.Context, query, searchType string) ([]Post, string, bool, error) {
 	u := WebBase + "/search?q=" + url.QueryEscape(query)
+	if searchType == "recent" {
+		u += "&serp_type=default&filter=recent"
+	}
 	html, err := c.getHTML(ctx, u)
 	if err != nil {
 		return nil, "", false, err
@@ -269,9 +290,9 @@ func relevanceTier(score int) string {
 //   - a single-term query must match the full normalized query exactly
 //   - a multi-term query is AND, not OR: every term must be present
 //   - the anchor must also be present:
-//     * for Latin queries, the first two words form a phrase anchor
-//       (e.g. "Tokyo Dome concert" requires "tokyo dome" + "concert")
-//     * otherwise the first term is the anchor
+//   - for Latin queries, the first two words form a phrase anchor
+//     (e.g. "Tokyo Dome concert" requires "tokyo dome" + "concert")
+//   - otherwise the first term is the anchor
 //   - exact full-query phrase receives the strongest score
 //   - partial CJK substring matches never qualify a result on their own
 //
@@ -367,24 +388,32 @@ func normalizeSearchText(s string) string {
 
 // SearchPageDiagnostic stores only aggregate, privacy-preserving source statistics.
 type SearchPageDiagnostic struct {
- Source string `json:"source"`
- Page int `json:"page"`
- Status string `json:"status"`
- Returned int `json:"returned"`
- Fresh12h int `json:"fresh_12h"`
- MissingTime int `json:"missing_time"`
- LatestPostedAt string `json:"latest_posted_at,omitempty"`
+	Source         string `json:"source"`
+	Page           int    `json:"page"`
+	Status         string `json:"status"`
+	Returned       int    `json:"returned"`
+	Fresh12h       int    `json:"fresh_12h"`
+	MissingTime    int    `json:"missing_time"`
+	LatestPostedAt string `json:"latest_posted_at,omitempty"`
 }
 
 func SummarizeSearchPage(source string, page int, posts []Post, now time.Time, window time.Duration, status string) SearchPageDiagnostic {
- d := SearchPageDiagnostic{Source: source, Page: page, Status: status, Returned: len(posts)}
- var latest time.Time
- for _, p := range posts {
-   if p.Timestamp.IsZero() { d.MissingTime++; continue }
-   if !p.Timestamp.Before(now.Add(-window)) && !p.Timestamp.After(now) { d.Fresh12h++ }
-   if p.Timestamp.After(latest) { latest = p.Timestamp }
- }
- if !latest.IsZero() { d.LatestPostedAt = latest.UTC().Format(time.RFC3339) }
- return d
+	d := SearchPageDiagnostic{Source: source, Page: page, Status: status, Returned: len(posts)}
+	var latest time.Time
+	for _, p := range posts {
+		if p.Timestamp.IsZero() {
+			d.MissingTime++
+			continue
+		}
+		if !p.Timestamp.Before(now.Add(-window)) && !p.Timestamp.After(now) {
+			d.Fresh12h++
+		}
+		if p.Timestamp.After(latest) {
+			latest = p.Timestamp
+		}
+	}
+	if !latest.IsZero() {
+		d.LatestPostedAt = latest.UTC().Format(time.RFC3339)
+	}
+	return d
 }
-

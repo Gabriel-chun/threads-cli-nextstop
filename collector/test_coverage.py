@@ -79,15 +79,15 @@ class WorkflowRegressionTest(unittest.TestCase):
             lines.append(line[10:] if line else "")
         return "\n".join(lines)
 
-    def test_push_cannot_force_collection_and_manual_obeys_cadence(self):
-        self.assertNotIn("  push:", self.workflow.split("permissions:", 1)[0])
+    def test_every_trigger_obeys_cadence(self):
+        self.assertIn("# recovery-safe-main-v1", self.workflow)
         script = self.step_script("Decide whether collection is due")
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "collector/archive/runs").mkdir(parents=True)
             from datetime import datetime, timezone
             (root / "collector/archive/runs/summary_recent.json").write_text(json.dumps({"run_at": datetime.now(timezone.utc).isoformat()}))
-            for event in ["schedule", "workflow_dispatch"]:
+            for event in ["schedule", "workflow_dispatch", "push"]:
                 output = root / f"{event}.txt"
                 subprocess.run(["bash", "-e", "-c", script], cwd=root,
                                env={**os.environ, "GITHUB_OUTPUT": str(output), "GITHUB_EVENT_NAME": event},
