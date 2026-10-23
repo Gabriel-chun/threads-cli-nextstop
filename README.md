@@ -2,6 +2,14 @@
 
 > Research / exploration project. This repository documents an evolving workflow for turning public Threads conversations into structured signals for human review. It is not presented as an official Threads integration, a guaranteed-compliant collection service, or a commercial data product.
 
+## Updates and review records｜更新與審查紀錄
+
+- [CHANGELOG — 更新、事故與審查紀錄](CHANGELOG.md)：固定入口，記錄問題、證據、修正、驗證與未解項目。
+- [2026-10-23 Collector code review](docs/reviews/2026-10-23-collector-code-review.md)：採集、存檔、Notion 同步與圖表的完整審查。
+- [Collector resilience patch](patches/2026-10-23-collector-resilience.patch)：PR #64 的可套用修正檔。
+
+後續修正與 code review 請在同一個 PR 更新 CHANGELOG；尚未確認的原因與未完成項目必須保留，不以測試通過代替正式部署驗證。每次紀錄使用下方文件內的固定格式，並附 PR、commit 或 Actions 證據。
+
 ## What this project is for
 
 Next Stop Live explores a simple question:
@@ -28,11 +36,7 @@ Threads public search
 
 ### Current collection boundary
 
-The production query is intentionally kept broad and small:
-
-```
-演唱會
-```
+The production query set is intentionally kept broad and small. The configuration loader includes the base recall queries `演唱會`, `演唱会`, and `concert`, plus the enabled Notion control configuration; each run archives its effective query list.
 
 Cities, venues, artists, transport, lodging, ticketing, and other dimensions are primarily reorganized **after collection** from the material already captured. They are not treated as reasons to continuously create new crawlers or expand the query surface.
 
@@ -40,11 +44,11 @@ This is deliberate. Expanding retrieval for every city, venue, artist, or conten
 
 ## Retrieval implementation
 
-The current production collector uses the last known working anonymous retrieval path:
+As of PR #63 and #64 (2026-10-23), production uses public logged-out **recent-search SSR**, search depth **1**, with cache disabled and an explicit project User-Agent. Recent mode does not use persisted GraphQL pagination or external search fallback. Other CLI search modes are separate from this production path.
 
-1. crawler-rendered Threads SSR search;
-2. logged-out Threads persisted GraphQL pagination;
-3. search depth 3.
+The collection target is about every two hours, gated against the latest archived attempt. Primary cron and independent-workflow completion heartbeats share the same cadence and concurrency controls. GitHub scheduling is best-effort; the external watchdog is not verified as an independent backup.
+
+PR #64 separates Notion sync health from source preservation and saves named last-good files after an observed successful source archive. Failed/partial attempts retain that backup. The dashboard displays source gaps as breaks rather than measured zero demand.
 
 Google site fallback is disabled.
 
@@ -59,7 +63,7 @@ The production collector does not require a logged-in Threads session and does n
 
 ### Important limitation
 
-The SSR / persisted GraphQL surfaces above are **not the official Threads API**. The project does not claim that these unofficial retrieval surfaces are permanently available, officially authorized by Meta, or suitable for unrestricted automated collection.
+The public SSR retrieval surface above is **not the official Threads API**. The project does not claim that these unofficial retrieval surfaces are permanently available, officially authorized by Meta, or suitable for unrestricted automated collection.
 
 This repository treats them as an experimental research surface that can change or disappear at any time.
 

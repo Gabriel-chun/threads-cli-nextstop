@@ -94,3 +94,18 @@ revision also passed Go tests, Hardening CI and Dashboard CI. The Cloudflare
 Workers Builds preview check failed; reading its logs requires a missing
 `workers-ci.read` scope, so its specific cause is not established. That preview
 check is distinct from the repository's CI-gated main production deployment.
+
+## Post-merge operational checks
+
+Validated main commit: `ec792a95588cdbbd8e109bd3747be8b7a1e800bc`.
+Dashboard CI (39911138448), production Cloudflare deploy (39911227013), and
+Production MCP Smoke (39911326474) all succeeded. The post-merge collector run
+(39911138477) respected cadence and skipped collection; no additional healthy
+source sample or first last-good archive is claimed by that skipped run.
+
+The separate Docs workflow (39911138494) failed because tago expected
+`docs/content`, which is absent. This docs-site configuration issue remains open
+and did not prevent the production dashboard deploy. Preview-build failure cause
+remains unknown because build-log access requires the unavailable
+`workers-ci.read` scope. See [the central update log](../../CHANGELOG.md) for the
+fixed entry format and the current known unresolved items.
