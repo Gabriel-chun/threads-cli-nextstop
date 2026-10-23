@@ -342,7 +342,7 @@ async function upsertCollectorRun({
 
   let status = "Success";
   if (failed.length >= totalQueries && totalQueries > 0) status = "Failed";
-  else if (failed.length > 0) status = "Partial";
+  else if (failed.length > 0 || ["stale", "degraded", "partial"].includes(summary.coverage_status)) status = "Partial";
 
   const enrichedSummary = {
     ...summary,
@@ -414,7 +414,7 @@ async function upsertJsonArchive({
 
   let status = "Success";
   if (failed.length >= totalQueries && totalQueries > 0) status = "Failed";
-  else if (failed.length > 0) status = "Partial";
+  else if (failed.length > 0 || ["stale", "degraded", "partial"].includes(summary.coverage_status)) status = "Partial";
 
   const properties = {
     "Run": title(runTitle),
@@ -538,7 +538,7 @@ async function upsertQueryRunHistory({
 
   let status = "Success";
   if (failed.length >= queryLines.length && queryLines.length > 0) status = "Failed";
-  else if (failed.length > 0) status = "Partial";
+  else if (failed.length > 0 || ["stale", "degraded", "partial"].includes(summary.coverage_status)) status = "Partial";
 
   const snapshotCount = Number(summary.snapshot_unique_rows || 0);
   const dedupeUnique = Number(summary.dedupe_unique_signals ?? summary.unique_signals ?? snapshotCount);

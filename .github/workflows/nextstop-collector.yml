@@ -1,20 +1,14 @@
 name: Next Stop Threads Collector
-# signal-design-v0.1 recall validation
-# One-time compatibility validation: prefer Recent SSR public search over default.
+# Source quality is assessed separately from successful execution and archiving.
 
 on:
   schedule:
     # GitHub scheduled events are best-effort and may be delayed or dropped.
-    # Wake four times per hour, then gate against the latest successful archive.
-    # Effective target: one real collection about every 2 hours; hybrid collection uses conservative public retrieval only.
+    # Wake four times per hour, then gate against the latest archived attempt.
+    # Effective target: one real collection about every 2 hours; collection uses the existing public SSR retrieval.
     # so missed schedule events are less likely to create 4–7 hour gaps.
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/nextstop-collector.yml"
 
 permissions:
   contents: write
@@ -43,14 +37,7 @@ jobs:
           import os
           from datetime import datetime, timezone
 
-          event = os.environ.get("GITHUB_EVENT_NAME", "")
-          if event != "schedule":
-              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-                  f.write("should_run=true\n")
-                  f.write("minutes_since_last=manual\n")
-              print("[cadence] non-scheduled event; collector is allowed to run")
-              raise SystemExit
-
+          # Manual dispatch obeys the same cadence; code pushes never collect.
           paths = sorted(glob.glob("collector/archive/runs/summary_*.json"))
           latest = None
           if paths:
@@ -87,7 +74,7 @@ jobs:
     outputs:
       run_stamp: ${{ steps.stamp.outputs.run_stamp }}
       provenance: ${{ steps.provenance.outputs.provenance }}
-      baseline_eligible: ${{ steps.provenance.outputs.baseline_eligible }}
+      baseline_eligible: ${{ steps.quality.outputs.baseline_eligible }}
 
     steps:
       - name: Checkout
@@ -155,6 +142,7 @@ jobs:
         run: |
           python3 -m unittest collector/test_clean_rules.py
           python3 -m unittest collector/test_observation.py
+          python3 -m unittest collector/test_coverage.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -222,39 +210,25 @@ jobs:
             --run-stamp "$RUN_STAMP"
 
       - name: Assess retrieval coverage
+        id: quality
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          summary_path = Path("collector/output/summary.json")
-          diagnostics_path = Path("collector/raw/hybrid_diagnostics.json")
-          summary = json.loads(summary_path.read_text(encoding="utf-8"))
-          diagnostics = {}
-          if diagnostics_path.exists():
-              diagnostics = json.loads(diagnostics_path.read_text(encoding="utf-8"))
-
-          raw_rows = int(summary.get("raw_rows") or 0)
-          accepted = int((summary.get("filter_diagnostics") or {}).get("accepted_raw_rows") or 0)
-          degraded = raw_rows == 0
-          stale = raw_rows > 0 and accepted == 0
-          # Keep workflow success separate from source-data quality.
-          summary["coverage_status"] = "degraded" if degraded else "stale" if stale else "observed"
-          summary_path.write_text(
-              json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
-              encoding="utf-8",
-          )
-
+          python3 collector/aggregate_search_diagnostics.py --raw-dir collector/raw --output collector/output/search_source_diagnostics.json
+          python3 collector/assess_coverage.py \
+            --summary collector/output/summary.json \
+            --diagnostics collector/output/search_source_diagnostics.json \
+            --queries "$QUERY_FILE" \
+            --failed-queries collector/failed_queries.txt
+          python3 - <<'PYCODE'
+          import json, os
+          summary = json.load(open("collector/output/summary.json", encoding="utf-8"))
+          eligible = os.environ.get("OBS_RUN_PROVENANCE") == "scheduled" and summary["quality_baseline_eligible"]
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"baseline_eligible={str(eligible).lower()}\n")
           with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
-              env.write(f"COLLECTOR_COVERAGE_STATUS={summary['coverage_status']}\n")
-              if degraded or stale:
-                  env.write("OBS_BASELINE_ELIGIBLE=false\n")
-
-          print(f"[coverage] status={summary['coverage_status']} raw_rows={raw_rows}")
-          PY
+              env.write(f"OBS_BASELINE_ELIGIBLE={str(eligible).lower()}\n")
+          PYCODE
 
       - name: Build observation bundle
         shell: bash
@@ -278,7 +252,6 @@ jobs:
 
       - name: Include collector diagnostics
         run: |
-          python3 collector/aggregate_search_diagnostics.py --raw-dir collector/raw --output collector/output/search_source_diagnostics.json
           cp collector/failed_queries.txt collector/output/failed_queries.txt
           cp "$QUERY_FILE" collector/output/queries.txt
           if [[ -s collector/raw/browser_diagnostics.json ]]; then
@@ -343,19 +316,6 @@ jobs:
           GITHUB_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         run: node collector/sync_notion.mjs
 
-      - name: Fail workflow when every query failed
-        shell: bash
-        run: |
-          set -euo pipefail
-          total_queries="$(awk 'NF && $1 !~ /^#/ {count++} END {print count+0}' "$QUERY_FILE")"
-          failed_queries="$(awk 'NF {count++} END {print count+0}' collector/failed_queries.txt)"
-
-          echo "[quality] total queries=$total_queries failed queries=$failed_queries"
-
-          if [[ "$total_queries" -gt 0 && "$failed_queries" -ge "$total_queries" ]]; then
-            echo "::error::All collector queries failed. Notion recorded the run as Failed; the successful archive will not advance."
-            exit 1
-          fi
 
   archive:
     needs: collect
@@ -440,7 +400,7 @@ jobs:
               "new_3h": summary.get("new_3h", 0),
               "new_12h": summary.get("new_12h", 0),
               "master_unique_rows": summary.get("master_unique_rows", 0),
-              "status": "Success",
+              "status": summary.get("run_status", "Partial"),
               "provenance": os.environ.get("OBS_RUN_PROVENANCE", "unknown"),
               "baseline_eligible": os.environ.get("OBS_BASELINE_ELIGIBLE", "false").lower() == "true",
               "workflow_event": os.environ.get("GITHUB_EVENT_NAME"),
@@ -470,3 +430,18 @@ jobs:
           git commit -m "data: collector snapshot $RUN_STAMP"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: Report archived source health
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          summary = json.loads(Path(f"collector/archive/runs/summary_{os.environ['RUN_STAMP']}.json").read_text())
+          coverage = summary.get("coverage_status")
+          if coverage in {"stale", "degraded"}:
+              print(f"::error::Collector archive saved, but source coverage is {coverage}; no healthy sample was produced. No automatic retry requested.")
+              raise SystemExit(1)
+          if coverage == "partial":
+              print("::warning::Collector archive saved with partial retrieval coverage; excluded from trend baselines.")
+          PY
