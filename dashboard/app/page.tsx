@@ -16,7 +16,7 @@ async function TrendStrip({ historyPromise }: { historyPromise: Promise<TrendPoi
       <div className="quietTrendStripHead">
         <div>
           <span><T k="signal.velocity" /></span>
-          <strong>{latestTrend ? `3h ${latestTrend.new3h} · 12h ${latestTrend.new12h}` : "—"}</strong>
+          <strong>{latestTrend?.sourceUsable && Number.isFinite(latestTrend.new3h) && Number.isFinite(latestTrend.new12h) ? `3h ${latestTrend.new3h} · 12h ${latestTrend.new12h}` : "—"}</strong>
         </div>
         <small><T k="signal.chart.trendWindow" /></small>
       </div>
@@ -56,16 +56,16 @@ async function Diagnostics({
   return (
     <div className="quietDetailsBody">
       <section className="metrics quietMetricCards">
-        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.concertRaw}</strong><small><T k="signal.metric.rawHelp" /></small></article>
-        <article><span><T k="signal.metric.clean" /></span><strong>{data.cleanCount}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
-        <article><span><T k="signal.metric.actionable" /></span><strong>{data.actionable}</strong><small><T k="signal.metric.actionableHelp" /></small></article>
+        <article><span><T k="signal.metric.concertRaw" /></span><strong>{data.sourceValid ? data.concertRaw : "—"}</strong><small><T k="signal.metric.rawHelp" /></small></article>
+        <article><span><T k="signal.metric.clean" /></span><strong>{data.sourceValid ? data.cleanCount : "—"}</strong><small><T k="signal.metric.cleanHelp" /></small></article>
+        <article><span><T k="signal.metric.actionable" /></span><strong>{data.sourceValid ? data.actionable : "—"}</strong><small><T k="signal.metric.actionableHelp" /></small></article>
       </section>
 
       <section className="trendGrid">
         <div className="panel trendPanel">
           <div className="panelHead">
             <div><p className="kicker"><T k="signal.pipelineQuality" /></p><h2><T k="signal.cleanResale" /></h2></div>
-            <p className="trendValue">{latestTrend ? `${latestTrend.cleanRatePct}%` : "—"}</p>
+            <p className="trendValue">{latestTrend?.sourceUsable && Number.isFinite(latestTrend.cleanRatePct) ? `${latestTrend.cleanRatePct}%` : "—"}</p>
           </div>
           <TrendChart data={history} series={[
             { key: "cleanSignals", labelKey: "signal.chart.clean", className: "trendA" },
@@ -93,7 +93,7 @@ async function Diagnostics({
         <aside className="panel split">
           <p className="kicker"><T k="signal.pipeline" /></p>
           <h2><T k="signal.threeLayers" /></h2>
-          <div className="layer actionable"><span>A</span><div><strong>{data.actionable} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
+          <div className="layer actionable"><span>A</span><div><strong>{data.sourceValid ? data.actionable : "—"} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
           <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
           <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
         </aside>

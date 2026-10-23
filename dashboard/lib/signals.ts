@@ -1,3 +1,5 @@
+import { sourceUsable, freshTimestamp } from "./collectorQuality";
+
 export type RawPost = {
   id: string;
   query?: string;
@@ -166,12 +168,11 @@ export function clusterCounts(signals: Signal[]) {
   return [...counts.values()].sort((a, b) => b.count - a.count);
 }
 
-const COLLECTOR_HEALTH_MAX_AGE_MS = 4 * 60 * 60 * 1000;
 
 export async function collectorHealth() {
   const res = await fetch(HISTORY_URL, {
     headers: { "User-Agent": "next-stop-live-dashboard-health" },
-    next: { revalidate: 120 }
+    cache: "no-store"
   });
   if (!res.ok) throw new Error(`collector history fetch failed: ${res.status}`);
 
@@ -189,19 +190,16 @@ export async function collectorHealth() {
   }
 
   const updatedAt = latest.run_at;
-  const updatedMs = Date.parse(updatedAt);
-  const ageMs = Number.isFinite(updatedMs)
-    ? Math.max(0, Date.now() - updatedMs)
-    : Number.POSITIVE_INFINITY;
-  const fresh = ageMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
+  const fresh = freshTimestamp(updatedAt);
   const succeeded = latest.status === "Success";
-  const sourceStale = (latest as typeof latest & { coverage_status?: string }).coverage_status === "stale";
+  const sourceStale = !sourceUsable(latest);
+  const syncFailed = latest.notion_sync_status === "failure";
 
   return {
-    healthy: succeeded && fresh && !sourceStale,
-    status: latest.status === "Failed"
+    healthy: succeeded && fresh && !sourceStale && !syncFailed,
+    status: latest.status === "Failed" || syncFailed
       ? "failure"
-      : succeeded && (!fresh || sourceStale)
+      : !fresh || sourceStale
         ? "stale"
         : succeeded
           ? "success"
@@ -275,7 +273,8 @@ export type TrendPoint = {
   new3h: number;
   new12h: number;
   masterCount: number;
-  status: "Success" | "Failed";
+  status: "Success" | "Failed" | "Partial";
+  sourceUsable: boolean;
 };
 
 type TrendRow = {
@@ -290,13 +289,18 @@ type TrendRow = {
   new_3h?: number;
   new_12h?: number;
   master_unique_rows?: number;
-  status?: "Success" | "Failed";
+  status?: "Success" | "Failed" | "Partial";
+  coverage_status?: string;
+  source_failure_count?: number;
+  accepted_raw_rows?: number;
+  notion_sync_status?: string;
 };
 
-export async function loadTrendHistory(limit = 36, includeFailed = false): Promise<TrendPoint[]> {
+// Keep failure markers even for the legacy false argument: removing them bridges outages.
+export async function loadTrendHistory(limit = 36, _includeFailed = false): Promise<TrendPoint[]> {
   const res = await fetch(HISTORY_URL, {
     headers: { "User-Agent": "next-stop-live-dashboard" },
-    next: { revalidate: 300 }
+    cache: "no-store"
   });
   if (!res.ok) return [];
 
@@ -306,17 +310,19 @@ export async function loadTrendHistory(limit = 36, includeFailed = false): Promi
       runAt: row.run_at || "",
       runStamp: row.run_stamp || "",
       pipelineVersion: row.pipeline_version ?? null,
-      rawRows: Number(row.raw_rows || 0),
-      dedupeUnique: Number(row.dedupe_unique_signals || 0),
-      cleanSignals: Number(row.unique_signals || 0),
-      excludedTransactions: Number(row.excluded_transactions || 0),
-      cleanRatePct: Number(row.clean_rate_pct || 0),
-      new3h: Number(row.new_3h || 0),
-      new12h: Number(row.new_12h || 0),
-      masterCount: Number(row.master_unique_rows || 0),
-      status: row.status === "Failed" ? "Failed" : "Success"
+      rawRows: Number(row.raw_rows ?? Number.NaN),
+      dedupeUnique: Number(row.dedupe_unique_signals ?? Number.NaN),
+      cleanSignals: Number(row.unique_signals ?? Number.NaN),
+      excludedTransactions: Number(row.excluded_transactions ?? Number.NaN),
+      cleanRatePct: Number(row.clean_rate_pct ?? Number.NaN),
+      new3h: Number(row.new_3h ?? Number.NaN),
+      new12h: Number(row.new_12h ?? Number.NaN),
+      masterCount: Number(row.master_unique_rows ?? Number.NaN),
+      sourceUsable: sourceUsable(row),
+      status: row.status === "Success" ? "Success" : row.status === "Failed" ? "Failed" : "Partial"
     }))
-    .filter((row) => Boolean(row.runAt) && (includeFailed || row.status === "Success"))
+    .filter((row) => Number.isFinite(Date.parse(row.runAt)))
+    .sort((a, b) => Date.parse(a.runAt) - Date.parse(b.runAt))
     .slice(-Math.max(1, Math.min(84, limit)));
 }
 
@@ -326,10 +332,12 @@ type ObservationBundle = {
     run_at?: string;
     status?: string;
     coverage_status?: string;
+    notion_sync_status?: string;
   };
   deterministic_facts?: {
     current?: {
       raw_rows?: number;
+      dedupe_unique?: number;
       clean_signals?: number;
       new_3h?: number;
       new_12h?: number;
@@ -361,11 +369,12 @@ type ObservationBundle = {
 export async function loadHomeObservation() {
   const observationRes = await fetch(OBSERVATION_URL, {
     headers: { "User-Agent": "next-stop-live-dashboard-home" },
-    next: { revalidate: 300 }
+    cache: "no-store"
   });
 
   if (!observationRes.ok) {
     return {
+      sourceValid: false,
       generatedAt: "",
       concertRaw: 0,
       cleanCount: 0,
@@ -390,17 +399,17 @@ export async function loadHomeObservation() {
   const observation = (await observationRes.json()) as ObservationBundle;
   const runAt = observation.run?.run_at || null;
   const runStatus = String(observation.run?.status || "").toLowerCase();
-  const runAgeMs = runAt && Number.isFinite(Date.parse(runAt))
-    ? Math.max(0, Date.now() - Date.parse(runAt))
-    : Number.POSITIVE_INFINITY;
-  const fresh = runAgeMs <= COLLECTOR_HEALTH_MAX_AGE_MS;
+  const fresh = freshTimestamp(runAt);
   const succeeded = runStatus === "success";
-  const sourceStale = observation.run?.coverage_status === "stale";
+  const current = observation.deterministic_facts?.current;
+  const sourceStale = !sourceUsable({status: runStatus, coverage_status: observation.run?.coverage_status,
+    raw_rows: current?.raw_rows, dedupe_unique_signals: current?.dedupe_unique, unique_signals: current?.clean_signals});
+  const syncFailed = observation.run?.notion_sync_status === "failure";
   const health = {
-    healthy: succeeded && fresh && !sourceStale,
-    status: runStatus === "failed"
+    healthy: succeeded && fresh && !sourceStale && !syncFailed,
+    status: runStatus === "failed" || syncFailed
       ? "failure"
-      : succeeded && (!fresh || sourceStale)
+      : !fresh || sourceStale
         ? "stale"
         : succeeded
           ? "success"
@@ -438,6 +447,7 @@ export async function loadHomeObservation() {
   }));
 
   return {
+    sourceValid: !sourceStale && fresh,
     generatedAt: observation.run?.run_at || "",
     concertRaw: Number(observation.deterministic_facts?.current?.raw_rows || 0),
     cleanCount: Number(observation.deterministic_facts?.current?.clean_signals || 0),

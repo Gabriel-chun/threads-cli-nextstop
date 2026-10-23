@@ -9,6 +9,11 @@ on:
     # Effective target: one real collection about every 2 hours; collection uses a single public recent-search SSR window.
     # so missed schedule events are less likely to create 4–7 hour gaps.
     - cron: "7,22,37,52 * * * *"
+  workflow_run:
+    # Independent heartbeats only; never subscribe to workflows triggered by this collector.
+    workflows: ["Next Stop Trend Tracking", "Language Need Exploration"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
   push:
     branches: [main]
@@ -23,6 +28,7 @@ concurrency:
 
 jobs:
   cadence:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.gate.outputs.should_run }}
@@ -78,6 +84,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.56.1-noble
     timeout-minutes: 30
     outputs:
+      notion_sync_status: ${{ steps.notion.outcome }}
       run_stamp: ${{ steps.stamp.outputs.run_stamp }}
       provenance: ${{ steps.provenance.outputs.provenance }}
       baseline_eligible: ${{ steps.quality.outputs.baseline_eligible }}
@@ -309,6 +316,9 @@ jobs:
           if-no-files-found: error
 
       - name: Sync snapshot to Notion
+        id: notion
+        timeout-minutes: 5
+        continue-on-error: true
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_POSTS_DATA_SOURCE_ID: "1d268bf4-2656-46c2-9ed1-b2143e611d3c"
@@ -333,6 +343,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
+      NOTION_SYNC_STATUS: ${{ needs.collect.outputs.notion_sync_status }}
       RUN_STAMP: ${{ needs.collect.outputs.run_stamp }}
       OBS_RUN_PROVENANCE: ${{ needs.collect.outputs.provenance }}
       OBS_BASELINE_ELIGIBLE: ${{ needs.collect.outputs.baseline_eligible }}
@@ -352,6 +363,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
+          python3 collector/archive_resilience.py
 
           mkdir -p collector/archive/latest
           mkdir -p collector/archive/snapshots
@@ -402,6 +415,10 @@ jobs:
               "pipeline_version": summary.get("pipeline_version"),
               "collector_mode": summary.get("collector_mode"),
               "coverage_status": summary.get("coverage_status"),
+              "snapshot_unique_rows": summary.get("snapshot_unique_rows"),
+              "accepted_raw_rows": (summary.get("filter_diagnostics") or {}).get("accepted_raw_rows"),
+              "source_failure_count": summary.get("source_failure_count", 0),
+              "notion_sync_status": summary.get("notion_sync_status"),
               "raw_rows": summary.get("raw_rows", 0),
               "dedupe_unique_signals": summary.get("dedupe_unique_signals", 0),
               "unique_signals": summary.get("unique_signals", 0),
@@ -449,6 +466,9 @@ jobs:
           from pathlib import Path
           summary = json.loads(Path(f"collector/archive/runs/summary_{os.environ['RUN_STAMP']}.json").read_text())
           coverage = summary.get("coverage_status")
+          if summary.get("notion_sync_status") != "success":
+              print("::error::Source archive saved, but Notion synchronization did not succeed. Inspect the sync step before retrying writes.")
+              raise SystemExit(1)
           if coverage in {"stale", "degraded"}:
               print(f"::error::Collector archive saved, but source coverage is {coverage}; no healthy sample was produced. No automatic retry requested.")
               raise SystemExit(1)

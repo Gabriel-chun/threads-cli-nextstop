@@ -87,7 +87,7 @@ class WorkflowRegressionTest(unittest.TestCase):
             (root / "collector/archive/runs").mkdir(parents=True)
             from datetime import datetime, timezone
             (root / "collector/archive/runs/summary_recent.json").write_text(json.dumps({"run_at": datetime.now(timezone.utc).isoformat()}))
-            for event in ["schedule", "workflow_dispatch", "push"]:
+            for event in ["schedule", "workflow_dispatch", "push", "workflow_run"]:
                 output = root / f"{event}.txt"
                 subprocess.run(["bash", "-e", "-c", script], cwd=root,
                                env={**os.environ, "GITHUB_OUTPUT": str(output), "GITHUB_EVENT_NAME": event},
@@ -105,10 +105,23 @@ class WorkflowRegressionTest(unittest.TestCase):
             (root / "collector/archive/runs").mkdir(parents=True)
             path = root / "collector/archive/runs/summary_test.json"
             for coverage, code in [("stale", 1), ("degraded", 1), ("partial", 0), ("observed", 0)]:
-                path.write_text(json.dumps({"coverage_status": coverage}))
+                path.write_text(json.dumps({"coverage_status": coverage, "notion_sync_status": "success"}))
                 result = subprocess.run(["bash", "-e", "-c", self.step_script("Report archived source health")], cwd=root,
                                         env={**os.environ, "RUN_STAMP": "test"}, capture_output=True)
                 self.assertEqual(result.returncode, code)
+            path.write_text(json.dumps({"coverage_status": "observed", "notion_sync_status": "failure"}))
+            result = subprocess.run(["bash", "-e", "-c", self.step_script("Report archived source health")], cwd=root,
+                                    env={**os.environ, "RUN_STAMP": "test"}, capture_output=True)
+            self.assertEqual(result.returncode, 1)
+
+    def test_backup_heartbeats_cannot_loop_back_from_collector_dependents(self):
+        heartbeat = self.workflow.split("  workflow_run:", 1)[1].split("  workflow_dispatch:", 1)[0]
+        self.assertIn('"Next Stop Trend Tracking"', heartbeat)
+        self.assertIn('"Language Need Exploration"', heartbeat)
+        for dependent in ["Daily Signal Deck", "Daily Keyword Network", "Observation Event"]:
+            self.assertNotIn(dependent, heartbeat)
+        self.assertIn("head_repository.full_name == github.repository", self.workflow)
+        self.assertIn("id: notion\n        timeout-minutes: 5\n        continue-on-error: true", self.workflow)
 
 
 if __name__ == "__main__":

@@ -38,6 +38,8 @@ jobs:
         run: npx tsx --test lib/reviewLedger.test.ts
       - name: Test mutation security boundary
         run: npx tsx --test lib/writeSecurity.test.ts
+      - name: Test collector source gaps and health
+        run: npx tsx --test lib/collectorQuality.test.ts
       - name: Build
         run: npm run build
       - name: Runtime MCP discovery regression
