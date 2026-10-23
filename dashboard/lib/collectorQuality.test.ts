@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { freshTimestamp, sourceUsable, trendSegments } from "./collectorQuality";
+import { freshTimestamp, sourceUsable, trendSegments, trendTimeTicks } from "./collectorQuality";
 import { loadTrendHistory, collectorHealth, loadHomeObservation } from "./signals";
 
 test("source gaps differ from a valid all-resale zero", () => {
@@ -55,4 +55,9 @@ test("home distinguishes failed source from downstream sync failure and real zer
     globalThis.fetch=async()=>new Response("Unavailable",{status:503});
     assert.equal((await loadHomeObservation()).sourceValid,false);
   } finally { globalThis.fetch=original; }
+});
+
+test("irregular collection times use the temporal midpoint for axis labels",()=>{
+  assert.deepEqual(trendTimeTicks(Date.parse("2026-10-23T00:00:00Z"),Date.parse("2026-10-23T20:00:00Z")),
+    ["2026-10-23T00:00:00.000Z","2026-10-23T10:00:00.000Z","2026-10-23T20:00:00.000Z"]);
 });

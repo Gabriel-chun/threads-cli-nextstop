@@ -94,8 +94,8 @@ async function Diagnostics({
           <p className="kicker"><T k="signal.pipeline" /></p>
           <h2><T k="signal.threeLayers" /></h2>
           <div className="layer actionable"><span>A</span><div><strong>{data.sourceValid ? data.actionable : "—"} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
-          <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
-          <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
+          <div className="layer context"><span>B</span><div><strong>{data.sourceValid ? data.context : "—"} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
+          <div className="layer noise"><span>C</span><div><strong>{data.sourceValid ? data.noise : "—"} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
         </aside>
       </section>
 

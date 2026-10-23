@@ -81,3 +81,16 @@ observations or alter historical archive facts.
   review. It excludes itself and generated build/dependency files. Apply from
   the stated base with `git apply --check patches/2026-10-23-collector-resilience.patch`
   after obtaining the patch externally (the target patch path need not exist).
+
+## PR review follow-up
+
+The automated review of the first PR revision identified two P2 issues. Both are
+fixed in the final patch: all three layer counts now use source validity, and
+axis labels use the same temporal midpoint as the time-scaled geometry, with
+padding aligned to the plotted area. An irregular-time tick regression was added.
+
+Final local totals: 70 Python tests and 47 dashboard tests. The initial remote
+revision also passed Go tests, Hardening CI and Dashboard CI. The Cloudflare
+Workers Builds preview check failed; reading its logs requires a missing
+`workers-ci.read` scope, so its specific cause is not established. That preview
+check is distinct from the repository's CI-gated main production deployment.

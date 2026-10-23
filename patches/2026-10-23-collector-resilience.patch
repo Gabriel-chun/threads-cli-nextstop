@@ -290,7 +290,7 @@ index 32eace3..b2b6f94 100644
  
  if __name__ == "__main__":
 diff --git a/dashboard/app/page.tsx b/dashboard/app/page.tsx
-index 7ea165a..33e82c5 100644
+index 7ea165a..2a6c96a 100644
 --- a/dashboard/app/page.tsx
 +++ b/dashboard/app/page.tsx
 @@ -16,7 +16,7 @@ async function TrendStrip({ historyPromise }: { historyPromise: Promise<TrendPoi
@@ -323,27 +323,31 @@ index 7ea165a..33e82c5 100644
            </div>
            <TrendChart data={history} series={[
              { key: "cleanSignals", labelKey: "signal.chart.clean", className: "trendA" },
-@@ -93,7 +93,7 @@ async function Diagnostics({
+@@ -93,9 +93,9 @@ async function Diagnostics({
          <aside className="panel split">
            <p className="kicker"><T k="signal.pipeline" /></p>
            <h2><T k="signal.threeLayers" /></h2>
 -          <div className="layer actionable"><span>A</span><div><strong>{data.actionable} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
+-          <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
+-          <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
 +          <div className="layer actionable"><span>A</span><div><strong>{data.sourceValid ? data.actionable : "—"} <T k="signal.layer.actionable" /></strong><small><T k="signal.actionableHelp2" /></small></div></div>
-           <div className="layer context"><span>B</span><div><strong>{data.context} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
-           <div className="layer noise"><span>C</span><div><strong>{data.noise} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
++          <div className="layer context"><span>B</span><div><strong>{data.sourceValid ? data.context : "—"} <T k="signal.layer.context" /></strong><small><T k="signal.contextHelp" /></small></div></div>
++          <div className="layer noise"><span>C</span><div><strong>{data.sourceValid ? data.noise : "—"} <T k="signal.layer.noise" /></strong><small><T k="signal.noiseHelp" /></small></div></div>
          </aside>
+       </section>
+ 
 diff --git a/dashboard/components/TrendChart.tsx b/dashboard/components/TrendChart.tsx
-index 87adf52..c7a2df6 100644
+index 87adf52..c76bcde 100644
 --- a/dashboard/components/TrendChart.tsx
 +++ b/dashboard/components/TrendChart.tsx
 @@ -1,5 +1,6 @@
  "use client";
  
-+import { trendSegments } from "../lib/collectorQuality";
++import { trendSegments, trendTimeTicks } from "../lib/collectorQuality";
  import type { TrendPoint } from "../lib/signals";
  import { useI18n } from "./I18nProvider";
  
-@@ -27,10 +28,12 @@ export function TrendChart({
+@@ -27,14 +28,16 @@ export function TrendChart({
    const height = compact ? 104 : 220;
    const padX = 18;
    const padY = compact ? 10 : 18;
@@ -359,7 +363,12 @@ index 87adf52..c7a2df6 100644
    const y = (value: number) =>
      height - padY - (value / max) * (height - padY * 2);
  
-@@ -46,11 +49,15 @@ export function TrendChart({
+-  const labels = [data[0], data[Math.floor((data.length - 1) / 2)], data[data.length - 1]];
++  const labels = trendTimeTicks(firstTime, lastTime);
+ 
+   return (
+     <div className={compact ? "trendChart compact" : "trendChart"}>
+@@ -46,13 +49,17 @@ export function TrendChart({
        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={t("signal.chart.aria")}>
          {!compact ? <line className="trendGridLine" x1={padX} x2={width - padX} y1={height / 2} y2={height / 2} /> : null}
          <line className="trendGridLine" x1={padX} x2={width - padX} y1={height - padY} y2={height - padY} />
@@ -375,19 +384,23 @@ index 87adf52..c7a2df6 100644
 +          </g>
 +        )))}
        </svg>
+-      <div className="trendAxis">
+-        {labels.map((row, index) => <span key={index}>{formatDate(row.runAt)}</span>)}
 +      <p className="quietTrendExplainer">{t("signal.chart.gaps")}</p>
-       <div className="trendAxis">
-         {labels.map((row, index) => <span key={index}>{formatDate(row.runAt)}</span>)}
++      <div className="trendAxis" style={{ marginInline: `${padX / width * 100}%` }}>
++        {labels.map((time, index) => <span key={index} style={{ flex: 1, textAlign: index === 0 ? "left" : index === 1 ? "center" : "right" }}>{formatDate(time)}</span>)}
        </div>
+     </div>
+   );
 diff --git a/dashboard/lib/collectorQuality.test.ts b/dashboard/lib/collectorQuality.test.ts
 new file mode 100644
-index 0000000..0eef858
+index 0000000..e90439d
 --- /dev/null
 +++ b/dashboard/lib/collectorQuality.test.ts
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,63 @@
 +import { test } from "node:test";
 +import assert from "node:assert/strict";
-+import { freshTimestamp, sourceUsable, trendSegments } from "./collectorQuality";
++import { freshTimestamp, sourceUsable, trendSegments, trendTimeTicks } from "./collectorQuality";
 +import { loadTrendHistory, collectorHealth, loadHomeObservation } from "./signals";
 +
 +test("source gaps differ from a valid all-resale zero", () => {
@@ -443,12 +456,17 @@ index 0000000..0eef858
 +    assert.equal((await loadHomeObservation()).sourceValid,false);
 +  } finally { globalThis.fetch=original; }
 +});
++
++test("irregular collection times use the temporal midpoint for axis labels",()=>{
++  assert.deepEqual(trendTimeTicks(Date.parse("2026-10-23T00:00:00Z"),Date.parse("2026-10-23T20:00:00Z")),
++    ["2026-10-23T00:00:00.000Z","2026-10-23T10:00:00.000Z","2026-10-23T20:00:00.000Z"]);
++});
 diff --git a/dashboard/lib/collectorQuality.ts b/dashboard/lib/collectorQuality.ts
 new file mode 100644
-index 0000000..bdf45b6
+index 0000000..da87c76
 --- /dev/null
 +++ b/dashboard/lib/collectorQuality.ts
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,42 @@
 +/** Source availability is separate from a legitimate zero clean-signal count. */
 +export type QualityRow = {
 +  status?: string; coverage_status?: string; raw_rows?: number;
@@ -485,6 +503,11 @@ index 0000000..bdf45b6
 +  }
 +  if (current.length) result.push(current);
 +  return result;
++}
++
++/** Axis ticks must share the chart's elapsed-time scale, not sample indexes. */
++export function trendTimeTicks(firstTime: number, lastTime: number): string[] {
++  return [firstTime, (firstTime + lastTime) / 2, lastTime].map(time => new Date(time).toISOString());
 +}
 diff --git a/dashboard/lib/i18n.ts b/dashboard/lib/i18n.ts
 index 1388dab..dca1dba 100644
@@ -685,10 +708,10 @@ index 467c926..999d9e3 100644
      cleanCount: Number(observation.deterministic_facts?.current?.clean_signals || 0),
 diff --git a/docs/reviews/2026-10-23-collector-code-review.md b/docs/reviews/2026-10-23-collector-code-review.md
 new file mode 100644
-index 0000000..6e592bd
+index 0000000..c5c1813
 --- /dev/null
 +++ b/docs/reviews/2026-10-23-collector-code-review.md
-@@ -0,0 +1,83 @@
+@@ -0,0 +1,96 @@
 +# Collector resilience review and patch — 2026-10-23
 +
 +Base: `2eb4de05beb059b7fbc9b35e16d17c8eba7d8085` (main).
@@ -772,3 +795,16 @@ index 0000000..6e592bd
 +  review. It excludes itself and generated build/dependency files. Apply from
 +  the stated base with `git apply --check patches/2026-10-23-collector-resilience.patch`
 +  after obtaining the patch externally (the target patch path need not exist).
++
++## PR review follow-up
++
++The automated review of the first PR revision identified two P2 issues. Both are
++fixed in the final patch: all three layer counts now use source validity, and
++axis labels use the same temporal midpoint as the time-scaled geometry, with
++padding aligned to the plotted area. An irregular-time tick regression was added.
++
++Final local totals: 70 Python tests and 47 dashboard tests. The initial remote
++revision also passed Go tests, Hardening CI and Dashboard CI. The Cloudflare
++Workers Builds preview check failed; reading its logs requires a missing
++`workers-ci.read` scope, so its specific cause is not established. That preview
++check is distinct from the repository's CI-gated main production deployment.

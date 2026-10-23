@@ -35,3 +35,8 @@ export function trendSegments<T extends ChartSample>(rows: T[], value: (row: T) 
   if (current.length) result.push(current);
   return result;
 }
+
+/** Axis ticks must share the chart's elapsed-time scale, not sample indexes. */
+export function trendTimeTicks(firstTime: number, lastTime: number): string[] {
+  return [firstTime, (firstTime + lastTime) / 2, lastTime].map(time => new Date(time).toISOString());
+}

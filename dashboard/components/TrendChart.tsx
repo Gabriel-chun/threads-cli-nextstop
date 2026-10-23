@@ -1,6 +1,6 @@
 "use client";
 
-import { trendSegments } from "../lib/collectorQuality";
+import { trendSegments, trendTimeTicks } from "../lib/collectorQuality";
 import type { TrendPoint } from "../lib/signals";
 import { useI18n } from "./I18nProvider";
 
@@ -37,7 +37,7 @@ export function TrendChart({
   const y = (value: number) =>
     height - padY - (value / max) * (height - padY * 2);
 
-  const labels = [data[0], data[Math.floor((data.length - 1) / 2)], data[data.length - 1]];
+  const labels = trendTimeTicks(firstTime, lastTime);
 
   return (
     <div className={compact ? "trendChart compact" : "trendChart"}>
@@ -58,8 +58,8 @@ export function TrendChart({
         )))}
       </svg>
       <p className="quietTrendExplainer">{t("signal.chart.gaps")}</p>
-      <div className="trendAxis">
-        {labels.map((row, index) => <span key={index}>{formatDate(row.runAt)}</span>)}
+      <div className="trendAxis" style={{ marginInline: `${padX / width * 100}%` }}>
+        {labels.map((time, index) => <span key={index} style={{ flex: 1, textAlign: index === 0 ? "left" : index === 1 ? "center" : "right" }}>{formatDate(time)}</span>)}
       </div>
     </div>
   );
