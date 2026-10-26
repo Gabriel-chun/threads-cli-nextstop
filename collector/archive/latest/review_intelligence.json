@@ -1,28 +1,28 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-10-25T18:35:22.992014Z",
+  "generated_at": "2026-10-26T20:47:20.977563Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 463,
-    "relevant": 66,
-    "irrelevant": 397
+    "total": 477,
+    "relevant": 68,
+    "irrelevant": 409
   },
   "positive_patterns": {
     "self_need": {
-      "relevant": 32,
-      "irrelevant": 88
+      "relevant": 33,
+      "irrelevant": 93
     },
     "time_constraint": {
-      "relevant": 16,
-      "irrelevant": 17
+      "relevant": 17,
+      "irrelevant": 19
     },
     "booking_decision": {
       "relevant": 9,
-      "irrelevant": 8
+      "irrelevant": 10
     },
     "actionable_friction": {
       "relevant": 10,
-      "irrelevant": 50
+      "irrelevant": 53
     }
   },
   "negative_patterns": {
@@ -32,11 +32,11 @@
     },
     "fan_opinion": {
       "relevant": 7,
-      "irrelevant": 37
+      "irrelevant": 43
     },
     "third_party_narrative": {
-      "relevant": 5,
-      "irrelevant": 40
+      "relevant": 6,
+      "irrelevant": 44
     },
     "announcement": {
       "relevant": 2,
@@ -49,8 +49,8 @@
       "irrelevant": 17
     },
     "交通／散場": {
-      "relevant": 16,
-      "irrelevant": 11
+      "relevant": 17,
+      "irrelevant": 13
     },
     "住宿／落腳": {
       "relevant": 10,
@@ -58,7 +58,7 @@
     },
     "其他演出內容": {
       "relevant": 22,
-      "irrelevant": 251
+      "irrelevant": 256
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -66,15 +66,15 @@
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 25
+      "irrelevant": 28
     },
     "拍攝／現場規則": {
       "relevant": 0,
       "irrelevant": 2
     },
     "票務／入場摩擦": {
-      "relevant": 8,
-      "irrelevant": 54
+      "relevant": 9,
+      "irrelevant": 56
     },
     "陪同／Solo Attendance": {
       "relevant": 2,
@@ -83,7 +83,7 @@
   },
   "feature_stats": {
     "accommodation_need": {
-      "relevant": 10,
+      "relevant": 11,
       "irrelevant": 5
     },
     "cp_fandom_language": {
@@ -100,31 +100,31 @@
     },
     "long_fandom_story": {
       "relevant": 5,
-      "irrelevant": 32
+      "irrelevant": 34
     },
     "merch_need": {
       "relevant": 6,
       "irrelevant": 24
     },
     "question_intent": {
-      "relevant": 44,
-      "irrelevant": 161
+      "relevant": 46,
+      "irrelevant": 171
     },
     "solo_attendance": {
-      "relevant": 5,
+      "relevant": 6,
       "irrelevant": 17
     },
     "ticketing_need": {
-      "relevant": 8,
-      "irrelevant": 55
+      "relevant": 9,
+      "irrelevant": 57
     },
     "transport_need": {
-      "relevant": 22,
-      "irrelevant": 13
+      "relevant": 23,
+      "irrelevant": 16
     },
     "venue_experience": {
       "relevant": 4,
-      "irrelevant": 35
+      "irrelevant": 37
     },
     "vip_benefit": {
       "relevant": 4,
@@ -136,8 +136,8 @@
       "cluster_id": "post_show_return",
       "label_zh": "散場返程",
       "label_en": "Post-show return",
-      "relevant_count": 24,
-      "irrelevant_count": 12,
+      "relevant_count": 25,
+      "irrelevant_count": 13,
       "affiliate_fit": "ready",
       "solution_map": [
         "intercity_transport_booking",
@@ -145,6 +145,12 @@
         "accommodation_booking"
       ],
       "evidence": [
+        {
+          "post_key": "post_b08ae3d78a7510e6",
+          "category": "票務／入場摩擦",
+          "text": "由于本人后续要去吉隆坡看演唱会，家里人得知我要去马来之后，把我骂的狗血淋头。（ps：一直说马来不安全什么的，但我又不能说是去看演唱会，现在我的机票酒店门票都订好了，是必须得去的）\n主要是我上次办的护照在家里，有什么理由能说服他们给我寄护照？或者还有什么别的办法呢？",
+          "reviewed_at": "2026-10-26T02:14:00.000+00:00"
+        },
         {
           "post_key": "post_cf1273fb673d54c4",
           "category": "交通／散場",
@@ -168,12 +174,6 @@
           "category": "交通／散場",
           "text": "搶到票了\n但交通問題馬上開始傷腦筋⋯\n\n有同樣台中朝馬\n想要找包車的嗎？\n目前想找回程\n\n11/21那週演唱會大混戰\n包車很滿\n（我絕～對不是在抱怨我們太晚開票🤪）\n有包車公司也歡迎私訊聯繫喔～",
           "reviewed_at": "2026-10-19T14:34:00.000+00:00"
-        },
-        {
-          "post_key": "post_da51760158b1166a",
-          "category": "交通／散場",
-          "text": "有人知道藤井風10/31演唱會週邊時段晚取是可以的嗎🥲 當天的高鐵沒有那麼早到 但靠後的時段都沒了🥹",
-          "reviewed_at": "2026-10-14T14:17:00.000+00:00"
         }
       ]
     },
@@ -181,7 +181,7 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 11,
+      "relevant_count": 12,
       "irrelevant_count": 5,
       "affiliate_fit": "ready",
       "solution_map": [
@@ -190,6 +190,12 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_b08ae3d78a7510e6",
+          "category": "票務／入場摩擦",
+          "text": "由于本人后续要去吉隆坡看演唱会，家里人得知我要去马来之后，把我骂的狗血淋头。（ps：一直说马来不安全什么的，但我又不能说是去看演唱会，现在我的机票酒店门票都订好了，是必须得去的）\n主要是我上次办的护照在家里，有什么理由能说服他们给我寄护照？或者还有什么别的办法呢？",
+          "reviewed_at": "2026-10-26T02:14:00.000+00:00"
+        },
         {
           "post_key": "post_a229a63848619eec",
           "category": "住宿／落腳",
@@ -213,12 +219,6 @@
           "category": "住宿／落腳",
           "text": "各位台灣的田粉大家好，想請教一下。\n\n我已經十年沒去台灣了，這次特地為了演唱會要去小巨蛋，請問住哪一區的飯店比較方便呢？再麻煩大家給我一點建議，我現在真的好緊張🙏🏻",
           "reviewed_at": "2026-10-14T14:17:00.000+00:00"
-        },
-        {
-          "post_key": "post_f20ce4ef3a9fb09f",
-          "category": "住宿／落腳",
-          "text": "雖然有人覺得很偏遠但Inspire 我真的一生推！\n冬暖夏涼做什麼事都不用在戶外 \n\n預算足夠請一定要訂裡面的飯店，演唱會結束後五分鐘我已經躺在床上真的非常優秀",
-          "reviewed_at": "2026-10-11T00:30:00.000+00:00"
         }
       ]
     },
@@ -227,7 +227,7 @@
       "label_zh": "演前／演後周邊",
       "label_en": "Pre / post-show nearby",
       "relevant_count": 10,
-      "irrelevant_count": 16,
+      "irrelevant_count": 19,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "local_experience_or_activity",
@@ -271,7 +271,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 35,
+      "irrelevant_count": 37,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -354,7 +354,7 @@
       "label_zh": "現場準備",
       "label_en": "Venue preparation",
       "relevant_count": 3,
-      "irrelevant_count": 14,
+      "irrelevant_count": 15,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "apparel_or_outerwear",
@@ -388,7 +388,7 @@
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
       "relevant_count": 5,
-      "irrelevant_count": 39,
+      "irrelevant_count": 41,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
