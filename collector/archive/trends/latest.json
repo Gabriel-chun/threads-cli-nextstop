@@ -1,13 +1,13 @@
 {
   "schema_version": "trend-observation-v0.2",
-  "generated_at": "2026-10-28T15:01:47.801384Z",
-  "run_stamp": "2026-10-28_145741Z",
+  "generated_at": "2026-10-29T05:06:25.920800Z",
+  "run_stamp": "2026-10-29_050210Z",
   "window": "upcoming_90d",
   "sample": {
-    "sample_id": "sample:2026-10-28_145741Z",
-    "run_stamp": "2026-10-28_145741Z",
-    "window_start": "2026-10-28T07:01:47.801384Z",
-    "window_end": "2026-10-28T15:01:47.801384Z",
+    "sample_id": "sample:2026-10-29_050210Z",
+    "run_stamp": "2026-10-29_050210Z",
+    "window_start": "2026-10-28T21:06:25.920800Z",
+    "window_end": "2026-10-29T05:06:25.920800Z",
     "sampling_strategy": "need_led_observation",
     "retrieval_semantics": "need_first_context_gated",
     "query_family": [
@@ -89,16 +89,1044 @@
       "fan meeting",
       "live show"
     ],
-    "raw_count": 169,
-    "deduped_count": 166,
-    "context_excluded_count": 166,
-    "clean_count": 0,
-    "generated_at": "2026-10-28T15:01:47.801384Z"
+    "raw_count": 162,
+    "deduped_count": 158,
+    "context_excluded_count": 157,
+    "clean_count": 1,
+    "generated_at": "2026-10-29T05:06:25.920800Z"
   },
-  "language_distribution": {},
-  "evidence": [],
-  "entities": [],
+  "language_distribution": {
+    "English": 1
+  },
+  "evidence": [
+    {
+      "evidence_id": "evidence:5ef64fb6776175677e7f",
+      "sample_id": "sample:2026-10-29_050210Z",
+      "observed_at": "2026-10-29T05:06:25.920800Z",
+      "posted_at": "2026-10-11T17:12:35Z",
+      "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+      "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+      "language_context": "English",
+      "sampling_language_context": "English",
+      "author_hash": "author:6dbc0348961cebdcc42a",
+      "query_family": "timing_last_train_en",
+      "raw_query": "last train",
+      "semantic_query": "concert last train",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:rail",
+            "label": "台鐵／火車",
+            "terms": [
+              "train"
+            ]
+          }
+        ],
+        "timing": [
+          {
+            "id": "timing:last_train",
+            "label": "末班車",
+            "terms": [
+              "last train"
+            ]
+          }
+        ],
+        "stay": [],
+        "keywords": [
+          "last train",
+          "train"
+        ]
+      }
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "mobility:rail",
+      "entity_type": "mobility",
+      "label": "台鐵／火車",
+      "evidence_ids": [
+        "evidence:5ef64fb6776175677e7f"
+      ]
+    },
+    {
+      "entity_id": "timing:last_train",
+      "entity_type": "timing",
+      "label": "末班車",
+      "evidence_ids": [
+        "evidence:5ef64fb6776175677e7f"
+      ]
+    }
+  ],
   "links": [
+    {
+      "link_id": "link:25490c16bfece73e9d50",
+      "source_type": "mobility",
+      "source_id": "mobility:rail",
+      "source_label": "台鐵／火車",
+      "target_type": "timing",
+      "target_id": "timing:last_train",
+      "target_label": "末班車",
+      "relation_type": "mobility_timing",
+      "resolution_confidence": "high",
+      "state": "repeated",
+      "first_seen": "2026-10-11T14:51:15.174354Z",
+      "last_seen": "2026-10-29T05:06:25.920800Z",
+      "sample_count": 33,
+      "evidence_count": 33,
+      "current_evidence_count": 1,
+      "unique_author_count": 2,
+      "evidence_ids": [
+        "evidence:26d69a02a4ba0d083126",
+        "evidence:11b8887d2dd32f156f4b",
+        "evidence:f25e7bbfe645c0b167fa",
+        "evidence:1b586a412af3fbcdb813",
+        "evidence:e1eae9596baeda2d9d53",
+        "evidence:514bc3812fd61e4e5353",
+        "evidence:9ec17cb88d792bcd346f",
+        "evidence:4728532e5683952b8f4e",
+        "evidence:87aa223b12f13814512a",
+        "evidence:15f04742aeb0ecd3980f",
+        "evidence:3fc2a76832720f5cbfb2",
+        "evidence:b8b5348f0c512d8dca41",
+        "evidence:8cf353cb7ca8aff70777",
+        "evidence:120e3a23a6a18e64338c",
+        "evidence:c43b60818cf5580e5e65",
+        "evidence:73370ee3c5de28cd7024",
+        "evidence:4527f0db515fb3e75d7b",
+        "evidence:f27fde6932f3b1f46d06",
+        "evidence:aeba8b88cd2cc45fbfb6",
+        "evidence:90a656bdc25261363109",
+        "evidence:a757d8e9035669011a8c",
+        "evidence:cd62e27488d779d8f926",
+        "evidence:a28eefb872171e2c4c47",
+        "evidence:90540d19eba2bff1243a",
+        "evidence:aef0eba4bc7f1f1d800d",
+        "evidence:7a1bd52485ff070911da",
+        "evidence:ba087382090fadabe41b",
+        "evidence:25c6c77efe0a4950fcad",
+        "evidence:909fca6b65464d5db31c",
+        "evidence:7ec4b0b715ef4df6633b",
+        "evidence:d3a66a8df1763584a84a",
+        "evidence:bacf8a55c9c0851aeb1c",
+        "evidence:5ef64fb6776175677e7f"
+      ],
+      "current_evidence_ids": [
+        "evidence:5ef64fb6776175677e7f"
+      ],
+      "author_hashes": [
+        "author:fd6cab8fba1f36be18e0",
+        "author:6dbc0348961cebdcc42a"
+      ],
+      "consecutive_windows": 1,
+      "supporting_evidence": [
+        {
+          "evidence_id": "evidence:120e3a23a6a18e64338c",
+          "sample_id": "sample:2026-10-18_123118Z",
+          "observed_at": "2026-10-18T12:35:22.102647Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:c43b60818cf5580e5e65",
+          "sample_id": "sample:2026-10-19_035753Z",
+          "observed_at": "2026-10-19T04:02:41.819246Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:73370ee3c5de28cd7024",
+          "sample_id": "sample:2026-10-19_152358Z",
+          "observed_at": "2026-10-19T15:28:17.622005Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:4527f0db515fb3e75d7b",
+          "sample_id": "sample:2026-10-20_041029Z",
+          "observed_at": "2026-10-20T04:14:38.980053Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:f27fde6932f3b1f46d06",
+          "sample_id": "sample:2026-10-20_132647Z",
+          "observed_at": "2026-10-20T13:31:19.353019Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:aeba8b88cd2cc45fbfb6",
+          "sample_id": "sample:2026-10-21_035848Z",
+          "observed_at": "2026-10-21T04:03:22.226470Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:90a656bdc25261363109",
+          "sample_id": "sample:2026-10-21_133624Z",
+          "observed_at": "2026-10-21T13:40:30.307015Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:a757d8e9035669011a8c",
+          "sample_id": "sample:2026-10-22_035904Z",
+          "observed_at": "2026-10-22T04:03:10.737031Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:cd62e27488d779d8f926",
+          "sample_id": "sample:2026-10-22_133805Z",
+          "observed_at": "2026-10-22T13:42:13.258778Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:a28eefb872171e2c4c47",
+          "sample_id": "sample:2026-10-23_040223Z",
+          "observed_at": "2026-10-23T04:06:29.896698Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:90540d19eba2bff1243a",
+          "sample_id": "sample:2026-10-23_131346Z",
+          "observed_at": "2026-10-23T13:17:54.907050Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:aef0eba4bc7f1f1d800d",
+          "sample_id": "sample:2026-10-24_035649Z",
+          "observed_at": "2026-10-24T04:00:57.687682Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:7a1bd52485ff070911da",
+          "sample_id": "sample:2026-10-24_123119Z",
+          "observed_at": "2026-10-24T12:35:25.007148Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:ba087382090fadabe41b",
+          "sample_id": "sample:2026-10-25_035617Z",
+          "observed_at": "2026-10-25T04:00:37.968903Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:25c6c77efe0a4950fcad",
+          "sample_id": "sample:2026-10-25_130418Z",
+          "observed_at": "2026-10-25T13:08:28.925625Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:909fca6b65464d5db31c",
+          "sample_id": "sample:2026-10-26_040034Z",
+          "observed_at": "2026-10-26T04:04:40.077267Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:7ec4b0b715ef4df6633b",
+          "sample_id": "sample:2026-10-26_145918Z",
+          "observed_at": "2026-10-26T15:03:26.259414Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:d3a66a8df1763584a84a",
+          "sample_id": "sample:2026-10-27_042124Z",
+          "observed_at": "2026-10-27T04:25:28.279987Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:bacf8a55c9c0851aeb1c",
+          "sample_id": "sample:2026-10-27_141203Z",
+          "observed_at": "2026-10-27T14:16:10.981625Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:5ef64fb6776175677e7f",
+          "sample_id": "sample:2026-10-29_050210Z",
+          "observed_at": "2026-10-29T05:06:25.920800Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        }
+      ]
+    },
     {
       "link_id": "link:e1283c2fa8743e6df346",
       "source_type": "artist",
@@ -2422,966 +3450,6 @@
               "散場",
               "火車",
               "高鐵"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "link_id": "link:25490c16bfece73e9d50",
-      "source_type": "mobility",
-      "source_id": "mobility:rail",
-      "source_label": "台鐵／火車",
-      "target_type": "timing",
-      "target_id": "timing:last_train",
-      "target_label": "末班車",
-      "relation_type": "mobility_timing",
-      "resolution_confidence": "high",
-      "state": "dormant",
-      "first_seen": "2026-10-11T14:51:15.174354Z",
-      "last_seen": "2026-10-27T14:16:10.981625Z",
-      "sample_count": 32,
-      "evidence_count": 32,
-      "current_evidence_count": 0,
-      "unique_author_count": 2,
-      "evidence_ids": [
-        "evidence:26d69a02a4ba0d083126",
-        "evidence:11b8887d2dd32f156f4b",
-        "evidence:f25e7bbfe645c0b167fa",
-        "evidence:1b586a412af3fbcdb813",
-        "evidence:e1eae9596baeda2d9d53",
-        "evidence:514bc3812fd61e4e5353",
-        "evidence:9ec17cb88d792bcd346f",
-        "evidence:4728532e5683952b8f4e",
-        "evidence:87aa223b12f13814512a",
-        "evidence:15f04742aeb0ecd3980f",
-        "evidence:3fc2a76832720f5cbfb2",
-        "evidence:b8b5348f0c512d8dca41",
-        "evidence:8cf353cb7ca8aff70777",
-        "evidence:120e3a23a6a18e64338c",
-        "evidence:c43b60818cf5580e5e65",
-        "evidence:73370ee3c5de28cd7024",
-        "evidence:4527f0db515fb3e75d7b",
-        "evidence:f27fde6932f3b1f46d06",
-        "evidence:aeba8b88cd2cc45fbfb6",
-        "evidence:90a656bdc25261363109",
-        "evidence:a757d8e9035669011a8c",
-        "evidence:cd62e27488d779d8f926",
-        "evidence:a28eefb872171e2c4c47",
-        "evidence:90540d19eba2bff1243a",
-        "evidence:aef0eba4bc7f1f1d800d",
-        "evidence:7a1bd52485ff070911da",
-        "evidence:ba087382090fadabe41b",
-        "evidence:25c6c77efe0a4950fcad",
-        "evidence:909fca6b65464d5db31c",
-        "evidence:7ec4b0b715ef4df6633b",
-        "evidence:d3a66a8df1763584a84a",
-        "evidence:bacf8a55c9c0851aeb1c"
-      ],
-      "current_evidence_ids": [],
-      "author_hashes": [
-        "author:fd6cab8fba1f36be18e0",
-        "author:6dbc0348961cebdcc42a"
-      ],
-      "consecutive_windows": 0,
-      "supporting_evidence": [
-        {
-          "evidence_id": "evidence:8cf353cb7ca8aff70777",
-          "sample_id": "sample:2026-10-18_034818Z",
-          "observed_at": "2026-10-18T03:52:50.720161Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:120e3a23a6a18e64338c",
-          "sample_id": "sample:2026-10-18_123118Z",
-          "observed_at": "2026-10-18T12:35:22.102647Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:c43b60818cf5580e5e65",
-          "sample_id": "sample:2026-10-19_035753Z",
-          "observed_at": "2026-10-19T04:02:41.819246Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:73370ee3c5de28cd7024",
-          "sample_id": "sample:2026-10-19_152358Z",
-          "observed_at": "2026-10-19T15:28:17.622005Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:4527f0db515fb3e75d7b",
-          "sample_id": "sample:2026-10-20_041029Z",
-          "observed_at": "2026-10-20T04:14:38.980053Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:f27fde6932f3b1f46d06",
-          "sample_id": "sample:2026-10-20_132647Z",
-          "observed_at": "2026-10-20T13:31:19.353019Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:aeba8b88cd2cc45fbfb6",
-          "sample_id": "sample:2026-10-21_035848Z",
-          "observed_at": "2026-10-21T04:03:22.226470Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:90a656bdc25261363109",
-          "sample_id": "sample:2026-10-21_133624Z",
-          "observed_at": "2026-10-21T13:40:30.307015Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:a757d8e9035669011a8c",
-          "sample_id": "sample:2026-10-22_035904Z",
-          "observed_at": "2026-10-22T04:03:10.737031Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:cd62e27488d779d8f926",
-          "sample_id": "sample:2026-10-22_133805Z",
-          "observed_at": "2026-10-22T13:42:13.258778Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:a28eefb872171e2c4c47",
-          "sample_id": "sample:2026-10-23_040223Z",
-          "observed_at": "2026-10-23T04:06:29.896698Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:90540d19eba2bff1243a",
-          "sample_id": "sample:2026-10-23_131346Z",
-          "observed_at": "2026-10-23T13:17:54.907050Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:aef0eba4bc7f1f1d800d",
-          "sample_id": "sample:2026-10-24_035649Z",
-          "observed_at": "2026-10-24T04:00:57.687682Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:7a1bd52485ff070911da",
-          "sample_id": "sample:2026-10-24_123119Z",
-          "observed_at": "2026-10-24T12:35:25.007148Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:ba087382090fadabe41b",
-          "sample_id": "sample:2026-10-25_035617Z",
-          "observed_at": "2026-10-25T04:00:37.968903Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:25c6c77efe0a4950fcad",
-          "sample_id": "sample:2026-10-25_130418Z",
-          "observed_at": "2026-10-25T13:08:28.925625Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:909fca6b65464d5db31c",
-          "sample_id": "sample:2026-10-26_040034Z",
-          "observed_at": "2026-10-26T04:04:40.077267Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:7ec4b0b715ef4df6633b",
-          "sample_id": "sample:2026-10-26_145918Z",
-          "observed_at": "2026-10-26T15:03:26.259414Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:d3a66a8df1763584a84a",
-          "sample_id": "sample:2026-10-27_042124Z",
-          "observed_at": "2026-10-27T04:25:28.279987Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
-        {
-          "evidence_id": "evidence:bacf8a55c9c0851aeb1c",
-          "sample_id": "sample:2026-10-27_141203Z",
-          "observed_at": "2026-10-27T14:16:10.981625Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
             ]
           }
         }
@@ -17532,8 +17600,10 @@
       "link_ids": []
     },
     "repeated": {
-      "count": 0,
-      "link_ids": []
+      "count": 1,
+      "link_ids": [
+        "link:25490c16bfece73e9d50"
+      ]
     },
     "persistent": {
       "count": 0,
@@ -17544,7 +17614,7 @@
       "link_ids": []
     },
     "dormant": {
-      "count": 74,
+      "count": 73,
       "link_ids": [
         "link:e1283c2fa8743e6df346",
         "link:d5bbd8f4e37ccdcd2d68",
@@ -17565,7 +17635,6 @@
         "link:6591b6c672b4642c6a88",
         "link:3ecb26ddb97ae23b6db3",
         "link:c15b613e5356643e4338",
-        "link:25490c16bfece73e9d50",
         "link:d98666b8959db0240298",
         "link:8121929aec671b502dcd",
         "link:916a2817f95bf498d629",
@@ -17803,11 +17872,16 @@
     }
   ],
   "comparison": {
-    "previous_run_stamp": "2026-10-28_045150Z",
-    "new_entities": [],
+    "previous_run_stamp": "2026-10-28_145741Z",
+    "new_entities": [
+      "mobility:rail",
+      "timing:last_train"
+    ],
     "repeated_entities": [],
     "new_links": [],
-    "repeated_links": [],
+    "repeated_links": [
+      "link:25490c16bfece73e9d50"
+    ],
     "dormant_links": [
       "link:06fd6af819cb9abe2f6c",
       "link:0c51bc4e0dae6c5d50b6",
@@ -17818,7 +17892,6 @@
       "link:1723f6704f8683df50dc",
       "link:1942af35faff034264d9",
       "link:1d6f03c6ffb0d8c818a1",
-      "link:25490c16bfece73e9d50",
       "link:27c4ab4393bac2ce5df4",
       "link:2a651b1972db994f10e9",
       "link:2dc87ed9d6e30f19ba60",
@@ -17885,16 +17958,16 @@
       "link:fe6b6767eb0c07b5479c"
     ],
     "sample_size_change": {
-      "raw": 5,
-      "clean": 0
+      "raw": -7,
+      "clean": 1
     }
   },
   "artist_seed_count": 8,
   "event_candidate_count": 11,
   "query_count": 18,
-  "raw_result_count": 169,
-  "clean_result_count": 0,
-  "active_edge_count": 0,
+  "raw_result_count": 162,
+  "clean_result_count": 1,
+  "active_edge_count": 1,
   "status_counts": {
     "observe": 11,
     "watch": 0,
@@ -17921,7 +17994,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:fujii_kaze_kaohsiung_20261031",
@@ -17943,7 +18016,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:vaundy_taipei_20261101",
@@ -17965,7 +18038,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261106",
@@ -17987,7 +18060,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261107",
@@ -18009,7 +18082,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261108",
@@ -18031,7 +18104,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261121",
@@ -18053,7 +18126,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261122",
@@ -18075,7 +18148,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261128",
@@ -18097,7 +18170,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261129",
@@ -18119,7 +18192,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     },
     {
       "event_id": "event:stray_kids_taipei_20261212",
@@ -18141,10 +18214,56 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-10-28T15:01:47.801384Z"
+      "last_updated": "2026-10-29T05:06:25.920800Z"
     }
   ],
   "edges": [],
-  "supporting_evidence": [],
+  "supporting_evidence": [
+    {
+      "evidence_id": "evidence:5ef64fb6776175677e7f",
+      "sample_id": "sample:2026-10-29_050210Z",
+      "observed_at": "2026-10-29T05:06:25.920800Z",
+      "posted_at": "2026-10-11T17:12:35Z",
+      "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+      "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+      "language_context": "English",
+      "sampling_language_context": "English",
+      "author_hash": "author:6dbc0348961cebdcc42a",
+      "query_family": "timing_last_train_en",
+      "raw_query": "last train",
+      "semantic_query": "concert last train",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:rail",
+            "label": "台鐵／火車",
+            "terms": [
+              "train"
+            ]
+          }
+        ],
+        "timing": [
+          {
+            "id": "timing:last_train",
+            "label": "末班車",
+            "terms": [
+              "last train"
+            ]
+          }
+        ],
+        "stay": [],
+        "keywords": [
+          "last train",
+          "train"
+        ]
+      }
+    }
+  ],
   "legacy_semantics": "compatibility_only_no_ranking"
 }
