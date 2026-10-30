@@ -1,0 +1,506 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-10-30_231002Z:clean-v2.4-recent",
+  "run": {
+    "run_stamp": "2026-10-30_231002Z",
+    "run_at": "2026-10-30T23:10:54.283222Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-recent",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "recent",
+    "coverage_status": "observed",
+    "provenance": "scheduled",
+    "baseline_eligible": true,
+    "workflow_event": "schedule",
+    "github_run_id": "41142715344",
+    "notion_sync_status": "success"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-10-30_231002Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-10-30_231002Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-10-30_231002Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-10-30_231002Z.txt",
+    "snapshot_fingerprint": "sha256:260787d92b9b33595267630f60b8ba3c9ef8c1bcb44c53cc9eb3c5dcc5087b63",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 49,
+      "snapshot_unique": 22,
+      "dedupe_unique": 22,
+      "clean_signals": 20,
+      "excluded_transactions": 2,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 90.9,
+      "new_3h": 38,
+      "new_12h": 114,
+      "unique_authors": 20,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 22
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-10-30_071715Z",
+      "run_at": "2026-10-30T07:18:06.811647Z",
+      "elapsed_minutes": 952.8,
+      "pipeline_version": "clean-v2.4-recent",
+      "clean_signals": 35,
+      "new_3h": 55,
+      "new_12h": 119,
+      "clean_rate_pct": 85.4,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 20,
+      "retained_signal_count": 0,
+      "clean_signal_delta": -15,
+      "rolling_3h_delta": -17,
+      "rolling_12h_delta": -5
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 24.0,
+        "sample_count": 1,
+        "max_gap_minutes": 952.8,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 1,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 952.8,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 8,
+          "excluded_provenance_counts": {
+            "manual": 6,
+            "unknown": 2
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 35.0,
+          "new_3h_median": 55.0,
+          "new_12h_median": 119.0,
+          "clean_rate_pct_median": 85.4
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 3,
+        "max_gap_minutes": 4979.8,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 3,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 4979.8,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 24,
+          "excluded_provenance_counts": {
+            "manual": 20,
+            "unknown": 4
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 35.0,
+          "new_3h_median": 55.0,
+          "new_12h_median": 125.0,
+          "clean_rate_pct_median": 85.4
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 8,
+        "max_gap_minutes": 4979.8,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 8,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 4979.8,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 56,
+          "excluded_provenance_counts": {
+            "manual": 47,
+            "unknown": 9
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 35.5,
+          "new_3h_median": 56.0,
+          "new_12h_median": 133.5,
+          "clean_rate_pct_median": 94.1
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 16,
+        "unique_authors": 16,
+        "post_ids": [
+          "4019330424606268850",
+          "4019341023763501591",
+          "4019383746491375664",
+          "4019436448977514496",
+          "4019476139676517864",
+          "4019484419559651324",
+          "4019484527177394201",
+          "4019556661178449260",
+          "4019556789045669505",
+          "4019576730637459719",
+          "4019597145053882909",
+          "4019602339312878099",
+          "4019650115405558142",
+          "4019653821173215342",
+          "4019657153824350660",
+          "4019662877103307728"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 4,
+        "unique_authors": 4,
+        "post_ids": [
+          "4019537129830835978",
+          "4019602539607095496",
+          "4019608180199996232",
+          "4019652003538248121"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 20,
+    "limit": 16,
+    "returned": 16,
+    "items": [
+      {
+        "post_id": "4019662877103307728",
+        "username": "cat.kunst",
+        "posted_at": "2026-10-30T22:59:37Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@cat.kunst/post/DfIthbykTvQ",
+        "is_new_since_previous": true,
+        "excerpt": "Somebody probably already said this, but what I really hate about that is a lot of those people get front row seats and make a disturbance leaving in the middle of a concert when the rest of us sit through the whole thing and have much worse seats. And we’re not gonna start moving up every time somebody leaves because that’s rude as well.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019657153824350660",
+        "username": "sanzugasti",
+        "posted_at": "2026-10-30T22:48:15Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@sanzugasti/post/DfIsOJkjuHE",
+        "is_new_since_previous": true,
+        "excerpt": "Concert “Sing”",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019653821173215342",
+        "username": "jafindas",
+        "posted_at": "2026-10-30T22:41:37Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@jafindas/post/DfIrdpzEjBu",
+        "is_new_since_previous": true,
+        "excerpt": "How was the concert?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019652003538248121",
+        "username": "sarajost07",
+        "posted_at": "2026-10-30T22:38:01Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@sarajost07/post/DfIrDM_laG5",
+        "is_new_since_previous": true,
+        "excerpt": "Our school does a really neat Halloween concert every year in conjunction with our town's Spook the Loop party. The middle school and high school each play ONE SONG. The entire thing is half an hour. There is NO excuse for anyone leaving early. The band kids also hand out treats at the end for all the kids who came in their costumes. The whole point is to...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4019650115405558142",
+        "username": "tripsterc",
+        "posted_at": "2026-10-30T22:34:16Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@tripsterc/post/DfIqnuiGzF-",
+        "is_new_since_previous": true,
+        "excerpt": "Seeing Sonic Symphony in concert",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019608180199996232",
+        "username": "joon.knowit",
+        "posted_at": "2026-10-30T21:10:57Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@joon.knowit/post/DfIhFfVEztI",
+        "is_new_since_previous": true,
+        "excerpt": "oh that’s right, he said that! omg I feel this SO hard, now it’s a double dose of post concert depression missing BTS and EH!! I feel like I wanna travel to Korea to see them both again, but my wallet is not agreeing 😂",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4019602539607095496",
+        "username": "bellagraffito",
+        "posted_at": "2026-10-30T20:59:44Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@bellagraffito/post/DfIfzaHifjI",
+        "is_new_since_previous": true,
+        "excerpt": "Tablo had joked with RM and Suga on Epikase about the Epik High tour helping those who saw BTS with their post-concert depression and now I'm like...well DAMN now I miss BTS AND Epik High! What am I gonna do now!!! 🤣🤣🤣",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4019602339312878099",
+        "username": "shiftingrachel",
+        "posted_at": "2026-10-30T20:59:20Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@shiftingrachel/post/DfIfwflEsIT",
+        "is_new_since_previous": true,
+        "excerpt": "Did you miss the part of Aerosmith “and friends”? This was a tribute to an incredible band that logically should not still be able to perform. My first concert was Aerosmith when I was 5. Getting to say goodbye to a huge part of my life was a core memory.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019597145053882909",
+        "username": "davlaan",
+        "posted_at": "2026-10-30T20:49:01Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@davlaan/post/DfIek6DHGod",
+        "is_new_since_previous": true,
+        "excerpt": "Today, where the concert was supposed to rumble, our sisters are standing and there is so much strength in this, so much true love ... I admire you, thank you for being with us and with the guys. We are one family, and this connection is stronger than any cancellation. 💛",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019576730637459719",
+        "username": "tattoogreeny68",
+        "posted_at": "2026-10-30T20:08:28Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@tattoogreeny68/post/DfIZ71pEmEH",
+        "is_new_since_previous": true,
+        "excerpt": "It was the best concert.  I sang , I danced and lost my voice for three days after the show.  Come back to Utah",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019556789045669505",
+        "username": "liyameowcat",
+        "posted_at": "2026-10-30T19:28:50Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@liyameowcat/post/DfIVZplk66B",
+        "is_new_since_previous": true,
+        "excerpt": "身為高雄市民,11/28我投 5號賴瑞隆!\n演唱會經濟是民進黨拼出來的!\n柯志恩妳搞清楚狀況不要來亂!\n#國民黨滾出高雄",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019556661178449260",
+        "username": "thedaddyweeds",
+        "posted_at": "2026-10-30T19:28:35Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@thedaddyweeds/post/DfIVXygGL1s",
+        "is_new_since_previous": true,
+        "excerpt": "Rush Concert Cincinnati",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019537129830835978",
+        "username": "piccolo_marie",
+        "posted_at": "2026-10-30T18:49:47Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@piccolo_marie/post/DfIQ7khD2cK",
+        "is_new_since_previous": true,
+        "excerpt": "My daughter and I went to your concert on September 20 2026 at the Silver Legacy in Reno Nevada on Sunday Sept 20 at 700pm  it was great , we even bought your T Shirt. We hope you come back again. The Backfires were good too.  THANK YOU Rob, Bret, and Keanu. We live here and though the crowd was not big it was all of us who truly love you.🫶🌹🌹🌹❤️❤️❤️✝️🙏🎼🎶🎵",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4019484527177394201",
+        "username": "bourbony.co",
+        "posted_at": "2026-10-30T17:05:16Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@bourbony.co/post/DfIE-GelmgZ",
+        "is_new_since_previous": true,
+        "excerpt": "I was just thinking about my first Rush concert. I *think* it must have been the Presto tour as all I remember is that there were giant inflatable rabbits on each side of the stage.",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019484419559651324",
+        "username": "jj2283",
+        "posted_at": "2026-10-30T17:05:03Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@jj2283/post/DfIE8iQEff8",
+        "is_new_since_previous": true,
+        "excerpt": "Concert was purposely moved to a smaller venue due to low ticket sales\n\nLol",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4019476139676517864",
+        "username": "uini111",
+        "posted_at": "2026-10-30T16:48:36Z",
+        "first_seen_at": "2026-10-30T23:10:54.283222Z",
+        "permalink": "https://www.threads.com/@uini111/post/DfIDEDAk8Xo",
+        "is_new_since_previous": true,
+        "excerpt": "盒母三大谎言\n1、宝石盒自己努力吧\n2、演唱会看完这场我就不看了\n3、这款盒孙太丑了我不买",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_sampling_sparse",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present",
+      "incompatible_config_history_present",
+      "incompatible_pipeline_history_present",
+      "unknown_provenance_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": true,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "sparse",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 13,
+    "baseline_ineligible_history_sample_count": 62
+  }
+}
