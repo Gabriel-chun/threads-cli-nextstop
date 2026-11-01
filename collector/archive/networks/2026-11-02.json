@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-11-01T17:33:56.393791Z",
+  "generated_at": "2026-11-01T20:06:38.522993Z",
   "network_date": "2026-11-02",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
   "source_master_count": 5433,
-  "source_card_count": 4,
+  "source_card_count": 3,
   "layers": [
     "recall",
     "language",
@@ -17,7 +17,7 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 3
+      "count": 2
     },
     {
       "id": "recall:演唱会",
@@ -35,7 +35,7 @@
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 3
+      "count": 2
     },
     {
       "id": "lang:zh_hans",
@@ -83,7 +83,7 @@
       "id": "need:mobility",
       "label": "行／移動",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:venue_inside",
@@ -95,20 +95,13 @@
       "id": "need:venue_outside",
       "label": "場館外",
       "layer": "need",
-      "count": 1
+      "count": 0
     },
     {
       "id": "need:trip_extension",
       "label": "延伸行程",
       "layer": "need",
       "count": 1
-    },
-    {
-      "id": "kw:mobility:捷運",
-      "label": "捷運",
-      "layer": "keyword",
-      "count": 5,
-      "need_node": "mobility"
     },
     {
       "id": "kw:venue_inside:手環",
@@ -125,20 +118,6 @@
       "need_node": "venue_inside"
     },
     {
-      "id": "kw:venue_outside:散場",
-      "label": "散場",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_outside"
-    },
-    {
-      "id": "kw:venue_outside:動線",
-      "label": "動線",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_outside"
-    },
-    {
       "id": "kw:trip_extension:行程",
       "label": "行程",
       "layer": "keyword",
@@ -148,24 +127,14 @@
   ],
   "edges": [
     {
-      "source": "need:mobility",
-      "target": "kw:mobility:捷運",
-      "weight": 5
-    },
-    {
-      "source": "recall:演唱會",
-      "target": "lang:zh_hant",
-      "weight": 3
-    },
-    {
       "source": "need:venue_inside",
       "target": "kw:venue_inside:手環",
       "weight": 2
     },
     {
-      "source": "lang:zh_hant",
-      "target": "need:mobility",
-      "weight": 1
+      "source": "recall:演唱會",
+      "target": "lang:zh_hant",
+      "weight": 2
     },
     {
       "source": "lang:zh_hant",
@@ -175,11 +144,6 @@
     {
       "source": "lang:zh_hant",
       "target": "need:venue_inside",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
-      "target": "need:venue_outside",
       "weight": 1
     },
     {
@@ -193,16 +157,6 @@
       "weight": 1
     },
     {
-      "source": "need:venue_outside",
-      "target": "kw:venue_outside:動線",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_outside",
-      "target": "kw:venue_outside:散場",
-      "weight": 1
-    },
-    {
       "source": "recall:演唱会",
       "target": "lang:zh_hans",
       "weight": 1
@@ -212,12 +166,7 @@
     "wear_support": [],
     "food": [],
     "stay": [],
-    "mobility": [
-      {
-        "term": "捷運",
-        "count": 5
-      }
-    ],
+    "mobility": [],
     "venue_inside": [
       {
         "term": "手環",
@@ -228,16 +177,7 @@
         "count": 1
       }
     ],
-    "venue_outside": [
-      {
-        "term": "散場",
-        "count": 1
-      },
-      {
-        "term": "動線",
-        "count": 1
-      }
-    ],
+    "venue_outside": [],
     "trip_extension": [
       {
         "term": "行程",
