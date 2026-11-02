@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-11-02T17:49:30.366206Z",
+  "generated_at": "2026-11-02T23:17:54.193820Z",
   "network_date": "2026-11-03",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 5642,
-  "source_card_count": 8,
+  "source_master_count": 5676,
+  "source_card_count": 10,
   "layers": [
     "recall",
     "language",
@@ -17,13 +17,13 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 5
+      "count": 6
     },
     {
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 2
+      "count": 3
     },
     {
       "id": "recall:concert",
@@ -35,13 +35,13 @@
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 5
+      "count": 6
     },
     {
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 2
+      "count": 3
     },
     {
       "id": "lang:hk_zh",
@@ -65,7 +65,7 @@
       "id": "need:wear_support",
       "label": "衣／應援／周邊",
       "layer": "need",
-      "count": 1
+      "count": 3
     },
     {
       "id": "need:food",
@@ -77,7 +77,7 @@
       "id": "need:stay",
       "label": "住",
       "layer": "need",
-      "count": 0
+      "count": 1
     },
     {
       "id": "need:mobility",
@@ -89,13 +89,13 @@
       "id": "need:venue_inside",
       "label": "場館內",
       "layer": "need",
-      "count": 1
+      "count": 3
     },
     {
       "id": "need:venue_outside",
       "label": "場館外",
       "layer": "need",
-      "count": 2
+      "count": 3
     },
     {
       "id": "need:trip_extension",
@@ -104,11 +104,32 @@
       "count": 0
     },
     {
+      "id": "kw:wear_support:应援",
+      "label": "应援",
+      "layer": "keyword",
+      "count": 2,
+      "need_node": "wear_support"
+    },
+    {
+      "id": "kw:wear_support:外套",
+      "label": "外套",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "wear_support"
+    },
+    {
       "id": "kw:wear_support:應援",
       "label": "應援",
       "layer": "keyword",
       "count": 1,
       "need_node": "wear_support"
+    },
+    {
+      "id": "kw:stay:住哪",
+      "label": "住哪",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "stay"
     },
     {
       "id": "kw:mobility:高鐵",
@@ -125,8 +146,22 @@
       "need_node": "mobility"
     },
     {
-      "id": "kw:venue_inside:Gate",
-      "label": "Gate",
+      "id": "kw:venue_inside:名字",
+      "label": "名字",
+      "layer": "keyword",
+      "count": 2,
+      "need_node": "venue_inside"
+    },
+    {
+      "id": "kw:venue_inside:入場",
+      "label": "入場",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "venue_inside"
+    },
+    {
+      "id": "kw:venue_inside:證件",
+      "label": "證件",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_inside"
@@ -135,12 +170,19 @@
       "id": "kw:venue_outside:散場",
       "label": "散場",
       "layer": "keyword",
-      "count": 2,
+      "count": 4,
       "need_node": "venue_outside"
     },
     {
-      "id": "kw:venue_outside:怎么回",
-      "label": "怎么回",
+      "id": "kw:venue_outside:離場",
+      "label": "離場",
+      "layer": "keyword",
+      "count": 1,
+      "need_node": "venue_outside"
+    },
+    {
+      "id": "kw:venue_outside:怎麼回",
+      "label": "怎麼回",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_outside"
@@ -150,11 +192,36 @@
     {
       "source": "recall:演唱會",
       "target": "lang:zh_hant",
-      "weight": 5
+      "weight": 6
+    },
+    {
+      "source": "need:venue_outside",
+      "target": "kw:venue_outside:散場",
+      "weight": 4
+    },
+    {
+      "source": "recall:演唱会",
+      "target": "lang:zh_hans",
+      "weight": 3
     },
     {
       "source": "lang:zh_hant",
       "target": "need:mobility",
+      "weight": 2
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:venue_inside",
+      "weight": 2
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:venue_outside",
+      "weight": 2
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:wear_support",
       "weight": 2
     },
     {
@@ -163,13 +230,13 @@
       "weight": 2
     },
     {
-      "source": "need:venue_outside",
-      "target": "kw:venue_outside:散場",
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:名字",
       "weight": 2
     },
     {
-      "source": "recall:演唱会",
-      "target": "lang:zh_hans",
+      "source": "need:wear_support",
+      "target": "kw:wear_support:应援",
       "weight": 2
     },
     {
@@ -183,13 +250,13 @@
       "weight": 1
     },
     {
-      "source": "lang:zh_hant",
-      "target": "need:venue_outside",
+      "source": "lang:zh_hans",
+      "target": "need:wear_support",
       "weight": 1
     },
     {
       "source": "lang:zh_hant",
-      "target": "need:wear_support",
+      "target": "need:stay",
       "weight": 1
     },
     {
@@ -198,13 +265,33 @@
       "weight": 1
     },
     {
+      "source": "need:stay",
+      "target": "kw:stay:住哪",
+      "weight": 1
+    },
+    {
       "source": "need:venue_inside",
-      "target": "kw:venue_inside:Gate",
+      "target": "kw:venue_inside:入場",
+      "weight": 1
+    },
+    {
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:證件",
       "weight": 1
     },
     {
       "source": "need:venue_outside",
-      "target": "kw:venue_outside:怎么回",
+      "target": "kw:venue_outside:怎麼回",
+      "weight": 1
+    },
+    {
+      "source": "need:venue_outside",
+      "target": "kw:venue_outside:離場",
+      "weight": 1
+    },
+    {
+      "source": "need:wear_support",
+      "target": "kw:wear_support:外套",
       "weight": 1
     },
     {
@@ -221,12 +308,25 @@
   "top_keywords": {
     "wear_support": [
       {
+        "term": "应援",
+        "count": 2
+      },
+      {
+        "term": "外套",
+        "count": 1
+      },
+      {
         "term": "應援",
         "count": 1
       }
     ],
     "food": [],
-    "stay": [],
+    "stay": [
+      {
+        "term": "住哪",
+        "count": 1
+      }
+    ],
     "mobility": [
       {
         "term": "高鐵",
@@ -239,17 +339,29 @@
     ],
     "venue_inside": [
       {
-        "term": "Gate",
+        "term": "名字",
+        "count": 2
+      },
+      {
+        "term": "入場",
+        "count": 1
+      },
+      {
+        "term": "證件",
         "count": 1
       }
     ],
     "venue_outside": [
       {
         "term": "散場",
-        "count": 2
+        "count": 4
       },
       {
-        "term": "怎么回",
+        "term": "離場",
+        "count": 1
+      },
+      {
+        "term": "怎麼回",
         "count": 1
       }
     ],
