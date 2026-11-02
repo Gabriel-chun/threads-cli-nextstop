@@ -1,13 +1,13 @@
 {
   "schema_version": "trend-observation-v0.2",
-  "generated_at": "2026-11-02T05:17:19.530854Z",
-  "run_stamp": "2026-11-02_051307Z",
+  "generated_at": "2026-11-02T18:05:17.784049Z",
+  "run_stamp": "2026-11-02_180114Z",
   "window": "upcoming_90d",
   "sample": {
-    "sample_id": "sample:2026-11-02_051307Z",
-    "run_stamp": "2026-11-02_051307Z",
-    "window_start": "2026-11-01T21:17:19.530854Z",
-    "window_end": "2026-11-02T05:17:19.530854Z",
+    "sample_id": "sample:2026-11-02_180114Z",
+    "run_stamp": "2026-11-02_180114Z",
+    "window_start": "2026-11-02T10:05:17.784049Z",
+    "window_end": "2026-11-02T18:05:17.784049Z",
     "sampling_strategy": "need_led_observation",
     "retrieval_semantics": "need_first_context_gated",
     "query_family": [
@@ -89,20 +89,21 @@
       "fan meeting",
       "live show"
     ],
-    "raw_count": 167,
-    "deduped_count": 166,
-    "context_excluded_count": 165,
-    "clean_count": 1,
-    "generated_at": "2026-11-02T05:17:19.530854Z"
+    "raw_count": 169,
+    "deduped_count": 164,
+    "context_excluded_count": 162,
+    "clean_count": 2,
+    "generated_at": "2026-11-02T18:05:17.784049Z"
   },
   "language_distribution": {
-    "English": 1
+    "English": 1,
+    "zh-Hant": 1
   },
   "evidence": [
     {
-      "evidence_id": "evidence:8462da118f69339d9e9d",
-      "sample_id": "sample:2026-11-02_051307Z",
-      "observed_at": "2026-11-02T05:17:19.530854Z",
+      "evidence_id": "evidence:c8860047c0508fcbcc0b",
+      "sample_id": "sample:2026-11-02_180114Z",
+      "observed_at": "2026-11-02T18:05:17.784049Z",
       "posted_at": "2026-10-11T17:12:35Z",
       "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
       "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
@@ -143,6 +144,42 @@
           "train"
         ]
       }
+    },
+    {
+      "evidence_id": "evidence:840da8801faaebf3bd99",
+      "sample_id": "sample:2026-11-02_180114Z",
+      "observed_at": "2026-11-02T18:05:17.784049Z",
+      "posted_at": "2026-11-02T12:57:04Z",
+      "source_url": "https://www.threads.com/@a412877/post/DfPW81vEwZx",
+      "text": "拜託泰國天氣能不能好一點\n不可能國外演唱會\n就這樣打雷降雨\n\nRRRRR是很崩潰的\n希望天氣好 跟飛機順利飛🥲\n不敢想像穿雨衣淋濕的演唱會..",
+      "language_context": "zh-Hant",
+      "sampling_language_context": "zh-Hant",
+      "author_hash": "author:6eb073e505d791c06e23",
+      "query_family": "mobility_flight",
+      "raw_query": "飛機",
+      "semantic_query": "飛機 演唱會",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:flight",
+            "label": "飛機／機票",
+            "terms": [
+              "飛機"
+            ]
+          }
+        ],
+        "timing": [],
+        "stay": [],
+        "keywords": [
+          "飛機"
+        ]
+      }
     }
   ],
   "entities": [
@@ -151,7 +188,15 @@
       "entity_type": "mobility",
       "label": "台鐵／火車",
       "evidence_ids": [
-        "evidence:8462da118f69339d9e9d"
+        "evidence:c8860047c0508fcbcc0b"
+      ]
+    },
+    {
+      "entity_id": "mobility:flight",
+      "entity_type": "mobility",
+      "label": "飛機／機票",
+      "evidence_ids": [
+        "evidence:840da8801faaebf3bd99"
       ]
     },
     {
@@ -159,7 +204,7 @@
       "entity_type": "timing",
       "label": "末班車",
       "evidence_ids": [
-        "evidence:8462da118f69339d9e9d"
+        "evidence:c8860047c0508fcbcc0b"
       ]
     }
   ],
@@ -176,9 +221,9 @@
       "resolution_confidence": "high",
       "state": "persistent",
       "first_seen": "2026-10-11T14:51:15.174354Z",
-      "last_seen": "2026-11-02T05:17:19.530854Z",
-      "sample_count": 41,
-      "evidence_count": 45,
+      "last_seen": "2026-11-02T18:05:17.784049Z",
+      "sample_count": 42,
+      "evidence_count": 46,
       "current_evidence_count": 1,
       "unique_author_count": 7,
       "evidence_ids": [
@@ -226,10 +271,11 @@
         "evidence:863df5263f9a0bd77f87",
         "evidence:0c5c134947d7ee514e62",
         "evidence:55c252bc840cfdafcaf2",
-        "evidence:8462da118f69339d9e9d"
+        "evidence:8462da118f69339d9e9d",
+        "evidence:c8860047c0508fcbcc0b"
       ],
       "current_evidence_ids": [
-        "evidence:8462da118f69339d9e9d"
+        "evidence:c8860047c0508fcbcc0b"
       ],
       "author_hashes": [
         "author:fd6cab8fba1f36be18e0",
@@ -240,53 +286,8 @@
         "author:89bfa1ec1a371e21032d",
         "author:5876af482b733085c1bb"
       ],
-      "consecutive_windows": 9,
+      "consecutive_windows": 10,
       "supporting_evidence": [
-        {
-          "evidence_id": "evidence:7a1bd52485ff070911da",
-          "sample_id": "sample:2026-10-24_123119Z",
-          "observed_at": "2026-10-24T12:35:25.007148Z",
-          "posted_at": "2026-10-11T17:12:35Z",
-          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
-          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:6dbc0348961cebdcc42a",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [],
-            "keywords": [
-              "last train",
-              "train"
-            ]
-          }
-        },
         {
           "evidence_id": "evidence:ba087382090fadabe41b",
           "sample_id": "sample:2026-10-25_035617Z",
@@ -1114,6 +1115,51 @@
           "evidence_id": "evidence:8462da118f69339d9e9d",
           "sample_id": "sample:2026-11-02_051307Z",
           "observed_at": "2026-11-02T05:17:19.530854Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:c8860047c0508fcbcc0b",
+          "sample_id": "sample:2026-11-02_180114Z",
+          "observed_at": "2026-11-02T18:05:17.784049Z",
           "posted_at": "2026-10-11T17:12:35Z",
           "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
           "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
@@ -19116,8 +19162,10 @@
     }
   ],
   "comparison": {
-    "previous_run_stamp": "2026-11-01_145137Z",
-    "new_entities": [],
+    "previous_run_stamp": "2026-11-02_051307Z",
+    "new_entities": [
+      "mobility:flight"
+    ],
     "repeated_entities": [
       "mobility:rail",
       "timing:last_train"
@@ -19208,15 +19256,15 @@
       "link:fe6b6767eb0c07b5479c"
     ],
     "sample_size_change": {
-      "raw": -14,
-      "clean": -2
+      "raw": 2,
+      "clean": 1
     }
   },
   "artist_seed_count": 8,
   "event_candidate_count": 11,
   "query_count": 18,
-  "raw_result_count": 167,
-  "clean_result_count": 1,
+  "raw_result_count": 169,
+  "clean_result_count": 2,
   "active_edge_count": 1,
   "status_counts": {
     "observe": 11,
@@ -19244,7 +19292,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:fujii_kaze_kaohsiung_20261031",
@@ -19266,7 +19314,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:vaundy_taipei_20261101",
@@ -19288,7 +19336,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261106",
@@ -19310,7 +19358,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261107",
@@ -19332,7 +19380,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261108",
@@ -19354,7 +19402,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261121",
@@ -19376,7 +19424,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261122",
@@ -19398,7 +19446,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261128",
@@ -19420,7 +19468,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261129",
@@ -19442,7 +19490,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     },
     {
       "event_id": "event:stray_kids_taipei_20261212",
@@ -19464,15 +19512,15 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-02T05:17:19.530854Z"
+      "last_updated": "2026-11-02T18:05:17.784049Z"
     }
   ],
   "edges": [],
   "supporting_evidence": [
     {
-      "evidence_id": "evidence:8462da118f69339d9e9d",
-      "sample_id": "sample:2026-11-02_051307Z",
-      "observed_at": "2026-11-02T05:17:19.530854Z",
+      "evidence_id": "evidence:c8860047c0508fcbcc0b",
+      "sample_id": "sample:2026-11-02_180114Z",
+      "observed_at": "2026-11-02T18:05:17.784049Z",
       "posted_at": "2026-10-11T17:12:35Z",
       "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
       "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
@@ -19511,6 +19559,42 @@
         "keywords": [
           "last train",
           "train"
+        ]
+      }
+    },
+    {
+      "evidence_id": "evidence:840da8801faaebf3bd99",
+      "sample_id": "sample:2026-11-02_180114Z",
+      "observed_at": "2026-11-02T18:05:17.784049Z",
+      "posted_at": "2026-11-02T12:57:04Z",
+      "source_url": "https://www.threads.com/@a412877/post/DfPW81vEwZx",
+      "text": "拜託泰國天氣能不能好一點\n不可能國外演唱會\n就這樣打雷降雨\n\nRRRRR是很崩潰的\n希望天氣好 跟飛機順利飛🥲\n不敢想像穿雨衣淋濕的演唱會..",
+      "language_context": "zh-Hant",
+      "sampling_language_context": "zh-Hant",
+      "author_hash": "author:6eb073e505d791c06e23",
+      "query_family": "mobility_flight",
+      "raw_query": "飛機",
+      "semantic_query": "飛機 演唱會",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:flight",
+            "label": "飛機／機票",
+            "terms": [
+              "飛機"
+            ]
+          }
+        ],
+        "timing": [],
+        "stay": [],
+        "keywords": [
+          "飛機"
         ]
       }
     }
