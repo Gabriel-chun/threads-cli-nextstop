@@ -1,42 +1,42 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-11-01T19:55:53.774904Z",
+  "generated_at": "2026-11-02T23:14:29.938668Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 508,
-    "relevant": 77,
-    "irrelevant": 431
+    "total": 525,
+    "relevant": 78,
+    "irrelevant": 447
   },
   "positive_patterns": {
     "self_need": {
       "relevant": 36,
-      "irrelevant": 105
+      "irrelevant": 111
     },
     "time_constraint": {
-      "relevant": 18,
+      "relevant": 19,
       "irrelevant": 20
     },
     "booking_decision": {
       "relevant": 10,
-      "irrelevant": 11
+      "irrelevant": 13
     },
     "actionable_friction": {
       "relevant": 10,
-      "irrelevant": 59
+      "irrelevant": 62
     }
   },
   "negative_patterns": {
     "resale": {
       "relevant": 2,
-      "irrelevant": 16
+      "irrelevant": 17
     },
     "fan_opinion": {
-      "relevant": 7,
-      "irrelevant": 45
+      "relevant": 8,
+      "irrelevant": 48
     },
     "third_party_narrative": {
       "relevant": 6,
-      "irrelevant": 50
+      "irrelevant": 54
     },
     "announcement": {
       "relevant": 2,
@@ -46,11 +46,11 @@
   "category_stats": {
     "VIP／互動福利": {
       "relevant": 4,
-      "irrelevant": 17
+      "irrelevant": 18
     },
     "交通／散場": {
-      "relevant": 17,
-      "irrelevant": 14
+      "relevant": 18,
+      "irrelevant": 17
     },
     "住宿／落腳": {
       "relevant": 12,
@@ -58,7 +58,7 @@
     },
     "其他演出內容": {
       "relevant": 27,
-      "irrelevant": 267
+      "irrelevant": 272
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -66,7 +66,7 @@
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 29
+      "irrelevant": 31
     },
     "拍攝／現場規則": {
       "relevant": 0,
@@ -78,17 +78,17 @@
     },
     "票務／入場摩擦": {
       "relevant": 10,
-      "irrelevant": 61
+      "irrelevant": 64
     },
     "陪同／Solo Attendance": {
       "relevant": 3,
-      "irrelevant": 18
+      "irrelevant": 20
     }
   },
   "feature_stats": {
     "accommodation_need": {
       "relevant": 13,
-      "irrelevant": 6
+      "irrelevant": 7
     },
     "cp_fandom_language": {
       "relevant": 0,
@@ -99,8 +99,8 @@
       "irrelevant": 3
     },
     "first_timer": {
-      "relevant": 7,
-      "irrelevant": 32
+      "relevant": 8,
+      "irrelevant": 34
     },
     "long_fandom_story": {
       "relevant": 5,
@@ -110,29 +110,33 @@
       "relevant": 6,
       "irrelevant": 24
     },
+    "political_noise": {
+      "relevant": 0,
+      "irrelevant": 1
+    },
     "question_intent": {
-      "relevant": 51,
-      "irrelevant": 191
+      "relevant": 52,
+      "irrelevant": 205
     },
     "solo_attendance": {
       "relevant": 8,
-      "irrelevant": 18
+      "irrelevant": 19
     },
     "ticketing_need": {
       "relevant": 10,
-      "irrelevant": 62
+      "irrelevant": 65
     },
     "transport_need": {
-      "relevant": 27,
-      "irrelevant": 19
+      "relevant": 28,
+      "irrelevant": 21
     },
     "venue_experience": {
-      "relevant": 4,
-      "irrelevant": 39
+      "relevant": 5,
+      "irrelevant": 42
     },
     "vip_benefit": {
       "relevant": 4,
-      "irrelevant": 21
+      "irrelevant": 22
     }
   },
   "demand_clusters": [
@@ -140,8 +144,8 @@
       "cluster_id": "post_show_return",
       "label_zh": "散場返程",
       "label_en": "Post-show return",
-      "relevant_count": 27,
-      "irrelevant_count": 17,
+      "relevant_count": 28,
+      "irrelevant_count": 18,
       "affiliate_fit": "ready",
       "solution_map": [
         "intercity_transport_booking",
@@ -149,6 +153,12 @@
         "accommodation_booking"
       ],
       "evidence": [
+        {
+          "post_key": "post_ed0327169d19b9b7",
+          "category": "交通／散場",
+          "text": "第一次來高雄世運場館只能說..！？\n大概是我看過\n台北大巨蛋\n桃園巨蛋\n國立體大體育場\n\n以來\n最讓我吃驚的退場災難！？？\n捷運小和車節小就算了！\n散場時候整個動線的引導解說因為封路\n在最前面的布條和告示牌幾乎被人海檔到很多段是看不到指引的！？\n\n走到捷運要2小時以上\n\n場館出來到捷運站很遠！\n唯一我覺得感謝的是捷運工作人員和站長很棒還有抒發等捷運安撫人心唱歌🎤\n\n藤井風 記性創作很棒\n但是自己當時搶到票沒發現沒唱「旅路」\n很可惜！\n\n然後住旅館花2300元才知道很舊沒關係\n要另外買！牙膏牙刷要100元\n\n說真的在一次\n我不太敢再來高雄世運場館看演唱會了！",
+          "reviewed_at": "2026-11-02T01:48:00.000+00:00"
+        },
         {
           "post_key": "post_b7bb5ed064b0403c",
           "category": "其他演出內容",
@@ -172,12 +182,6 @@
           "category": "交通／散場",
           "text": "阿娘喂遇到天使噗哩\n剛剛坐和欣去北車 到的時間超死人因為搶不到票\n後來出去外面繞了一圈之後發現轉運站最安全就回來等了\n結果那個天使噗哩可能看到我的ㄍㄟ西是也要去看演唱會的\n主動問我要不要等一下一起坐計程車去排領號碼牌🥹\n我說因為這趟有點太緊急所以預算不太夠\n他跟我說沒關係 哇靠500多塊計程車跟我說沒關係\n不行我要跟他要帳號到時候匯錢給他\n窮鬼還敢快閃臺北啊 額額額嗚嗚嗚嗚",
           "reviewed_at": "2026-10-25T07:58:00.000+00:00"
-        },
-        {
-          "post_key": "post_31cfcef33fb8c3fc",
-          "category": "票務／入場摩擦",
-          "text": "禮拜五要搶高鐵票\n返鄉車票沒搶到因為那時候沒買到演唱會門票😓\n如果高鐵搶不到直接去現場買自由座是有可能ㄉ嗎⋯",
-          "reviewed_at": "2026-10-21T03:44:00.000+00:00"
         }
       ]
     },
@@ -185,8 +189,8 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 14,
-      "irrelevant_count": 6,
+      "relevant_count": 15,
+      "irrelevant_count": 7,
       "affiliate_fit": "ready",
       "solution_map": [
         "accommodation_booking",
@@ -194,6 +198,12 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_ed0327169d19b9b7",
+          "category": "交通／散場",
+          "text": "第一次來高雄世運場館只能說..！？\n大概是我看過\n台北大巨蛋\n桃園巨蛋\n國立體大體育場\n\n以來\n最讓我吃驚的退場災難！？？\n捷運小和車節小就算了！\n散場時候整個動線的引導解說因為封路\n在最前面的布條和告示牌幾乎被人海檔到很多段是看不到指引的！？\n\n走到捷運要2小時以上\n\n場館出來到捷運站很遠！\n唯一我覺得感謝的是捷運工作人員和站長很棒還有抒發等捷運安撫人心唱歌🎤\n\n藤井風 記性創作很棒\n但是自己當時搶到票沒發現沒唱「旅路」\n很可惜！\n\n然後住旅館花2300元才知道很舊沒關係\n要另外買！牙膏牙刷要100元\n\n說真的在一次\n我不太敢再來高雄世運場館看演唱會了！",
+          "reviewed_at": "2026-11-02T01:48:00.000+00:00"
+        },
         {
           "post_key": "post_334a185c1d671dea",
           "category": "住宿／落腳",
@@ -217,12 +227,6 @@
           "category": "住宿／落腳",
           "text": "Ye fans, who’s flying to Jakarta? 👀🇮🇩\n\nAlready got your concert ticket but haven’t figured out transportation yet?\n\nWe offer private 7-seater rides for your crew:\n✈️ Airport\n🎤 GBK\n🏨 Hotel\n📍 Extra stops upon request\n\nAvanza & Innova Zenix available for 2-day and 3-day packages.\n\nCome with your friends, split the ride, and enjoy Jakarta without the transport headache. 🚘\nYou enjoy the show. We’ll handle the ride. 🖤\n\nReply or DM us to check availability!\n\n#YeJakarta #KanyeWest",
           "reviewed_at": "2026-10-21T03:44:00.000+00:00"
-        },
-        {
-          "post_key": "post_a8cfb3fcd52db136",
-          "category": "住宿／落腳",
-          "text": "有人有多的jasper演唱會的票嗎🥲\n請看看我\n飯店提前訂了不能取消😭",
-          "reviewed_at": "2026-10-18T01:19:00.000+00:00"
         }
       ]
     },
@@ -230,14 +234,20 @@
       "cluster_id": "post_event_experience",
       "label_zh": "演前／演後周邊",
       "label_en": "Pre / post-show nearby",
-      "relevant_count": 11,
-      "irrelevant_count": 21,
+      "relevant_count": 12,
+      "irrelevant_count": 22,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "local_experience_or_activity",
         "restaurant_reservation"
       ],
       "evidence": [
+        {
+          "post_key": "post_ed0327169d19b9b7",
+          "category": "交通／散場",
+          "text": "第一次來高雄世運場館只能說..！？\n大概是我看過\n台北大巨蛋\n桃園巨蛋\n國立體大體育場\n\n以來\n最讓我吃驚的退場災難！？？\n捷運小和車節小就算了！\n散場時候整個動線的引導解說因為封路\n在最前面的布條和告示牌幾乎被人海檔到很多段是看不到指引的！？\n\n走到捷運要2小時以上\n\n場館出來到捷運站很遠！\n唯一我覺得感謝的是捷運工作人員和站長很棒還有抒發等捷運安撫人心唱歌🎤\n\n藤井風 記性創作很棒\n但是自己當時搶到票沒發現沒唱「旅路」\n很可惜！\n\n然後住旅館花2300元才知道很舊沒關係\n要另外買！牙膏牙刷要100元\n\n說真的在一次\n我不太敢再來高雄世運場館看演唱會了！",
+          "reviewed_at": "2026-11-02T01:48:00.000+00:00"
+        },
         {
           "post_key": "post_ae8a2262e5a8f4f5",
           "category": "票務／入場摩擦",
@@ -261,12 +271,6 @@
           "category": "陪同／Solo Attendance",
           "text": "第一次看演唱會\n請問廣大脆友 沒有要拍照買週邊的話，17:00開場16:15到小巨蛋會太晚嗎▓",
           "reviewed_at": "2026-10-11T13:21:00.000+00:00"
-        },
-        {
-          "post_key": "post_9d908b44e4f40806",
-          "category": "VIP／互動福利",
-          "text": "幹幹演唱會結束後我想說我家附近的711\n應該會比較少人就提議朋友一起去那裡集合\n到了一段時間發現盧廣仲來這間711！！\n真的超超超超超激動！！！！\n歐買尬我真的超佩服我自己的提議！！\n也超感謝我朋友有發現！！\n超級開心可以跟本人合照❤️😭",
-          "reviewed_at": "2026-10-06T06:15:00.000+00:00"
         }
       ]
     },
@@ -275,7 +279,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 39,
+      "irrelevant_count": 41,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -319,7 +323,7 @@
       "label_zh": "拍攝／手機",
       "label_en": "Recording / phone",
       "relevant_count": 5,
-      "irrelevant_count": 13,
+      "irrelevant_count": 15,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "recording_device_or_accessory",
@@ -364,7 +368,7 @@
       "label_zh": "現場準備",
       "label_en": "Venue preparation",
       "relevant_count": 3,
-      "irrelevant_count": 15,
+      "irrelevant_count": 17,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "apparel_or_outerwear",
@@ -398,7 +402,7 @@
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
       "relevant_count": 6,
-      "irrelevant_count": 45,
+      "irrelevant_count": 46,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
