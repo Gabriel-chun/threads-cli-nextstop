@@ -1,28 +1,28 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-11-02T23:14:29.938668Z",
+  "generated_at": "2026-11-03T21:19:09.824916Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 525,
-    "relevant": 78,
-    "irrelevant": 447
+    "total": 535,
+    "relevant": 81,
+    "irrelevant": 454
   },
   "positive_patterns": {
     "self_need": {
       "relevant": 36,
-      "irrelevant": 111
+      "irrelevant": 113
     },
     "time_constraint": {
-      "relevant": 19,
-      "irrelevant": 20
+      "relevant": 22,
+      "irrelevant": 21
     },
     "booking_decision": {
-      "relevant": 10,
-      "irrelevant": 13
+      "relevant": 11,
+      "irrelevant": 14
     },
     "actionable_friction": {
-      "relevant": 10,
-      "irrelevant": 62
+      "relevant": 12,
+      "irrelevant": 63
     }
   },
   "negative_patterns": {
@@ -31,12 +31,12 @@
       "irrelevant": 17
     },
     "fan_opinion": {
-      "relevant": 8,
-      "irrelevant": 48
+      "relevant": 9,
+      "irrelevant": 49
     },
     "third_party_narrative": {
       "relevant": 6,
-      "irrelevant": 54
+      "irrelevant": 56
     },
     "announcement": {
       "relevant": 2,
@@ -49,8 +49,8 @@
       "irrelevant": 18
     },
     "交通／散場": {
-      "relevant": 18,
-      "irrelevant": 17
+      "relevant": 19,
+      "irrelevant": 19
     },
     "住宿／落腳": {
       "relevant": 12,
@@ -58,7 +58,7 @@
     },
     "其他演出內容": {
       "relevant": 27,
-      "irrelevant": 272
+      "irrelevant": 275
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -66,7 +66,7 @@
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 31
+      "irrelevant": 32
     },
     "拍攝／現場規則": {
       "relevant": 0,
@@ -77,17 +77,17 @@
       "irrelevant": 1
     },
     "票務／入場摩擦": {
-      "relevant": 10,
+      "relevant": 12,
       "irrelevant": 64
     },
     "陪同／Solo Attendance": {
       "relevant": 3,
-      "irrelevant": 20
+      "irrelevant": 21
     }
   },
   "feature_stats": {
     "accommodation_need": {
-      "relevant": 13,
+      "relevant": 14,
       "irrelevant": 7
     },
     "cp_fandom_language": {
@@ -99,7 +99,7 @@
       "irrelevant": 3
     },
     "first_timer": {
-      "relevant": 8,
+      "relevant": 9,
       "irrelevant": 34
     },
     "long_fandom_story": {
@@ -115,24 +115,24 @@
       "irrelevant": 1
     },
     "question_intent": {
-      "relevant": 52,
-      "irrelevant": 205
+      "relevant": 55,
+      "irrelevant": 211
     },
     "solo_attendance": {
       "relevant": 8,
-      "irrelevant": 19
+      "irrelevant": 20
     },
     "ticketing_need": {
-      "relevant": 10,
+      "relevant": 12,
       "irrelevant": 65
     },
     "transport_need": {
-      "relevant": 28,
-      "irrelevant": 21
+      "relevant": 30,
+      "irrelevant": 22
     },
     "venue_experience": {
-      "relevant": 5,
-      "irrelevant": 42
+      "relevant": 6,
+      "irrelevant": 43
     },
     "vip_benefit": {
       "relevant": 4,
@@ -144,8 +144,8 @@
       "cluster_id": "post_show_return",
       "label_zh": "散場返程",
       "label_en": "Post-show return",
-      "relevant_count": 28,
-      "irrelevant_count": 18,
+      "relevant_count": 29,
+      "irrelevant_count": 19,
       "affiliate_fit": "ready",
       "solution_map": [
         "intercity_transport_booking",
@@ -153,6 +153,12 @@
         "accommodation_booking"
       ],
       "evidence": [
+        {
+          "post_key": "post_2502c6a120edb5a7",
+          "category": "交通／散場",
+          "text": "有沒有去過林口體育館看演唱會的人，可以救一下第一次追演唱會的我\nBOYNEXTDOOR 一月那場我搶到了，開心完才發現我完全不知道要怎麼去\n我住台南，目前想法是當天早上搭高鐵上去，到桃園再轉機捷\n可是散場如果太晚，回台南的車還有嗎\n還是要在林口或桃園住一晚\n如果住一晚，隔天一早又要坐兩個多小時的車回去上課\n第一次自己規劃這種，越查越亂\n去過的可以跟我說一下嗎，散場之後你們是怎麼離開林口的",
+          "reviewed_at": "2026-11-03T03:07:00.000+00:00"
+        },
         {
           "post_key": "post_ed0327169d19b9b7",
           "category": "交通／散場",
@@ -176,12 +182,6 @@
           "category": "票務／入場摩擦",
           "text": "由于本人后续要去吉隆坡看演唱会，家里人得知我要去马来之后，把我骂的狗血淋头。（ps：一直说马来不安全什么的，但我又不能说是去看演唱会，现在我的机票酒店门票都订好了，是必须得去的）\n主要是我上次办的护照在家里，有什么理由能说服他们给我寄护照？或者还有什么别的办法呢？",
           "reviewed_at": "2026-10-26T02:14:00.000+00:00"
-        },
-        {
-          "post_key": "post_cf1273fb673d54c4",
-          "category": "交通／散場",
-          "text": "阿娘喂遇到天使噗哩\n剛剛坐和欣去北車 到的時間超死人因為搶不到票\n後來出去外面繞了一圈之後發現轉運站最安全就回來等了\n結果那個天使噗哩可能看到我的ㄍㄟ西是也要去看演唱會的\n主動問我要不要等一下一起坐計程車去排領號碼牌🥹\n我說因為這趟有點太緊急所以預算不太夠\n他跟我說沒關係 哇靠500多塊計程車跟我說沒關係\n不行我要跟他要帳號到時候匯錢給他\n窮鬼還敢快閃臺北啊 額額額嗚嗚嗚嗚",
-          "reviewed_at": "2026-10-25T07:58:00.000+00:00"
         }
       ]
     },
@@ -189,7 +189,7 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 15,
+      "relevant_count": 17,
       "irrelevant_count": 7,
       "affiliate_fit": "ready",
       "solution_map": [
@@ -198,6 +198,18 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_2502c6a120edb5a7",
+          "category": "交通／散場",
+          "text": "有沒有去過林口體育館看演唱會的人，可以救一下第一次追演唱會的我\nBOYNEXTDOOR 一月那場我搶到了，開心完才發現我完全不知道要怎麼去\n我住台南，目前想法是當天早上搭高鐵上去，到桃園再轉機捷\n可是散場如果太晚，回台南的車還有嗎\n還是要在林口或桃園住一晚\n如果住一晚，隔天一早又要坐兩個多小時的車回去上課\n第一次自己規劃這種，越查越亂\n去過的可以跟我說一下嗎，散場之後你們是怎麼離開林口的",
+          "reviewed_at": "2026-11-03T03:07:00.000+00:00"
+        },
+        {
+          "post_key": "post_9ad6f24bf8275d55",
+          "category": "票務／入場摩擦",
+          "text": "預算有限去日本看演唱會的學生，住的地方通常都離場館很遠吧\n我上次為了省錢訂在好幾站外的商旅，散場之後擠電車擠了快一個小時，車廂裡站著都快睡著\n最近看到 10/31 那場有身分查驗、部分持分票的人被帶離，大家都在說之後查核可能會更嚴\n我腦中第一個想到的是，那入場前排隊的時間不就又要更長了\n提早到、排查驗、看完、再擠一個小時回去，整天的體力根本不夠用\n窮學生去日本看演唱會的，你們都住哪裡，散場後怎麼回去",
+          "reviewed_at": "2026-11-03T03:04:00.000+00:00"
+        },
         {
           "post_key": "post_ed0327169d19b9b7",
           "category": "交通／散場",
@@ -215,18 +227,6 @@
           "category": "住宿／落腳",
           "text": "女神们 去曼谷看演唱会的话有没有推荐的酒店 ▓想要离地铁站近倾向住市区然后去拉曼加拉体育场比较方便的",
           "reviewed_at": "2026-10-29T03:17:00.000+00:00"
-        },
-        {
-          "post_key": "post_b08ae3d78a7510e6",
-          "category": "票務／入場摩擦",
-          "text": "由于本人后续要去吉隆坡看演唱会，家里人得知我要去马来之后，把我骂的狗血淋头。（ps：一直说马来不安全什么的，但我又不能说是去看演唱会，现在我的机票酒店门票都订好了，是必须得去的）\n主要是我上次办的护照在家里，有什么理由能说服他们给我寄护照？或者还有什么别的办法呢？",
-          "reviewed_at": "2026-10-26T02:14:00.000+00:00"
-        },
-        {
-          "post_key": "post_a229a63848619eec",
-          "category": "住宿／落腳",
-          "text": "Ye fans, who’s flying to Jakarta? 👀🇮🇩\n\nAlready got your concert ticket but haven’t figured out transportation yet?\n\nWe offer private 7-seater rides for your crew:\n✈️ Airport\n🎤 GBK\n🏨 Hotel\n📍 Extra stops upon request\n\nAvanza & Innova Zenix available for 2-day and 3-day packages.\n\nCome with your friends, split the ride, and enjoy Jakarta without the transport headache. 🚘\nYou enjoy the show. We’ll handle the ride. 🖤\n\nReply or DM us to check availability!\n\n#YeJakarta #KanyeWest",
-          "reviewed_at": "2026-10-21T03:44:00.000+00:00"
         }
       ]
     },
@@ -235,7 +235,7 @@
       "label_zh": "演前／演後周邊",
       "label_en": "Pre / post-show nearby",
       "relevant_count": 12,
-      "irrelevant_count": 22,
+      "irrelevant_count": 23,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "local_experience_or_activity",
@@ -279,7 +279,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 41,
+      "irrelevant_count": 42,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -367,7 +367,7 @@
       "cluster_id": "venue_prep",
       "label_zh": "現場準備",
       "label_en": "Venue preparation",
-      "relevant_count": 3,
+      "relevant_count": 4,
       "irrelevant_count": 17,
       "affiliate_fit": "adjacent",
       "solution_map": [
@@ -377,6 +377,12 @@
         "earplugs"
       ],
       "evidence": [
+        {
+          "post_key": "post_57d51c38dd4d8765",
+          "category": "票務／入場摩擦",
+          "text": "下個月要去日本看演唱會，看到 10/31 那場有人被查身分帶離，我焦慮到把該準備的全部重新檢查一遍\n票上的名字跟護照英文拼法，一個字一個字對\n電子票、截圖、購票信箱都備好，怕現場網路爆掉\n證件放外套內袋，不要排到了才在包包裡翻\n排隊可能要站很久，前一晚一定要睡好\n我的票是自己名字抽到的，照理說沒問題，但看到那些畫面還是會怕\n去過日本實名制場的，排隊查驗大概要多久？",
+          "reviewed_at": "2026-11-03T03:08:00.000+00:00"
+        },
         {
           "post_key": "post_1fc44208b343df2e",
           "category": "其他演出內容",
@@ -401,11 +407,23 @@
       "cluster_id": "ticket_entry",
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
-      "relevant_count": 6,
+      "relevant_count": 8,
       "irrelevant_count": 46,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
+        {
+          "post_key": "post_57d51c38dd4d8765",
+          "category": "票務／入場摩擦",
+          "text": "下個月要去日本看演唱會，看到 10/31 那場有人被查身分帶離，我焦慮到把該準備的全部重新檢查一遍\n票上的名字跟護照英文拼法，一個字一個字對\n電子票、截圖、購票信箱都備好，怕現場網路爆掉\n證件放外套內袋，不要排到了才在包包裡翻\n排隊可能要站很久，前一晚一定要睡好\n我的票是自己名字抽到的，照理說沒問題，但看到那些畫面還是會怕\n去過日本實名制場的，排隊查驗大概要多久？",
+          "reviewed_at": "2026-11-03T03:08:00.000+00:00"
+        },
+        {
+          "post_key": "post_9ad6f24bf8275d55",
+          "category": "票務／入場摩擦",
+          "text": "預算有限去日本看演唱會的學生，住的地方通常都離場館很遠吧\n我上次為了省錢訂在好幾站外的商旅，散場之後擠電車擠了快一個小時，車廂裡站著都快睡著\n最近看到 10/31 那場有身分查驗、部分持分票的人被帶離，大家都在說之後查核可能會更嚴\n我腦中第一個想到的是，那入場前排隊的時間不就又要更長了\n提早到、排查驗、看完、再擠一個小時回去，整天的體力根本不夠用\n窮學生去日本看演唱會的，你們都住哪裡，散場後怎麼回去",
+          "reviewed_at": "2026-11-03T03:04:00.000+00:00"
+        },
         {
           "post_key": "post_ae8a2262e5a8f4f5",
           "category": "票務／入場摩擦",
@@ -423,18 +441,6 @@
           "category": "票務／入場摩擦",
           "text": "不是，手環沒號碼。演唱會後\n結束後，會整隊到D區待命，\n我觀察一排30個人，最右邊是1號",
           "reviewed_at": "2026-10-11T00:30:00.000+00:00"
-        },
-        {
-          "post_key": "post_3e80ace2a1c17242",
-          "category": "票務／入場摩擦",
-          "text": "演唱會小白求助🙏🙏\n\n我竟然抽中咗😭，但第一次睇演唱會，唔知到時安排會係點，想問問各大佬意見🧎\n\n諗住帶A3 file裝poster ,但主辦規則寫“不準攜帶任何超過38×30×20厘米以上的物品”，咁A3file俾唔俾入場🗿\n\n同埋有冇大佬知道喺活動接待處攞完海報之後仲去唔去到行李寄存？因為主辦話離開主場館之後不得再次進入，咁攞海報嘅接待處係喺驗票處出面定入面🙏\n\n因為都想像到成個場興奮起上嚟可能會比較混亂，張海報好似放寄存安全啲🥲",
-          "reviewed_at": "2026-10-03T02:22:00.000+00:00"
-        },
-        {
-          "post_key": "post_6235c78ecb61502b",
-          "category": "票務／入場摩擦",
-          "text": "🆗⋯夜深人靜來講個大阪鬼故事好了😍\n收了一張9/10大阪場002 🈚️升 p\n（不含粽卡，001會先選位，入場後再換位）\n票主告知，進場如有問題都可以討論解決辦法。\n到了9/8票主告知我001們要下去內場。\n如果場館內無法互通，會給其中一位002拿001的護照入場，再不然的話就走退款。\n從這邊，就和剛開始交易說的「入場後換位」不一樣了！\n很擔心如果拿001護照被本確的話該怎麼辦？\n明明雙方也還在討論期間，票主就突然沒有再回覆了。\n（當時時間晚了認為可能是去休息了）\n但當晚我想了很久，認為這跟一開始說的不太一樣，因票主前面有提到退款的部分，所以我就提議要退款。\n票主才突然秒回詢問：「9/9確定不能互通再退款可以嗎？」\n因為前面交易過程中，票主回覆都稍慢，我也擔心可能要到9/9演唱會結束後才能知道互不互通，到時也來不及再去收9/10的票，所以還是提議要退款。\n果真一直到9/9下午都遲遲沒有收到回覆，但卻看到票主在大帳十分活躍，更新大阪小日記、參與抽選、約朋友吃飯？\n票主自述很積極處理，我屬實感受不太到。\n就連最後也是直接不讀不回😆",
-          "reviewed_at": "2026-10-02T15:16:00.000+00:00"
         }
       ]
     }
