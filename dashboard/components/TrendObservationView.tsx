@@ -182,7 +182,7 @@ export function TrendObservationView({data,snapshots,reviewIntelligence,initialV
 }
 
 function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|null;onSelectCluster:(cluster:ReviewIntelligenceCluster)=>void}){
-  const {t}=useI18n();
+  const {t,formatDate}=useI18n();
   if(!data) return <section className="quietEmpty"><p className="muted">{t("trend.review.noData")}</p></section>;
 
   const ready=data.demand_clusters.filter(row=>row.affiliate_fit==="ready");
@@ -203,6 +203,7 @@ function ReviewIntelligenceView({data,onSelectCluster}:{data:ReviewIntelligence|
       <span><strong>{ready.length}</strong>{t("trend.review.readyClusters")}</span>
       <span><strong>{adjacent.length}</strong>{t("trend.review.adjacentClusters")}</span>
     </div>
+    <p className="muted reviewArchiveAsOf">{t("trend.review.archivedAt")} {formatDate(data.generated_at)} · {t("trend.review.archiveLag")} <a className="quietTextLink" href="/reviews">{t("trend.review.liveCountsLink")}</a></p>
 
     <details className="reviewResearchDetails">
       <summary>{t("explore.patternDetails")}</summary>
