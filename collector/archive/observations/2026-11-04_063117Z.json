@@ -1,0 +1,525 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-11-04_063117Z:clean-v2.4-recent",
+  "run": {
+    "run_stamp": "2026-11-04_063117Z",
+    "run_at": "2026-11-04T06:32:07.257293Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-recent",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "recent",
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "41785974975",
+    "notion_sync_status": "success"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-11-04_063117Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-11-04_063117Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-11-04_063117Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-11-04_063117Z.txt",
+    "snapshot_fingerprint": "sha256:cec8f0faffb462ef9ec7296254e888a14e0a427cfd23c079908beca78766a182",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 48,
+      "snapshot_unique": 30,
+      "dedupe_unique": 30,
+      "clean_signals": 27,
+      "excluded_transactions": 3,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 90.0,
+      "new_3h": 51,
+      "new_12h": 99,
+      "unique_authors": 27,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 30
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-11-03_222239Z",
+      "run_at": "2026-11-03T22:23:26.726567Z",
+      "elapsed_minutes": 488.7,
+      "pipeline_version": "clean-v2.4-recent",
+      "clean_signals": 21,
+      "new_3h": 33,
+      "new_12h": 119,
+      "clean_rate_pct": 91.3,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 27,
+      "retained_signal_count": 0,
+      "clean_signal_delta": 6,
+      "rolling_3h_delta": 18,
+      "rolling_12h_delta": -20
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 24.0,
+        "sample_count": 3,
+        "max_gap_minutes": 816.5,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 3,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 816.5,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 6,
+          "excluded_provenance_counts": {
+            "manual": 6
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 30.0,
+          "new_3h_median": 51.0,
+          "new_12h_median": 119.0,
+          "clean_rate_pct_median": 91.3
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 6,
+        "max_gap_minutes": 1475.7,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 6,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1475.7,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 21,
+          "excluded_provenance_counts": {
+            "manual": 21
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.0,
+          "new_3h_median": 49.0,
+          "new_12h_median": 108.5,
+          "clean_rate_pct_median": 92.55
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 12,
+        "max_gap_minutes": 4979.8,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 12,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 4979.8,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 51,
+          "excluded_provenance_counts": {
+            "unknown": 5,
+            "manual": 46
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.0,
+          "new_3h_median": 50.5,
+          "new_12h_median": 119.5,
+          "clean_rate_pct_median": 92.19999999999999
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 22,
+        "unique_authors": 22,
+        "post_ids": [
+          "4022455953693840731",
+          "4022532670331404984",
+          "4022558047608137055",
+          "4022687963817343543",
+          "4022697397637555540",
+          "4022699272516674550",
+          "4022718006266855372",
+          "4022720065124357832",
+          "4022723647890944175",
+          "4022743766146444065",
+          "4022748415129716175",
+          "4022754670724505846",
+          "4022755999614706418",
+          "4022763659771114851",
+          "4022763824247671280",
+          "4022764168910379121",
+          "4022768270847490451",
+          "4022773800751847445",
+          "4022776388739162860",
+          "4022780807941779690",
+          "4022782462594890647",
+          "4022785874392582910"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 3,
+        "unique_authors": 3,
+        "post_ids": [
+          "4022482314080069851",
+          "4022626152761703606",
+          "4022709757605937608"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "周邊／現場商品",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4022729274750643003"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "場館／現場體驗",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4022724564663500563"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 27,
+    "limit": 16,
+    "returned": 16,
+    "items": [
+      {
+        "post_id": "4022785874392582910",
+        "username": "1hyzora090",
+        "posted_at": "2026-11-04T06:24:27Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@1hyzora090/post/DfTznBqoQr-",
+        "is_new_since_previous": true,
+        "excerpt": "脆蜜们如果想看演唱会的同时在当地旅游几天 在网上找搭子会不会很尴尬玩不到一起去啊 求飘出去",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022782462594890647",
+        "username": "syahirah_shukri",
+        "posted_at": "2026-11-04T06:17:41Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@syahirah_shukri/post/DfTy1YLo7uX",
+        "is_new_since_previous": true,
+        "excerpt": "(WTB) Hi anyone nak letgo/jual ticket concert the weeknd malam ni? Section 214 row Q or nearby !!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022780807941779690",
+        "username": "dvm_27",
+        "posted_at": "2026-11-04T06:14:23Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@dvm_27/post/DfTydTKoPDq",
+        "is_new_since_previous": true,
+        "excerpt": "Looking for The Weeknd concert Day 2 tickets! 🎟️\n\nIf anyone is selling, please DM me. Thank you! 🙏",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022776388739162860",
+        "username": "jojojojoyces",
+        "posted_at": "2026-11-04T06:05:37Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@jojojojoyces/post/DfTxc_doGLs",
+        "is_new_since_previous": true,
+        "excerpt": "🔥 WTS | THE WEEKND CONCERT TICKET 🔥\n\n📍 A6 Section x 2 | Floor\n💰 ori price \n🎟️ F2F Deal\n🤝 Can enter the venue together!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022773800751847445",
+        "username": "twaengg",
+        "posted_at": "2026-11-04T06:00:28Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@twaengg/post/DfTw3VNj9gV",
+        "is_new_since_previous": true,
+        "excerpt": "WTB the weeknd concert ticket 4/11. 1 ticket only... pm best price 😮‍💨",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022768270847490451",
+        "username": "4verjas",
+        "posted_at": "2026-11-04T05:49:29Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@4verjas/post/DfTvm3Fk7mT",
+        "is_new_since_previous": true,
+        "excerpt": "Looking for BTS concert 20 Dec. 2 VIP or Cat 1 tickets",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022764168910379121",
+        "username": "ms_ainaaa",
+        "posted_at": "2026-11-04T05:41:20Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@ms_ainaaa/post/DfTurK3Ephx",
+        "is_new_since_previous": true,
+        "excerpt": "Hi Ade yang nak letgo ticket concert the weeknd tak? Nak 2 tickets please !seat side by side 🥹🙏🏽",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022763824247671280",
+        "username": "heyhey_fmzt",
+        "posted_at": "2026-11-04T05:40:39Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@heyhey_fmzt/post/DfTumJ3kwnw",
+        "is_new_since_previous": true,
+        "excerpt": "CHÍNH THỨC SOLD OUT TOÀN BỘ VÉ DAY 3 CONCERT ATVNCG2026 TRONG VÒNG 40 PHÚT 😭😭😭😭\nĐỈNH VÃI TRỜI ƠIIIII! ĐẲNG CẤP LÀ MÃI MÃI 😭😭😭",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022763659771114851",
+        "username": "camonpauduc",
+        "posted_at": "2026-11-04T05:40:19Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@camonpauduc/post/DfTujwsAfVj",
+        "is_new_since_previous": true,
+        "excerpt": "DAY 3 CONCERT ATVNCG 2026\nSOLD\nOUT\n39 phút",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022755999614706418",
+        "username": "zn_deark",
+        "posted_at": "2026-11-04T05:25:06Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@zn_deark/post/DfTs0SnGyLy",
+        "is_new_since_previous": true,
+        "excerpt": "最近重温腿演唱会,其实老大唯粉只要心胸开阔一些就会发现妹妹们其实都很心疼她,比如初期的演唱会发言她是主力,越到后期暖场互动的活就都被几个小的接下来了,到了15周年干脆轮流当队长。再比如MrMr时期打歌,权俞利看她很累的样子就问她“要背吗?” 这种完全没有摄像机记录没必要假装的场合只能说我姐真情流露了,至今也只有去现场的粉丝文字后记。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022754670724505846",
+        "username": "calvintiew_",
+        "posted_at": "2026-11-04T05:22:28Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@calvintiew_/post/DfTsg8_E-D2",
+        "is_new_since_previous": true,
+        "excerpt": "Wtb \nWeeknd Concert 4 Nov\nX2 tickets \nDM section & price. Thanks!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022748415129716175",
+        "username": "nemuiiii_ii",
+        "posted_at": "2026-11-04T05:10:02Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@nemuiiii_ii/post/DfTrF7AkoXP",
+        "is_new_since_previous": true,
+        "excerpt": "事已至此我只想问,为什么你们9月看演唱会一副拿到大结果的样子,到底在开心什么▓",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022743766146444065",
+        "username": "hrhz5225",
+        "posted_at": "2026-11-04T05:00:48Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@hrhz5225/post/DfTqCRTk2sh",
+        "is_new_since_previous": true,
+        "excerpt": "我来推销一波我自己么,在韩国上学网速快,接演唱会手搓\n目前战绩有txt首尔,a2b内场一排四排,asepa fm,nctwish花园内场九排\n有需要的演出都可以问问好么\n也可以先私联备用\n\n没人鹅就偷偷删掉  飘飘飘",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4022729274750643003",
+        "username": "deborah0822",
+        "posted_at": "2026-11-04T04:32:00Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@deborah0822/post/DfTmvZJE6s7",
+        "is_new_since_previous": true,
+        "excerpt": "我老爸,竟然是北極亭阿伯之一 🌚\n—————\n上週我老爸突然很新奇的跟我說\n/ 今天我們北極亭來了一個日本歌星,\n 本來是我在唱,後來他會講中文的朋友問我,\n 可不可以讓他插播唱兩首。\n/ 他在台上唱喝采,你聽過嗎?\n 齁,還唱唱跳跳的,我們都有幫他拍手。\n 但我看他穿拖鞋唱,應該是新手。\n\n** 我當時想,哪裡有什麼日本歌星啦⋯ \n  應該是被騙了吧,該不會被騙買什麼周邊商品吧⋯\n/ 還有攝影機和相機在拍他,\n 不知道是不是日本不紅,才來台灣想發唱片。\n\n** 我也就聽聽的過去了,反正沒被騙就好。\n————\n一直到昨天! \n看到網上的片段才發現!!\n等一下!!我爸爸怎麼在這裡啦!!\n\n才想起來,上週出門讓世運又封路的演唱會,\n才想起來,好多朋友發限動聽的藤井風,是日本人。\n但我是個!!!只認識藤井樹的人...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "actionable",
+          "category": "周邊／現場商品"
+        }
+      },
+      {
+        "post_id": "4022724564663500563",
+        "username": "chibimama1110",
+        "posted_at": "2026-11-04T04:22:39Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@chibimama1110/post/DfTlq2iAX8T",
+        "is_new_since_previous": true,
+        "excerpt": "人生第一次在國外看演唱會就獻給了vaundy\n太開心了以至於回來馬來西亞了都還在回味▓\n應援也跟好跟滿,不枉費我這幾個月的練習▓\n太感動了小巨蛋聚集了密密麻麻的橘色人類\n一到現場直接哭出來▓\n總而言之太開心了,我的金色記憶球\n\n謝謝男朋友充當攝影師,還為了拍照排了一個小時的隊▓\n是世界第一好男友!▓",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "場館／現場體驗"
+        }
+      },
+      {
+        "post_id": "4022723647890944175",
+        "username": "_.anling._",
+        "posted_at": "2026-11-04T04:20:49Z",
+        "first_seen_at": "2026-11-04T06:32:07.257293Z",
+        "permalink": "https://www.threads.com/@_.anling._/post/DfTldguGnCv",
+        "is_new_since_previous": true,
+        "excerpt": "有冇香港🇭🇰MOA會去TXT澳門 day2演唱會啊 ? 🥹 想搵人一齊去🫶🏻\n06年 我係圭擔😙\n目前打算即日來回!但如果想留一晚 第二日一齊返香港都得😆\n如果大家啱傾 之後可以一齊追星啊~\n我係新粉 想識下其他 MOA一齊玩一齊追星🥹",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_sampling_sparse",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present",
+      "unknown_provenance_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": true,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "sparse",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 0,
+    "baseline_ineligible_history_sample_count": 71
+  }
+}
