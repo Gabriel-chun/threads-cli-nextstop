@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-11-03T21:28:27.557732Z",
-  "network_date": "2026-11-04",
+  "generated_at": "2026-11-04T16:31:46.809568Z",
+  "network_date": "2026-11-05",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 5880,
-  "source_card_count": 11,
+  "source_master_count": 6046,
+  "source_card_count": 9,
   "layers": [
     "recall",
     "language",
@@ -17,19 +17,19 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 4
+      "count": 5
     },
     {
       "id": "recall:演唱会",
       "label": "演唱会",
       "layer": "recall",
-      "count": 5
+      "count": 0
     },
     {
       "id": "recall:concert",
       "label": "concert",
       "layer": "recall",
-      "count": 2
+      "count": 4
     },
     {
       "id": "lang:zh_hant",
@@ -41,7 +41,7 @@
       "id": "lang:zh_hans",
       "label": "zh_hans",
       "layer": "language",
-      "count": 5
+      "count": 0
     },
     {
       "id": "lang:hk_zh",
@@ -53,13 +53,13 @@
       "id": "lang:english",
       "label": "english",
       "layer": "language",
-      "count": 2
+      "count": 4
     },
     {
       "id": "lang:mixed",
       "label": "mixed",
       "layer": "language",
-      "count": 0
+      "count": 1
     },
     {
       "id": "need:wear_support",
@@ -89,7 +89,7 @@
       "id": "need:venue_inside",
       "label": "場館內",
       "layer": "need",
-      "count": 5
+      "count": 3
     },
     {
       "id": "need:venue_outside",
@@ -107,40 +107,33 @@
       "id": "kw:wear_support:應援",
       "label": "應援",
       "layer": "keyword",
-      "count": 2,
+      "count": 6,
       "need_node": "wear_support"
     },
     {
-      "id": "kw:stay:酒店",
-      "label": "酒店",
+      "id": "kw:wear_support:周邊",
+      "label": "周邊",
+      "layer": "keyword",
+      "count": 4,
+      "need_node": "wear_support"
+    },
+    {
+      "id": "kw:stay:飯店",
+      "label": "飯店",
       "layer": "keyword",
       "count": 1,
       "need_node": "stay"
     },
     {
-      "id": "kw:venue_inside:名字",
-      "label": "名字",
+      "id": "kw:venue_inside:seat",
+      "label": "seat",
       "layer": "keyword",
-      "count": 1,
+      "count": 3,
       "need_node": "venue_inside"
     },
     {
-      "id": "kw:venue_inside:座位",
-      "label": "座位",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_inside"
-    },
-    {
-      "id": "kw:venue_inside:Seat",
-      "label": "Seat",
-      "layer": "keyword",
-      "count": 1,
-      "need_node": "venue_inside"
-    },
-    {
-      "id": "kw:venue_outside:散場",
-      "label": "散場",
+      "id": "kw:venue_outside:after the concert",
+      "label": "after the concert",
       "layer": "keyword",
       "count": 1,
       "need_node": "venue_outside"
@@ -148,9 +141,19 @@
   ],
   "edges": [
     {
-      "source": "recall:演唱会",
-      "target": "lang:zh_hans",
-      "weight": 5
+      "source": "need:wear_support",
+      "target": "kw:wear_support:應援",
+      "weight": 6
+    },
+    {
+      "source": "need:wear_support",
+      "target": "kw:wear_support:周邊",
+      "weight": 4
+    },
+    {
+      "source": "recall:concert",
+      "target": "lang:english",
+      "weight": 4
     },
     {
       "source": "recall:演唱會",
@@ -160,66 +163,46 @@
     {
       "source": "lang:english",
       "target": "need:venue_inside",
-      "weight": 2
+      "weight": 3
     },
     {
-      "source": "lang:zh_hant",
-      "target": "need:venue_inside",
-      "weight": 2
+      "source": "need:venue_inside",
+      "target": "kw:venue_inside:seat",
+      "weight": 3
     },
     {
-      "source": "lang:zh_hant",
-      "target": "need:wear_support",
-      "weight": 2
-    },
-    {
-      "source": "need:wear_support",
-      "target": "kw:wear_support:應援",
-      "weight": 2
-    },
-    {
-      "source": "recall:concert",
-      "target": "lang:english",
-      "weight": 2
-    },
-    {
-      "source": "lang:zh_hans",
-      "target": "need:stay",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hans",
-      "target": "need:venue_inside",
-      "weight": 1
-    },
-    {
-      "source": "lang:zh_hant",
+      "source": "lang:english",
       "target": "need:venue_outside",
       "weight": 1
     },
     {
+      "source": "lang:mixed",
+      "target": "need:wear_support",
+      "weight": 1
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:stay",
+      "weight": 1
+    },
+    {
+      "source": "lang:zh_hant",
+      "target": "need:wear_support",
+      "weight": 1
+    },
+    {
       "source": "need:stay",
-      "target": "kw:stay:酒店",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:Seat",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:名字",
-      "weight": 1
-    },
-    {
-      "source": "need:venue_inside",
-      "target": "kw:venue_inside:座位",
+      "target": "kw:stay:飯店",
       "weight": 1
     },
     {
       "source": "need:venue_outside",
-      "target": "kw:venue_outside:散場",
+      "target": "kw:venue_outside:after the concert",
+      "weight": 1
+    },
+    {
+      "source": "recall:演唱會",
+      "target": "lang:mixed",
       "weight": 1
     }
   ],
@@ -227,34 +210,30 @@
     "wear_support": [
       {
         "term": "應援",
-        "count": 2
+        "count": 6
+      },
+      {
+        "term": "周邊",
+        "count": 4
       }
     ],
     "food": [],
     "stay": [
       {
-        "term": "酒店",
+        "term": "飯店",
         "count": 1
       }
     ],
     "mobility": [],
     "venue_inside": [
       {
-        "term": "名字",
-        "count": 1
-      },
-      {
-        "term": "座位",
-        "count": 1
-      },
-      {
-        "term": "Seat",
-        "count": 1
+        "term": "seat",
+        "count": 3
       }
     ],
     "venue_outside": [
       {
-        "term": "散場",
+        "term": "after the concert",
         "count": 1
       }
     ],
