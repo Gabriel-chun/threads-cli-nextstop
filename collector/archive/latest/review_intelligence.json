@@ -1,20 +1,20 @@
 {
   "schema_version": "review-intelligence-v0.1",
-  "generated_at": "2026-11-03T21:19:09.824916Z",
+  "generated_at": "2026-11-04T21:36:09.929627Z",
   "source": "github:collector/archive/reviews",
   "review_counts": {
-    "total": 535,
-    "relevant": 81,
-    "irrelevant": 454
+    "total": 548,
+    "relevant": 82,
+    "irrelevant": 466
   },
   "positive_patterns": {
     "self_need": {
       "relevant": 36,
-      "irrelevant": 113
+      "irrelevant": 120
     },
     "time_constraint": {
       "relevant": 22,
-      "irrelevant": 21
+      "irrelevant": 22
     },
     "booking_decision": {
       "relevant": 11,
@@ -28,19 +28,19 @@
   "negative_patterns": {
     "resale": {
       "relevant": 2,
-      "irrelevant": 17
+      "irrelevant": 20
     },
     "fan_opinion": {
       "relevant": 9,
-      "irrelevant": 49
+      "irrelevant": 51
     },
     "third_party_narrative": {
       "relevant": 6,
-      "irrelevant": 56
+      "irrelevant": 58
     },
     "announcement": {
       "relevant": 2,
-      "irrelevant": 11
+      "irrelevant": 12
     }
   },
   "category_stats": {
@@ -50,15 +50,15 @@
     },
     "交通／散場": {
       "relevant": 19,
-      "irrelevant": 19
+      "irrelevant": 21
     },
     "住宿／落腳": {
-      "relevant": 12,
+      "relevant": 13,
       "irrelevant": 3
     },
     "其他演出內容": {
       "relevant": 27,
-      "irrelevant": 275
+      "irrelevant": 280
     },
     "周邊／現場商品": {
       "relevant": 3,
@@ -66,7 +66,7 @@
     },
     "場館／現場體驗": {
       "relevant": 1,
-      "irrelevant": 32
+      "irrelevant": 34
     },
     "拍攝／現場規則": {
       "relevant": 0,
@@ -82,12 +82,12 @@
     },
     "陪同／Solo Attendance": {
       "relevant": 3,
-      "irrelevant": 21
+      "irrelevant": 24
     }
   },
   "feature_stats": {
     "accommodation_need": {
-      "relevant": 14,
+      "relevant": 15,
       "irrelevant": 7
     },
     "cp_fandom_language": {
@@ -100,11 +100,11 @@
     },
     "first_timer": {
       "relevant": 9,
-      "irrelevant": 34
+      "irrelevant": 38
     },
     "long_fandom_story": {
       "relevant": 5,
-      "irrelevant": 35
+      "irrelevant": 36
     },
     "merch_need": {
       "relevant": 6,
@@ -112,15 +112,15 @@
     },
     "political_noise": {
       "relevant": 0,
-      "irrelevant": 1
+      "irrelevant": 2
     },
     "question_intent": {
-      "relevant": 55,
-      "irrelevant": 211
+      "relevant": 56,
+      "irrelevant": 220
     },
     "solo_attendance": {
       "relevant": 8,
-      "irrelevant": 20
+      "irrelevant": 23
     },
     "ticketing_need": {
       "relevant": 12,
@@ -128,11 +128,11 @@
     },
     "transport_need": {
       "relevant": 30,
-      "irrelevant": 22
+      "irrelevant": 24
     },
     "venue_experience": {
       "relevant": 6,
-      "irrelevant": 43
+      "irrelevant": 47
     },
     "vip_benefit": {
       "relevant": 4,
@@ -145,7 +145,7 @@
       "label_zh": "散場返程",
       "label_en": "Post-show return",
       "relevant_count": 29,
-      "irrelevant_count": 19,
+      "irrelevant_count": 20,
       "affiliate_fit": "ready",
       "solution_map": [
         "intercity_transport_booking",
@@ -189,7 +189,7 @@
       "cluster_id": "accommodation",
       "label_zh": "住宿／落腳",
       "label_en": "Stay / lodging",
-      "relevant_count": 17,
+      "relevant_count": 18,
       "irrelevant_count": 7,
       "affiliate_fit": "ready",
       "solution_map": [
@@ -198,6 +198,12 @@
         "flight_hotel_bundle"
       ],
       "evidence": [
+        {
+          "post_key": "post_28450658f16aa5cd",
+          "category": "住宿／落腳",
+          "text": "蜜们去澳门看完演唱会回来横琴口岸立刻打车回酒店安全吗…我有点害怕😨",
+          "reviewed_at": "2026-11-04T08:30:00.000+00:00"
+        },
         {
           "post_key": "post_2502c6a120edb5a7",
           "category": "交通／散場",
@@ -221,12 +227,6 @@
           "category": "住宿／落腳",
           "text": "演唱會結束沒訂飯店的現在還找得到地方過一晚嗎？\n目前只想到的Ktv也只到早上六點▓",
           "reviewed_at": "2026-10-30T10:30:00.000+00:00"
-        },
-        {
-          "post_key": "post_d4b145c6b43abc97",
-          "category": "住宿／落腳",
-          "text": "女神们 去曼谷看演唱会的话有没有推荐的酒店 ▓想要离地铁站近倾向住市区然后去拉曼加拉体育场比较方便的",
-          "reviewed_at": "2026-10-29T03:17:00.000+00:00"
         }
       ]
     },
@@ -235,7 +235,7 @@
       "label_zh": "演前／演後周邊",
       "label_en": "Pre / post-show nearby",
       "relevant_count": 12,
-      "irrelevant_count": 23,
+      "irrelevant_count": 24,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "local_experience_or_activity",
@@ -279,7 +279,7 @@
       "label_zh": "手燈／應援／周邊",
       "label_en": "Lightstick / fan goods",
       "relevant_count": 7,
-      "irrelevant_count": 42,
+      "irrelevant_count": 46,
       "affiliate_fit": "adjacent",
       "solution_map": [
         "official_merch_or_lightstick",
@@ -408,7 +408,7 @@
       "label_zh": "票務／入場流程",
       "label_en": "Ticketing / entry process",
       "relevant_count": 8,
-      "irrelevant_count": 46,
+      "irrelevant_count": 47,
       "affiliate_fit": "insight_only",
       "solution_map": [],
       "evidence": [
