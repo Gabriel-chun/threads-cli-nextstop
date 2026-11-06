@@ -1,39 +1,232 @@
 {
   "schema_version": "signal-deck-v0.4",
-  "generated_at": "2026-11-05T23:43:37.371893Z",
+  "generated_at": "2026-11-06T23:28:08.598861Z",
   "refresh_policy": "daily",
   "window_key": "3d",
   "window": {
     "label": "3日",
     "days": 3,
-    "signal_count": 505,
-    "core_eligible_count": 16,
-    "adjacent_count": 2,
+    "signal_count": 537,
+    "core_eligible_count": 14,
+    "adjacent_count": 3,
     "discovery_count": 5,
-    "eligible_count": 23,
-    "high_confidence_count": 10,
-    "medium_confidence_count": 8,
-    "medium_sampled_count": 8,
-    "low_confidence_count": 487,
-    "card_count": 23,
-    "affiliate_ready_count": 5,
-    "affiliate_adjacent_count": 10,
-    "affiliate_insight_only_count": 3,
+    "eligible_count": 22,
+    "high_confidence_count": 12,
+    "medium_confidence_count": 5,
+    "medium_sampled_count": 5,
+    "low_confidence_count": 520,
+    "card_count": 22,
+    "affiliate_ready_count": 8,
+    "affiliate_adjacent_count": 7,
+    "affiliate_insight_only_count": 2,
     "affiliate_none_count": 5,
-    "default_review_limit": 23,
+    "default_review_limit": 22,
     "extend_step": 10,
     "display_limit": 5,
     "cards": [
       {
+        "id": "post_261a3b243ec5f76f",
+        "post_key": "post_261a3b243ec5f76f",
+        "snapshot_id": "deck_2026-11-06_3d_261a3b243ec5f76f",
+        "post_id": "4024273375128795810",
+        "category": "住宿／落腳",
+        "kind": "actionable",
+        "status": "今日",
+        "score": 103.322,
+        "base_score": 68.049,
+        "actionability_score": 33.0,
+        "actionability_band": "high",
+        "ranking_delta": 0.273,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_stay_need",
+          "venue_access_or_return"
+        ],
+        "solution_map": [
+          {
+            "category": "accommodation_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "stay"
+          },
+          {
+            "category": "local_transfer_or_transit_pass",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "venue_outside"
+          }
+        ],
+        "intent_score": 5.0,
+        "intent_band": "high",
+        "candidate_confidence": "high",
+        "target_fit_score": 8.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "stay",
+          "venue_outside"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question",
+          "logistics_context"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert",
+          "hotel"
+        ],
+        "need_nodes": [
+          "food",
+          "stay",
+          "venue_outside"
+        ],
+        "need_terms": [
+          "food",
+          "hotel",
+          "after concert"
+        ],
+        "need_edges": [
+          "food->stay",
+          "food->venue_outside",
+          "stay->venue_outside"
+        ],
+        "feature_tags": [
+          "accommodation_need",
+          "question_intent"
+        ],
+        "username": "melonicaps",
+        "text": "Hii, anyone nak sharing transport after concert BTSinKL?\n\nDetails:\n-after concert only (13/12/2026)\n-from stadium to hotel (Need hotel near mine: Mercure Shaw Parade, Pudu)\n-Might late to hotel bcoz traffic, take video/ photo\n-We can eat first/ buy food before head back to hotel\n-Availble 3pax\n-Price: RM30-RM50",
+        "summary": "Hii, anyone nak sharing transport after concert BTSinKL? Details: -after concert only (13/12/2026) -from stadium to hotel (Need hotel near mine: Mercure Shaw Parade, Pudu) -Might…",
+        "permalink": "https://www.threads.com/@melonicaps/post/DfZF1ArnTqi",
+        "posted_at": "2026-11-06T07:39:51Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
+        "id": "post_52bae2b20a6fb3cc",
+        "post_key": "post_52bae2b20a6fb3cc",
+        "snapshot_id": "deck_2026-11-06_3d_52bae2b20a6fb3cc",
+        "post_id": "4024283787595741801",
+        "category": "住宿／落腳",
+        "kind": "actionable",
+        "status": "今日",
+        "score": 101.776,
+        "base_score": 68.135,
+        "actionability_score": 33.0,
+        "actionability_band": "high",
+        "ranking_delta": -1.359,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
+        "affiliate_fit_reasons": [
+          "bookable_stay_need"
+        ],
+        "solution_map": [
+          {
+            "category": "accommodation_booking",
+            "kind": "service",
+            "strength": "direct",
+            "source_signal": "stay"
+          }
+        ],
+        "intent_score": 10.0,
+        "intent_band": "high",
+        "candidate_confidence": "medium",
+        "target_fit_score": 2.0,
+        "target_fit_band": "medium",
+        "target_fit_signals": [
+          "stay"
+        ],
+        "target_fit_penalties": [
+          "merch_only"
+        ],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision",
+          "need_question",
+          "action_marker",
+          "logistics_context"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hans",
+        "language_tokens": [
+          "演唱会",
+          "酒店",
+          "周边"
+        ],
+        "need_nodes": [
+          "wear_support",
+          "stay",
+          "trip_extension"
+        ],
+        "need_terms": [
+          "周边",
+          "酒店",
+          "附近",
+          "旅游"
+        ],
+        "need_edges": [
+          "wear_support->stay",
+          "wear_support->trip_extension",
+          "stay->trip_extension"
+        ],
+        "feature_tags": [
+          "accommodation_need",
+          "merch_need",
+          "question_intent"
+        ],
+        "username": "shien2001",
+        "text": "偶然看到某族人说“我们不需要去因为空山基的出现而拍照放上网上而感到光荣”。这种人真是令人反感。\n\n还是那句话，真的不喜欢的东西，你可以不去看也不去听。而不是把人家欣赏艺术的看法这样随随便便去想去那些色情的东西。\n\n回想看看，The Weenknd的演唱会单单是政府的服务费和非居民公共演艺预扣税两天都可以去到千万令吉。再加上促进附近的酒店餐饮旅游业，这笔收入拿到真的要因为所谓宗教而去终止？\n\n别忘了，这两天的在体育馆外摆摊的食物、餐车和非官方周边都是马来人卖的。若不是因为The Weeknd来，他们有机会有这笔收入？\n\n再者，空山基只是一个机器人，这个机器人想要表达的是将机械、未来主义、金属质感与人体美学完美融合，而不是要传达色情裸体的。这尊艺术品被带到来巡演给各个国家看，算是一种艺术美的画面。我们是一个多元的国家，不是伊朗。他们需要我们来尊重他们的宗教和文化，难道他们就不能尊重我们的艺术？\n\nGuys，很多大咖艺人已经skip马来西亚去泰国新加坡了，这个问题已经是一个提醒要我们去关注了。\n\n共勉之",
+        "summary": "偶然看到某族人说“我们不需要去因为空山基的出现而拍照放上网上而感到光荣”。这种人真是令人反感。 还是那句话，真的不喜欢的东西，你可以不去看也不去听。而不是把人家欣赏艺术的看法这样随随便便去想去那些色情的东西。 回想看看，The Weenknd的演唱会单单是政府的服务费和非居民公共演艺预扣税两天都可以去到千万令吉。再加上促进附近的酒店餐饮旅游业，这笔收入拿到…",
+        "permalink": "https://www.threads.com/@shien2001/post/DfZIMiDAfpp",
+        "posted_at": "2026-11-06T08:00:33Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱会",
+        "source_queries": [
+          "演唱会"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
         "id": "post_68b11cb92ebe6457",
         "post_key": "post_68b11cb92ebe6457",
-        "snapshot_id": "deck_2026-11-05_3d_68b11cb92ebe6457",
+        "snapshot_id": "deck_2026-11-06_3d_68b11cb92ebe6457",
         "post_id": "4023101008691955134",
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
-        "score": 97.926,
-        "base_score": 64.279,
+        "score": 93.647,
+        "base_score": 60.0,
         "actionability_score": 35.0,
         "actionability_band": "high",
         "ranking_delta": -2.353,
@@ -124,80 +317,78 @@
         "review_lane": "core"
       },
       {
-        "id": "post_83a6d6e286280ceb",
-        "post_key": "post_83a6d6e286280ceb",
-        "snapshot_id": "deck_2026-11-05_3d_83a6d6e286280ceb",
-        "post_id": "4023763717052786243",
-        "category": "交通／散場",
+        "id": "post_3a6938dc076ea871",
+        "post_key": "post_3a6938dc076ea871",
+        "snapshot_id": "deck_2026-11-06_3d_3a6938dc076ea871",
+        "post_id": "4024223384485831183",
+        "category": "住宿／落腳",
         "kind": "actionable",
         "status": "今日",
-        "score": 89.471,
-        "base_score": 69.765,
-        "actionability_score": 19.0,
+        "score": 91.21,
+        "base_score": 67.635,
+        "actionability_score": 16.0,
         "actionability_band": "high",
-        "ranking_delta": -1.294,
+        "ranking_delta": 5.575,
         "affiliate_priority_delta": 2.0,
         "affiliate_fit": "ready",
         "affiliate_fit_score": 4.0,
         "affiliate_fit_reasons": [
-          "bookable_intercity_mobility"
+          "bookable_stay_need"
         ],
         "solution_map": [
           {
-            "category": "intercity_transport_booking",
+            "category": "accommodation_booking",
             "kind": "service",
             "strength": "direct",
-            "source_signal": "mobility"
+            "source_signal": "stay"
           }
         ],
-        "intent_score": 9.0,
+        "intent_score": 6.0,
         "intent_band": "high",
         "candidate_confidence": "high",
         "target_fit_score": 4.0,
         "target_fit_band": "high",
         "target_fit_signals": [
-          "mobility"
+          "stay"
         ],
         "target_fit_penalties": [],
         "target_fit_paths": [
           "attendance_logistics"
         ],
-        "semantic_role": "self_need",
+        "semantic_role": "advisory_experience",
         "semantic_role_signals": [
-          "self_need"
+          "advisory_experience"
         ],
         "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
-          "need_question",
-          "logistics_context"
+          "action_marker"
         ],
         "intent_penalties": [],
-        "language_context": "zh_hant",
+        "language_context": "zh_hans",
         "language_tokens": [
-          "演唱會",
-          "高鐵"
+          "演唱会",
+          "酒店"
         ],
         "need_nodes": [
-          "mobility"
+          "stay"
         ],
         "need_terms": [
-          "高鐵"
+          "酒店"
         ],
         "need_edges": [],
         "feature_tags": [
-          "question_intent",
-          "transport_need"
+          "accommodation_need"
         ],
-        "username": "tiffwlz",
-        "text": "11/22演唱會結束回台北朋友包車 目前缺3人 \n想問是否有人不趕高鐵想搭車💜 \n私訊",
-        "summary": "11/22演唱會結束回台北朋友包車 目前缺3人 想問是否有人不趕高鐵想搭車💜 私訊",
-        "permalink": "https://www.threads.com/@tiffwlz/post/DfXR8gnCWZD",
-        "posted_at": "2026-11-05T14:47:15Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
+        "username": "wwww0.910",
+        "text": "推荐来澳门看演唱会的蜜蜜住这家酒店 就在银河对面非常方便 酒店很干净 而且一晚上便宜的话才五百块",
+        "summary": "推荐来澳门看演唱会的蜜蜜住这家酒店 就在银河对面非常方便 酒店很干净 而且一晚上便宜的话才五百块",
+        "permalink": "https://www.threads.com/@wwww0.910/post/DfY6djRGSIP",
+        "posted_at": "2026-11-06T06:00:32Z",
+        "media_type": "CAROUSEL_ALBUM",
+        "query": "演唱会",
         "source_queries": [
-          "演唱會"
+          "演唱会"
         ],
         "retrieval_sources": [
           "threads_ssr_recent"
@@ -208,13 +399,13 @@
       {
         "id": "post_ea90f3d0318f7c98",
         "post_key": "post_ea90f3d0318f7c98",
-        "snapshot_id": "deck_2026-11-05_3d_ea90f3d0318f7c98",
+        "snapshot_id": "deck_2026-11-06_3d_ea90f3d0318f7c98",
         "post_id": "4023034177263754105",
         "category": "住宿／落腳",
         "kind": "actionable",
         "status": "近期",
-        "score": 88.267,
-        "base_score": 63.726,
+        "score": 84.541,
+        "base_score": 60.0,
         "actionability_score": 21.0,
         "actionability_band": "high",
         "ranking_delta": 1.541,
@@ -300,53 +491,43 @@
         "review_lane": "core"
       },
       {
-        "id": "post_096bfc465afb7233",
-        "post_key": "post_096bfc465afb7233",
-        "snapshot_id": "deck_2026-11-05_3d_096bfc465afb7233",
-        "post_id": "4022264077464351202",
+        "id": "post_83a6d6e286280ceb",
+        "post_key": "post_83a6d6e286280ceb",
+        "snapshot_id": "deck_2026-11-06_3d_83a6d6e286280ceb",
+        "post_id": "4023763717052786243",
         "category": "交通／散場",
         "kind": "actionable",
         "status": "近期",
-        "score": 87.0,
-        "base_score": 60.0,
-        "actionability_score": 30.0,
+        "score": 83.536,
+        "base_score": 63.83,
+        "actionability_score": 19.0,
         "actionability_band": "high",
-        "ranking_delta": -4.0,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
+        "ranking_delta": -1.294,
+        "affiliate_priority_delta": 2.0,
+        "affiliate_fit": "ready",
+        "affiliate_fit_score": 4.0,
         "affiliate_fit_reasons": [
-          "venue_access_or_return",
-          "recording_friction"
+          "bookable_intercity_mobility"
         ],
         "solution_map": [
           {
-            "category": "local_transfer_or_transit_pass",
+            "category": "intercity_transport_booking",
             "kind": "service",
-            "strength": "adjacent",
-            "source_signal": "venue_outside"
-          },
-          {
-            "category": "recording_device_or_accessory",
-            "kind": "product",
-            "strength": "adjacent",
-            "source_signal": "live_recording_setup"
+            "strength": "direct",
+            "source_signal": "mobility"
           }
         ],
-        "intent_score": 6.0,
+        "intent_score": 9.0,
         "intent_band": "high",
         "candidate_confidence": "high",
-        "target_fit_score": 11.0,
+        "target_fit_score": 4.0,
         "target_fit_band": "high",
         "target_fit_signals": [
-          "venue_outside",
-          "live_recording_setup",
-          "participation_prep"
+          "mobility"
         ],
         "target_fit_penalties": [],
         "target_fit_paths": [
-          "attendance_logistics",
-          "experience_utility"
+          "attendance_logistics"
         ],
         "semantic_role": "self_need",
         "semantic_role_signals": [
@@ -355,43 +536,32 @@
         "semantic_role_penalties": [],
         "intent_signals": [
           "user_decision",
-          "need_question"
+          "need_question",
+          "logistics_context"
         ],
         "intent_penalties": [],
         "language_context": "zh_hant",
         "language_tokens": [
           "演唱會",
-          "散場",
-          "應援",
-          "哪裡"
+          "高鐵"
         ],
         "need_nodes": [
-          "wear_support",
-          "venue_inside",
-          "venue_outside"
+          "mobility"
         ],
         "need_terms": [
-          "應援",
-          "名字",
-          "散場"
+          "高鐵"
         ],
-        "need_edges": [
-          "wear_support->venue_inside",
-          "wear_support->venue_outside",
-          "venue_inside->venue_outside"
-        ],
+        "need_edges": [],
         "feature_tags": [
-          "first_timer",
           "question_intent",
-          "transport_need",
-          "venue_experience"
+          "transport_need"
         ],
-        "username": "yuzzz______",
-        "text": "氣到現在還在氣 \n追了兩年多 從我剛入坑 \n在台灣糊糊的根本沒什麼人在討論 \n所謂的小眾男團 到現在隨便一間店\n都可以聽到ATEEZ的音樂  一首歌真的飛升了\n2年時間 參加過20幾場你們的活動\n說實話 也陪伴你們很久了吧\n\n第一次刷票 \n迫不及待的飛海外看看TTL 安可 \n很美好很美好 很幸福的回憶\n即使後續的十幾場演唱會 位置越來越近\n你們越來越清楚 甚至一堆飯撒鏡頭 \n我辦公室桌布 永遠是TTL安可場 \n看台位置拍的那張宋旼琦 人物小小的 \n只看的到大屏上的宋先生 真的太幸福了\n永遠無法忘記 花車時候 整個人幸福到爆哭出來的感動 \n同時我旁邊的中國男飯 也一直哽咽落淚 \n再然後 後面一群海外粉激動的喊著成員的名字\n散場時 五顏六色 洋人 日本人 一堆中文使用者  人生第一場海外場 印象非常深刻 原來你們的海外粉絲這麼多呀\n整場TTL安可 我真的只遇到一個韓飯在發應援 \n清一色歐美國家粉絲 俄羅斯漂亮到像模特的粉絲 接下班時一堆歐美站姐扛著大砲在拍攝 排場週時前後左右都是台灣人\n請問 KQ你們要的純血韓國人粉絲在哪裡呢？\nATEEZ你們是是全世界最不配搞韓國人優先購的團。",
-        "summary": "氣到現在還在氣 追了兩年多 從我剛入坑 在台灣糊糊的根本沒什麼人在討論 所謂的小眾男團 到現在隨便一間店 都可以聽到ATEEZ的音樂 一首歌真的飛升了 2年時間 參加過20幾場你們的活動 說實話 也陪伴你們很久了吧 第一次刷票 迫不及待的飛海外看看TTL 安可 很美好很美好 很幸福的回憶 即使後續的十幾場演唱會 位置越來越近 你們越來越清楚 甚至一堆飯撒鏡…",
-        "permalink": "https://www.threads.com/@yuzzz______/post/DfR894aE7Hi",
-        "posted_at": "2026-11-03T13:07:44Z",
-        "media_type": "IMAGE",
+        "username": "tiffwlz",
+        "text": "11/22演唱會結束回台北朋友包車 目前缺3人 \n想問是否有人不趕高鐵想搭車💜 \n私訊",
+        "summary": "11/22演唱會結束回台北朋友包車 目前缺3人 想問是否有人不趕高鐵想搭車💜 私訊",
+        "permalink": "https://www.threads.com/@tiffwlz/post/DfXR8gnCWZD",
+        "posted_at": "2026-11-05T14:47:15Z",
+        "media_type": "TEXT_POST",
         "query": "演唱會",
         "source_queries": [
           "演唱會"
@@ -403,15 +573,94 @@
         "review_lane": "core"
       },
       {
+        "id": "post_8d14eb62271dfa92",
+        "post_key": "post_8d14eb62271dfa92",
+        "snapshot_id": "deck_2026-11-06_3d_8d14eb62271dfa92",
+        "post_id": "4024062313548163998",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 78.563,
+        "base_score": 66.302,
+        "actionability_score": 14.0,
+        "actionability_band": "high",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "venue_access_or_return"
+        ],
+        "solution_map": [
+          {
+            "category": "local_transfer_or_transit_pass",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "venue_outside"
+          }
+        ],
+        "intent_score": 5.0,
+        "intent_band": "high",
+        "candidate_confidence": "high",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "venue_outside"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question",
+          "logistics_context"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_outside"
+        ],
+        "need_terms": [
+          "after the concert"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "stefjdp",
+        "text": "Did you mean after the concert its best to walk toward the next station and ride from there instead of going to the bukit jalil station as its faster? thanks also sharing 🙏",
+        "summary": "Did you mean after the concert its best to walk toward the next station and ride from there instead of going to the bukit jalil station as its faster? thanks also sharing 🙏",
+        "permalink": "https://www.threads.com/@stefjdp/post/DfYV1qREyue",
+        "posted_at": "2026-11-06T00:40:31Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
         "id": "post_9a25a5502fd77efe",
         "post_key": "post_9a25a5502fd77efe",
-        "snapshot_id": "deck_2026-11-05_3d_9a25a5502fd77efe",
+        "snapshot_id": "deck_2026-11-06_3d_9a25a5502fd77efe",
         "post_id": "4023476814362067845",
         "category": "住宿／落腳",
         "kind": "actionable",
-        "status": "今日",
-        "score": 81.634,
-        "base_score": 67.39,
+        "status": "近期",
+        "score": 75.699,
+        "base_score": 61.455,
         "actionability_score": 8.85,
         "actionability_band": "medium",
         "ranking_delta": 3.394,
@@ -486,15 +735,92 @@
         "review_lane": "core"
       },
       {
+        "id": "post_5b3929a1a33e38ad",
+        "post_key": "post_5b3929a1a33e38ad",
+        "snapshot_id": "deck_2026-11-06_3d_5b3929a1a33e38ad",
+        "post_id": "4023148698565531736",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "近期",
+        "score": 74.875,
+        "base_score": 60.0,
+        "actionability_score": 15.0,
+        "actionability_band": "high",
+        "ranking_delta": -1.125,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "venue_access_or_return"
+        ],
+        "solution_map": [
+          {
+            "category": "local_transfer_or_transit_pass",
+            "kind": "service",
+            "strength": "adjacent",
+            "source_signal": "venue_outside"
+          }
+        ],
+        "intent_score": 7.0,
+        "intent_band": "high",
+        "candidate_confidence": "high",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "venue_outside"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "attendance_logistics"
+        ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision",
+          "logistics_context"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_outside"
+        ],
+        "need_terms": [
+          "after concert"
+        ],
+        "need_edges": [],
+        "feature_tags": [],
+        "username": "elleeeeeskay",
+        "text": "dm please, i think i need a ride back home after concert cause most of the times grab akan cancel 😩",
+        "summary": "dm please, i think i need a ride back home after concert cause most of the times grab akan cancel 😩",
+        "permalink": "https://www.threads.com/@elleeeeeskay/post/DfVGG0AkthY",
+        "posted_at": "2026-11-04T18:25:19Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
         "id": "post_1bba258350327c6d",
         "post_key": "post_1bba258350327c6d",
-        "snapshot_id": "deck_2026-11-05_3d_1bba258350327c6d",
+        "snapshot_id": "deck_2026-11-06_3d_1bba258350327c6d",
         "post_id": "4023589408976213750",
         "category": "票務／入場摩擦",
         "kind": "actionable",
-        "status": "今日",
-        "score": 80.322,
-        "base_score": 68.322,
+        "status": "近期",
+        "score": 74.387,
+        "base_score": 62.387,
         "actionability_score": 16.0,
         "actionability_band": "high",
         "ranking_delta": -4.0,
@@ -568,18 +894,157 @@
         "review_lane": "core"
       },
       {
-        "id": "post_5b3929a1a33e38ad",
-        "post_key": "post_5b3929a1a33e38ad",
-        "snapshot_id": "deck_2026-11-05_3d_5b3929a1a33e38ad",
-        "post_id": "4023148698565531736",
+        "id": "post_a97b09123b3e1cc9",
+        "post_key": "post_a97b09123b3e1cc9",
+        "snapshot_id": "deck_2026-11-06_3d_a97b09123b3e1cc9",
+        "post_id": "4024511219351799399",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "現在",
+        "score": 74.179,
+        "base_score": 70.018,
+        "actionability_score": 6.9,
+        "actionability_band": "medium",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_inside"
+        ],
+        "need_terms": [
+          "seat"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "u2start",
+        "text": "“What we do in our band is take the best seats in the house and make sure they’re often the most affordable—the ones up front, the ones within the heart or the circle. We’ve done this all our life. We always find a way to do this.” - Bono on U2 concert tickets, 2026",
+        "summary": "“What we do in our band is take the best seats in the house and make sure they’re often the most affordable—the ones up front, the ones within the heart or the circle. We’ve done…",
+        "permalink": "https://www.threads.com/@u2start/post/DfZ76GYCcZn",
+        "posted_at": "2026-11-06T15:32:25Z",
+        "media_type": "IMAGE",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_9ee81595cf1f9484",
+        "post_key": "post_9ee81595cf1f9484",
+        "snapshot_id": "deck_2026-11-06_3d_9ee81595cf1f9484",
+        "post_id": "4024149568116478593",
+        "category": "場館／現場體驗",
+        "kind": "context",
+        "status": "今日",
+        "score": 73.024,
+        "base_score": 67.024,
+        "actionability_score": 10.0,
+        "actionability_band": "medium",
+        "ranking_delta": -4.0,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 6.0,
+        "intent_band": "high",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision",
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hant",
+        "language_tokens": [
+          "演唱會",
+          "怎麼",
+          "應援"
+        ],
+        "need_nodes": [
+          "wear_support"
+        ],
+        "need_terms": [
+          "應援"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "first_timer",
+          "question_intent",
+          "venue_experience"
+        ],
+        "username": "reve_daily",
+        "text": "SEULGI 💛💌｜首張正規專輯＆千葉加場演唱會 🎉🥰\n🐻：哈囉哈囉～\n🐻：今天是雙重喜事～～～\n🐻：我的首張正規專輯要發行了～～而且我們還要在千葉追加一場演唱會～～～\n🐻：我昨天才知道我的正規專輯計畫已經公開了，你們知道嗎？\n🐻：大家都在恭喜我，我還想說「你們怎麼會知道！！？？ㅋㅋㅋ」\n👤：姐姐，你的體力真的夠用嗎！？！？！\n🐻：只要持續做下去，我就能練出足夠的體力！！！\n🐻：我必須繼續跑下去～～～～\n🐻：我們要多多見面喔！\n🐻：因為今年上半年我們都沒什麼機會見面。\n👤：那麼個人演唱會呢～～～～？\n🐻：走吧！\n🐻：明年的我……要加油啊！\n🐻：感覺現在一邊進行 Aseul 演唱會，一邊也像是在為自己的個人演唱會做訓練。\n🐻：大家今天的應援聲音超級洪亮，簡直像老虎一樣！\n🐻：嘿嘿，感覺今天可以有一場很愉快的聚餐了。\n🐻：再次非常感謝所有來看巡演的 Luvies 🥹🥹\n🐻：有時候我也覺得自己的狀態不是那麼好，對此感到很抱歉 🥹\n🐻：我會好好照顧自己，希望能夠長久地站在舞台上為大家表演 😚\n🐻：這就是我第一次的自我照顧。\n🐻：ㅋㅋㅋㅋㅋㅋㅋ 現在要出發去團隊聚餐了！",
+        "summary": "SEULGI 💛💌｜首張正規專輯＆千葉加場演唱會 🎉🥰 🐻：哈囉哈囉～ 🐻：今天是雙重喜事～～～ 🐻：我的首張正規專輯要發行了～～而且我們還要在千葉追加一場演唱會～～～ 🐻：我昨天才知道我的正規專輯計畫已經公開了，你們知道嗎？ 🐻：大家都在恭喜我，我還想說「你們怎麼會知道！！？？ㅋㅋㅋ」 👤：姐姐，你的體力真的夠用嗎！？！？！ 🐻：只要持續做下去，我就能練…",
+        "permalink": "https://www.threads.com/@reve_daily/post/DfYprYan9KB",
+        "posted_at": "2026-11-06T03:33:52Z",
+        "media_type": "CAROUSEL_ALBUM",
+        "query": "演唱會",
+        "source_queries": [
+          "演唱會"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_8985463fdba9db3a",
+        "post_key": "post_8985463fdba9db3a",
+        "snapshot_id": "deck_2026-11-06_3d_8985463fdba9db3a",
+        "post_id": "4022693648375282105",
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
-        "score": 79.549,
-        "base_score": 64.674,
-        "actionability_score": 15.0,
+        "score": 72.261,
+        "base_score": 60.0,
+        "actionability_score": 14.0,
         "actionability_band": "high",
-        "ranking_delta": -1.125,
+        "ranking_delta": -2.739,
         "affiliate_priority_delta": 1.0,
         "affiliate_fit": "adjacent",
         "affiliate_fit_score": 2.0,
@@ -594,7 +1059,7 @@
             "source_signal": "venue_outside"
           }
         ],
-        "intent_score": 7.0,
+        "intent_score": 5.0,
         "intent_band": "high",
         "candidate_confidence": "high",
         "target_fit_score": 4.0,
@@ -603,85 +1068,6 @@
           "venue_outside"
         ],
         "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "self_need"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "user_decision",
-          "logistics_context"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_outside"
-        ],
-        "need_terms": [
-          "after concert"
-        ],
-        "need_edges": [],
-        "feature_tags": [],
-        "username": "elleeeeeskay",
-        "text": "dm please, i think i need a ride back home after concert cause most of the times grab akan cancel 😩",
-        "summary": "dm please, i think i need a ride back home after concert cause most of the times grab akan cancel 😩",
-        "permalink": "https://www.threads.com/@elleeeeeskay/post/DfVGG0AkthY",
-        "posted_at": "2026-11-04T18:25:19Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_28450658f16aa5cd",
-        "post_key": "post_28450658f16aa5cd",
-        "snapshot_id": "deck_2026-11-05_3d_28450658f16aa5cd",
-        "post_id": "4022033829393126911",
-        "category": "住宿／落腳",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 76.273,
-        "base_score": 60.0,
-        "actionability_score": 15.0,
-        "actionability_band": "high",
-        "ranking_delta": 0.273,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
-        "affiliate_fit_reasons": [
-          "trip_commitment"
-        ],
-        "solution_map": [
-          {
-            "category": "trip_planning_bundle",
-            "kind": "service",
-            "strength": "adjacent",
-            "source_signal": "cross_city"
-          }
-        ],
-        "intent_score": 5.0,
-        "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 2.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "cross_city_commitment"
-        ],
-        "target_fit_penalties": [
-          "incidental_stay"
-        ],
         "target_fit_paths": [
           "attendance_logistics"
         ],
@@ -695,31 +1081,29 @@
           "logistics_context"
         ],
         "intent_penalties": [],
-        "language_context": "zh_hans",
+        "language_context": "english",
         "language_tokens": [
-          "演唱会",
-          "酒店"
+          "concert"
         ],
         "need_nodes": [
-          "stay"
+          "venue_outside"
         ],
         "need_terms": [
-          "酒店"
+          "after the concert"
         ],
         "need_edges": [],
         "feature_tags": [
-          "accommodation_need",
           "question_intent"
         ],
-        "username": "adirennaissante",
-        "text": "蜜们去澳门看完演唱会回来横琴口岸立刻打车回酒店安全吗…我有点害怕😨",
-        "summary": "蜜们去澳门看完演唱会回来横琴口岸立刻打车回酒店安全吗…我有点害怕😨",
-        "permalink": "https://www.threads.com/@adirennaissante/post/DfRInVLlNX_",
-        "posted_at": "2026-11-03T05:30:17Z",
+        "username": "indigosph",
+        "text": "Is there anyone I can carpool with after the concert to damansara ? Please let me knowww preferably girllllll",
+        "summary": "Is there anyone I can carpool with after the concert to damansara ? Please let me knowww preferably girllllll",
+        "permalink": "https://www.threads.com/@indigosph/post/DfTeo9foPm5",
+        "posted_at": "2026-11-04T03:21:13Z",
         "media_type": "TEXT_POST",
-        "query": "演唱会",
+        "query": "concert",
         "source_queries": [
-          "演唱会"
+          "concert"
         ],
         "retrieval_sources": [
           "threads_ssr_recent"
@@ -728,15 +1112,217 @@
         "review_lane": "core"
       },
       {
+        "id": "post_1720e33eb8e9db1a",
+        "post_key": "post_1720e33eb8e9db1a",
+        "snapshot_id": "deck_2026-11-06_3d_1720e33eb8e9db1a",
+        "post_id": "4024171330924651390",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 71.365,
+        "base_score": 67.204,
+        "actionability_score": 6.9,
+        "actionability_band": "medium",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_inside"
+        ],
+        "need_terms": [
+          "seat"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "harriszainul",
+        "text": "I have a question. If you want to stand at a concert, why did you buy a seated ticket?",
+        "summary": "I have a question. If you want to stand at a concert, why did you buy a seated ticket?",
+        "permalink": "https://www.threads.com/@harriszainul/post/DfYuoEnEyN-",
+        "posted_at": "2026-11-06T04:17:07Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_455b16187a7a5713",
+        "post_key": "post_455b16187a7a5713",
+        "snapshot_id": "deck_2026-11-06_3d_455b16187a7a5713",
+        "post_id": "4024167838814652560",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 71.336,
+        "base_score": 67.175,
+        "actionability_score": 6.9,
+        "actionability_band": "medium",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_inside"
+        ],
+        "need_terms": [
+          "seat"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "ailderynaa",
+        "text": "It’s a concert, not a cinema. People go there to sing, dance, stand and enjoy the atmosphere. You can’t expect everyone to remain seated throughout the entire show.\n\nAnd have you looked at the people in front of you? There were plenty of others standing too. We weren’t the only ones. We only stood when people in front of us were standing as well. It’s not like we were deliberately standing while everyone else was seated.",
+        "summary": "It’s a concert, not a cinema. People go there to sing, dance, stand and enjoy the atmosphere. You can’t expect everyone to remain seated throughout the entire show. And have you l…",
+        "permalink": "https://www.threads.com/@ailderynaa/post/DfYt1QVGUiQ",
+        "posted_at": "2026-11-06T04:10:10Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
+        "id": "post_932c37b9b34fd780",
+        "post_key": "post_932c37b9b34fd780",
+        "snapshot_id": "deck_2026-11-06_3d_932c37b9b34fd780",
+        "post_id": "4024133745489791847",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "今日",
+        "score": 71.054,
+        "base_score": 66.893,
+        "actionability_score": 6.9,
+        "actionability_band": "medium",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "none",
+        "affiliate_fit_score": 0.0,
+        "affiliate_fit_reasons": [
+          "no_solution_mapping"
+        ],
+        "solution_map": [],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "low",
+        "target_fit_score": 0.0,
+        "target_fit_band": "low",
+        "target_fit_signals": [],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "english",
+        "language_tokens": [
+          "concert"
+        ],
+        "need_nodes": [
+          "venue_inside"
+        ],
+        "need_terms": [
+          "seat",
+          "SEAT"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "itzme_limkarwei",
+        "text": "Can we PLEASE talk about basic concert etiquette??? 😭💀\n\nThe Weeknd's concert was 10/10, but the attitude of these two foreign girls sitting next to me??? -100/10. 💀\n\nI was at Section 228, Row G, and one of the girls decided to sit in someone else's seat even after her friend warned her. When the actual seat owners came, instead of apologising, her friend even tried to argue back and gave them that BITCHY ATTITUDE??? GIRL THAT'S NOT EVEN YOUR SEAT 😭💀",
+        "summary": "Can we PLEASE talk about basic concert etiquette??? 😭💀 The Weeknd's concert was 10/10, but the attitude of these two foreign girls sitting next to me??? -100/10. 💀 I was at Sectio…",
+        "permalink": "https://www.threads.com/@itzme_limkarwei/post/DfYmFIclMtn",
+        "posted_at": "2026-11-06T03:02:26Z",
+        "media_type": "TEXT_POST",
+        "query": "concert",
+        "source_queries": [
+          "concert"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "discovery"
+      },
+      {
         "id": "post_ce6b4599a5714ee1",
         "post_key": "post_ce6b4599a5714ee1",
-        "snapshot_id": "deck_2026-11-05_3d_ce6b4599a5714ee1",
+        "snapshot_id": "deck_2026-11-06_3d_ce6b4599a5714ee1",
         "post_id": "4023425679924770117",
         "category": "交通／散場",
         "kind": "actionable",
-        "status": "今日",
-        "score": 73.41,
-        "base_score": 66.967,
+        "status": "近期",
+        "score": 67.474,
+        "base_score": 61.031,
         "actionability_score": 7.85,
         "actionability_band": "medium",
         "ranking_delta": -3.407,
@@ -811,443 +1397,15 @@
         "review_lane": "core"
       },
       {
-        "id": "post_8985463fdba9db3a",
-        "post_key": "post_8985463fdba9db3a",
-        "snapshot_id": "deck_2026-11-05_3d_8985463fdba9db3a",
-        "post_id": "4022693648375282105",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 73.168,
-        "base_score": 60.907,
-        "actionability_score": 14.0,
-        "actionability_band": "high",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
-        "affiliate_fit_reasons": [
-          "venue_access_or_return"
-        ],
-        "solution_map": [
-          {
-            "category": "local_transfer_or_transit_pass",
-            "kind": "service",
-            "strength": "adjacent",
-            "source_signal": "venue_outside"
-          }
-        ],
-        "intent_score": 5.0,
-        "intent_band": "high",
-        "candidate_confidence": "high",
-        "target_fit_score": 4.0,
-        "target_fit_band": "high",
-        "target_fit_signals": [
-          "venue_outside"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question",
-          "logistics_context"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_outside"
-        ],
-        "need_terms": [
-          "after the concert"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "indigosph",
-        "text": "Is there anyone I can carpool with after the concert to damansara ? Please let me knowww preferably girllllll",
-        "summary": "Is there anyone I can carpool with after the concert to damansara ? Please let me knowww preferably girllllll",
-        "permalink": "https://www.threads.com/@indigosph/post/DfTeo9foPm5",
-        "posted_at": "2026-11-04T03:21:13Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_6f9a24008921a2f7",
-        "post_key": "post_6f9a24008921a2f7",
-        "snapshot_id": "deck_2026-11-05_3d_6f9a24008921a2f7",
-        "post_id": "4023667235495397349",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "今日",
-        "score": 73.127,
-        "base_score": 68.966,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "mixed",
-        "language_tokens": [
-          "演唱会"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "seat"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "yychew80",
-        "text": "所以星期六的演唱会PS2 standing\n是free standing 还是 跟着票里写的row几seat几？\n看到都蒙 agenda show要排队 \n而且还有queue cut off time \n到底是跟位置 还是先到先得？\n毕竟看去年的是写free standing \n现在只是写standing\nagenda还show要排队 如果有规定rowxseatx \n我不用这样早去排队吧🫪🤧\n有人有答案吗🤣",
-        "summary": "所以星期六的演唱会PS2 standing 是free standing 还是 跟着票里写的row几seat几？ 看到都蒙 agenda show要排队 而且还有queue cut off time 到底是跟位置 还是先到先得？ 毕竟看去年的是写free standing 现在只是写standing agenda还show要排队 如果有规定rowxseat…",
-        "permalink": "https://www.threads.com/@yychew80/post/DfW8AhKFMfl",
-        "posted_at": "2026-11-05T11:35:34Z",
-        "media_type": "IMAGE",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_40687670d36469fc",
-        "post_key": "post_40687670d36469fc",
-        "snapshot_id": "deck_2026-11-05_3d_40687670d36469fc",
-        "post_id": "4023654913242932216",
-        "category": "場館／現場體驗",
-        "kind": "context",
-        "status": "今日",
-        "score": 71.764,
-        "base_score": 68.864,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -4.0,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "mixed",
-        "language_tokens": [
-          "演唱会"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "seat"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "venue_experience"
-        ],
-        "username": "hopetolovemyself",
-        "text": "为什么现在去演唱会一定要要求人家站起来 there is standing zone and seated for a reason bros🧍🏻‍♀️\n腿不好的人是要怎样站2 3个小时😭",
-        "summary": "为什么现在去演唱会一定要要求人家站起来 there is standing zone and seated for a reason bros🧍🏻‍♀️ 腿不好的人是要怎样站2 3个小时😭",
-        "permalink": "https://www.threads.com/@hopetolovemyself/post/DfW5NNKmaP4",
-        "posted_at": "2026-11-05T11:11:05Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_6a41d8ef0bba7382",
-        "post_key": "post_6a41d8ef0bba7382",
-        "snapshot_id": "deck_2026-11-05_3d_6a41d8ef0bba7382",
-        "post_id": "4023440687027103739",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "今日",
-        "score": 71.252,
-        "base_score": 67.091,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "seat"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "qveenka",
-        "text": "i get your point but why compromise the concert experience to remain seated? why concerts lain like coldplay everyone can stand? just know it’s also not wrong to stand so if semua stand no issue pun",
-        "summary": "i get your point but why compromise the concert experience to remain seated? why concerts lain like coldplay everyone can stand? just know it’s also not wrong to stand so if semua…",
-        "permalink": "https://www.threads.com/@qveenka/post/DfWIfzdGqf7",
-        "posted_at": "2026-11-05T04:05:27Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_bead87e35df4b831",
-        "post_key": "post_bead87e35df4b831",
-        "snapshot_id": "deck_2026-11-05_3d_bead87e35df4b831",
-        "post_id": "4023155016681332804",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 69.887,
-        "base_score": 64.726,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
-        "affiliate_fit_reasons": [
-          "recording_friction"
-        ],
-        "solution_map": [
-          {
-            "category": "recording_device_or_accessory",
-            "kind": "product",
-            "strength": "adjacent",
-            "source_signal": "live_recording_setup"
-          }
-        ],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "medium",
-        "target_fit_score": 8.0,
-        "target_fit_band": "high",
-        "target_fit_signals": [
-          "venue_operation",
-          "live_recording_setup"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics",
-          "experience_utility"
-        ],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "utility_question"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "gate"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "adriaharis",
-        "text": "idk if this happened to other gates or just gate c. but we were told to take our belongings (for etc umbrella, film camera and whatsover). we asked if we could come back for the stuff after that but they just said no guarantee but what i think thy didnt say is that they were gonna throw away all our stuff. when we gt out of the concert, everyone was literally looking for their stuff in trash bins bc the cleaners apparently threw everything away and even mixed some stuff with trash.",
-        "summary": "idk if this happened to other gates or just gate c. but we were told to take our belongings (for etc umbrella, film camera and whatsover). we asked if we could come back for the s…",
-        "permalink": "https://www.threads.com/@adriaharis/post/DfVHiwNnyBE",
-        "posted_at": "2026-11-04T18:37:53Z",
-        "media_type": "IMAGE",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_a10be4caff7f3ce5",
-        "post_key": "post_a10be4caff7f3ce5",
-        "snapshot_id": "deck_2026-11-05_3d_a10be4caff7f3ce5",
-        "post_id": "4022989420550878857",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 67.516,
-        "base_score": 63.355,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "seat"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "shawntisdale799",
-        "text": "Looking for a date this Saturday trying to take a woman to this concert flow seats get at me it’s all on ME ???",
-        "summary": "Looking for a date this Saturday trying to take a woman to this concert flow seats get at me it’s all on ME ???",
-        "permalink": "https://www.threads.com/@shawntisdale799/post/DfUh5AzFvaJ",
-        "posted_at": "2026-11-04T13:08:52Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
         "id": "post_c4705d10f274f1b7",
         "post_key": "post_c4705d10f274f1b7",
-        "snapshot_id": "deck_2026-11-05_3d_c4705d10f274f1b7",
+        "snapshot_id": "deck_2026-11-06_3d_c4705d10f274f1b7",
         "post_id": "4022732121005264333",
         "category": "場館／現場體驗",
         "kind": "context",
         "status": "近期",
-        "score": 67.225,
-        "base_score": 61.225,
+        "score": 66.0,
+        "base_score": 60.0,
         "actionability_score": 9.0,
         "actionability_band": "medium",
         "ranking_delta": -4.0,
@@ -1321,77 +1479,10 @@
         "review_lane": "adjacent"
       },
       {
-        "id": "post_c6143730639fa2a1",
-        "post_key": "post_c6143730639fa2a1",
-        "snapshot_id": "deck_2026-11-05_3d_c6143730639fa2a1",
-        "post_id": "4022764168910379121",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 65.651,
-        "base_score": 61.49,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "none",
-        "affiliate_fit_score": 0.0,
-        "affiliate_fit_reasons": [
-          "no_solution_mapping"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "low",
-        "target_fit_score": 0.0,
-        "target_fit_band": "low",
-        "target_fit_signals": [],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "english",
-        "language_tokens": [
-          "concert"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "seat"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "ms_ainaaa",
-        "text": "Hi Ade yang nak letgo ticket concert the weeknd tak? Nak 2 tickets please !seat side by side 🥹🙏🏽",
-        "summary": "Hi Ade yang nak letgo ticket concert the weeknd tak? Nak 2 tickets please !seat side by side 🥹🙏🏽",
-        "permalink": "https://www.threads.com/@ms_ainaaa/post/DfTurK3Ephx",
-        "posted_at": "2026-11-04T05:41:20Z",
-        "media_type": "TEXT_POST",
-        "query": "concert",
-        "source_queries": [
-          "concert"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "discovery"
-      },
-      {
-        "id": "post_08b2b5634688d7b6",
-        "post_key": "post_08b2b5634688d7b6",
-        "snapshot_id": "deck_2026-11-05_3d_08b2b5634688d7b6",
-        "post_id": "4021989727570368638",
+        "id": "post_bead87e35df4b831",
+        "post_key": "post_bead87e35df4b831",
+        "snapshot_id": "deck_2026-11-06_3d_bead87e35df4b831",
+        "post_id": "4023155016681332804",
         "category": "其他演出內容",
         "kind": "context",
         "status": "近期",
@@ -1404,98 +1495,29 @@
         "affiliate_fit": "adjacent",
         "affiliate_fit_score": 2.0,
         "affiliate_fit_reasons": [
-          "trip_commitment"
+          "recording_friction"
         ],
         "solution_map": [
           {
-            "category": "trip_planning_bundle",
-            "kind": "service",
+            "category": "recording_device_or_accessory",
+            "kind": "product",
             "strength": "adjacent",
-            "source_signal": "cross_city"
+            "source_signal": "live_recording_setup"
           }
         ],
         "intent_score": 2.0,
         "intent_band": "medium",
         "candidate_confidence": "medium",
-        "target_fit_score": 2.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "cross_city_commitment"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hans",
-        "language_tokens": [
-          "演唱会"
-        ],
-        "need_nodes": [
-          "venue_inside"
-        ],
-        "need_terms": [
-          "实名"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent"
-        ],
-        "username": "yanw0n8964",
-        "text": "朴成训那个ss叫什么Aa不是从参加完上海那个合影之后应该被朴成训认出来然后blft就拉黑了吗，这事完了之后不就参加了一个活动就是去澳门看演唱会吗，而且澳门的票也不是强实名🌚",
-        "summary": "朴成训那个ss叫什么Aa不是从参加完上海那个合影之后应该被朴成训认出来然后blft就拉黑了吗，这事完了之后不就参加了一个活动就是去澳门看演唱会吗，而且澳门的票也不是强实名🌚",
-        "permalink": "https://www.threads.com/@yanw0n8964/post/DfQ-lkKGhh-",
-        "posted_at": "2026-11-03T04:02:39Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_4da0d00b87efc5b6",
-        "post_key": "post_4da0d00b87efc5b6",
-        "snapshot_id": "deck_2026-11-05_3d_4da0d00b87efc5b6",
-        "post_id": "4022007316702507439",
-        "category": "其他演出內容",
-        "kind": "context",
-        "status": "近期",
-        "score": 64.161,
-        "base_score": 60.0,
-        "actionability_score": 6.9,
-        "actionability_band": "medium",
-        "ranking_delta": -2.739,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "insight_only",
-        "affiliate_fit_score": 1.0,
-        "affiliate_fit_reasons": [
-          "useful_need_without_direct_offer"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "medium",
-        "target_fit_score": 4.0,
+        "target_fit_score": 8.0,
         "target_fit_band": "high",
         "target_fit_signals": [
-          "venue_operation"
+          "venue_operation",
+          "live_recording_setup"
         ],
         "target_fit_penalties": [],
         "target_fit_paths": [
-          "attendance_logistics"
+          "attendance_logistics",
+          "experience_utility"
         ],
         "semantic_role": "self_need",
         "semantic_role_signals": [
@@ -1508,26 +1530,24 @@
         "intent_penalties": [],
         "language_context": "english",
         "language_tokens": [
-          "CONCERT",
           "concert"
         ],
         "need_nodes": [
           "venue_inside"
         ],
         "need_terms": [
-          "GATE",
-          "Gate"
+          "gate"
         ],
         "need_edges": [],
         "feature_tags": [
           "question_intent"
         ],
-        "username": "intanyazid",
-        "text": "🚨 THE WEEKND CONCERT GOERS! 🚨 \n\nAnyone still looking for parking near Stadium Bukit Jalil? 👀\n\n I have 1 GATED PARKING SLOT AVAILABLE! 🚗✨ \n\n📍 Near Stadium Car Park Gate C\n🚶🏻‍♀️ Only 400m walking distance to stadium! \n💰 RM20 ONLY / FLAT RATE!\n\n✅ Reserve your parking in advance\n✅ Just park & enjoy the concert! 🎶",
-        "summary": "🚨 THE WEEKND CONCERT GOERS! 🚨 Anyone still looking for parking near Stadium Bukit Jalil? 👀 I have 1 GATED PARKING SLOT AVAILABLE! 🚗✨ 📍 Near Stadium Car Park Gate C 🚶🏻‍♀️ Only 400m…",
-        "permalink": "https://www.threads.com/@intanyazid/post/DfRClhUEzGv",
-        "posted_at": "2026-11-03T04:37:36Z",
-        "media_type": "TEXT_POST",
+        "username": "adriaharis",
+        "text": "idk if this happened to other gates or just gate c. but we were told to take our belongings (for etc umbrella, film camera and whatsover). we asked if we could come back for the stuff after that but they just said no guarantee but what i think thy didnt say is that they were gonna throw away all our stuff. when we gt out of the concert, everyone was literally looking for their stuff in trash bins bc the cleaners apparently threw everything away and even mixed some stuff with trash.",
+        "summary": "idk if this happened to other gates or just gate c. but we were told to take our belongings (for etc umbrella, film camera and whatsover). we asked if we could come back for the s…",
+        "permalink": "https://www.threads.com/@adriaharis/post/DfVHiwNnyBE",
+        "posted_at": "2026-11-04T18:37:53Z",
+        "media_type": "IMAGE",
         "query": "concert",
         "source_queries": [
           "concert"
@@ -1539,15 +1559,160 @@
         "review_lane": "core"
       },
       {
-        "id": "post_29cb1638d056dc9f",
-        "post_key": "post_29cb1638d056dc9f",
-        "snapshot_id": "deck_2026-11-05_3d_29cb1638d056dc9f",
-        "post_id": "4023518604125901012",
+        "id": "post_80c2a44d72fc4ce4",
+        "post_key": "post_80c2a44d72fc4ce4",
+        "snapshot_id": "deck_2026-11-06_3d_80c2a44d72fc4ce4",
+        "post_id": "4024437648215623768",
         "category": "其他演出內容",
         "kind": "context",
         "status": "今日",
-        "score": 63.997,
-        "base_score": 67.736,
+        "score": 64.67,
+        "base_score": 69.409,
+        "actionability_score": -3.0,
+        "actionability_band": "low",
+        "ranking_delta": -2.739,
+        "affiliate_priority_delta": 1.0,
+        "affiliate_fit": "adjacent",
+        "affiliate_fit_score": 2.0,
+        "affiliate_fit_reasons": [
+          "recording_friction"
+        ],
+        "solution_map": [
+          {
+            "category": "recording_device_or_accessory",
+            "kind": "product",
+            "strength": "adjacent",
+            "source_signal": "live_recording_setup"
+          }
+        ],
+        "intent_score": 4.0,
+        "intent_band": "high",
+        "candidate_confidence": "high",
+        "target_fit_score": 4.0,
+        "target_fit_band": "high",
+        "target_fit_signals": [
+          "live_recording_setup"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [
+          "experience_utility"
+        ],
+        "semantic_role": "self_need",
+        "semantic_role_signals": [
+          "self_need"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "user_decision"
+        ],
+        "intent_penalties": [],
+        "language_context": "zh_hant",
+        "language_tokens": [
+          "演唱會"
+        ],
+        "need_nodes": [],
+        "need_terms": [],
+        "need_edges": [],
+        "feature_tags": [
+          "question_intent"
+        ],
+        "username": "_leeknowmi",
+        "text": "請問還有租借手機11/22有空檔嗎\n我朋友演唱會租借手機撞大霧啦！\n救救他 當日借隔日還🥺🥺🙏",
+        "summary": "請問還有租借手機11/22有空檔嗎 我朋友演唱會租借手機撞大霧啦！ 救救他 當日借隔日還🥺🥺🙏",
+        "permalink": "https://www.threads.com/@_leeknowmi/post/DfZrLf6mchY",
+        "posted_at": "2026-11-06T13:06:14Z",
+        "media_type": "IMAGE",
+        "query": "演唱會",
+        "source_queries": [
+          "演唱會"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "adjacent"
+      },
+      {
+        "id": "post_fe3b5bde828da6ab",
+        "post_key": "post_fe3b5bde828da6ab",
+        "snapshot_id": "deck_2026-11-06_3d_fe3b5bde828da6ab",
+        "post_id": "4022852663473955536",
+        "category": "周邊／現場商品",
+        "kind": "actionable",
+        "status": "近期",
+        "score": 60.404,
+        "base_score": 60.0,
+        "actionability_score": 4.3,
+        "actionability_band": "low",
+        "ranking_delta": -3.896,
+        "affiliate_priority_delta": 0.0,
+        "affiliate_fit": "insight_only",
+        "affiliate_fit_score": 1.0,
+        "affiliate_fit_reasons": [
+          "useful_need_without_direct_offer"
+        ],
+        "solution_map": [],
+        "intent_score": 2.0,
+        "intent_band": "medium",
+        "candidate_confidence": "medium",
+        "target_fit_score": 3.0,
+        "target_fit_band": "medium",
+        "target_fit_signals": [
+          "participation_prep"
+        ],
+        "target_fit_penalties": [],
+        "target_fit_paths": [],
+        "semantic_role": "question_need",
+        "semantic_role_signals": [
+          "need_question_role"
+        ],
+        "semantic_role_penalties": [],
+        "intent_signals": [
+          "need_question"
+        ],
+        "intent_penalties": [],
+        "language_context": "mixed",
+        "language_tokens": [
+          "演唱會",
+          "周邊"
+        ],
+        "need_nodes": [
+          "wear_support"
+        ],
+        "need_terms": [
+          "周邊"
+        ],
+        "need_edges": [],
+        "feature_tags": [
+          "merch_need",
+          "question_intent"
+        ],
+        "username": "yagami_yoru",
+        "text": "PLAVE KEEP IT MANIC 澳門場演唱會\n細數主辦單位 REG 能力低下的一些個人感受 Part 1\n* 超多字很抱歉\n（演唱會相關的所有安排_理性文書ver.）\n（不理性含粗口口語ver. 下收 ⬅️想看發瘋的話可以直接看這個，內容基本上一樣）\n\n1. 周邊販售\n首先排隊方面並沒有任何資訊，什麼時間可以開始排隊或在哪裹排都沒有通知，只知道售賣位置。舉辦過活動（尤其是演唱會）的人都知道售賣周邊，一定會有粉絲提早到場排隊，如果提早公佈排隊的相關資訊的話，就不會有當天的衝突發生了。\n在場保安估計也是迷惘的狀態吧，這也是跟場地溝通不足的問題。\n\n第二點，有關商品的公佈資訊中列明每樣商品每人限購一件，照字面的意思上來說，應該是相同的商品就只可以限購一件，而並不是衣服不同尺寸就當成兩件不同的商品。\n現場沒有實物提供參考之餘，預計周邊的數量真的太少了，尤其是澳門限定的那件T恤真的少得可憐。導致很多粉絲也買不到想要的商品。\n\n販售周邊場地明明是宴會廳，沒有音響可以提供給你們嗎？為什麼要用擴音器？聲音少到都聽不到什麼賣完了。就只聽到賣完了三個字。",
+        "summary": "PLAVE KEEP IT MANIC 澳門場演唱會 細數主辦單位 REG 能力低下的一些個人感受 Part 1 * 超多字很抱歉 （演唱會相關的所有安排_理性文書ver.） （不理性含粗口口語ver. 下收 ⬅️想看發瘋的話可以直接看這個，內容基本上一樣） 1. 周邊販售 首先排隊方面並沒有任何資訊，什麼時間可以開始排隊或在哪裹排都沒有通知，只知道售賣位…",
+        "permalink": "https://www.threads.com/@yagami_yoru/post/DfUCy72GWLQ",
+        "posted_at": "2026-11-04T08:37:09Z",
+        "media_type": "TEXT_POST",
+        "query": "演唱會",
+        "source_queries": [
+          "演唱會"
+        ],
+        "retrieval_sources": [
+          "threads_ssr_recent"
+        ],
+        "source": "Threads",
+        "review_lane": "core"
+      },
+      {
+        "id": "post_29cb1638d056dc9f",
+        "post_key": "post_29cb1638d056dc9f",
+        "snapshot_id": "deck_2026-11-06_3d_29cb1638d056dc9f",
+        "post_id": "4023518604125901012",
+        "category": "其他演出內容",
+        "kind": "context",
+        "status": "近期",
+        "score": 58.062,
+        "base_score": 61.801,
         "actionability_score": -3.0,
         "actionability_band": "low",
         "ranking_delta": -2.739,
@@ -1611,228 +1776,6 @@
         ],
         "source": "Threads",
         "review_lane": "adjacent"
-      },
-      {
-        "id": "post_fe3b5bde828da6ab",
-        "post_key": "post_fe3b5bde828da6ab",
-        "snapshot_id": "deck_2026-11-05_3d_fe3b5bde828da6ab",
-        "post_id": "4022852663473955536",
-        "category": "周邊／現場商品",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 62.627,
-        "base_score": 62.223,
-        "actionability_score": 4.3,
-        "actionability_band": "low",
-        "ranking_delta": -3.896,
-        "affiliate_priority_delta": 0.0,
-        "affiliate_fit": "insight_only",
-        "affiliate_fit_score": 1.0,
-        "affiliate_fit_reasons": [
-          "useful_need_without_direct_offer"
-        ],
-        "solution_map": [],
-        "intent_score": 2.0,
-        "intent_band": "medium",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "participation_prep"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [],
-        "semantic_role": "question_need",
-        "semantic_role_signals": [
-          "need_question_role"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "need_question"
-        ],
-        "intent_penalties": [],
-        "language_context": "mixed",
-        "language_tokens": [
-          "演唱會",
-          "周邊"
-        ],
-        "need_nodes": [
-          "wear_support"
-        ],
-        "need_terms": [
-          "周邊"
-        ],
-        "need_edges": [],
-        "feature_tags": [
-          "merch_need",
-          "question_intent"
-        ],
-        "username": "yagami_yoru",
-        "text": "PLAVE KEEP IT MANIC 澳門場演唱會\n細數主辦單位 REG 能力低下的一些個人感受 Part 1\n* 超多字很抱歉\n（演唱會相關的所有安排_理性文書ver.）\n（不理性含粗口口語ver. 下收 ⬅️想看發瘋的話可以直接看這個，內容基本上一樣）\n\n1. 周邊販售\n首先排隊方面並沒有任何資訊，什麼時間可以開始排隊或在哪裹排都沒有通知，只知道售賣位置。舉辦過活動（尤其是演唱會）的人都知道售賣周邊，一定會有粉絲提早到場排隊，如果提早公佈排隊的相關資訊的話，就不會有當天的衝突發生了。\n在場保安估計也是迷惘的狀態吧，這也是跟場地溝通不足的問題。\n\n第二點，有關商品的公佈資訊中列明每樣商品每人限購一件，照字面的意思上來說，應該是相同的商品就只可以限購一件，而並不是衣服不同尺寸就當成兩件不同的商品。\n現場沒有實物提供參考之餘，預計周邊的數量真的太少了，尤其是澳門限定的那件T恤真的少得可憐。導致很多粉絲也買不到想要的商品。\n\n販售周邊場地明明是宴會廳，沒有音響可以提供給你們嗎？為什麼要用擴音器？聲音少到都聽不到什麼賣完了。就只聽到賣完了三個字。",
-        "summary": "PLAVE KEEP IT MANIC 澳門場演唱會 細數主辦單位 REG 能力低下的一些個人感受 Part 1 * 超多字很抱歉 （演唱會相關的所有安排_理性文書ver.） （不理性含粗口口語ver. 下收 ⬅️想看發瘋的話可以直接看這個，內容基本上一樣） 1. 周邊販售 首先排隊方面並沒有任何資訊，什麼時間可以開始排隊或在哪裹排都沒有通知，只知道售賣位…",
-        "permalink": "https://www.threads.com/@yagami_yoru/post/DfUCy72GWLQ",
-        "posted_at": "2026-11-04T08:37:09Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_253421daada8d44c",
-        "post_key": "post_253421daada8d44c",
-        "snapshot_id": "deck_2026-11-05_3d_253421daada8d44c",
-        "post_id": "4022387607292448073",
-        "category": "陪同／Solo Attendance",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 61.1,
-        "base_score": 60.0,
-        "actionability_score": 4.0,
-        "actionability_band": "low",
-        "ranking_delta": -3.9,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
-        "affiliate_fit_reasons": [
-          "trip_commitment"
-        ],
-        "solution_map": [
-          {
-            "category": "trip_planning_bundle",
-            "kind": "service",
-            "strength": "adjacent",
-            "source_signal": "cross_city"
-          }
-        ],
-        "intent_score": 4.0,
-        "intent_band": "high",
-        "candidate_confidence": "high",
-        "target_fit_score": 5.0,
-        "target_fit_band": "high",
-        "target_fit_signals": [
-          "solo_or_cross_city",
-          "cross_city_commitment"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "self_need"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hant",
-        "language_tokens": [
-          "演唱會"
-        ],
-        "need_nodes": [],
-        "need_terms": [],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "solo_attendance"
-        ],
-        "username": "zen5_20",
-        "text": "想找一起去 BTS 高雄場演唱會的夥伴！💜\n\n因為這次是一個人去，總覺得有點孤單、怕自己會無聊，所以想找個伴一起去看演唱會～\n\n想問問有沒有人也是 22 號要去高雄場的呢？希望可以找到一起搭車、排隊、看演唱會的朋友！🥹\n\n如果你也剛好一個人去，歡迎私訊我一起作伴！💜💜",
-        "summary": "想找一起去 BTS 高雄場演唱會的夥伴！💜 因為這次是一個人去，總覺得有點孤單、怕自己會無聊，所以想找個伴一起去看演唱會～ 想問問有沒有人也是 22 號要去高雄場的呢？希望可以找到一起搭車、排隊、看演唱會的朋友！🥹 如果你也剛好一個人去，歡迎私訊我一起作伴！💜💜",
-        "permalink": "https://www.threads.com/@zen5_20/post/DfSZDehmY1J",
-        "posted_at": "2026-11-03T17:13:10Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱會",
-        "source_queries": [
-          "演唱會"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
-      },
-      {
-        "id": "post_6400125ffdf61b6f",
-        "post_key": "post_6400125ffdf61b6f",
-        "snapshot_id": "deck_2026-11-05_3d_6400125ffdf61b6f",
-        "post_id": "4022218360314157968",
-        "category": "陪同／Solo Attendance",
-        "kind": "actionable",
-        "status": "近期",
-        "score": 61.1,
-        "base_score": 60.0,
-        "actionability_score": 4.0,
-        "actionability_band": "low",
-        "ranking_delta": -3.9,
-        "affiliate_priority_delta": 1.0,
-        "affiliate_fit": "adjacent",
-        "affiliate_fit_score": 2.0,
-        "affiliate_fit_reasons": [
-          "trip_commitment"
-        ],
-        "solution_map": [
-          {
-            "category": "trip_planning_bundle",
-            "kind": "service",
-            "strength": "adjacent",
-            "source_signal": "cross_city"
-          }
-        ],
-        "intent_score": 4.0,
-        "intent_band": "high",
-        "candidate_confidence": "medium",
-        "target_fit_score": 3.0,
-        "target_fit_band": "medium",
-        "target_fit_signals": [
-          "solo_or_cross_city"
-        ],
-        "target_fit_penalties": [],
-        "target_fit_paths": [
-          "attendance_logistics"
-        ],
-        "semantic_role": "self_need",
-        "semantic_role_signals": [
-          "self_need"
-        ],
-        "semantic_role_penalties": [],
-        "intent_signals": [
-          "user_decision"
-        ],
-        "intent_penalties": [],
-        "language_context": "zh_hans",
-        "language_tokens": [
-          "演唱会"
-        ],
-        "need_nodes": [],
-        "need_terms": [],
-        "need_edges": [],
-        "feature_tags": [
-          "question_intent",
-          "solo_attendance"
-        ],
-        "username": "fayeee.ng",
-        "text": "请问有小姐姐也是一个人去the weeknd演唱会吗 🥹",
-        "summary": "请问有小姐姐也是一个人去the weeknd演唱会吗 🥹",
-        "permalink": "https://www.threads.com/@fayeee.ng/post/DfRykm_lFuQ",
-        "posted_at": "2026-11-03T11:36:54Z",
-        "media_type": "TEXT_POST",
-        "query": "演唱会",
-        "source_queries": [
-          "演唱会"
-        ],
-        "retrieval_sources": [
-          "threads_ssr_recent"
-        ],
-        "source": "Threads",
-        "review_lane": "core"
       }
     ]
   }
