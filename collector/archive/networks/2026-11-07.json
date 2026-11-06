@@ -1,11 +1,11 @@
 {
   "schema_version": "keyword-network-v0.1",
-  "generated_at": "2026-11-06T16:48:49.056976Z",
+  "generated_at": "2026-11-06T21:15:14.000164Z",
   "network_date": "2026-11-07",
   "timezone": "Asia/Taipei",
   "refresh_policy": "daily_00:00_with_collector_fallback",
-  "source_master_count": 6556,
-  "source_card_count": 9,
+  "source_master_count": 6578,
+  "source_card_count": 10,
   "layers": [
     "recall",
     "language",
@@ -17,7 +17,7 @@
       "id": "recall:演唱會",
       "label": "演唱會",
       "layer": "recall",
-      "count": 2
+      "count": 3
     },
     {
       "id": "recall:演唱会",
@@ -35,7 +35,7 @@
       "id": "lang:zh_hant",
       "label": "zh_hant",
       "layer": "language",
-      "count": 2
+      "count": 3
     },
     {
       "id": "lang:zh_hans",
@@ -208,6 +208,11 @@
       "weight": 3
     },
     {
+      "source": "recall:演唱會",
+      "target": "lang:zh_hant",
+      "weight": 3
+    },
+    {
       "source": "lang:english",
       "target": "need:venue_outside",
       "weight": 2
@@ -225,11 +230,6 @@
     {
       "source": "recall:演唱会",
       "target": "lang:zh_hans",
-      "weight": 2
-    },
-    {
-      "source": "recall:演唱會",
-      "target": "lang:zh_hant",
       "weight": 2
     },
     {
