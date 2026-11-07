@@ -1,10 +1,10 @@
 {
   "schema_version": "observation-bundle-v1",
-  "observation_id": "concert:2026-11-07_080056Z:clean-v2.4-recent",
+  "observation_id": "concert:2026-11-07_102639Z:clean-v2.4-recent",
   "run": {
-    "run_stamp": "2026-11-07_080056Z",
-    "run_at": "2026-11-07T08:01:34.180699Z",
-    "status": "failed",
+    "run_stamp": "2026-11-07_102639Z",
+    "run_at": "2026-11-07T10:27:35.452448Z",
+    "status": "success",
     "pipeline_version": "clean-v2.4-recent",
     "track": "演唱會",
     "config_key": "concert",
@@ -13,40 +13,40 @@
     "window_hours": 12,
     "min_score": 30,
     "collector_mode": "recent",
-    "coverage_status": "degraded",
-    "provenance": "manual",
-    "baseline_eligible": false,
-    "workflow_event": "workflow_dispatch",
-    "github_run_id": "42353593889",
+    "coverage_status": "observed",
+    "provenance": "scheduled",
+    "baseline_eligible": true,
+    "workflow_event": "schedule",
+    "github_run_id": "42363914529",
     "notion_sync_status": "success"
   },
   "lineage": {
-    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-11-07_080056Z.json",
-    "summary_ref": "collector/archive/runs/summary_2026-11-07_080056Z.json",
-    "queries_ref": "collector/archive/runs/queries_2026-11-07_080056Z.txt",
-    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-11-07_080056Z.txt",
-    "snapshot_fingerprint": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-11-07_102639Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-11-07_102639Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-11-07_102639Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-11-07_102639Z.txt",
+    "snapshot_fingerprint": "sha256:6fb592f3498c99c536ea6588ad231cbadaa2d33f066792feca3de649b8ab1115",
     "master_dependency": false
   },
   "deterministic_facts": {
     "current": {
-      "raw_rows": 0,
-      "snapshot_unique": 0,
-      "dedupe_unique": 0,
-      "clean_signals": 0,
-      "excluded_transactions": 0,
+      "raw_rows": 41,
+      "snapshot_unique": 33,
+      "dedupe_unique": 33,
+      "clean_signals": 31,
+      "excluded_transactions": 2,
       "suppressed_duplicates": 0,
-      "clean_rate_pct": 0,
-      "new_3h": 32,
+      "clean_rate_pct": 93.9,
+      "new_3h": 28,
       "new_12h": 93,
-      "unique_authors": 0,
-      "author_diversity_ratio": null,
-      "duplicate_adjusted_volume": 0
+      "unique_authors": 30,
+      "author_diversity_ratio": 0.9677,
+      "duplicate_adjusted_volume": 33
     },
     "previous_comparable_run": {
       "run_stamp": "2026-11-07_030901Z",
       "run_at": "2026-11-07T03:09:50.811450Z",
-      "elapsed_minutes": 291.7,
+      "elapsed_minutes": 437.7,
       "pipeline_version": "clean-v2.4-recent",
       "clean_signals": 20,
       "new_3h": 33,
@@ -64,10 +64,10 @@
     },
     "delta": {
       "overlap_available": true,
-      "new_signal_count": 0,
+      "new_signal_count": 31,
       "retained_signal_count": 0,
-      "clean_signal_delta": -20,
-      "rolling_3h_delta": -1,
+      "clean_signal_delta": 11,
+      "rolling_3h_delta": -5,
       "rolling_12h_delta": -10
     },
     "baselines": {
@@ -195,27 +195,329 @@
       "deterministic": true,
       "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
     },
-    "clusters": []
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 25,
+        "unique_authors": 24,
+        "post_ids": [
+          "4024783799577738272",
+          "4024849975578962227",
+          "4024897876786874934",
+          "4024901886130756393",
+          "4024913122854966006",
+          "4024923560363660584",
+          "4024938630506715905",
+          "4024939317811002636",
+          "4024942109562877937",
+          "4024959945002290844",
+          "4024964647815314674",
+          "4024983903782079022",
+          "4024986559573968080",
+          "4025015642357312439",
+          "4025016729931628949",
+          "4025025800458326190",
+          "4025026667848239622",
+          "4025029827207393286",
+          "4025047791629752956",
+          "4025060762851039442",
+          "4025067537909494430",
+          "4025068604379357415",
+          "4025069436654556350",
+          "4025078501007417121",
+          "4025080041204986831"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "演後社群／內容需求",
+        "count": 3,
+        "unique_authors": 3,
+        "post_ids": [
+          "4024807799159562601",
+          "4024811516940220133",
+          "4025066479611419567"
+        ]
+      },
+      {
+        "kind": "context",
+        "category": "場館／現場體驗",
+        "count": 2,
+        "unique_authors": 2,
+        "post_ids": [
+          "4024906784314082109",
+          "4024912222539986928"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "陪同／Solo Attendance",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4024900686509607419"
+        ]
+      }
+    ]
   },
   "evidence": {
-    "total_clean_evidence": 0,
+    "total_clean_evidence": 31,
     "limit": 16,
-    "returned": 0,
-    "items": []
+    "returned": 16,
+    "items": [
+      {
+        "post_id": "4025080041204986831",
+        "username": "youngmul_aaa",
+        "posted_at": "2026-11-07T10:22:53Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@youngmul_aaa/post/Dfb9PjAibPP",
+        "is_new_since_previous": true,
+        "excerpt": "我想看演唱会。。。。。▓",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025078501007417121",
+        "username": "desperate4luv_01",
+        "posted_at": "2026-11-07T10:19:30Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@desperate4luv_01/post/Dfb85Ilm98h",
+        "is_new_since_previous": true,
+        "excerpt": "谁刷到xhs那个exo演唱会迟到偶遇郑成灿的视频了😱我已经很久没有被拉椅子帅到心跳加速呼吸暂停了 感觉他真有一米九吧",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025069436654556350",
+        "username": "1ioorong3ii_",
+        "posted_at": "2026-11-07T10:01:29Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@1ioorong3ii_/post/Dfb61OwE5S-",
+        "is_new_since_previous": true,
+        "excerpt": "闺蜜们谁能告诉我这是谁啊怎么一直在看演唱会",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025068604379357415",
+        "username": "gmmtv",
+        "posted_at": "2026-11-07T09:59:53Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@gmmtv/post/Dfb6pHom-Dn",
+        "is_new_since_previous": true,
+        "excerpt": "Welcome to ‘SECRET AREA’ #DewTeeFanconD1 🤫\n\n🔗 BUY TICKETS AT : thaiticketmajor.com/concert/dew-tee-secret-area-fancon.html",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025067537909494430",
+        "username": "gmmtv",
+        "posted_at": "2026-11-07T09:57:43Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@gmmtv/post/Dfb6ZmaDTKe",
+        "is_new_since_previous": true,
+        "excerpt": "ARE YOU READY FOR “DEW TEE SECRET AREA FANCON” 🤫\n\n📍7-8 NOVEMBER  2026\n Union Hall, Union Mall \n\nBUY TICKETS AT : https://www.thaiticketmajor.com/concert/dew-tee-secret-area-fancon.html \n\n#DewTeeFanconD1\n#GMMTV",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025066479611419567",
+        "username": "marylinm_",
+        "posted_at": "2026-11-07T09:55:37Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@marylinm_/post/Dfb6KMykhuv",
+        "is_new_since_previous": true,
+        "excerpt": "Hello! I am looking to sell 2x tickets for 19th nov mcr concert in Zone D Section 208B, selling at half price rm400 now for both. If you are concern about legitimacy, i am happy to meet up with you face to face to sell ticket 👍🏻. We cant go due to last minute work dinner commitments. The original price per ticket is rm399",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "context",
+          "category": "演後社群／內容需求"
+        }
+      },
+      {
+        "post_id": "4025060762851039442",
+        "username": "akhmarrashid",
+        "posted_at": "2026-11-07T09:44:15Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@akhmarrashid/post/Dfb43ApGVjS",
+        "is_new_since_previous": true,
+        "excerpt": "Yang pergi concert tapi islam ni, what is in your mind actually?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025047791629752956",
+        "username": "kinda_cinnamon",
+        "posted_at": "2026-11-07T09:18:29Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@kinda_cinnamon/post/Dfb16QQD9p8",
+        "is_new_since_previous": true,
+        "excerpt": "Bam!!!!來朴珍榮演唱會了",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025029827207393286",
+        "username": "backtolifekate",
+        "posted_at": "2026-11-07T08:42:47Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@backtolifekate/post/Dfbx01lDHAG",
+        "is_new_since_previous": true,
+        "excerpt": "“We have been lied to the concert isn’t live in Europe” yeah because of time zones 🫩 we knew that?",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025026667848239622",
+        "username": "nianori_",
+        "posted_at": "2026-11-07T08:36:31Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@nianori_/post/DfbxG3MkYoG",
+        "is_new_since_previous": true,
+        "excerpt": "Guys, we’ve been lied to... the concert at the cinema isn’t even live, at least in Europe",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025025800458326190",
+        "username": "momoxkorea",
+        "posted_at": "2026-11-07T08:34:47Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@momoxkorea/post/Dfbw6PYGdCu",
+        "is_new_since_previous": true,
+        "excerpt": "來搭船去看演唱會▓\n今天走水路\n不塞車 棒棒der",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025016729931628949",
+        "username": "another_lifecorner",
+        "posted_at": "2026-11-07T08:16:46Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@another_lifecorner/post/Dfbu2PylEGV",
+        "is_new_since_previous": true,
+        "excerpt": "Anh Will \nConcert ATVNCG 2026 TPHCM (D1)",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4025015642357312439",
+        "username": "ollps",
+        "posted_at": "2026-11-07T08:14:36Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@ollps/post/Dfbuma6GSu3",
+        "is_new_since_previous": true,
+        "excerpt": "嚴正的警告大家⚠️\n不要去問尹淨漢演唱會要穿什麼🤣",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024986559573968080",
+        "username": "wei030522",
+        "posted_at": "2026-11-07T07:16:49Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@wei030522/post/Dfbn_NdIMTQ",
+        "is_new_since_previous": true,
+        "excerpt": "搭一個早早的華航來吉隆坡,\n坐在很後面的排數的我,\n一臉超沒睡飽的樣子準備下機。\n經過兩位空服員後,突然其中一位說:\n「小姐,」\n我回頭前還在想難道我忘記拿什麼了嗎?\n於是倉皇回頭,\n結果她說:「演唱會見喔!」\n\n啊啊啊啊感謝我包包上的藝喵🐈‍⬛\n謝謝水水空服員跟我相認,\n讓我一落地就好開心~~\n今天雲跟我們一定會一切順利ㄉ🫶🏼🫶🏼",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024983903782079022",
+        "username": "raphael90999099",
+        "posted_at": "2026-11-07T07:11:33Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@raphael90999099/post/DfbnYkDmIou",
+        "is_new_since_previous": true,
+        "excerpt": "那天工作到一半跑去義享BTS快閃店,正排隊等著入場時,我發現不少跟我一起排隊的女生轉頭用著新奇有趣+驚訝的眼神看著我⋯⋯⋯我感覺得出來她們心裏是說哇阿姨等級的army耶⋯⋯^ ^\n當下的我真的好尷尬😅\n我真的好想舉個牌子或在胸前貼張紙說 *我是被北漂的女兒派來幫她買手燈的*⋯⋯\n不要再這樣看我了~\n\n但我真的很開心BTS來高雄開演唱會,託他們的福,我因此可以多一次見到忙到無法常見面的可愛女兒",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024964647815314674",
+        "username": "lindachen1119",
+        "posted_at": "2026-11-07T06:33:17Z",
+        "first_seen_at": "2026-11-07T10:27:35.452448Z",
+        "permalink": "https://www.threads.com/@lindachen1119/post/DfbjAWiiXzy",
+        "is_new_since_previous": true,
+        "excerpt": "請保佑金藝聲今天在吉隆坡的演唱會演出順利▓\n未來也健健康康完成巡演\n\n我們能做的\n尊重他的決定\n給予最熱烈的掌聲\n為他祈禱✨",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
   },
   "data_quality": {
     "flags": [
-      "all_queries_failed",
       "baseline_24h_sampling_sparse",
       "baseline_72h_sampling_sparse",
       "baseline_7d_sampling_sparse",
       "baseline_ineligible_history_present",
-      "collector_coverage_degraded",
-      "collector_source_failure",
       "unknown_provenance_history_present"
     ],
-    "coverage_status": "degraded",
-    "failed_query_count": 3,
+    "coverage_status": "observed",
+    "failed_query_count": 0,
     "query_count": 3,
     "baseline_complete_24h": true,
     "baseline_complete_72h": true,
