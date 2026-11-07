@@ -1,0 +1,518 @@
+{
+  "schema_version": "observation-bundle-v1",
+  "observation_id": "concert:2026-11-07_010106Z:clean-v2.4-recent",
+  "run": {
+    "run_stamp": "2026-11-07_010106Z",
+    "run_at": "2026-11-07T01:01:51.737884Z",
+    "status": "success",
+    "pipeline_version": "clean-v2.4-recent",
+    "track": "演唱會",
+    "config_key": "concert",
+    "query_hash": "bd91ad9cff38da69724708318806368e64a080395d38ef7de6f105de8a2d38c3",
+    "query_count": 3,
+    "window_hours": 12,
+    "min_score": 30,
+    "collector_mode": "recent",
+    "coverage_status": "observed",
+    "provenance": "manual",
+    "baseline_eligible": false,
+    "workflow_event": "workflow_dispatch",
+    "github_run_id": "42321589337",
+    "notion_sync_status": "success"
+  },
+  "lineage": {
+    "snapshot_ref": "collector/archive/snapshots/snapshot_2026-11-07_010106Z.json",
+    "summary_ref": "collector/archive/runs/summary_2026-11-07_010106Z.json",
+    "queries_ref": "collector/archive/runs/queries_2026-11-07_010106Z.txt",
+    "failed_queries_ref": "collector/archive/runs/failed_queries_2026-11-07_010106Z.txt",
+    "snapshot_fingerprint": "sha256:83485ebf511d27675b512103aeb347a531398eded0437fa30ec9d74947c5a67a",
+    "master_dependency": false
+  },
+  "deterministic_facts": {
+    "current": {
+      "raw_rows": 39,
+      "snapshot_unique": 20,
+      "dedupe_unique": 20,
+      "clean_signals": 18,
+      "excluded_transactions": 2,
+      "suppressed_duplicates": 0,
+      "clean_rate_pct": 90.0,
+      "new_3h": 42,
+      "new_12h": 123,
+      "unique_authors": 18,
+      "author_diversity_ratio": 1.0,
+      "duplicate_adjusted_volume": 20
+    },
+    "previous_comparable_run": {
+      "run_stamp": "2026-11-06_034331Z",
+      "run_at": "2026-11-06T03:44:19.622938Z",
+      "elapsed_minutes": 1277.5,
+      "pipeline_version": "clean-v2.4-recent",
+      "clean_signals": 31,
+      "new_3h": 48,
+      "new_12h": 96,
+      "clean_rate_pct": 96.9,
+      "compatibility": {
+        "pipeline_version": "compatible",
+        "query": "compatible",
+        "config": "compatible",
+        "provenance": "scheduled",
+        "baseline_eligible": true,
+        "structurally_compatible": true,
+        "compatible_for_baseline": true
+      }
+    },
+    "delta": {
+      "overlap_available": true,
+      "new_signal_count": 18,
+      "retained_signal_count": 0,
+      "clean_signal_delta": -13,
+      "rolling_3h_delta": -6,
+      "rolling_12h_delta": 27
+    },
+    "baselines": {
+      "24h": {
+        "window": "24h",
+        "hours": 24,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 24.0,
+        "sample_count": 1,
+        "max_gap_minutes": 1732.1,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 1,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1732.1,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 8,
+          "excluded_provenance_counts": {
+            "manual": 7,
+            "unknown": 1
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 31.0,
+          "new_3h_median": 48.0,
+          "new_12h_median": 96.0,
+          "clean_rate_pct_median": 96.9
+        }
+      },
+      "72h": {
+        "window": "72h",
+        "hours": 72,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 72.0,
+        "sample_count": 2,
+        "max_gap_minutes": 1732.1,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 2,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1732.1,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 24,
+          "excluded_provenance_counts": {
+            "manual": 22,
+            "unknown": 2
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 29.0,
+          "new_3h_median": 41.0,
+          "new_12h_median": 105.5,
+          "clean_rate_pct_median": 95.0
+        }
+      },
+      "7d": {
+        "window": "7d",
+        "hours": 168,
+        "complete": true,
+        "coverage_complete": true,
+        "coverage_hours": 168.0,
+        "sample_count": 10,
+        "max_gap_minutes": 1732.1,
+        "sampling_quality": "sparse",
+        "sampling": {
+          "quality": "sparse",
+          "eligible_sample_count": 10,
+          "expected_cadence_minutes": 120,
+          "max_expected_gap_minutes": 180,
+          "max_gap_minutes": 1732.1,
+          "cadence_within_tolerance": false
+        },
+        "compatibility": {
+          "pipeline_version": "compatible",
+          "query": "compatible",
+          "config": "compatible",
+          "excluded_incompatible_samples": 0,
+          "excluded_pipeline_mismatch": 0,
+          "excluded_query_mismatch": 0,
+          "excluded_config_mismatch": 0,
+          "excluded_baseline_ineligible_samples": 53,
+          "excluded_provenance_counts": {
+            "manual": 50,
+            "unknown": 3
+          }
+        },
+        "metrics": {
+          "clean_signals_median": 30.5,
+          "new_3h_median": 49.0,
+          "new_12h_median": 117.0,
+          "clean_rate_pct_median": 95.35
+        }
+      }
+    }
+  },
+  "derived_annotations": {
+    "authoritative": false,
+    "classifier": {
+      "name": "dashboard-intent-regex",
+      "version": "v1",
+      "deterministic": true,
+      "note": "Derived annotation only; it does not alter Collector Clean / Dedupe source of truth."
+    },
+    "clusters": [
+      {
+        "kind": "noise",
+        "category": "粉絲心得／現場紀錄",
+        "count": 15,
+        "unique_authors": 15,
+        "post_ids": [
+          "4024489286833843600",
+          "4024489544799947467",
+          "4024523901728671342",
+          "4024573056764823495",
+          "4024592248910076411",
+          "4024647196331384674",
+          "4024648022557223082",
+          "4024717250444064205",
+          "4024730244347012372",
+          "4024751185315473197",
+          "4024760462042840901",
+          "4024786087939612361",
+          "4024786378026012178",
+          "4024786949172452086",
+          "4024787938440142602"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "取消／交通／行程風險",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4024441335083645559"
+        ]
+      },
+      {
+        "kind": "actionable",
+        "category": "陪同／Solo Attendance",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4024538634791686701"
+        ]
+      },
+      {
+        "kind": "noise",
+        "category": "關鍵詞雜訊",
+        "count": 1,
+        "unique_authors": 1,
+        "post_ids": [
+          "4024532653185813361"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "total_clean_evidence": 18,
+    "limit": 16,
+    "returned": 16,
+    "items": [
+      {
+        "post_id": "4024787938440142602",
+        "username": "ellekinkeek",
+        "posted_at": "2026-11-07T00:42:12Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@ellekinkeek/post/Dfa605HAF8K",
+        "is_new_since_previous": true,
+        "excerpt": "I saw her in concert in 2008 and she played 5 different instruments live during the set. She is insanely talented, truly!",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024786949172452086",
+        "username": "an_sunig",
+        "posted_at": "2026-11-07T00:40:14Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@an_sunig/post/Dfa6mfyDVr2",
+        "is_new_since_previous": true,
+        "excerpt": "[📢] THE BOYZ CONCERT <RENAIZZANCE> \n\n2026. 12.  25. (FRI) 7PM (KST)\n2026. 12.  26. (SAT) 5PM (KST)\n2026. 12.  27. (SUN) 4PM (KST)\n\n🌐KSPO DOME\n🎫YES24",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024786378026012178",
+        "username": "adowbongmanoc",
+        "posted_at": "2026-11-07T00:39:06Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@adowbongmanoc/post/Dfa6eL3Ek4S",
+        "is_new_since_previous": true,
+        "excerpt": "LF: MCR concert tix PH 🇵🇭",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024786087939612361",
+        "username": "t_innie_289",
+        "posted_at": "2026-11-07T00:38:31Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@t_innie_289/post/Dfa6Z9skx7J",
+        "is_new_since_previous": true,
+        "excerpt": "Heading to Tokyo Dome (Stray Kids Concert) \nSo excited !!😊💕😆",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024760462042840901",
+        "username": "annavibes_sakura",
+        "posted_at": "2026-11-06T23:47:37Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@annavibes_sakura/post/Dfa0lDuGb9F",
+        "is_new_since_previous": true,
+        "excerpt": "你不能因為賴瑞隆默默做事,就說他沒做事。\n\n賴瑞隆深耕高雄20年,在高雄市府服務,歷任高雄市政府新聞局專委、建設局專委、觀光局主任秘書、新聞局長、海洋局長等職。任內曾推動2013年高雄黃色小鴨展出、開創演唱會經濟與城市行銷等。",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024751185315473197",
+        "username": "firulight",
+        "posted_at": "2026-11-06T23:29:16Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@firulight/post/DfayeEGD6ct",
+        "is_new_since_previous": true,
+        "excerpt": "#duranduran #simonlebon #madrid #spain #concert psiclinda",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024730244347012372",
+        "username": "sh1819012",
+        "posted_at": "2026-11-06T22:47:34Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@sh1819012/post/DfattVTEyUU",
+        "is_new_since_previous": true,
+        "excerpt": "沒想到昨天在西門町巧遇高瀨統也🥹\n遇到時直接嚇到定住不敢搭話怕打擾私人行程\n結果可能太驚訝被統也發現了🤣\n統也直接主動走過來握手還問要不要拍照\n但太驚訝第一次沒聽到謝謝統也再問第二次\n真的好寵粉好親民,開始期待晚上的演唱會了♾️🖤🤎\n謝謝統也🖤🤎\n\n還遇到Fumiya跟emi🥹雖然也想拍照但沒有勇氣上前問,也不想再多做打擾了\n\n還有昨天應該要化妝的可惡!\n昨天還去居酒屋吃飯喝酒希望沒有什麼酒味🥹",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024717250444064205",
+        "username": "2amillion",
+        "posted_at": "2026-11-06T22:21:45Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@2amillion/post/DfaqwPyGvXN",
+        "is_new_since_previous": true,
+        "excerpt": "I got backstage passses for the Chris brown and usher concert who coming with me",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024648022557223082",
+        "username": "mimss.cmr",
+        "posted_at": "2026-11-06T20:04:13Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@mimss.cmr/post/DfabA2SgGiq",
+        "is_new_since_previous": true,
+        "excerpt": "I was scammed for more than 1,400 euros for the BTS concert in July in Paris. I never received the tickets or my money. I'm still angry and don't think about anything else. I'm trying to find a way to get help. I've called for assistance, but I still haven't received any news. I wanted to warn you: if you see them, don't trust them. I made a mistake, and ...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024647196331384674",
+        "username": "amisspyt",
+        "posted_at": "2026-11-06T20:02:34Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@amisspyt/post/Dfaa00zmp9i",
+        "is_new_since_previous": true,
+        "excerpt": "I need some fire stitch braids for the concert tomorrow. Hair included...I pay & I drive 😅😭 any recommendations",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024592248910076411",
+        "username": "23461qwe",
+        "posted_at": "2026-11-06T18:13:24Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@23461qwe/post/DfaOVPCE1n7",
+        "is_new_since_previous": true,
+        "excerpt": "所以虞书欣演唱会只有18号一场吗😭😭😭😭啊啊啊啊不要啊 会有19号吗😭😭😭😭",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024573056764823495",
+        "username": "zzjsy624",
+        "posted_at": "2026-11-06T17:35:16Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@zzjsy624/post/DfaJ989E0fH",
+        "is_new_since_previous": true,
+        "excerpt": "演唱会找自己到底有啥好处",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024538634791686701",
+        "username": "arba_yun",
+        "posted_at": "2026-11-06T16:26:53Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@arba_yun/post/DfaCJC_mBIt",
+        "is_new_since_previous": true,
+        "excerpt": "植木日DAY1 Ending 南手寫信\nTo 我的樹苗\n\n你們好啊,樹苗♡,我是優賢,很高興見到你!\n你們在讀這封信的時候應該是演唱會結束的時間了吧?\n\n聽說已經10年了欸...... 我們一起走過來的時間\n這麼快就10年了... 很神奇吧?\n一開始只是喜歡唱歌而已,曾經覺得光是能讓某人聽到我的歌就覺得很幸福了,不知不覺就收到了10年歲月這樣的禮物\n\n回頭看真的有很多事情,也有過非常幸福的瞬間,也有過雖然看似沒事地笑著但其實非常疲累的瞬間... 也有過不知道自己是否做得好,我走的路是否正確,對自己不斷地在提問的瞬間\n\n但是很奇怪地,連我自己都不相信自己的瞬間,你們總是相信著我,我停下腳步的時候,你們也不會催促並等待著我,需要邁開腳步的勇氣時,無時無刻都是那個最先伸出手的人,我想就是因為這樣所以我才能走到這...",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "actionable",
+          "category": "陪同／Solo Attendance"
+        }
+      },
+      {
+        "post_id": "4024532653185813361",
+        "username": "gdr_1023",
+        "posted_at": "2026-11-06T16:15:00Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@gdr_1023/post/DfaAyAMGctx",
+        "is_new_since_previous": true,
+        "excerpt": "今天在東區大安路吃晚餐\n吃完順便去小巨蛋看演唱會\n完全沒想到會遇到蔣萬安掃街\n根據我的觀察看不出來有任何動員的人力\n只有保鏢跟里長是一直緊跟著\n其他人有些是市長拜票完跟著拍照走一小段\n我自己因為剛好順路就跟著走一小段\n感覺不到任何刻意造勢的人\n都是一些很像路人的婆婆媽媽幫忙喊\n喊累了就有其他熱情民眾跟著喊\n這種親民不動員網軍、不擾民的市長\n才是真的走入民間\n一個一個店家拜訪\n一隻手一隻手的握\n只要經過他眼前的路人\n他都誠心的去拜票\n我也只是站在旁邊錄影\n他也主動來跟我握手\n(我身上甚至穿著綠色衣服😂)\n途中有看到他還進去貼了洋流標誌的店家\n市長也是很破圈的跟他們握手🤝\n店家也都很熱情的回應",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "關鍵詞雜訊"
+        }
+      },
+      {
+        "post_id": "4024523901728671342",
+        "username": "kkblwbz",
+        "posted_at": "2026-11-06T15:57:36Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@kkblwbz/post/DfZ-ypwm0Zu",
+        "is_new_since_previous": true,
+        "excerpt": "nsm性格真的很火辣但又很纯真,真是火象白羊来的。演唱会后一天拍这个棒球物料被其他几个棒球白痴气得冒火,结果过了几天被问又说成员全部都很善良反而感谢他们体谅自己脾气,发脾气概率极大但自己很快又好了。上辈子是爱龇牙的小吉娃娃吧摸摸毛让你傲娇一会儿,真可爱",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      },
+      {
+        "post_id": "4024489544799947467",
+        "username": "masochisn",
+        "posted_at": "2026-11-06T14:49:21Z",
+        "first_seen_at": "2026-11-07T01:01:51.737884Z",
+        "permalink": "https://www.threads.com/@masochisn/post/DfZ2-sYEwrL",
+        "is_new_since_previous": true,
+        "excerpt": "米津演唱會的歌單 需要的自取🌝\n第二天會有幾首會跟第一天不一樣 我明天都會放進去\n不過安可曲的兩手新歌如果台北場之前有發表的話我也會放\nhttps://open.spotify.com/playlist/6Lwxes3RwaAVk2ghWnC9lD?si=U4BAVj9pTRqa3Qi-reATFQ&utm_source=copy-link",
+        "derived_annotation": {
+          "authoritative": false,
+          "classifier": "dashboard-intent-regex:v1",
+          "kind": "noise",
+          "category": "粉絲心得／現場紀錄"
+        }
+      }
+    ]
+  },
+  "data_quality": {
+    "flags": [
+      "baseline_24h_sampling_sparse",
+      "baseline_72h_sampling_sparse",
+      "baseline_7d_sampling_sparse",
+      "baseline_ineligible_history_present",
+      "unknown_provenance_history_present"
+    ],
+    "coverage_status": "observed",
+    "failed_query_count": 0,
+    "query_count": 3,
+    "baseline_complete_24h": true,
+    "baseline_complete_72h": true,
+    "baseline_complete_7d": true,
+    "baseline_sampling_quality_24h": "sparse",
+    "baseline_sampling_quality_72h": "sparse",
+    "baseline_sampling_quality_7d": "sparse",
+    "incompatible_history_sample_count": 0,
+    "baseline_ineligible_history_sample_count": 70
+  }
+}
