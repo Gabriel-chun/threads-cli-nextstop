@@ -1,13 +1,13 @@
 {
   "schema_version": "trend-observation-v0.2",
-  "generated_at": "2026-11-06T15:51:19.174218Z",
-  "run_stamp": "2026-11-06_154715Z",
+  "generated_at": "2026-11-07T05:24:01.019920Z",
+  "run_stamp": "2026-11-07_051952Z",
   "window": "upcoming_90d",
   "sample": {
-    "sample_id": "sample:2026-11-06_154715Z",
-    "run_stamp": "2026-11-06_154715Z",
-    "window_start": "2026-11-06T07:51:19.174218Z",
-    "window_end": "2026-11-06T15:51:19.174218Z",
+    "sample_id": "sample:2026-11-07_051952Z",
+    "run_stamp": "2026-11-07_051952Z",
+    "window_start": "2026-11-06T21:24:01.019920Z",
+    "window_end": "2026-11-07T05:24:01.019920Z",
     "sampling_strategy": "need_led_observation",
     "retrieval_semantics": "need_first_context_gated",
     "query_family": [
@@ -89,20 +89,21 @@
       "fan meeting",
       "live show"
     ],
-    "raw_count": 173,
-    "deduped_count": 169,
-    "context_excluded_count": 168,
-    "clean_count": 1,
-    "generated_at": "2026-11-06T15:51:19.174218Z"
+    "raw_count": 155,
+    "deduped_count": 153,
+    "context_excluded_count": 150,
+    "clean_count": 3,
+    "generated_at": "2026-11-07T05:24:01.019920Z"
   },
   "language_distribution": {
-    "English": 1
+    "English": 2,
+    "zh-Hant": 1
   },
   "evidence": [
     {
-      "evidence_id": "evidence:a10c9ebd34a51bd87a6d",
-      "sample_id": "sample:2026-11-06_154715Z",
-      "observed_at": "2026-11-06T15:51:19.174218Z",
+      "evidence_id": "evidence:7b005363e4f997e2696d",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
       "posted_at": "2026-10-11T17:12:35Z",
       "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
       "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
@@ -143,6 +144,95 @@
           "train"
         ]
       }
+    },
+    {
+      "evidence_id": "evidence:bc04b362d48e5bf06a17",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
+      "posted_at": "2026-10-13T06:13:54Z",
+      "source_url": "https://www.threads.com/@dregs01/post/DebI6cJjUg7",
+      "text": "幹 一醒來發現感到很煩躁的不只有我\n老實說單就台灣粉絲來說誰不是要花機票錢去看日本小偶像\n還順便說在台灣沒知名度要幫忙增加在台灣的人氣\n糯米是想上東京巨蛋還是台北大巨蛋啊😍\n不想講得很難聽 不過讓本來就有在看糯米的臺灣人扣分的印象…",
+      "language_context": "zh-Hant",
+      "sampling_language_context": "zh-Hant",
+      "author_hash": "author:35f5b8ae374112c8c990",
+      "query_family": "mobility_airfare",
+      "raw_query": "機票",
+      "semantic_query": "機票 演唱會",
+      "annotation": {
+        "artists": [],
+        "venues": [
+          {
+            "id": "venue:taipei_dome",
+            "label": "臺北大巨蛋",
+            "city": "台北"
+          }
+        ],
+        "cities": [
+          "台北"
+        ],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:flight",
+            "label": "飛機／機票",
+            "terms": [
+              "機票"
+            ]
+          }
+        ],
+        "timing": [],
+        "stay": [],
+        "keywords": [
+          "機票"
+        ]
+      }
+    },
+    {
+      "evidence_id": "evidence:26f9f6356b320f68ab74",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
+      "posted_at": "2026-11-07T01:18:41Z",
+      "source_url": "https://www.threads.com/@aniz_ismail/post/Dfa_AIjk7nI",
+      "text": "Went to The Weeknd concert and a few other concerts in Stadium Bukit Jalil before this, so here's some tips. #BTSinKL\n\n1. Anyone using the train, top-up your tng card. RM20 should be enough\n2. If you don't have tng card, please buy the token to go back as soon as you arrive. Don't buy it after the concert\n3. 4pm-7pm should be peak times and some people are already queueing\n(+)",
+      "language_context": "English",
+      "sampling_language_context": "English",
+      "author_hash": "author:4803c89110867a7d3ded",
+      "query_family": "mobility_train_en",
+      "raw_query": "train",
+      "semantic_query": "concert train",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:rail",
+            "label": "台鐵／火車",
+            "terms": [
+              "train"
+            ]
+          }
+        ],
+        "timing": [
+          {
+            "id": "timing:arrival",
+            "label": "到達時間",
+            "terms": [
+              "arrive"
+            ]
+          }
+        ],
+        "stay": [],
+        "keywords": [
+          "arrive",
+          "train"
+        ]
+      }
     }
   ],
   "entities": [
@@ -151,7 +241,24 @@
       "entity_type": "mobility",
       "label": "台鐵／火車",
       "evidence_ids": [
-        "evidence:a10c9ebd34a51bd87a6d"
+        "evidence:7b005363e4f997e2696d",
+        "evidence:26f9f6356b320f68ab74"
+      ]
+    },
+    {
+      "entity_id": "mobility:flight",
+      "entity_type": "mobility",
+      "label": "飛機／機票",
+      "evidence_ids": [
+        "evidence:bc04b362d48e5bf06a17"
+      ]
+    },
+    {
+      "entity_id": "timing:arrival",
+      "entity_type": "timing",
+      "label": "到達時間",
+      "evidence_ids": [
+        "evidence:26f9f6356b320f68ab74"
       ]
     },
     {
@@ -159,7 +266,15 @@
       "entity_type": "timing",
       "label": "末班車",
       "evidence_ids": [
-        "evidence:a10c9ebd34a51bd87a6d"
+        "evidence:7b005363e4f997e2696d"
+      ]
+    },
+    {
+      "entity_id": "venue:taipei_dome",
+      "entity_type": "venue",
+      "label": "臺北大巨蛋",
+      "evidence_ids": [
+        "evidence:bc04b362d48e5bf06a17"
       ]
     }
   ],
@@ -176,9 +291,9 @@
       "resolution_confidence": "high",
       "state": "persistent",
       "first_seen": "2026-10-11T14:51:15.174354Z",
-      "last_seen": "2026-11-06T15:51:19.174218Z",
-      "sample_count": 49,
-      "evidence_count": 57,
+      "last_seen": "2026-11-07T05:24:01.019920Z",
+      "sample_count": 50,
+      "evidence_count": 58,
       "current_evidence_count": 1,
       "unique_author_count": 8,
       "evidence_ids": [
@@ -238,10 +353,11 @@
         "evidence:f9b20b83ef24163cd1eb",
         "evidence:cf49a17636b3aa3b97e3",
         "evidence:e520a90e12b49c9186d9",
-        "evidence:a10c9ebd34a51bd87a6d"
+        "evidence:a10c9ebd34a51bd87a6d",
+        "evidence:7b005363e4f997e2696d"
       ],
       "current_evidence_ids": [
-        "evidence:a10c9ebd34a51bd87a6d"
+        "evidence:7b005363e4f997e2696d"
       ],
       "author_hashes": [
         "author:fd6cab8fba1f36be18e0",
@@ -253,62 +369,8 @@
         "author:5876af482b733085c1bb",
         "author:e758633e543e43ff43f0"
       ],
-      "consecutive_windows": 17,
+      "consecutive_windows": 18,
       "supporting_evidence": [
-        {
-          "evidence_id": "evidence:4748c37ffcb5882f212c",
-          "sample_id": "sample:2026-10-31_142518Z",
-          "observed_at": "2026-10-31T14:29:21.011462Z",
-          "posted_at": "2026-10-22T00:14:48Z",
-          "source_url": "https://www.threads.com/@__kriziaaa__/post/Dexq-MwASX6",
-          "text": "Hi! I will be watching the concert of BTS next month and I don’t know what time will it end. I can’t book a hotel at Kaohsiung as it is all booked on the same date of the concert. May I ask what time is the last train from Kaohsiung going to Taipei? Thanks 😊",
-          "language_context": "English",
-          "sampling_language_context": "English",
-          "author_hash": "author:ae74b4ff451112e031e5",
-          "query_family": "timing_last_train_en",
-          "raw_query": "last train",
-          "semantic_query": "concert last train",
-          "annotation": {
-            "artists": [],
-            "venues": [],
-            "cities": [],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:rail",
-                "label": "台鐵／火車",
-                "terms": [
-                  "train"
-                ]
-              }
-            ],
-            "timing": [
-              {
-                "id": "timing:last_train",
-                "label": "末班車",
-                "terms": [
-                  "last train"
-                ]
-              }
-            ],
-            "stay": [
-              {
-                "id": "stay:lodging",
-                "label": "住宿／飯店",
-                "terms": [
-                  "hotel"
-                ]
-              }
-            ],
-            "keywords": [
-              "hotel",
-              "last train",
-              "train"
-            ]
-          }
-        },
         {
           "evidence_id": "evidence:7cc7627f31ae4a718ab6",
           "sample_id": "sample:2026-10-31_142518Z",
@@ -1186,6 +1248,245 @@
             "stay": [],
             "keywords": [
               "last train",
+              "train"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:7b005363e4f997e2696d",
+          "sample_id": "sample:2026-11-07_051952Z",
+          "observed_at": "2026-11-07T05:24:01.019920Z",
+          "posted_at": "2026-10-11T17:12:35Z",
+          "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
+          "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:6dbc0348961cebdcc42a",
+          "query_family": "timing_last_train_en",
+          "raw_query": "last train",
+          "semantic_query": "concert last train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:last_train",
+                "label": "末班車",
+                "terms": [
+                  "last train"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "last train",
+              "train"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "link_id": "link:b73935212db29e754163",
+      "source_type": "venue",
+      "source_id": "venue:taipei_dome",
+      "source_label": "臺北大巨蛋",
+      "target_type": "mobility",
+      "target_id": "mobility:flight",
+      "target_label": "飛機／機票",
+      "relation_type": "venue_mobility",
+      "resolution_confidence": "high",
+      "state": "repeated",
+      "first_seen": "2026-10-13T15:48:46.854136Z",
+      "last_seen": "2026-11-07T05:24:01.019920Z",
+      "sample_count": 2,
+      "evidence_count": 2,
+      "current_evidence_count": 1,
+      "unique_author_count": 1,
+      "evidence_ids": [
+        "evidence:e5f4e40dc7e89ea787c0",
+        "evidence:bc04b362d48e5bf06a17"
+      ],
+      "current_evidence_ids": [
+        "evidence:bc04b362d48e5bf06a17"
+      ],
+      "author_hashes": [
+        "author:35f5b8ae374112c8c990"
+      ],
+      "consecutive_windows": 1,
+      "supporting_evidence": [
+        {
+          "evidence_id": "evidence:e5f4e40dc7e89ea787c0",
+          "sample_id": "sample:2026-10-13_154410Z",
+          "observed_at": "2026-10-13T15:48:46.854136Z",
+          "posted_at": "2026-10-13T06:13:54Z",
+          "source_url": "https://www.threads.com/@dregs01/post/DebI6cJjUg7",
+          "text": "幹 一醒來發現感到很煩躁的不只有我\n老實說單就台灣粉絲來說誰不是要花機票錢去看日本小偶像\n還順便說在台灣沒知名度要幫忙增加在台灣的人氣\n糯米是想上東京巨蛋還是台北大巨蛋啊😍\n不想講得很難聽 不過讓本來就有在看糯米的臺灣人扣分的印象…",
+          "language_context": "zh-Hant",
+          "sampling_language_context": "zh-Hant",
+          "author_hash": "author:35f5b8ae374112c8c990",
+          "query_family": "mobility_airfare",
+          "raw_query": "機票",
+          "semantic_query": "機票 演唱會",
+          "annotation": {
+            "artists": [],
+            "venues": [
+              {
+                "id": "venue:taipei_dome",
+                "label": "臺北大巨蛋",
+                "city": "台北"
+              }
+            ],
+            "cities": [
+              "台北"
+            ],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:flight",
+                "label": "飛機／機票",
+                "terms": [
+                  "機票"
+                ]
+              }
+            ],
+            "timing": [],
+            "stay": [],
+            "keywords": [
+              "機票"
+            ]
+          }
+        },
+        {
+          "evidence_id": "evidence:bc04b362d48e5bf06a17",
+          "sample_id": "sample:2026-11-07_051952Z",
+          "observed_at": "2026-11-07T05:24:01.019920Z",
+          "posted_at": "2026-10-13T06:13:54Z",
+          "source_url": "https://www.threads.com/@dregs01/post/DebI6cJjUg7",
+          "text": "幹 一醒來發現感到很煩躁的不只有我\n老實說單就台灣粉絲來說誰不是要花機票錢去看日本小偶像\n還順便說在台灣沒知名度要幫忙增加在台灣的人氣\n糯米是想上東京巨蛋還是台北大巨蛋啊😍\n不想講得很難聽 不過讓本來就有在看糯米的臺灣人扣分的印象…",
+          "language_context": "zh-Hant",
+          "sampling_language_context": "zh-Hant",
+          "author_hash": "author:35f5b8ae374112c8c990",
+          "query_family": "mobility_airfare",
+          "raw_query": "機票",
+          "semantic_query": "機票 演唱會",
+          "annotation": {
+            "artists": [],
+            "venues": [
+              {
+                "id": "venue:taipei_dome",
+                "label": "臺北大巨蛋",
+                "city": "台北"
+              }
+            ],
+            "cities": [
+              "台北"
+            ],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:flight",
+                "label": "飛機／機票",
+                "terms": [
+                  "機票"
+                ]
+              }
+            ],
+            "timing": [],
+            "stay": [],
+            "keywords": [
+              "機票"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "link_id": "link:4c4d812eb54c09ab702f",
+      "source_type": "mobility",
+      "source_id": "mobility:rail",
+      "source_label": "台鐵／火車",
+      "target_type": "timing",
+      "target_id": "timing:arrival",
+      "target_label": "到達時間",
+      "relation_type": "mobility_timing",
+      "resolution_confidence": "high",
+      "state": "new",
+      "first_seen": "2026-11-07T05:24:01.019920Z",
+      "last_seen": "2026-11-07T05:24:01.019920Z",
+      "sample_count": 1,
+      "evidence_count": 1,
+      "current_evidence_count": 1,
+      "unique_author_count": 1,
+      "evidence_ids": [
+        "evidence:26f9f6356b320f68ab74"
+      ],
+      "current_evidence_ids": [
+        "evidence:26f9f6356b320f68ab74"
+      ],
+      "author_hashes": [
+        "author:4803c89110867a7d3ded"
+      ],
+      "consecutive_windows": 1,
+      "supporting_evidence": [
+        {
+          "evidence_id": "evidence:26f9f6356b320f68ab74",
+          "sample_id": "sample:2026-11-07_051952Z",
+          "observed_at": "2026-11-07T05:24:01.019920Z",
+          "posted_at": "2026-11-07T01:18:41Z",
+          "source_url": "https://www.threads.com/@aniz_ismail/post/Dfa_AIjk7nI",
+          "text": "Went to The Weeknd concert and a few other concerts in Stadium Bukit Jalil before this, so here's some tips. #BTSinKL\n\n1. Anyone using the train, top-up your tng card. RM20 should be enough\n2. If you don't have tng card, please buy the token to go back as soon as you arrive. Don't buy it after the concert\n3. 4pm-7pm should be peak times and some people are already queueing\n(+)",
+          "language_context": "English",
+          "sampling_language_context": "English",
+          "author_hash": "author:4803c89110867a7d3ded",
+          "query_family": "mobility_train_en",
+          "raw_query": "train",
+          "semantic_query": "concert train",
+          "annotation": {
+            "artists": [],
+            "venues": [],
+            "cities": [],
+            "dates": [],
+            "event": null,
+            "resolution_confidence": "unresolved",
+            "mobility": [
+              {
+                "id": "mobility:rail",
+                "label": "台鐵／火車",
+                "terms": [
+                  "train"
+                ]
+              }
+            ],
+            "timing": [
+              {
+                "id": "timing:arrival",
+                "label": "到達時間",
+                "terms": [
+                  "arrive"
+                ]
+              }
+            ],
+            "stay": [],
+            "keywords": [
+              "arrive",
               "train"
             ]
           }
@@ -11814,78 +12115,6 @@
       ]
     },
     {
-      "link_id": "link:b73935212db29e754163",
-      "source_type": "venue",
-      "source_id": "venue:taipei_dome",
-      "source_label": "臺北大巨蛋",
-      "target_type": "mobility",
-      "target_id": "mobility:flight",
-      "target_label": "飛機／機票",
-      "relation_type": "venue_mobility",
-      "resolution_confidence": "high",
-      "state": "dormant",
-      "first_seen": "2026-10-13T15:48:46.854136Z",
-      "last_seen": "2026-10-13T15:48:46.854136Z",
-      "sample_count": 1,
-      "evidence_count": 1,
-      "current_evidence_count": 0,
-      "unique_author_count": 1,
-      "evidence_ids": [
-        "evidence:e5f4e40dc7e89ea787c0"
-      ],
-      "current_evidence_ids": [],
-      "author_hashes": [
-        "author:35f5b8ae374112c8c990"
-      ],
-      "consecutive_windows": 0,
-      "supporting_evidence": [
-        {
-          "evidence_id": "evidence:e5f4e40dc7e89ea787c0",
-          "sample_id": "sample:2026-10-13_154410Z",
-          "observed_at": "2026-10-13T15:48:46.854136Z",
-          "posted_at": "2026-10-13T06:13:54Z",
-          "source_url": "https://www.threads.com/@dregs01/post/DebI6cJjUg7",
-          "text": "幹 一醒來發現感到很煩躁的不只有我\n老實說單就台灣粉絲來說誰不是要花機票錢去看日本小偶像\n還順便說在台灣沒知名度要幫忙增加在台灣的人氣\n糯米是想上東京巨蛋還是台北大巨蛋啊😍\n不想講得很難聽 不過讓本來就有在看糯米的臺灣人扣分的印象…",
-          "language_context": "zh-Hant",
-          "sampling_language_context": "zh-Hant",
-          "author_hash": "author:35f5b8ae374112c8c990",
-          "query_family": "mobility_airfare",
-          "raw_query": "機票",
-          "semantic_query": "機票 演唱會",
-          "annotation": {
-            "artists": [],
-            "venues": [
-              {
-                "id": "venue:taipei_dome",
-                "label": "臺北大巨蛋",
-                "city": "台北"
-              }
-            ],
-            "cities": [
-              "台北"
-            ],
-            "dates": [],
-            "event": null,
-            "resolution_confidence": "unresolved",
-            "mobility": [
-              {
-                "id": "mobility:flight",
-                "label": "飛機／機票",
-                "terms": [
-                  "機票"
-                ]
-              }
-            ],
-            "timing": [],
-            "stay": [],
-            "keywords": [
-              "機票"
-            ]
-          }
-        }
-      ]
-    },
-    {
       "link_id": "link:e8571332ebe6d2844490",
       "source_type": "venue",
       "source_id": "venue:taipei_dome",
@@ -20755,12 +20984,16 @@
   ],
   "link_states": {
     "new": {
-      "count": 0,
-      "link_ids": []
+      "count": 1,
+      "link_ids": [
+        "link:4c4d812eb54c09ab702f"
+      ]
     },
     "repeated": {
-      "count": 0,
-      "link_ids": []
+      "count": 1,
+      "link_ids": [
+        "link:b73935212db29e754163"
+      ]
     },
     "persistent": {
       "count": 1,
@@ -20773,7 +21006,7 @@
       "link_ids": []
     },
     "dormant": {
-      "count": 82,
+      "count": 81,
       "link_ids": [
         "link:e1283c2fa8743e6df346",
         "link:d5bbd8f4e37ccdcd2d68",
@@ -20829,7 +21062,6 @@
         "link:fe6b6767eb0c07b5479c",
         "link:2a651b1972db994f10e9",
         "link:f6b22dd6e5ef24810abd",
-        "link:b73935212db29e754163",
         "link:e8571332ebe6d2844490",
         "link:df1e486c1b6464480cfc",
         "link:e2780ddb4bfc2e26ab88",
@@ -21040,15 +21272,22 @@
     }
   ],
   "comparison": {
-    "previous_run_stamp": "2026-11-06_054944Z",
-    "new_entities": [],
+    "previous_run_stamp": "2026-11-06_154715Z",
+    "new_entities": [
+      "mobility:flight",
+      "timing:arrival",
+      "venue:taipei_dome"
+    ],
     "repeated_entities": [
       "mobility:rail",
       "timing:last_train"
     ],
-    "new_links": [],
+    "new_links": [
+      "link:4c4d812eb54c09ab702f"
+    ],
     "repeated_links": [
-      "link:25490c16bfece73e9d50"
+      "link:25490c16bfece73e9d50",
+      "link:b73935212db29e754163"
     ],
     "dormant_links": [
       "link:02a39ca18cf7596d0fa0",
@@ -21105,7 +21344,6 @@
       "link:b4698780146a95b7b69d",
       "link:b4df591d339d5e0d6ae4",
       "link:b4f7eaed0feb83f0e812",
-      "link:b73935212db29e754163",
       "link:b8c8ffda0503e6c1338c",
       "link:bad0dac63fb921c0785c",
       "link:c15b613e5356643e4338",
@@ -21135,16 +21373,16 @@
       "link:fe6b6767eb0c07b5479c"
     ],
     "sample_size_change": {
-      "raw": -4,
-      "clean": 0
+      "raw": -18,
+      "clean": 2
     }
   },
   "artist_seed_count": 8,
   "event_candidate_count": 11,
   "query_count": 18,
-  "raw_result_count": 173,
-  "clean_result_count": 1,
-  "active_edge_count": 1,
+  "raw_result_count": 155,
+  "clean_result_count": 3,
+  "active_edge_count": 3,
   "status_counts": {
     "observe": 11,
     "watch": 0,
@@ -21171,7 +21409,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:fujii_kaze_kaohsiung_20261031",
@@ -21193,7 +21431,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:vaundy_taipei_20261101",
@@ -21215,7 +21453,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261106",
@@ -21237,7 +21475,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261107",
@@ -21259,7 +21497,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:accusefive_taipei_20261108",
@@ -21281,7 +21519,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261121",
@@ -21303,7 +21541,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:babymonster_taipei_20261122",
@@ -21325,7 +21563,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261128",
@@ -21347,7 +21585,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:mamamoo_taipei_20261129",
@@ -21369,7 +21607,7 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     },
     {
       "event_id": "event:stray_kids_taipei_20261212",
@@ -21391,15 +21629,15 @@
       "unique_author_count": 0,
       "need_edge_count": 0,
       "need_edges": [],
-      "last_updated": "2026-11-06T15:51:19.174218Z"
+      "last_updated": "2026-11-07T05:24:01.019920Z"
     }
   ],
   "edges": [],
   "supporting_evidence": [
     {
-      "evidence_id": "evidence:a10c9ebd34a51bd87a6d",
-      "sample_id": "sample:2026-11-06_154715Z",
-      "observed_at": "2026-11-06T15:51:19.174218Z",
+      "evidence_id": "evidence:7b005363e4f997e2696d",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
       "posted_at": "2026-10-11T17:12:35Z",
       "source_url": "https://www.threads.com/@lunafan/post/DeXKtDNILgu",
       "text": "My only complaint is that the last train back to Baltimore is too early. If I want to go to a concert I need a 2 AM train.",
@@ -21437,6 +21675,95 @@
         "stay": [],
         "keywords": [
           "last train",
+          "train"
+        ]
+      }
+    },
+    {
+      "evidence_id": "evidence:bc04b362d48e5bf06a17",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
+      "posted_at": "2026-10-13T06:13:54Z",
+      "source_url": "https://www.threads.com/@dregs01/post/DebI6cJjUg7",
+      "text": "幹 一醒來發現感到很煩躁的不只有我\n老實說單就台灣粉絲來說誰不是要花機票錢去看日本小偶像\n還順便說在台灣沒知名度要幫忙增加在台灣的人氣\n糯米是想上東京巨蛋還是台北大巨蛋啊😍\n不想講得很難聽 不過讓本來就有在看糯米的臺灣人扣分的印象…",
+      "language_context": "zh-Hant",
+      "sampling_language_context": "zh-Hant",
+      "author_hash": "author:35f5b8ae374112c8c990",
+      "query_family": "mobility_airfare",
+      "raw_query": "機票",
+      "semantic_query": "機票 演唱會",
+      "annotation": {
+        "artists": [],
+        "venues": [
+          {
+            "id": "venue:taipei_dome",
+            "label": "臺北大巨蛋",
+            "city": "台北"
+          }
+        ],
+        "cities": [
+          "台北"
+        ],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:flight",
+            "label": "飛機／機票",
+            "terms": [
+              "機票"
+            ]
+          }
+        ],
+        "timing": [],
+        "stay": [],
+        "keywords": [
+          "機票"
+        ]
+      }
+    },
+    {
+      "evidence_id": "evidence:26f9f6356b320f68ab74",
+      "sample_id": "sample:2026-11-07_051952Z",
+      "observed_at": "2026-11-07T05:24:01.019920Z",
+      "posted_at": "2026-11-07T01:18:41Z",
+      "source_url": "https://www.threads.com/@aniz_ismail/post/Dfa_AIjk7nI",
+      "text": "Went to The Weeknd concert and a few other concerts in Stadium Bukit Jalil before this, so here's some tips. #BTSinKL\n\n1. Anyone using the train, top-up your tng card. RM20 should be enough\n2. If you don't have tng card, please buy the token to go back as soon as you arrive. Don't buy it after the concert\n3. 4pm-7pm should be peak times and some people are already queueing\n(+)",
+      "language_context": "English",
+      "sampling_language_context": "English",
+      "author_hash": "author:4803c89110867a7d3ded",
+      "query_family": "mobility_train_en",
+      "raw_query": "train",
+      "semantic_query": "concert train",
+      "annotation": {
+        "artists": [],
+        "venues": [],
+        "cities": [],
+        "dates": [],
+        "event": null,
+        "resolution_confidence": "unresolved",
+        "mobility": [
+          {
+            "id": "mobility:rail",
+            "label": "台鐵／火車",
+            "terms": [
+              "train"
+            ]
+          }
+        ],
+        "timing": [
+          {
+            "id": "timing:arrival",
+            "label": "到達時間",
+            "terms": [
+              "arrive"
+            ]
+          }
+        ],
+        "stay": [],
+        "keywords": [
+          "arrive",
           "train"
         ]
       }
